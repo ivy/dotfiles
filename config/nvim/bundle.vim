@@ -60,6 +60,9 @@ Plug 'kchmck/vim-coffee-script'
 Plug 'moll/vim-node'
 Plug 'mxw/vim-jsx'
 Plug 'pangloss/vim-javascript'
+Plug 'prettier/vim-prettier', {
+  \ 'do': 'yarn install',
+  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
 
 " Go
 Plug 'benmills/vim-golang-alternate'
