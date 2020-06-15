@@ -2,6 +2,11 @@
 #
 # See https://github.com/nvm-sh/nvm#readme
 
+# NVM_VERSION_DEFAULT caches the default Node version number. This saves
+# valuable seconds when changing directories, ensuring we keep the command
+# prompt as responsive as possible.
+NVM_VERSION_DEFAULT=""
+
 # load-nvmrc switches the NVM Node version based on the current working
 # directory. Based on https://stackoverflow.com/a/39519460
 load-nvmrc() {
@@ -9,7 +14,11 @@ load-nvmrc() {
   local nvmrc_path="$(nvm_find_nvmrc)"
 
   if [[ -z "$nvmrc_path" ]]; then
-    if [[ "$current_version" != "$(nvm version default)" ]]; then
+    if [[ -z "$NVM_VERSION_DEFAULT" ]]; then
+      NVM_VERSION_DEFAULT="$(nvm version default)"
+    fi
+
+    if [[ "$current_version" != "$NVM_VERSION_DEFAULT" ]]; then
       echo 'Switching to default NVM version.'
       nvm use default
     fi
