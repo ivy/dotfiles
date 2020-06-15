@@ -8,11 +8,11 @@ load-nvmrc() {
   local current_version="$(nvm version)"
   local nvmrc_path="$(nvm_find_nvmrc)"
 
-  if [[ -z "$nvmrc_path" ]] && \
-     [[ "$current_version" != "$(nvm version default)" ]];
-  then
-    echo 'Switching to default NVM version.'
-    nvm use default
+  if [[ -z "$nvmrc_path" ]]; then
+    if [[ "$current_version" != "$(nvm version default)" ]]; then
+      echo 'Switching to default NVM version.'
+      nvm use default
+    fi
     return
   fi
 
