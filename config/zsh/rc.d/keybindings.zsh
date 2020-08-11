@@ -4,6 +4,12 @@
 # See man:terminfo(5) for more information.
 zmodload zsh/terminfo
 
+if [[ "$OSTYPE" == darwin* ]]; then
+  # NOTE(ivy): This fixes backspace for some terminal applications. It's
+  # dependent on my terminal configuration which uses '\033[3~'.
+  stty erase '^?'
+fi
+
 # Switch to application mode when zle is active, since only then are values from
 # $terminfo valid.
 #
