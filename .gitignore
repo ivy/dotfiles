@@ -1,3 +1,5 @@
+*.local
 .zcompdump*
 .zplug
 .zsh_history
+/git-authors
