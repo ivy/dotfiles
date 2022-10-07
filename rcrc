@@ -1,2 +1,2 @@
-EXCLUDES="README.md LICENSE.md"
+EXCLUDES=".gitignore .gitmodules bootstrap Brewfile Brewfile.lock.json LICENSE.md README.md templates vendor"
 UNDOTTED="bin"
