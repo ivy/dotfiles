@@ -1,10 +1,10 @@
 # gnu-utils.zsh updates the search path to replace various BSD utilities with
 # their GNU counterparts. I personally find these variants to be more
-# user-friendly and featurefully than what ships with macOS.
+# user-friendly and featureful than what ships with macOS.
 #
-# Note: There's a chance you might run into unexpected behavior when running
-# certain scripts. I haven't personally run into this yet but it's something to
-# keep in mind!
+# Note: As a Mac user I sometimes run into small compatibility issues with
+# coworkers who are using the default BSD utils. I haven't run into the inverse
+# yet but it's something to be aware of.
 
 function {
   if [[ "$OSTYPE" != darwin* ]]; then
