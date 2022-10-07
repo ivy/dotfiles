@@ -2,12 +2,8 @@
 
 ## Installation
 
-Clone the repository:
+In a terminal run:
 
-    $ git clone https://github.com/ivy/dotfiles.git $HOME/.dotfiles
-
-Install the dotfiles with [rcm][rcm]:
-
-    $ RCRC=$HOME/.dotfiles/rcrc rcup
-
-[rcm]: https://github.com/thoughtbot/rcm#readme
+```sh
+curl -fsSL https://raw.githubusercontent.com/ivy/dotfiles/main/bootstrap | bash -s
+```

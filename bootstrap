@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+DOTFILES_DIR="${DOTFILES_DIR:-$HOME/src/github.com/ivy/dotfiles}"
+
+install_rcm() {
+  if command -v rcup; then
+    return
+  fi
+
+  if command -v brew; then
+    brew install rcm
+  else
+    echo "ERROR: RCM not found. Install it and try again." >&2
+    echo "See https://github.com/thoughtbot/rcm#readme" >&2
+    exit 1
+  fi
+}
+
+clone_dotfiles() {
+  if [ -e "$DOTFILES_DIR/.git" ]; then
+    return
+  fi
+
+  mkdir -p "$DOTFILES_DIR"
+  git clone --recursive https://github.com/ivy/dotfiles.git "$DOTFILES_DIR"
+}
+
+main() {
+  install_rcm
+  clone_dotfiles
+  rcup -d "$HOME/src/github.com/ivy/dotfiles"
+}
+
+main
