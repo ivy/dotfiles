@@ -10,6 +10,10 @@ zplug "zsh-users/zsh-autosuggestions"
 # Use pure prompt theme
 zplug "sindresorhus/pure"
 
+# Enable vim-like modal editing.
+# TODO(ivy): Set up https://github.com/jeffreytse/zsh-vi-mode
+bindkey -v
+
 function {
   local funcdir="$ZPLUG_HOME/functions"
 
