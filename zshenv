@@ -8,9 +8,6 @@
 # See https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
 XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 
-# Use nvim as the default editor.
-export EDITOR="nvim"
-
 for envfile in "$XDG_CONFIG_HOME/zsh/env.d/"*.zsh; do
   source "$envfile"
 done
