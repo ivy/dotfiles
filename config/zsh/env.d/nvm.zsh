@@ -36,7 +36,9 @@ load-nvmrc() {
 
 function {
   local search_dirs=(
-    "$HOME/.nvm" /usr/local/opt/nvm
+    /opt/homebrew/opt/nvm
+    /usr/local/opt/nvm
+    "$HOME/.nvm"
   )
 
   for dir in "${search_dirs[@]}"; do
@@ -45,7 +47,8 @@ function {
     export NVM_DIR="$HOME/.nvm"
 
     source "$dir/nvm.sh"
-    source "$dir/etc/bash_completion.d/nvm"
+    # TODO: Source zsh-users/zsh-completions instead
+    #source "$dir/etc/bash_completion.d/nvm"
 
     autoload -U add-zsh-hook
     add-zsh-hook chpwd load-nvmrc
