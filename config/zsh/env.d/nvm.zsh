@@ -20,7 +20,7 @@ load-nvmrc() {
 
     if [[ "$current_version" != "$NVM_VERSION_DEFAULT" ]]; then
       echo 'Switching to default NVM version.'
-      nvm use default
+      nvm use default >&2
     fi
     return
   fi
@@ -28,9 +28,9 @@ load-nvmrc() {
   local nvmrc_version="$(nvm version "$(<"$nvmrc_path")")"
 
   if [[ "$nvmrc_version" = "N/A" ]]; then
-    nvm install
+    nvm install >&2
   elif [[ "$nvmrc_version" != "$current_version" ]]; then
-    nvm use
+    nvm use >&2
   fi
 }
 
