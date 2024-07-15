@@ -1,0 +1,102 @@
+#!/usr/bin/env bash
+#
+# open-webui -- OpenWebUI helper script
+#
+
+[[ -n "$DEBUG" ]] && set -o xtrace
+set -o errexit
+set -o nounset
+set -o pipefail
+
+if [[ -r "$HOME/.zshenv.local" ]]; then
+  # Load local environment variables
+  source "$HOME/.zshenv.local"
+fi
+
+# Path to store persistent data
+DATA_DIR="$HOME/Library/Application Support/com.openwebui.OpenWebUI"
+
+status() {
+  docker ps \
+    --filter "name=open-webui" \
+    --format "table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.Ports}}"
+}
+
+start() {
+  docker run \
+    --detach \
+    --env OPENAI_API_KEY="$OPENAI_API_KEY" \
+    --env WEBUI_AUTH=False \
+    --name open-webui \
+    --publish 3000:8080 \
+    --rm \
+    --volume "$DATA_DIR:/app/backend/data" \
+    ghcr.io/open-webui/open-webui:main
+}
+
+stop() {
+  docker kill open-webui
+}
+
+restart() {
+  stop || true
+  start
+}
+
+logs() {
+  docker logs open-webui $*
+}
+
+usage() {
+  echo "Usage: $0 <command> [args...]
+
+Commands:
+  status
+  start
+  stop
+  restart
+  logs [args...]
+  help"
+}
+
+main() {
+  if [[ $# -eq 0 ]]; then
+    usage >&2
+    exit 1
+  fi
+
+  if [[ -z "${OPENAI_API_KEY:-}" ]]; then
+    echo "OPENAI_API_KEY is not set! See: https://docs.openwebui.com/tutorial/openai" >&2
+    exit 1
+  fi
+
+  cmd="$1"
+  shift
+
+  case "$cmd" in
+    status)
+      status
+      ;;
+    start)
+      start
+      ;;
+    stop)
+      stop
+      ;;
+    restart)
+      restart
+      ;;
+    logs)
+      logs "$*"
+      ;;
+    help)
+      usage
+      ;;
+    *)
+      echo "Unknown command: $cmd"
+      exit 1
+      ;;
+  esac
+}
+
+main "$@"
