@@ -14,7 +14,10 @@ if [[ -r "$HOME/.zshenv.local" ]]; then
 fi
 
 # Path to store persistent data
-DATA_DIR="$HOME/Library/Application Support/com.openwebui.OpenWebUI"
+WEBUI_DATA_DIR="${WEBUI_DATA_DIR:-$HOME/Library/Application Support/com.openwebui.OpenWebUI}"
+
+# Port to expose the web UI
+WEBUI_PORT="${WEBUI_PORT:-3000}"
 
 status() {
   docker ps \
@@ -28,9 +31,9 @@ start() {
     --env OPENAI_API_KEY="$OPENAI_API_KEY" \
     --env WEBUI_AUTH=False \
     --name open-webui \
-    --publish 3000:8080 \
+    --publish "$WEBUI_PORT:8080" \
     --rm \
-    --volume "$DATA_DIR:/app/backend/data" \
+    --volume "$WEBUI_DATA_DIR:/app/backend/data" \
     ghcr.io/open-webui/open-webui:main
 }
 
