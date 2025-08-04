@@ -28,8 +28,6 @@
 
 set -o errexit
 set -o nounset
-# shellcheck disable=SC3040
-set -o pipefail
 
 # Default values
 BIN_DIR="${BIN_DIR:-$HOME/.local/bin}"
@@ -55,8 +53,6 @@ get_download_cmd() {
 
 # Function to download and install Chezmoi
 install_chezmoi() {
-    # shellcheck disable=SC3043
-    local download_cmd
     download_cmd=$(get_download_cmd)
     
     echo "Installing Chezmoi to $BIN_DIR..."
