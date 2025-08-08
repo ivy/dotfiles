@@ -26,6 +26,7 @@
 #   Initializing dotfiles from /home/user/dotfiles...
 #   [Chezmoi output showing applied configurations]
 
+[ -n "$DEBUG" ] && set -o xtrace
 set -o errexit
 set -o nounset
 
