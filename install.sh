@@ -580,11 +580,11 @@ main() {
   # Add BIN_DIR to PATH
   add_to_path
 
-  # Set chezmoi variable for the exec command
-  chezmoi="$BIN_DIR/chezmoi"
+  # Get the actual chezmoi path
+  chezmoi="$(command -v chezmoi)"
 
   log_info "Initializing dotfiles from $script_dir..."
-  log_info "Summary: Chezmoi available at $(command -v chezmoi) and configured successfully"
+  log_info "Summary: Chezmoi available at $chezmoi and configured successfully"
 
   # Execute the initialization command
   exec "$chezmoi" init --apply --source="$script_dir"
