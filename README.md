@@ -16,6 +16,41 @@ This repository contains my personal dotfiles for setting up a productive develo
 3. **Shared tools** that follow common standards, enabling me to collaborate with others without friction.
 4. **Documentation** that clearly explains the rationale behind each configuration choice.
 
+## Installation
+
+### Quick Start
+
+```bash
+git clone https://github.com/ivy/dotfiles-redux.git && cd dotfiles-redux && ./install.sh
+```
+
+### Advanced Usage
+
+The installer supports various options and can pass arguments directly to `chezmoi init`:
+
+```bash
+# Force reinstall tools (if already installed)
+REINSTALL_TOOLS=true ./install.sh
+
+# Pass arguments to chezmoi init
+./install.sh -- --force          # Force chezmoi to overwrite existing files
+./install.sh -- --one-shot       # Use chezmoi's one-shot mode
+
+# Combine options
+REINSTALL_TOOLS=true ./install.sh -- --force
+```
+
+### Environment Variables
+
+You can customize the installation behavior with these environment variables:
+
+- `REINSTALL_TOOLS=true` - Force reinstallation of tools even if already present
+- `BIN_DIR=/custom/path` - Install binaries to a custom directory (default: `~/.local/bin`)
+- `DEBUG=1` - Enable debug output during installation
+- `VERIFY_SIGNATURES=false` - Disable signature verification (not recommended)
+
+For a complete list of options, run `./install.sh --help`.
+
 ## License
 
 This project is open source under the [ISC License](LICENSE.md), credited to Ivy Evans.
