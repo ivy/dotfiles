@@ -93,25 +93,23 @@ log_debug() {
 
 # Parse command line arguments
 parse_arguments() {
-  FORCE_INSTALL=false
+  # Store all arguments for passthrough to chezmoi init
+  CHEZMOI_ARGS=()
+  
   while [ $# -gt 0 ]; do
     case $1 in
-      --force)
-        FORCE_INSTALL=true
-        shift
-        ;;
       --help | -h)
         cat <<'EOF'
 Chezmoi Dotfiles Installer
 
 USAGE:
-    ./install.sh [OPTIONS]
+    ./install.sh [OPTIONS] [-- CHEZMOI_ARGS...]
 
 OPTIONS:
-    --force     Force reinstallation even if tools are already installed
     --help, -h  Show this help message
 
 ENVIRONMENT VARIABLES:
+    REINSTALL_TOOLS        Force reinstallation even if tools are already installed (default: false)
     CHEZMOI_VERSION         Override the version to install (default: latest)
     COSIGN_VERSION          Override the cosign version to install (default: latest)
     BIN_DIR                 Override installation directory (default: ~/.local/bin)
@@ -120,18 +118,24 @@ ENVIRONMENT VARIABLES:
     DEBUG                   Enable debug output
 
 EXAMPLES:
-    ./install.sh                    # Install normally
-    ./install.sh --force            # Force reinstall everything
-    DEBUG=1 ./install.sh            # Install with debug output
-    BIN_DIR=/usr/local/bin ./install.sh  # Install to custom directory
+    ./install.sh                                    # Install normally
+    REINSTALL_TOOLS=true ./install.sh               # Force reinstall everything
+    ./install.sh -- --force                         # Pass --force to chezmoi init
+    ./install.sh -- --one-shot                      # Use chezmoi one-shot mode
+    DEBUG=1 ./install.sh                            # Install with debug output
+    BIN_DIR=/usr/local/bin ./install.sh             # Install to custom directory
 
 EOF
         exit 0
         ;;
+      --)
+        shift
+        CHEZMOI_ARGS+=("$@")
+        break
+        ;;
       *)
-        log_error "Unknown option: $1"
-        log_error "Use --help for usage information"
-        exit 1
+        CHEZMOI_ARGS+=("$1")
+        shift
         ;;
     esac
   done
@@ -493,10 +497,10 @@ download_chezmoi() {
 # Function to install chezmoi
 install_chezmoi() {
   # Check if chezmoi is already available and not forcing reinstall
-  if command -v chezmoi >/dev/null 2>&1 && [ "$FORCE_INSTALL" != "true" ]; then
+  if command -v chezmoi >/dev/null 2>&1 && [ "${REINSTALL_TOOLS:-false}" != "true" ]; then
     log_info "Chezmoi is already installed: $(command -v chezmoi)"
     log_info "Version: $(chezmoi --version 2>/dev/null || echo "unknown")"
-    log_info "Use --force to reinstall"
+    log_info "Use REINSTALL_TOOLS=true to reinstall"
     return 0
   fi
 
@@ -505,7 +509,7 @@ install_chezmoi() {
     install_cosign
   fi
 
-  if [ "$FORCE_INSTALL" = "true" ]; then
+  if [ "${REINSTALL_TOOLS:-false}" = "true" ]; then
     log_info "Force installing chezmoi..."
   fi
 
@@ -563,9 +567,9 @@ main() {
   readonly COSIGN_VERSION="${COSIGN_VERSION:-latest}"
   readonly VERIFY_SIGNATURES="${VERIFY_SIGNATURES:-true}"
   readonly SKIP_PACKAGE_MANAGER="${SKIP_PACKAGE_MANAGER:-false}"
-  readonly FORCE_INSTALL
+  readonly REINSTALL_TOOLS="${REINSTALL_TOOLS:-false}"
 
-  if [ "$FORCE_INSTALL" = "true" ]; then
+  if [ "$REINSTALL_TOOLS" = "true" ]; then
     log_info "Starting Chezmoi dotfiles manager installation (force mode)..."
   else
     log_info "Starting Chezmoi dotfiles manager installation..."
@@ -586,8 +590,8 @@ main() {
   log_info "Initializing dotfiles from $script_dir..."
   log_info "Summary: Chezmoi available at $chezmoi and configured successfully"
 
-  # Execute the initialization command
-  exec "$chezmoi" init --apply --source="$script_dir"
+  # Execute the initialization command with passthrough arguments
+  exec "$chezmoi" init --apply --source="$script_dir" "${CHEZMOI_ARGS[@]}"
 }
 
 main "$@"
