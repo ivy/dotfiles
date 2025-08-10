@@ -4,9 +4,9 @@
 	"name": "Dotfiles Development",
 	// Use Debian bookworm base image
 	"image": "mcr.microsoft.com/devcontainers/base:bookworm",
-
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	"features": {
+		"ghcr.io/devcontainers-extra/features/mise:1": {},
 		"ghcr.io/devcontainers/features/docker-in-docker:2": {
 			"version": "latest",
 			"enableNonRootDocker": "true"
@@ -14,14 +14,13 @@
 		"ghcr.io/devcontainers/features/git:1": {},
 		"ghcr.io/devcontainers/features/github-cli:1": {}
 	},
-
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
-
 	// Configure tool-specific properties.
 	"customizations": {
 		"vscode": {
 			"extensions": [
+				"bungcip.better-toml",
 				"eamodio.gitlens",
 				"jetmartin.bats",
 				"mkhl.shfmt",
@@ -50,16 +49,16 @@
 				"files.associations": {
 					"*.bats": "shellscript"
 				},
-				"editor.rulers": [80, 100],
+				"editor.rulers": [
+					80
+				],
 				"editor.wordWrap": "bounded",
 				"editor.wordWrapColumn": 100
 			}
 		}
 	},
-
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 	// "remoteUser": "root",
-
 	// Run the install script and setup development tools after container creation
-	"postCreateCommand": "./install.sh && ./bin/setup"
+	"postCreateCommand": "./install.sh && mise trust --yes && ./bin/setup"
 }
