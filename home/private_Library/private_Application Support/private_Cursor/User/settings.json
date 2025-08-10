@@ -1,0 +1,17 @@
+{
+    "window.commandCenter": 1,
+    "editor.rulers": [
+        80
+    ],
+    "go.formatTool": "goimports",
+    "workbench.colorTheme": "Tokyo Night",
+    "git.autofetch": true,
+    "window.autoDetectColorScheme": true,
+    "workbench.preferredLightColorTheme": "Tokyo Night Light",
+    "editor.accessibilitySupport": "off",
+    "cursor.composer.shouldChimeAfterChatFinishes": true,
+    "cursor.composer.shouldAllowCustomModes": true,
+    "workbench.preferredDarkColorTheme": "Tokyo Night",
+    "editor.fontFamily": "'FiraCode Nerd Font', Menlo, Monaco, 'Courier New', monospace",
+    "editor.fontLigatures": true
+}

@@ -1,3 +1,8 @@
 .oh-my-zsh/.git/
 .oh-my-zsh/cache/
 .oh-my-zsh/log/
+
+{{ if ne .chezmoi.os "darwin" }}
+private_Library/private_Application Support/private_Cursor/User/settings.json
+private_Library/private_Application Support/private_Cursor/User/keybindings.json
+{{ end }}
