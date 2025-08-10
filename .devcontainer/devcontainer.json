@@ -10,14 +10,52 @@
 		"ghcr.io/devcontainers/features/docker-in-docker:2": {
 			"version": "latest",
 			"enableNonRootDocker": "true"
-		}
+		},
+		"ghcr.io/devcontainers/features/git:1": {},
+		"ghcr.io/devcontainers/features/github-cli:1": {}
 	},
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 
 	// Configure tool-specific properties.
-	// "customizations": {},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"eamodio.gitlens",
+				"jetmartin.bats",
+				"mkhl.shfmt",
+				"ms-vscode.vscode-json",
+				"streetsidesoftware.code-spell-checker",
+				"timonwong.shellcheck",
+				"yzhang.markdown-all-in-one"
+			],
+			"settings": {
+				"editor.formatOnSave": true,
+				"editor.codeActionsOnSave": {
+					"source.fixAll": "explicit",
+					"source.organizeImports": "explicit"
+				},
+				"shellcheck.enable": true,
+				"shellcheck.run": "onSave",
+				"shfmt.config": {
+					"indent": 2,
+					"binaryNextLine": false,
+					"switchCaseIndent": false,
+					"spaceRedirects": false,
+					"keepPadding": false,
+					"minify": false,
+					"simplify": false
+				},
+				"files.associations": {
+					"*.bats": "shellscript"
+				},
+				"editor.rulers": [80, 100],
+				"editor.wordWrap": "bounded",
+				"editor.wordWrapColumn": 100
+			}
+		}
+	},
 
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 	// "remoteUser": "root",
