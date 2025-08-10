@@ -1,0 +1,10 @@
+{{ if lookPath "zsh" }}
+# Oh-My-Zsh external configuration
+# Only install if zsh is available in the system PATH
+[".oh-my-zsh"]
+    type = "archive"
+    url = "https://github.com/ohmyzsh/ohmyzsh/archive/master.tar.gz"
+    exact = true
+    stripComponents = 1
+    refreshPeriod = "24h"
+{{ end }}
