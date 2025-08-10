@@ -6,7 +6,8 @@
 # Setup function that runs before each test
 setup() {
   # Create temporary directories for testing
-  export TEST_TMPDIR=$(mktemp -d)
+  TEST_TMPDIR=$(mktemp -d)
+  export TEST_TMPDIR
   export TEST_SOURCE_DIR="$TEST_TMPDIR/source"
   export TEST_HOME_DIR="$TEST_TMPDIR/home"
 
@@ -29,7 +30,6 @@ assert_valid_yaml() {
   local file="$1"
 
   yq '.' "$file" >/dev/null
-  [ $? -eq 0 ]
 }
 
 # Helper function to assert valid shell syntax
@@ -42,12 +42,10 @@ assert_valid_shell() {
 
   # Test basic syntax with bash -n
   bash -n "$temp_script"
-  [ $? -eq 0 ]
 
   # Test with shellcheck if available
   if command -v shellcheck >/dev/null 2>&1; then
     shellcheck "$temp_script"
-    [ $? -eq 0 ]
   fi
 }
 
@@ -61,5 +59,4 @@ assert_script_structure() {
   # Should be syntactically valid
   echo "$script" >"$TEST_TMPDIR/temp.sh"
   bash -n "$TEST_TMPDIR/temp.sh"
-  [ $? -eq 0 ]
 }

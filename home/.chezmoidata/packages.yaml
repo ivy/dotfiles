@@ -50,6 +50,34 @@ packages:
       - xz
       - zstd
     casks:
-      - 1password-cli
+      # Development tools
+      - cursor
       - ngrok
+      - visual-studio-code
+
+      # Communication
+      - slack
+
+      # Productivity
+      - obsidian
+      - amethyst
+
+      # Media
+      - vlc
+
+      # Security
+      - 1password
+
+      # Audio
+      - loopback
+
+      # Fonts
       - font-fira-code-nerd-font
+    mas:
+      # Productivity
+      - 1532419400 # MeetingBar
+      - 1592917505 # Noir
+
+      # Utilities
+      - 1365531024 # 1Blocker
+      - 641027709  # Color Picker
