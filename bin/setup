@@ -1,0 +1,165 @@
+#!/bin/sh
+#
+# setup -- Development Tools Setup Script
+#
+# This script installs development tools needed for this dotfiles repository:
+#   - shfmt: Shell script formatter
+#   - shell linter: Shell script static analysis tool
+#
+# The script follows POSIX compliance and uses apt package manager.
+#
+# HOW TO USE:
+#   ./bin/setup
+#
+# ENVIRONMENT VARIABLES:
+#   DEBUG: Enable debug output
+#   FORCE_INSTALL: Force reinstallation even if tools are already installed
+#
+# EXAMPLE USAGE:
+#   $ ./bin/setup
+#   Installing development tools...
+#   shfmt installed successfully
+#   shell linter installed successfully
+#
+# =============================================================================
+# CONFIGURATION AND CONSTANTS
+# =============================================================================
+
+[ -n "${DEBUG:-}" ] && set -o xtrace
+set -o errexit
+set -o nounset
+
+# Package list to install
+readonly PACKAGES="shfmt shellcheck"
+
+# =============================================================================
+# LOGGING FUNCTIONS
+# =============================================================================
+
+log_info() {
+  printf "\033[32m[INFO]\033[0m %s\n" "$*" >&2
+}
+
+log_error() {
+  printf "\033[31m[ERROR]\033[0m %s\n" "$*" >&2
+}
+
+log_debug() {
+  if [ -n "${DEBUG:-}" ]; then
+    printf "\033[36m[DEBUG]\033[0m %s\n" "$*" >&2
+  fi
+}
+
+# =============================================================================
+# UTILITY FUNCTIONS
+# =============================================================================
+
+# Function to check if we need sudo for package operations
+need_sudo() {
+  # Check if we can write to apt directories
+  if [ -w /var/lib/apt/lists ] 2>/dev/null; then
+    return 1 # No sudo needed
+  else
+    return 0 # Sudo needed
+  fi
+}
+
+# Function to run command with sudo if needed
+run_with_sudo() {
+  if need_sudo; then
+    if ! command -v sudo >/dev/null 2>&1; then
+      log_error "sudo is required but not available"
+      exit 1
+    fi
+    sudo "$@"
+  else
+    "$@"
+  fi
+}
+
+# Function to check if a package is installed
+is_package_installed() {
+  package_name="$1"
+  if command -v "$package_name" >/dev/null 2>&1; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+# Function to install packages via apt
+install_packages() {
+  log_info "Installing development tools: $PACKAGES"
+  
+  # Check if apt is available
+  if ! command -v apt-get >/dev/null 2>&1; then
+    log_error "apt-get is not available on this system"
+    log_error "This script is designed for Debian/Ubuntu systems"
+    exit 1
+  fi
+  
+  # Update package list
+  log_info "Updating package list..."
+  if ! run_with_sudo apt-get update; then
+    log_error "Failed to update package list"
+    exit 1
+  fi
+  
+  # Install packages
+  for package in $PACKAGES; do
+    if is_package_installed "$package" && [ "${FORCE_INSTALL:-false}" != "true" ]; then
+      log_info "$package is already installed: $(command -v "$package")"
+      continue
+    fi
+    
+    log_info "Installing $package..."
+    if run_with_sudo apt-get install -y "$package"; then
+      log_info "$package installed successfully"
+    else
+      log_error "Failed to install $package"
+      exit 1
+    fi
+  done
+}
+
+# Function to verify installations
+verify_installations() {
+  log_info "Verifying installations..."
+  
+  for package in $PACKAGES; do
+    if is_package_installed "$package"; then
+      version_info=""
+      case "$package" in
+        shfmt)
+          version_info="$(shfmt --version 2>/dev/null || echo "unknown")"
+          ;;
+        shellcheck)
+          version_info="$(shellcheck --version 2>/dev/null | grep '^version:' | cut -d' ' -f2 || echo "unknown")"
+          ;;
+      esac
+      log_info "$package: $(command -v "$package") (version: $version_info)"
+    else
+      log_error "$package is not available after installation"
+      exit 1
+    fi
+  done
+}
+
+# =============================================================================
+# MAIN EXECUTION
+# =============================================================================
+
+main() {
+  log_info "Starting development tools setup..."
+  log_debug "Packages to install: $PACKAGES"
+  
+  # Install packages
+  install_packages
+  
+  # Verify installations
+  verify_installations
+  
+  log_info "Development tools setup completed successfully"
+}
+
+main "$@"
