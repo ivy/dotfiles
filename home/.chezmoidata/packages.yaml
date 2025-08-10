@@ -1,5 +1,55 @@
+# Homebrew packages managed by chezmoi
+# Organized by functionality for easy maintenance
+
 packages:
   darwin:
-    brews: []
+    brews:
+      # Security & authentication
+      - cosign
+      - gnupg
+
+      # Core CLI utilities
+      - awscli
+      - coreutils
+      - curl
+      - mas
+      - ripgrep
+      - tree
+
+      # System monitoring
+      - htop
+
+      # System & certificates
+      - ca-certificates
+      - zsh
+
+      # Docker & containerization
+      - docker
+      - docker-buildx
+      - docker-completion
+      - docker-compose
+      - docker-credential-helper
+      - docker-credential-helper-ecr
+
+      # Media
+      - ffmpeg
+      - flac
+
+      # Git
+      - gh
+      - git
+      - git-lfs
+
+      # Parsing utilities
+      - jq
+      - yq
+
+      # Compression utilities
+      - lz4
+      - lzo
+      - xz
+      - zstd
     casks:
-      - 'font-fira-code-nerd-font'
+      - 1password-cli
+      - ngrok
+      - font-fira-code-nerd-font
