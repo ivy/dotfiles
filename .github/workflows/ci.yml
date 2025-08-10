@@ -12,17 +12,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Run ShellCheck
-        # TODO: add `shellcheck home/**/*.sh`
         run: |
           shellcheck install.sh
+          shellcheck bin/setup
+          shellcheck bin/test
 
-  install-test:
+  test:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
     steps:
       - uses: actions/checkout@v4
-      - name: Test installation script
+      - name: Install chezmoi
         run: |
           ./install.sh
+      - name: Install test dependencies
+        run: |
+          ./bin/setup
+      - name: Run test suite
+        run: |
+          ./bin/test

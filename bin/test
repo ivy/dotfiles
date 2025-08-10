@@ -1,0 +1,17 @@
+#!/bin/sh
+#
+# test -- Test Suite Runner
+#
+# Simple test runner for bats tests.
+# Run './bin/setup' first to install dependencies.
+#
+
+[ -n "${DEBUG:-}" ] && set -o xtrace
+set -o errexit
+set -o nounset
+
+# Change to project root directory
+cd "$(dirname "$0")/.."
+
+# Run tests
+exec bats ./**/*.bats

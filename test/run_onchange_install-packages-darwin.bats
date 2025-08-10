@@ -4,7 +4,7 @@ load test_helper
 
 @test "packages.yaml file is valid YAML" {
   # Test that our actual packages.yaml file is valid YAML
-  local packages_file="../home/.chezmoidata/packages.yaml"
+  local packages_file="home/.chezmoidata/packages.yaml"
 
   # Check if the file exists
   [ -f "$packages_file" ]
@@ -15,7 +15,7 @@ load test_helper
 
 @test "packages.yaml has the structure our script expects" {
   # Test that our packages.yaml has the structure our script needs
-  local packages_file="../home/.chezmoidata/packages.yaml"
+  local packages_file="home/.chezmoidata/packages.yaml"
 
   # Check if the file exists
   [ -f "$packages_file" ]
@@ -36,7 +36,7 @@ load test_helper
 
 @test "renders correctly on darwin with packages" {
   # Test our ACTUAL script with our ACTUAL packages data
-  local script_file="../home/run_onchange_install-packages-darwin.sh.tmpl"
+  local script_file="home/run_onchange_install-packages-darwin.sh.tmpl"
 
   # Create config with our actual data
   cat >"$TEST_TMPDIR/real-config.toml" <<EOF
@@ -69,7 +69,7 @@ EOF
 
 @test "does not render on non-darwin systems" {
   # Test our ACTUAL script on non-darwin systems
-  local script_file="../home/run_onchange_install-packages-darwin.sh.tmpl"
+  local script_file="home/run_onchange_install-packages-darwin.sh.tmpl"
 
   # Create config with linux OS
   cat >"$TEST_TMPDIR/linux-config.toml" <<EOF
@@ -88,7 +88,7 @@ EOF
 
 @test "produces valid shell syntax" {
   # Test that our ACTUAL script renders to valid shell syntax
-  local script_file="../home/run_onchange_install-packages-darwin.sh.tmpl"
+  local script_file="home/run_onchange_install-packages-darwin.sh.tmpl"
 
   # Create config with our actual data
   cat >"$TEST_TMPDIR/syntax-config.toml" <<EOF
