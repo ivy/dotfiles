@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/sh
 #
 # install.sh -- Chezmoi Dotfiles Installer
 #
@@ -94,12 +94,12 @@ log_debug() {
 # Parse command line arguments
 parse_arguments() {
   # Store all arguments for passthrough to chezmoi init
-  CHEZMOI_ARGS=()
-  
+  CHEZMOI_ARGS=""
+
   while [ $# -gt 0 ]; do
     case $1 in
-      --help | -h)
-        cat <<'EOF'
+    --help | -h)
+      cat <<'EOF'
 Chezmoi Dotfiles Installer
 
 USAGE:
@@ -126,17 +126,17 @@ EXAMPLES:
     BIN_DIR=/usr/local/bin ./install.sh             # Install to custom directory
 
 EOF
-        exit 0
-        ;;
-      --)
-        shift
-        CHEZMOI_ARGS+=("$@")
-        break
-        ;;
-      *)
-        CHEZMOI_ARGS+=("$1")
-        shift
-        ;;
+      exit 0
+      ;;
+    --)
+      shift
+      CHEZMOI_ARGS="$CHEZMOI_ARGS $*"
+      break
+      ;;
+    *)
+      CHEZMOI_ARGS="$CHEZMOI_ARGS $1"
+      shift
+      ;;
     esac
   done
 }
@@ -191,35 +191,35 @@ get_download_cmd() {
 detect_system() {
   # Detect OS
   case "$(uname -s)" in
-    Linux*) os="linux" ;;
-    Darwin*) os="darwin" ;;
-    FreeBSD*) os="freebsd" ;;
-    OpenBSD*) os="openbsd" ;;
-    *)
-      log_error "Unsupported operating system: $(uname -s)"
-      log_error "Supported systems: Linux, Darwin (macOS), FreeBSD, OpenBSD"
-      exit 1
-      ;;
+  Linux*) os="linux" ;;
+  Darwin*) os="darwin" ;;
+  FreeBSD*) os="freebsd" ;;
+  OpenBSD*) os="openbsd" ;;
+  *)
+    log_error "Unsupported operating system: $(uname -s)"
+    log_error "Supported systems: Linux, Darwin (macOS), FreeBSD, OpenBSD"
+    exit 1
+    ;;
   esac
 
   # Detect architecture
   case "$(uname -m)" in
-    x86_64 | amd64) arch="amd64" ;;
-    aarch64 | arm64) arch="arm64" ;;
-    armv7l | armv8l) arch="arm" ;;
-    i386 | i686) arch="i386" ;;
-    ppc64) arch="ppc64" ;;
-    ppc64le) arch="ppc64le" ;;
-    s390x) arch="s390x" ;;
-    riscv64) arch="riscv64" ;;
-    loong64) arch="loong64" ;;
-    mips64) arch="mips64" ;;
-    mips64le) arch="mips64le" ;;
-    *)
-      log_error "Unsupported architecture: $(uname -m)"
-      log_error "Supported architectures: x86_64, aarch64, armv7l, i386, ppc64, s390x, riscv64, loong64, mips64"
-      exit 1
-      ;;
+  x86_64 | amd64) arch="amd64" ;;
+  aarch64 | arm64) arch="arm64" ;;
+  armv7l | armv8l) arch="arm" ;;
+  i386 | i686) arch="i386" ;;
+  ppc64) arch="ppc64" ;;
+  ppc64le) arch="ppc64le" ;;
+  s390x) arch="s390x" ;;
+  riscv64) arch="riscv64" ;;
+  loong64) arch="loong64" ;;
+  mips64) arch="mips64" ;;
+  mips64le) arch="mips64le" ;;
+  *)
+    log_error "Unsupported architecture: $(uname -m)"
+    log_error "Supported architectures: x86_64, aarch64, armv7l, i386, ppc64, s390x, riscv64, loong64, mips64"
+    exit 1
+    ;;
   esac
 
   echo "${os}_${arch}"
@@ -283,14 +283,14 @@ run_with_sudo() {
 # Function to install cosign
 install_cosign() {
   # Check if cosign is already available and not forcing reinstall
-  if command -v cosign >/dev/null 2>&1 && [ "$FORCE_INSTALL" != "true" ]; then
+  if command -v cosign >/dev/null 2>&1 && [ "${REINSTALL_TOOLS:-false}" != "true" ]; then
     log_info "Cosign is already installed: $(command -v cosign)"
     log_info "Version: $(cosign version 2>/dev/null | grep 'GitVersion:' | cut -d' ' -f2 || echo "unknown")"
     log_info "Use --force to reinstall"
     return 0
   fi
 
-  if [ "$FORCE_INSTALL" = "true" ]; then
+  if [ "${REINSTALL_TOOLS:-false}" = "true" ]; then
     log_info "Force installing cosign for signature verification..."
   else
     log_info "Installing cosign for signature verification..."
@@ -418,14 +418,14 @@ download_chezmoi() {
 
   # Determine file extension based on system
   case "$system" in
-    linux_*) ext="tar.gz" ;;
-    darwin_*) ext="tar.gz" ;;
-    freebsd_*) ext="tar.gz" ;;
-    openbsd_*) ext="tar.gz" ;;
-    *)
-      log_error "Unsupported system for download: $system"
-      exit 1
-      ;;
+  linux_*) ext="tar.gz" ;;
+  darwin_*) ext="tar.gz" ;;
+  freebsd_*) ext="tar.gz" ;;
+  openbsd_*) ext="tar.gz" ;;
+  *)
+    log_error "Unsupported system for download: $system"
+    exit 1
+    ;;
   esac
 
   # Download files to temporary directory
@@ -547,8 +547,8 @@ install_chezmoi() {
 # Add BIN_DIR to PATH if not already there
 add_to_path() {
   case ":$PATH:" in
-    *":$BIN_DIR:"*) ;;
-    *) export PATH="$BIN_DIR:$PATH" ;;
+  *":$BIN_DIR:"*) ;;
+  *) export PATH="$BIN_DIR:$PATH" ;;
   esac
 }
 
@@ -591,7 +591,13 @@ main() {
   log_info "Summary: Chezmoi available at $chezmoi and configured successfully"
 
   # Execute the initialization command with passthrough arguments
-  exec "$chezmoi" init --apply --source="$script_dir" "${CHEZMOI_ARGS[@]}"
+  if [ -n "$CHEZMOI_ARGS" ]; then
+    # shellcheck disable=SC2086
+    set -- $CHEZMOI_ARGS
+    exec "$chezmoi" init --apply --source="$script_dir" "$@"
+  else
+    exec "$chezmoi" init --apply --source="$script_dir"
+  fi
 }
 
 main "$@"
