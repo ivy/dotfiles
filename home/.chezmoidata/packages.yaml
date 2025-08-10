@@ -1,0 +1,5 @@
+packages:
+  darwin:
+    brews: []
+    casks:
+      - 'font-fira-code-nerd-font'
