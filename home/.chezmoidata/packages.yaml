@@ -26,6 +26,9 @@ packages:
       # Terminal multiplexer
       - tmux
 
+      # Shell prompt
+      - starship
+
       # System & certificates
       - ca-certificates
       - zsh
