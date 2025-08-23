@@ -1,0 +1,147 @@
+#!/usr/bin/env bash
+#
+# open-webui -- OpenWebUI helper script
+#
+
+[[ -n "$DEBUG" ]] && set -o xtrace
+set -o errexit
+set -o nounset
+set -o pipefail
+
+if [[ -r "$HOME/.zshenv.local" ]]; then
+  # Load local environment variables
+  source "$HOME/.zshenv.local"
+  export OPENAI_API_KEY="${OPENAI_API_KEY:-}"
+fi
+
+# Tailscale configuration
+export TAILSCALE_STATE_DIR="${TAILSCALE_STATE_DIR:-$HOME/Library/Application Support/com.openwebui.OpenWebUI/tailscale-state}"
+export TAILSCALE_CONFIG_DIR="${TAILSCALE_CONFIG_DIR:-${XDG_CONFIG_HOME:-$HOME/.config}/docker-compose/tailscale}"
+export TS_HOSTNAME="${TS_HOSTNAME:-open-webui}"
+export TS_AUTHKEY="${TS_AUTHKEY:-}"
+export TS_EXTRA_ARGS="${TS_EXTRA_ARGS:---advertise-tags=tag:container}"
+
+# Path to store persistent data
+export WEBUI_DATA_DIR="${WEBUI_DATA_DIR:-$HOME/Library/Application Support/com.openwebui.OpenWebUI}"
+
+# Port to expose the web UI
+export WEBUI_PORT="${WEBUI_PORT:-3000}"
+
+# Docker Compose project name
+export COMPOSE_PROJECT_NAME="${COMPOSE_PROJECT_NAME:-open-webui}"
+
+# Path to docker-compose.yml (assumes it's in the same directory as this script)
+COMPOSE_FILE="${COMPOSE_FILE:-${XDG_CONFIG_HOME:-$HOME/.config}/docker-compose/open-webui.yml}"
+
+status() {
+  docker-compose -f "$COMPOSE_FILE" ps
+}
+
+start() {
+  # Create data directories if they don't exist
+  mkdir -p \
+    "$TAILSCALE_STATE_DIR" \
+    "$WEBUI_DATA_DIR"
+
+  docker-compose -f "$COMPOSE_FILE" up -d --pull always
+}
+
+stop() {
+  docker-compose -f "$COMPOSE_FILE" down
+}
+
+restart() {
+  docker-compose -f "$COMPOSE_FILE" restart
+}
+
+logs() {
+  docker-compose -f "$COMPOSE_FILE" logs $*
+}
+
+pull() {
+  docker-compose -f "$COMPOSE_FILE" pull
+}
+
+update() {
+  echo "Pulling latest image..."
+  pull
+  echo "Restarting service with new image..."
+  docker-compose -f "$COMPOSE_FILE" up -d
+}
+
+shell() {
+  docker-compose -f "$COMPOSE_FILE" exec open-webui /bin/bash
+}
+
+usage() {
+  echo "Usage: $0 <command> [args...]
+
+Commands:
+  status              Show status of the service
+  start               Start the service
+  stop                Stop the service
+  restart             Restart the service
+  logs [args...]      Show logs (supports docker-compose logs options)
+  pull                Pull the latest image
+  update              Pull latest image and restart service
+  shell               Open a shell in the running container
+  help                Show this help message"
+}
+
+main() {
+  if [[ $# -eq 0 ]]; then
+    usage >&2
+    exit 1
+  fi
+
+  if [[ -z "${OPENAI_API_KEY:-}" ]]; then
+    echo "OPENAI_API_KEY is not set! See: https://docs.openwebui.com/tutorial/openai" >&2
+    exit 1
+  fi
+
+  if [[ ! -f "$COMPOSE_FILE" ]]; then
+    echo "docker-compose.yml not found at: $COMPOSE_FILE" >&2
+    echo "Please ensure docker-compose.yml is in the same directory as this script" >&2
+    exit 1
+  fi
+
+  cmd="$1"
+  shift
+
+  case "$cmd" in
+    status)
+      status
+      ;;
+    start)
+      start
+      ;;
+    stop)
+      stop
+      ;;
+    restart)
+      restart
+      ;;
+    logs)
+      logs "$@"
+      ;;
+    pull)
+      pull
+      ;;
+    update)
+      update
+      ;;
+    shell)
+      shell
+      ;;
+    help)
+      usage
+      ;;
+    *)
+      echo "Unknown command: $cmd" >&2
+      usage >&2
+      exit 1
+      ;;
+  esac
+}
+
+main "$@"

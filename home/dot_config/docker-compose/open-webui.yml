@@ -1,0 +1,33 @@
+version: '3.7'
+
+services:
+  tailscale:
+    image: tailscale/tailscale:latest
+    hostname: ${TS_HOSTNAME:-open-webui}
+    environment:
+      - TS_AUTHKEY=${TS_AUTHKEY}
+      - TS_EXTRA_ARGS=${TS_EXTRA_ARGS:---advertise-tags=tag:container}
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_USERSPACE=false
+      - TS_SERVE_CONFIG=/config/serve.json
+    volumes:
+      - "${TAILSCALE_STATE_DIR:-./tailscale-state}:/var/lib/tailscale"
+      - "${TAILSCALE_CONFIG_DIR:-./tailscale-config}:/config:ro"
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    cap_add:
+      - net_admin
+    restart: unless-stopped
+
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui-app
+    depends_on:
+      - tailscale
+    network_mode: service:tailscale
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - WEBUI_AUTH=${WEBUI_AUTH:-False}
+    volumes:
+      - "${WEBUI_DATA_DIR:-./data}:/app/backend/data"
+    restart: unless-stopped
