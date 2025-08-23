@@ -290,3 +290,6 @@ tags
 *.ori
 *.orig
 *.tmp
+
+# Claude Code
+.claude/settings.local.json
