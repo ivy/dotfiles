@@ -52,6 +52,9 @@ packages:
       - jq
       - yq
 
+      # Documentation & diagramming
+      - mermaid-cli
+
       # Compression utilities
       - lz4
       - lzo
