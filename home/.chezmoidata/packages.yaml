@@ -12,8 +12,11 @@ packages:
       - awscli
       - coreutils
       - curl
+      - fd
+      - fzf
       - mas
       - mise
+      - neovim
       - ripgrep
       - tree
 
@@ -43,6 +46,7 @@ packages:
       - gh
       - git
       - git-lfs
+      - lazygit
 
       # Parsing utilities
       - jq
