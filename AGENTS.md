@@ -39,6 +39,7 @@ The repository uses [mise](https://github.com/jdx/mise) for tool version managem
 - Uses Homebrew for package installation via `run_onchange_install-packages-darwin.sh.tmpl`
 - Supports brew packages, casks, and Mac App Store apps through templates
 - Package definitions are templated and rendered by Chezmoi
+- **Preference**: Install tools through package managers when they are stable and unlikely to diverge in versions across projects (e.g., neovim, lazygit, ripgrep, fd, fzf)
 
 #### Adding New Packages
 To add new packages, edit `home/.chezmoidata/packages.yaml`:
