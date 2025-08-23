@@ -20,6 +20,9 @@ packages:
       # System monitoring
       - htop
 
+      # Terminal multiplexer
+      - tmux
+
       # System & certificates
       - ca-certificates
       - zsh

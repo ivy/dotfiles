@@ -40,6 +40,13 @@ The repository uses [mise](https://github.com/jdx/mise) for tool version managem
 - Supports brew packages, casks, and Mac App Store apps through templates
 - Package definitions are templated and rendered by Chezmoi
 
+#### Adding New Packages
+To add new packages, edit `home/.chezmoidata/packages.yaml`:
+- **Brew packages**: Add to `packages.darwin.brews` array
+- **Casks**: Add to `packages.darwin.casks` array  
+- **Mac App Store**: Add app ID to `packages.darwin.mas` array
+Run `chezmoi apply` to install new packages.
+
 ## Architecture
 
 ### Chezmoi Structure
