@@ -43,6 +43,7 @@ packages:
       - flac
 
       # Git
+      - delta
       - gh
       - git
       - git-lfs
