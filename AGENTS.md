@@ -97,6 +97,14 @@ bats -t test/
 2. Template files (`.tmpl`) will be processed by Chezmoi
 3. Test changes: `chezmoi diff` to see what would change
 4. Apply changes: `chezmoi apply`
+5. Commit each change with a descriptive Conventional Commit message (e.g., `feat: add package`, `fix: correct template syntax`)
+
+### Claude Code Workflow
+When making configuration changes:
+1. Always run `chezmoi diff` before applying to preview changes
+2. Run `chezmoi apply` to apply configuration changes
+3. After each logical change, create a git commit with a descriptive Conventional Commit message
+4. Use commit prefixes: `feat:` for new features/packages, `fix:` for corrections, `chore:` for maintenance
 
 ### Adding New Dotfiles
 1. Add file to appropriate location in `home/` with `dot_` prefix
