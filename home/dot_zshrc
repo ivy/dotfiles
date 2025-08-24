@@ -77,6 +77,10 @@ source "$ZSH"/oh-my-zsh.sh
 
 # User configuration
 
+# Add custom functions directory to fpath and enable autoloading
+fpath=($XDG_CONFIG_HOME/zsh/functions $fpath)
+autoload -Uz c
+
 # Enable Vi mode for command line editing
 bindkey -v
 
