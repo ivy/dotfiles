@@ -90,6 +90,9 @@ packages:
 
       # Fonts
       - font-fira-code-nerd-font
+
+      # Terminal
+      - ghostty
     mas:
       # Productivity
       - 1532419400 # MeetingBar

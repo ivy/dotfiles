@@ -1,0 +1,37 @@
+# This is the configuration file for Ghostty.
+#
+# This template file has been automatically created at the following
+# path since Ghostty couldn't find any existing config files on your system:
+#
+#   /Users/ivy/Library/Application Support/com.mitchellh.ghostty/config
+#
+# The template does not set any default options, since Ghostty ships
+# with sensible defaults for all options. Users should only need to set
+# options that they want to change from the default.
+#
+# Run `ghostty +show-config --default --docs` to view a list of
+# all available config options and their default values.
+#
+# Additionally, each config option is also explained in detail
+# on Ghostty's website, at https://ghostty.org/docs/config.
+
+# Font Configuration
+font-family = FiraCode Nerd Font Mono
+font-size = 14
+font-feature = +calt,+liga,+dlig
+
+# Shell Integration
+shell-integration = zsh
+shell-integration-features = cursor,sudo,title
+
+# Quick Terminal (macOS)
+keybind = global:cmd+grave_accent=toggle_quick_terminal
+
+# Basic Keybindings
+keybind = cmd+d=new_split:right
+keybind = cmd+shift+d=new_split:down
+keybind = cmd+t=new_tab
+keybind = cmd+w=close_tab
+
+# Theme
+theme = light:tokyonight-day,dark:tokyonight
