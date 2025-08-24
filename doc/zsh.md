@@ -2,6 +2,23 @@
 
 This document describes the zsh shell configuration in this dotfiles repository.
 
+## Design Philosophy
+
+The configuration follows a minimalist approach:
+- Uses Oh My Zsh for base functionality but doesn't over-customize
+- Implements standard specifications (XDG Base Directory)
+- Provides robust utility functions with comprehensive fallbacks
+- Keeps most Oh My Zsh options as commented examples for reference
+
+## Key Features
+
+- **XDG Compliance**: Proper directory structure following standards
+- **Clean PATH Management**: Safely adds user bin directory
+- **Vi Mode**: Familiar vi keybindings for command editing
+- **Tool Integration**: Modern tools (mise, starship) integrated via plugins
+- **Fast Reload**: Custom `reload!` function for quick shell restarts
+- **Smart Project Navigation**: Intelligent repository discovery with the `e` function
+
 ## Configuration Files
 
 The zsh configuration is split across two files:
@@ -53,18 +70,31 @@ bindkey -v
 
 A shell reload function for fast configuration reloads. Simply run `reload!` to restart your shell session with updated configuration.
 
-## Design Philosophy
+#### e Function
 
-The configuration follows a minimalist approach:
-- Uses Oh My Zsh for base functionality but doesn't over-customize
-- Implements standard specifications (XDG Base Directory)
-- Provides robust utility functions with comprehensive fallbacks
-- Keeps most Oh My Zsh options as commented examples for reference
+A project navigation and Claude Code launcher script. The `e` command intelligently finds, clones, or creates repositories and opens them in Claude Code.
 
-## Key Features
+**Usage:**
+```bash
+e                    # Use fzf to select from available projects
+e REPO              # Search for REPO across configured organizations
+e ORG/REPO          # Open specific ORG/REPO
+```
 
-- **XDG Compliance**: Proper directory structure following standards
-- **Clean PATH Management**: Safely adds user bin directory
-- **Vi Mode**: Familiar vi keybindings for command editing
-- **Tool Integration**: Modern tools (mise, starship) integrated via plugins
-- **Fast Reload**: Custom `reload!` function for quick shell restarts
+**Environment Variables:**
+- `PROJECTS_DIR` - Base directory for projects (default: `$HOME/src/github.com`)
+- `GITHUB_USER` - Primary GitHub username 
+- `GITHUB_ORGS` - Comma-delimited list of GitHub organizations to search (e.g., `"myorg,company,another-org"`)
+
+**Smart Repository Discovery:**
+When you specify just a repository name (e.g., `e dotfiles`), the function:
+1. Searches locally across all configured organizations
+2. If not found locally, tries cloning from each organization in order
+3. Only creates a new repository if none are found and you confirm
+
+**Organization Priority:**
+The function checks organizations in this order:
+1. `GITHUB_USER` environment variable
+2. User from `gh config get user` (GitHub CLI)
+3. Organizations from `GITHUB_ORGS` (comma-delimited)
+4. System username as final fallback
