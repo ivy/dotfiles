@@ -58,7 +58,4 @@ install_tokyo_night_theme() {
 # Only run on macOS
 if [[ "$OSTYPE" == "darwin"* ]]; then
     install_tokyo_night_theme
-else
-    echo "This script is only for macOS"
-    exit 1
 fi
