@@ -90,7 +90,7 @@ find_existing_repo() {
     local potential_orgs
     
     # Get list of potential organizations
-    readarray -t potential_orgs < <(get_potential_orgs)
+    potential_orgs=(${(f)"$(get_potential_orgs)"})
     
     # Check each organization for existing repository
     for org in "${potential_orgs[@]}"; do
@@ -111,7 +111,7 @@ clone_repo_from_orgs() {
     local potential_orgs
     
     # Get list of potential organizations
-    readarray -t potential_orgs < <(get_potential_orgs)
+    potential_orgs=(${(f)"$(get_potential_orgs)"})
     
     # Try cloning from each organization
     for org in "${potential_orgs[@]}"; do
@@ -120,7 +120,7 @@ clone_repo_from_orgs() {
         
         echo "Trying to clone from: $repo_url"
         
-        if git clone "$repo_url" "$repo_path" 2>/dev/null; then
+        if git clone "$repo_url" "$repo_path"; then
             echo "Successfully cloned repository to: $repo_path"
             echo "$org/$repo"
             return 0
@@ -133,22 +133,24 @@ clone_repo_from_orgs() {
     echo "" >&2
     
     # Offer to create new repository
-    local fallback_org="${potential_orgs[0]}"
-    local repo_path="$PROJECTS_DIR/$fallback_org/$repo"
-    
-    read -q "REPLY?Would you like to create a new repository at $repo_path? (y/N) "
-    echo
-    
-    if [[ "$REPLY" =~ ^[Yy]$ ]]; then
-        mkdir -p "$repo_path"
-        cd "$repo_path"
-        git init
-        echo "Created new repository at: $repo_path"
-        echo "$fallback_org/$repo"
-        return 0
-    else
-        return 1
+    if (( ${#potential_orgs[@]} > 0 )); then
+        local fallback_org="${potential_orgs[1]}"
+        local repo_path="$PROJECTS_DIR/$fallback_org/$repo"
+        
+        read -q "REPLY?Would you like to create a new repository at $repo_path? (y/N) "
+        echo
+        
+        if [[ "$REPLY" =~ ^[Yy]$ ]]; then
+            mkdir -p "$repo_path"
+            cd "$repo_path"
+            git init
+            echo "Created new repository at: $repo_path"
+            echo "$fallback_org/$repo"
+            return 0
+        fi
     fi
+    
+    return 1
 }
 
 # Function to use fzf to select a project
@@ -243,7 +245,7 @@ main() {
         echo "Repository not found at: $project_path"
         echo "Attempting to clone from: $repo_url"
         
-        if git clone "$repo_url" "$project_path" 2>/dev/null; then
+        if git clone "$repo_url" "$project_path"; then
             echo "Successfully cloned repository to: $project_path"
         else
             echo "Failed to clone repository from $repo_url" >&2
