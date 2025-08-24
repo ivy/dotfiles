@@ -24,6 +24,8 @@ jobs:
         os: [ubuntu-latest, macos-latest]
     steps:
       - uses: actions/checkout@v4
+      - name: Setup mise
+        uses: jdx/mise-action@v2
       - name: Install chezmoi
         run: |
           ./install.sh
