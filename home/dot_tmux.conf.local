@@ -40,3 +40,6 @@ bind -r L resize-pane -R 5
 
 # Clear terminal with prefix + Ctrl+l
 bind-key C-l send-keys C-l \; clear-history
+
+# Override default prefix+e to open Claude in chezmoi directory
+bind e run-shell 'tmux new-window -c "$(chezmoi data | jq -r .chezmoi.workingTree)" -n "dotfiles" "claude"'

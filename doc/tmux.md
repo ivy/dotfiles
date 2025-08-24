@@ -74,6 +74,16 @@ These bindings work seamlessly:
 - **Copy Mode**: Navigate with same keys
 - **Fallback**: Prefix-based navigation always available
 
+### Custom Keybindings
+**Location**: `home/dot_tmux.conf.local`
+
+#### Claude Code Integration
+- `prefix + e` - Open Claude Code in dotfiles directory
+  - Overrides the default gpakosz "edit config" binding
+  - Opens a new tmux window named "dotfiles"
+  - Automatically navigates to the chezmoi working directory
+  - Launches Claude Code for AI-assisted dotfiles management
+
 ### Version Compatibility
 The configuration handles different tmux versions for the `Ctrl+\` binding:
 - **tmux < 3.0**: Uses single backslash escape
@@ -96,7 +106,7 @@ The external base configuration provides:
 - Copy mode improvements
 
 ### Built-in Keybindings
-- `prefix + e` - Edit local config and reload
+- `prefix + e` - ~~Edit local config and reload~~ **Overridden**: Open Claude Code in dotfiles directory
 - `prefix + r` - Reload configuration
 - `prefix + Tab` - Toggle mouse mode
 - Many more - see gpakosz documentation
