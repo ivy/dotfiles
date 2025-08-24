@@ -11,7 +11,7 @@
 # Environment variables:
 #   PROJECTS_DIR        # Base directory for projects (default: $HOME/src/github.com)
 #   GITHUB_USER         # Primary GitHub username for fallback
-#   GITHUB_ORGS         # Array of preferred GitHub orgs/users for fallback
+#   GITHUB_ORGS         # Comma-delimited list of GitHub orgs/users to search
 #   USER                # System username as final fallback
 
 set -o errexit -o nounset
@@ -35,37 +35,120 @@ get_github_user() {
     return 1
 }
 
-# Function to determine fallback organization
-get_fallback_org() {
-    # Try GITHUB_USER first
+# Function to get list of potential organizations to check
+get_potential_orgs() {
+    local orgs=()
+    
+    # Add GITHUB_USER if set
     if [[ -n "${GITHUB_USER:-}" ]]; then
-        echo "$GITHUB_USER"
-        return 0
+        orgs+=("$GITHUB_USER")
     fi
     
-    # Try to get from gh CLI config
+    # Add user from gh CLI config
     local gh_user
     if gh_user=$(get_github_user); then
-        echo "$gh_user"
-        return 0
-    fi
-    
-    # Try first entry in GITHUB_ORGS array
-    if [[ -n "${GITHUB_ORGS:-}" ]]; then
-        # Handle both array and string formats
-        if [[ "${GITHUB_ORGS[*]:-}" != "$GITHUB_ORGS" ]] 2>/dev/null; then
-            # It's an array
-            echo "${GITHUB_ORGS[1]}"
-            return 0
-        else
-            # It's a string, take first word
-            echo "${GITHUB_ORGS%% *}"
-            return 0
+        # Only add if not already in list
+        if [[ " ${orgs[*]} " != *" $gh_user "* ]]; then
+            orgs+=("$gh_user")
         fi
     fi
     
-    # Fallback to USER
-    echo "${USER:-$(whoami)}"
+    # Add entries from GITHUB_ORGS (comma-delimited)
+    if [[ -n "${GITHUB_ORGS:-}" ]]; then
+        if [[ "${GITHUB_ORGS[*]:-}" != "$GITHUB_ORGS" ]] 2>/dev/null; then
+            # It's an array
+            for org in "${GITHUB_ORGS[@]}"; do
+                if [[ " ${orgs[*]} " != *" $org "* ]]; then
+                    orgs+=("$org")
+                fi
+            done
+        else
+            # It's a string, split on commas
+            IFS=',' read -ra github_orgs <<< "$GITHUB_ORGS"
+            for org in "${github_orgs[@]}"; do
+                # Trim whitespace
+                org=$(echo "$org" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+                if [[ -n "$org" && " ${orgs[*]} " != *" $org "* ]]; then
+                    orgs+=("$org")
+                fi
+            done
+        fi
+    fi
+    
+    # Add system user as final fallback
+    local system_user="${USER:-$(whoami)}"
+    if [[ " ${orgs[*]} " != *" $system_user "* ]]; then
+        orgs+=("$system_user")
+    fi
+    
+    printf '%s\n' "${orgs[@]}"
+}
+
+# Function to find existing repository across organizations
+find_existing_repo() {
+    local repo="$1"
+    local potential_orgs
+    
+    # Get list of potential organizations
+    readarray -t potential_orgs < <(get_potential_orgs)
+    
+    # Check each organization for existing repository
+    for org in "${potential_orgs[@]}"; do
+        local repo_path="$PROJECTS_DIR/$org/$repo"
+        if [[ -d "$repo_path" ]]; then
+            echo "$org/$repo"
+            return 0
+        fi
+    done
+    
+    # No existing repository found
+    return 1
+}
+
+# Function to clone repository from potential organizations
+clone_repo_from_orgs() {
+    local repo="$1"
+    local potential_orgs
+    
+    # Get list of potential organizations
+    readarray -t potential_orgs < <(get_potential_orgs)
+    
+    # Try cloning from each organization
+    for org in "${potential_orgs[@]}"; do
+        local repo_path="$PROJECTS_DIR/$org/$repo"
+        local repo_url="https://github.com/$org/$repo.git"
+        
+        echo "Trying to clone from: $repo_url"
+        
+        if git clone "$repo_url" "$repo_path" 2>/dev/null; then
+            echo "Successfully cloned repository to: $repo_path"
+            echo "$org/$repo"
+            return 0
+        fi
+    done
+    
+    # No repository found in any organization
+    echo "Repository '$repo' not found in any configured organization:" >&2
+    printf '  %s\n' "${potential_orgs[@]}" >&2
+    echo "" >&2
+    
+    # Offer to create new repository
+    local fallback_org="${potential_orgs[0]}"
+    local repo_path="$PROJECTS_DIR/$fallback_org/$repo"
+    
+    read -q "REPLY?Would you like to create a new repository at $repo_path? (y/N) "
+    echo
+    
+    if [[ "$REPLY" =~ ^[Yy]$ ]]; then
+        mkdir -p "$repo_path"
+        cd "$repo_path"
+        git init
+        echo "Created new repository at: $repo_path"
+        echo "$fallback_org/$repo"
+        return 0
+    else
+        return 1
+    fi
 }
 
 # Function to use fzf to select a project
@@ -90,39 +173,6 @@ select_project_with_fzf() {
     fi
 }
 
-# Function to clone a repository
-clone_repo() {
-    local org="$1"
-    local repo="$2"
-    local repo_path="$PROJECTS_DIR/$org/$repo"
-    local repo_url="https://github.com/$org/$repo.git"
-    
-    echo "Repository not found at: $repo_path"
-    echo "Attempting to clone from: $repo_url"
-    
-    if ! git clone "$repo_url" "$repo_path" 2>/dev/null; then
-        echo "Failed to clone repository from $repo_url" >&2
-        echo ""
-        read -q "REPLY?Would you like to create a new repository at $repo_path? (y/N) "
-        echo
-        
-        if [[ "$REPLY" =~ ^[Yy]$ ]]; then
-            mkdir -p "$repo_path"
-            cd "$repo_path"
-            git init
-            echo "# $repo" > README.md
-            git add README.md
-            git commit -m "Initial commit"
-            echo "Created new repository at: $repo_path"
-            return 0
-        else
-            return 1
-        fi
-    fi
-    
-    echo "Successfully cloned repository to: $repo_path"
-    return 0
-}
 
 # Function to open project in Claude Code
 open_project() {
@@ -149,43 +199,67 @@ open_project() {
 
 # Main logic
 main() {
-    local org repo project_path
+    local selected_project project_path
     
     case "${1:-}" in
         "")
             # No arguments - use fzf to select project
-            local selected_project
             if ! selected_project=$(select_project_with_fzf); then
                 return 1
             fi
-            org="${selected_project%/*}"
-            repo="${selected_project#*/}"
             project_path="$PROJECTS_DIR/$selected_project"
             ;;
         */*)
-            # ORG/REPO format
-            org="${1%/*}"
-            repo="${1#*/}"
-            project_path="$PROJECTS_DIR/$org/$repo"
+            # ORG/REPO format - use as specified
+            selected_project="$1"
+            project_path="$PROJECTS_DIR/$selected_project"
             ;;
         *)
-            # Just REPO - need to determine ORG
-            repo="$1"
-            org=$(get_fallback_org)
-            if [[ -z "$org" ]]; then
-                echo "Error: Could not determine organization for repository '$repo'" >&2
-                echo "Please specify as ORG/REPO or set GITHUB_USER/GITHUB_ORGS" >&2
-                return 1
+            # Just REPO - search across organizations
+            local repo="$1"
+            
+            # First check if repo exists locally
+            if selected_project=$(find_existing_repo "$repo"); then
+                echo "Found existing repository: $selected_project"
+                project_path="$PROJECTS_DIR/$selected_project"
+            else
+                # Try to clone from configured organizations
+                if selected_project=$(clone_repo_from_orgs "$repo"); then
+                    project_path="$PROJECTS_DIR/$selected_project"
+                else
+                    echo "Error: Could not find, clone, or create repository '$repo'" >&2
+                    return 1
+                fi
             fi
-            project_path="$PROJECTS_DIR/$org/$repo"
             ;;
     esac
     
-    # Check if project directory exists
+    # Check if project directory exists (for ORG/REPO format or fzf selection)
     if [[ ! -d "$project_path" ]]; then
-        if ! clone_repo "$org" "$repo"; then
-            echo "Error: Could not access or create project: $project_path" >&2
-            return 1
+        local org="${selected_project%/*}"
+        local repo="${selected_project#*/}"
+        local repo_url="https://github.com/$org/$repo.git"
+        
+        echo "Repository not found at: $project_path"
+        echo "Attempting to clone from: $repo_url"
+        
+        if git clone "$repo_url" "$project_path" 2>/dev/null; then
+            echo "Successfully cloned repository to: $project_path"
+        else
+            echo "Failed to clone repository from $repo_url" >&2
+            echo "" >&2
+            read -q "REPLY?Would you like to create a new repository at $project_path? (y/N) "
+            echo
+            
+            if [[ "$REPLY" =~ ^[Yy]$ ]]; then
+                mkdir -p "$project_path"
+                cd "$project_path"
+                git init
+                echo "Created new repository at: $project_path"
+            else
+                echo "Error: Could not access or create project: $project_path" >&2
+                return 1
+            fi
         fi
     fi
     
