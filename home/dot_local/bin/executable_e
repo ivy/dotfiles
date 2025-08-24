@@ -1,0 +1,197 @@
+#!/usr/bin/env zsh
+
+# e [[ORG/]REPO] — open a project in Claude Code
+# A shortcut to navigate to projects and launch Claude Code
+#
+# Usage:
+#   e                    # Use fzf to select from available projects
+#   e REPO              # Open REPO using fallback ORG logic
+#   e ORG/REPO          # Open specific ORG/REPO
+#
+# Environment variables:
+#   PROJECTS_DIR        # Base directory for projects (default: $HOME/src/github.com)
+#   GITHUB_USER         # Primary GitHub username for fallback
+#   GITHUB_ORGS         # Array of preferred GitHub orgs/users for fallback
+#   USER                # System username as final fallback
+
+set -o errexit -o nounset
+
+# Configuration
+PROJECTS_DIR="${PROJECTS_DIR:-$HOME/src/github.com}"
+
+# Ensure projects directory exists
+[[ -d "$PROJECTS_DIR" ]] || mkdir -p "$PROJECTS_DIR"
+
+# Function to get GitHub user from gh CLI (without API request)
+get_github_user() {
+    if command -v gh >/dev/null 2>&1; then
+        # Try to get user from gh config (no API request)
+        local gh_user
+        if gh_user=$(gh config get -h github.com user 2>/dev/null) && [[ -n "$gh_user" ]]; then
+            echo "$gh_user"
+            return 0
+        fi
+    fi
+    return 1
+}
+
+# Function to determine fallback organization
+get_fallback_org() {
+    # Try GITHUB_USER first
+    if [[ -n "${GITHUB_USER:-}" ]]; then
+        echo "$GITHUB_USER"
+        return 0
+    fi
+    
+    # Try to get from gh CLI config
+    local gh_user
+    if gh_user=$(get_github_user); then
+        echo "$gh_user"
+        return 0
+    fi
+    
+    # Try first entry in GITHUB_ORGS array
+    if [[ -n "${GITHUB_ORGS:-}" ]]; then
+        # Handle both array and string formats
+        if [[ "${GITHUB_ORGS[*]:-}" != "$GITHUB_ORGS" ]] 2>/dev/null; then
+            # It's an array
+            echo "${GITHUB_ORGS[1]}"
+            return 0
+        else
+            # It's a string, take first word
+            echo "${GITHUB_ORGS%% *}"
+            return 0
+        fi
+    fi
+    
+    # Fallback to USER
+    echo "${USER:-$(whoami)}"
+}
+
+# Function to use fzf to select a project
+select_project_with_fzf() {
+    if ! command -v fzf >/dev/null 2>&1; then
+        echo "Error: fzf is required for project selection but not installed" >&2
+        return 1
+    fi
+    
+    local selected
+    selected=$(find "$PROJECTS_DIR" -type d -mindepth 2 -maxdepth 2 -not -path '*/.*' | \
+        sed "s|$PROJECTS_DIR/||" | \
+        sort | \
+        fzf --prompt="Select project: " --height=40% --reverse --border)
+    
+    if [[ -n "$selected" ]]; then
+        echo "$selected"
+        return 0
+    else
+        echo "No project selected" >&2
+        return 1
+    fi
+}
+
+# Function to clone a repository
+clone_repo() {
+    local org="$1"
+    local repo="$2"
+    local repo_path="$PROJECTS_DIR/$org/$repo"
+    local repo_url="https://github.com/$org/$repo.git"
+    
+    echo "Repository not found at: $repo_path"
+    echo "Attempting to clone from: $repo_url"
+    
+    if ! git clone "$repo_url" "$repo_path" 2>/dev/null; then
+        echo "Failed to clone repository from $repo_url" >&2
+        echo ""
+        read -q "REPLY?Would you like to create a new repository at $repo_path? (y/N) "
+        echo
+        
+        if [[ "$REPLY" =~ ^[Yy]$ ]]; then
+            mkdir -p "$repo_path"
+            cd "$repo_path"
+            git init
+            echo "# $repo" > README.md
+            git add README.md
+            git commit -m "Initial commit"
+            echo "Created new repository at: $repo_path"
+            return 0
+        else
+            return 1
+        fi
+    fi
+    
+    echo "Successfully cloned repository to: $repo_path"
+    return 0
+}
+
+# Function to open project in Claude Code
+open_project() {
+    local project_path="$1"
+    
+    if [[ ! -d "$project_path" ]]; then
+        echo "Error: Project directory does not exist: $project_path" >&2
+        return 1
+    fi
+    
+    echo "Opening project: $project_path"
+    cd "$project_path"
+    
+    # Check if claude command exists
+    if command -v claude >/dev/null 2>&1; then
+        exec claude
+    else
+        echo "Warning: 'claude' command not found in PATH" >&2
+        echo "Current directory: $(pwd)"
+        echo "You can now manually start Claude Code in this directory"
+        return 0
+    fi
+}
+
+# Main logic
+main() {
+    local org repo project_path
+    
+    case "${1:-}" in
+        "")
+            # No arguments - use fzf to select project
+            local selected_project
+            if ! selected_project=$(select_project_with_fzf); then
+                return 1
+            fi
+            org="${selected_project%/*}"
+            repo="${selected_project#*/}"
+            project_path="$PROJECTS_DIR/$selected_project"
+            ;;
+        */*)
+            # ORG/REPO format
+            org="${1%/*}"
+            repo="${1#*/}"
+            project_path="$PROJECTS_DIR/$org/$repo"
+            ;;
+        *)
+            # Just REPO - need to determine ORG
+            repo="$1"
+            org=$(get_fallback_org)
+            if [[ -z "$org" ]]; then
+                echo "Error: Could not determine organization for repository '$repo'" >&2
+                echo "Please specify as ORG/REPO or set GITHUB_USER/GITHUB_ORGS" >&2
+                return 1
+            fi
+            project_path="$PROJECTS_DIR/$org/$repo"
+            ;;
+    esac
+    
+    # Check if project directory exists
+    if [[ ! -d "$project_path" ]]; then
+        if ! clone_repo "$org" "$repo"; then
+            echo "Error: Could not access or create project: $project_path" >&2
+            return 1
+        fi
+    fi
+    
+    # Open the project
+    open_project "$project_path"
+}
+
+# Run main function with all arguments
+main "$@"
