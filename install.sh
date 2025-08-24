@@ -346,6 +346,78 @@ install_cosign() {
 }
 
 # =============================================================================
+# MISE INSTALLATION
+# =============================================================================
+
+# Function to install mise
+install_mise() {
+  # Check if mise is already available and not forcing reinstall
+  if command -v mise >/dev/null 2>&1 && [ "${REINSTALL_TOOLS:-false}" != "true" ]; then
+    log_info "Mise is already installed: $(command -v mise)"
+    log_info "Version: $(mise --version 2>/dev/null | head -n1 || echo "unknown")"
+    log_info "Use REINSTALL_TOOLS=true to reinstall"
+    return 0
+  fi
+
+  if [ "${REINSTALL_TOOLS:-false}" = "true" ]; then
+    log_info "Force installing mise for tool version management..."
+  else
+    log_info "Installing mise for tool version management..."
+  fi
+
+  # Try package managers first
+  if command -v brew >/dev/null 2>&1; then
+    if try_package_install "mise" "Homebrew" "brew install mise"; then
+      return 0
+    fi
+  elif command -v apt-get >/dev/null 2>&1; then
+    log_info "Installing mise via apt repository..."
+    system=$(detect_system)
+    
+    # Determine architecture for apt repository
+    case "$system" in
+      linux_amd64) repo_arch="amd64" ;;
+      linux_arm64) repo_arch="arm64" ;;
+      *) 
+        log_info "Unsupported architecture for mise apt repository: $system"
+        return 1
+        ;;
+    esac
+    
+    # Install required dependencies and set up repository
+    if run_with_sudo apt-get update -y && run_with_sudo apt-get install -y gpg wget curl; then
+      if run_with_sudo install -dm 755 /etc/apt/keyrings; then
+        download_cmd=$(get_download_cmd)
+        
+        if $download_cmd https://mise.jdx.dev/gpg-key.pub | gpg --dearmor | run_with_sudo tee /etc/apt/keyrings/mise-archive-keyring.gpg >/dev/null; then
+          echo "deb [signed-by=/etc/apt/keyrings/mise-archive-keyring.gpg arch=$repo_arch] https://mise.jdx.dev/deb stable main" | run_with_sudo tee /etc/apt/sources.list.d/mise.list
+          if run_with_sudo apt-get update && try_package_install "mise" "apt" "run_with_sudo apt-get install -y mise"; then
+            return 0
+          fi
+        fi
+      fi
+    fi
+    log_info "Mise apt installation failed"
+    return 1
+  elif command -v pacman >/dev/null 2>&1; then
+    if try_package_install "mise" "pacman" "run_with_sudo pacman -S --noconfirm mise"; then
+      return 0
+    fi
+  elif command -v apk >/dev/null 2>&1; then
+    if try_package_install "mise" "apk" "run_with_sudo apk add mise"; then
+      return 0
+    fi
+  elif command -v dnf >/dev/null 2>&1; then
+    if try_package_install "mise" "dnf" "run_with_sudo dnf install -y mise"; then
+      return 0
+    fi
+  fi
+
+  log_info "No suitable package manager found for mise installation"
+  return 1
+}
+
+# =============================================================================
 # CHEZMOI INSTALLATION
 # =============================================================================
 
@@ -577,6 +649,11 @@ main() {
 
   # Set up environment and validate requirements
   setup_environment
+
+  # Install Mise (optional, continue on failure)
+  if ! install_mise; then
+    log_info "Mise installation failed, but continuing with chezmoi setup"
+  fi
 
   # Install Chezmoi
   install_chezmoi
