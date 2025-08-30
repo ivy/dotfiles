@@ -35,6 +35,7 @@ packages:
       - zsh
 
       # Docker & containerization
+      - devcontainer
       - docker
       - docker-buildx
       - docker-completion
