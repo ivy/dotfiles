@@ -59,6 +59,7 @@ packages:
       - yq
 
       # Documentation & diagramming
+      - glow
       - mermaid-cli
       - pandoc
       - texinfo

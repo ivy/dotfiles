@@ -84,6 +84,9 @@ autoload -Uz c
 # Enable Vi mode for command line editing
 bindkey -v
 
+# Suffix aliases - automatically open files by extension
+alias -s md=glow
+
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
