@@ -269,3 +269,88 @@ function reload! {
     
     exec "$zsh_path" "$@"
 }
+
+{{- $zshSyntaxHighlightPath := joinPath .chezmoi.homeDir ".config/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" }}
+{{- if stat $zshSyntaxHighlightPath }}
+
+# ============================================================================
+# Zsh Syntax Highlighting - MUST BE LOADED LAST
+# ============================================================================
+# Speed-optimized configuration with compile-time checks
+
+# Configure highlighters BEFORE loading the plugin
+typeset -gA ZSH_HIGHLIGHT_HIGHLIGHTERS=(
+    main 1
+    brackets 1
+    pattern 1
+    cursor 0  # Disabled for performance
+    root 0    # Disabled unless needed
+)
+
+# Performance optimization for large buffers
+export ZSH_HIGHLIGHT_MAXLENGTH=20000
+
+# Configure highlighting styles for catppuccin compatibility
+typeset -gA ZSH_HIGHLIGHT_STYLES=(
+    # Commands and builtins
+    'builtin'                  'fg=blue'
+    'command'                  'fg=green'
+    'precommand'               'fg=green,underline'
+    'alias'                    'fg=cyan'
+    'function'                 'fg=cyan'
+    
+    # Paths
+    'path'                     'fg=white,underline'
+    'path_prefix'              'fg=white'
+    'path_approx'              'fg=yellow'
+    
+    # Options and arguments
+    'single-hyphen-option'     'fg=magenta'
+    'double-hyphen-option'     'fg=magenta'
+    
+    # Quotes and globbing
+    'single-quoted-argument'   'fg=yellow'
+    'double-quoted-argument'   'fg=yellow'
+    'dollar-quoted-argument'   'fg=yellow'
+    'back-quoted-argument'     'fg=magenta'
+    'globbing'                 'fg=cyan,bold'
+    
+    # Variables
+    'assign'                   'fg=white'
+    'parameter'                'fg=yellow'
+    
+    # Errors
+    'unknown-token'            'fg=red,bold'
+    'reserved-word'            'fg=magenta'
+    'commandseparator'         'fg=white'
+    
+    # Brackets
+    'bracket-level-1'          'fg=blue,bold'
+    'bracket-level-2'          'fg=green,bold'
+    'bracket-level-3'          'fg=magenta,bold'
+    'bracket-level-4'          'fg=yellow,bold'
+    'bracket-error'            'fg=red,bold'
+)
+
+# Custom patterns for common commands
+typeset -gA ZSH_HIGHLIGHT_PATTERNS=(
+    'rm -rf *'                 'fg=white,bold,bg=red'
+    'sudo *'                   'fg=white,bold,bg=red'
+)
+
+# Load the plugin - MUST BE LAST
+source {{ $zshSyntaxHighlightPath }}
+
+# Ensure highlighting updates properly in vim modes
+if [[ -n "$ZSH_HIGHLIGHT_VERSION" ]]; then
+    # Force rehighlight on mode change
+    function zle-keymap-select {
+        zle && zle .reset-prompt && zle -R
+    }
+    
+    # Ensure highlighting works in all vim modes
+    zle -N zle-keymap-select
+    zle -N zle-line-init
+fi
+
+{{- end }}
