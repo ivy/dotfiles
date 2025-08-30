@@ -59,6 +59,8 @@ packages:
 
       # Documentation & diagramming
       - mermaid-cli
+      - pandoc
+      - texinfo
 
       # Compression utilities
       - lz4
