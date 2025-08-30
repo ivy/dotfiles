@@ -10,6 +10,7 @@ packages:
 
       # Core CLI utilities
       - awscli
+      - bat
       - coreutils
       - curl
       - eza

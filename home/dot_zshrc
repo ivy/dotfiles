@@ -98,6 +98,7 @@ function alias_preference {
 }
 
 # Create aliases to enhanced alternatives
+alias_preference cat bat
 alias_preference dircolors gdircolors
 alias_preference git hub
 alias_preference ls eza gls
