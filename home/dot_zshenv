@@ -13,3 +13,7 @@ export XDG_CONFIG_DIRS="${XDG_CONFIG_DIRS:-/etc/xdg}"
 if [[ -d "$HOME/.local/bin" && ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
   export PATH="$HOME/.local/bin:$PATH"
 fi
+
+# Pager configuration
+export PAGER="less"
+export LESS="-FRX"

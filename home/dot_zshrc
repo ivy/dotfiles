@@ -84,8 +84,50 @@ autoload -Uz c
 # Enable Vi mode for command line editing
 bindkey -v
 
+# Helper function for creating aliases to preferred commands
+function alias_preference {
+  local name="$1"
+  shift
+
+  for cmd in "$@"; do
+    if command -v "$cmd" &>/dev/null; then
+      alias "$name"="$cmd"
+      break
+    fi
+  done
+}
+
+# Create aliases to enhanced alternatives
+alias_preference dircolors gdircolors
+alias_preference git hub
+alias_preference ls gls
+alias_preference make colormake
+alias_preference top htop
+alias_preference vi nvim vim
+alias_preference vim nvim
+
+unset -f alias_preference
+
+# Aliases for colorized commands
+alias grep='grep -Hn --color=auto'
+alias tree='tree -C'
+
+# OS-specific aliases
+case "$OSTYPE" in
+darwin*|*bsd)
+  export CLICOLOR=1
+  alias ls='ls -p'
+  ;;
+linux*)
+  alias ls='ls --color=auto -p'
+  ;;
+*)
+  echo "aliases: unknown OSTYPE '$OSTYPE'" >&2
+  ;;
+esac
+
 # Suffix aliases - automatically open files by extension
-alias -s md=glow
+alias -s md="glow --pager"
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
