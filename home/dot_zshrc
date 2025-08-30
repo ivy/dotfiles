@@ -71,9 +71,18 @@ export ZSH="$HOME/.oh-my-zsh"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 # shellcheck disable=SC2034
-plugins=(git mise starship)
+plugins=(
+  git
+  mise
+  starship
+)
 
 source "$ZSH"/oh-my-zsh.sh
+
+# Initialize atuin for magical shell history
+if command -v atuin >/dev/null 2>&1; then
+    eval "$(atuin init zsh)"
+fi
 
 # User configuration
 

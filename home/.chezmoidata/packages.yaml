@@ -9,6 +9,7 @@ packages:
       - gnupg
 
       # Core CLI utilities
+      - atuin
       - awscli
       - bat
       - coreutils
