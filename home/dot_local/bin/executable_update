@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+set -o errexit -o nounset -o pipefail
+
+echo "🔄 Updating dotfiles and all tools..."
+
+# Update Homebrew packages
+echo "📦 Updating Homebrew packages..."
+brew update && brew upgrade
+
+# Update mise tools
+if command -v mise >/dev/null 2>&1; then
+    echo "🛠️  Updating mise tools..."
+    mise upgrade --yes
+fi
+
+# Update Chezmoi managed externals (Oh-My-Zsh, tmux config)
+echo "📂 Updating Chezmoi externals..."
+chezmoi update
+
+# Update Neovim plugins
+echo "🚀 Updating Neovim plugins..."
+nvim --headless "+Lazy! update" +qa
+
+# Clean up Homebrew
+echo "🧹 Cleaning up Homebrew..."
+brew cleanup
+
+echo "✅ All updates completed!"
