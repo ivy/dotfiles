@@ -12,6 +12,7 @@ packages:
       - awscli
       - coreutils
       - curl
+      - eza
       - fd
       - fzf
       - mas
