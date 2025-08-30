@@ -1,0 +1,5 @@
+{{- if lookPath "atuin" -}}
+{{ output "atuin" "gen-completions" "--shell" "zsh" -}}
+{{- else -}}
+# atuin not available, no completions generated
+{{- end -}}

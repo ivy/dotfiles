@@ -86,8 +86,12 @@ fi
 
 # User configuration
 
-# Add custom functions directory to fpath and enable autoloading
-fpath=($XDG_CONFIG_HOME/zsh/functions $fpath)
+# Add custom functions and completions directories to fpath and enable autoloading
+fpath=(
+  "$XDG_CONFIG_HOME/zsh/functions"
+  "$XDG_CONFIG_HOME/zsh/completions"
+  "${fpath[@]}"
+)
 autoload -Uz c
 
 # Enable Vi mode for command line editing
