@@ -84,6 +84,61 @@ source "$ZSH"/oh-my-zsh.sh
 eval "$(atuin init zsh)"
 {{- end }}
 
+{{- $zshAutoSuggestPath := joinPath .chezmoi.homeDir ".config/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh" }}
+{{- if stat $zshAutoSuggestPath }}
+
+# Speed-optimized zsh-autosuggestions loading
+# All checks done at template generation time by chezmoi
+
+# Pre-configure before loading for maximum speed
+export ZSH_AUTOSUGGEST_USE_ASYNC=1
+export ZSH_AUTOSUGGEST_MANUAL_REBIND=1  # We'll handle rebinding for vim mode
+export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
+export ZSH_AUTOSUGGEST_HISTORY_IGNORE="?(#c50,)"  # Ignore commands > 50 chars
+export ZSH_AUTOSUGGEST_COMPLETION_IGNORE="* --help"  # Skip help completions
+
+# Catpuccin theme support - optimized for Ghostty + tmux
+if [[ "${TERM}" == "xterm-ghostty" ]] || [[ -n "${TMUX}" ]]; then
+    # Ghostty and tmux support proper color sequences
+    export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'  # ANSI bright black adapts to theme
+else
+    # Fallback to neutral gray for other terminals
+    export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=244'
+fi
+
+# Load plugin
+source {{ $zshAutoSuggestPath }}
+
+# Custom vim mode integration
+_zsh_autosuggest_bind_vim_mode() {
+    # Clear default bindings
+    bindkey -M viins '^[[C' forward-char  # Right arrow baseline
+    bindkey -M viins '^[[D' backward-char # Left arrow baseline
+    
+    # Insert mode bindings
+    bindkey -M viins '^F' vi-forward-word  # Ctrl+F: accept word
+    bindkey -M viins '^E' vi-end-of-line   # Ctrl+E: accept to end
+    bindkey -M viins '^]' autosuggest-accept  # Ctrl+]: accept full
+    
+    # Visual mode support
+    bindkey -M vicmd '^]' autosuggest-accept
+    bindkey -M visual '^]' autosuggest-accept
+    
+    # Quick accepts in normal mode
+    bindkey -M vicmd 'L' vi-end-of-line
+    bindkey -M vicmd 'A' vi-add-eol       # A should accept and go to end
+}
+
+# Apply vim bindings after plugin loads
+_zsh_autosuggest_bind_vim_mode
+
+# Speed hack: only fetch suggestions for commands > 2 chars
+_zsh_autosuggest_should_fetch() {
+    (( ${#BUFFER} > 2 ))
+}
+
+{{- end }}
+
 # User configuration
 
 # Add custom functions and completions directories to fpath and enable autoloading
