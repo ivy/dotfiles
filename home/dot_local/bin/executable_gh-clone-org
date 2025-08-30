@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+
+set -o errexit -o nounset -o pipefail
+
+if [[ $# -eq 0 ]] || [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then
+    echo "Usage: gh-clone-org ORG1 [ORG2 ...]"
+    echo "Clones all repositories from GitHub organizations to ~/src/github.com/{org}/{repo}"
+    exit 0
+fi
+
+# Check if gh is available and authenticated
+if ! command -v gh >/dev/null 2>&1; then
+    echo "Error: GitHub CLI (gh) is not installed"
+    exit 1
+fi
+
+if ! gh auth status >/dev/null 2>&1; then
+    echo "Error: Not authenticated with GitHub CLI. Run 'gh auth login' first."
+    exit 1
+fi
+
+# Check if jq is available
+if ! command -v jq >/dev/null 2>&1; then
+    echo "Error: jq is not installed"
+    exit 1
+fi
+
+BASE_DIR="$HOME/src/github.com"
+
+for org in "$@"; do
+    echo "🔍 Fetching repositories for organization: $org"
+    
+    ORG_DIR="$BASE_DIR/$org"
+    mkdir -p "$ORG_DIR"
+    
+    # Get all repos for the organization
+    repos=$(gh repo list "$org" --limit 9999 --json name,url | jq -r '.[] | "\(.name) \(.url)"')
+    
+    if [[ -z "$repos" ]]; then
+        echo "⚠️  No repositories found for organization: $org"
+        continue
+    fi
+    
+    total_repos=$(echo "$repos" | wc -l | tr -d ' ')
+    echo "📦 Found $total_repos repositories in $org"
+    
+    current=0
+    while IFS=' ' read -r repo_name clone_url; do
+        ((current++))
+        repo_path="$ORG_DIR/$repo_name"
+        
+        if [[ -d "$repo_path" ]]; then
+            echo "🔄 [$current/$total_repos] Updating $repo_name..."
+            cd "$repo_path"
+            
+            # Check if working tree is clean
+            if git diff-index --quiet HEAD -- 2>/dev/null; then
+                echo "📥 [$current/$total_repos] Pulling latest changes for $repo_name..."
+                git fetch --all --recurse-submodules
+                git pull --recurse-submodules
+                echo "✅ [$current/$total_repos] Updated $repo_name"
+            else
+                echo "⚠️  [$current/$total_repos] $repo_name has uncommitted changes - fetching only"
+                git fetch --all --recurse-submodules
+            fi
+            continue
+        fi
+        
+        echo "📥 [$current/$total_repos] Cloning $repo_name..."
+        if git clone --recurse-submodules "$clone_url" "$repo_path"; then
+            echo "✅ [$current/$total_repos] Successfully cloned $repo_name"
+        else
+            echo "❌ [$current/$total_repos] Failed to clone $repo_name"
+        fi
+    done <<< "$repos"
+    
+    echo "🎉 Completed cloning repositories for $org"
+    echo
+done
+
+echo "✅ All organizations processed!"
