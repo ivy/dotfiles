@@ -668,7 +668,7 @@ main() {
   log_info "Summary: Chezmoi available at $chezmoi and configured successfully"
 
   # Execute the initialization command with proper argument handling
-  set -- --apply --source="$script_dir"
+  set -- --apply --source="$script_dir" --working-tree="$script_dir"
   
   # Add promptString arguments if environment variables are set
   if [ -n "${GIT_USER_NAME:-}" ]; then

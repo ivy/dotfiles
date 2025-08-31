@@ -1,12 +1,21 @@
-# This is the init template that runs during 'chezmoi init'
-# It prompts for user input and creates the initial config file
-# Prompt functions (promptString, promptStringOnce, etc.) are only available here
+# Chezmoi Configuration File Template
+# This template is processed during `chezmoi init` to create the actual config file.
+# Variables are prompted from the user and stored in the [data] section.
 
 {{- $gitName := promptString "Git user.name" -}}
 {{- $gitEmail := promptString "Git user.email" -}}
 
+# Source Directory Configuration
+# Allows us to maintain Chezmoi outside of the default `~/.local/share/chezmoi/`.
+# This enables storing the dotfiles repository in a custom location while still
+# using chezmoi for management. The workingTree variable points to the repo root.
 sourceDir = "{{ .chezmoi.workingTree }}"
 
+# Data Section
+# Variables defined here are available in all templates via the .data namespace.
+# These values can be referenced in template files throughout the dotfiles repo.
 [data.git]
+# Git user configuration - prompted during initialization
+# Used in git config templates and other version control settings
 name = {{ $gitName | quote }}
 email = {{ $gitEmail | quote }}
