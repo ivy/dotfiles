@@ -27,11 +27,8 @@ jobs:
       - name: Setup mise
         uses: jdx/mise-action@v2
       - name: Install chezmoi
-        env:
-          GIT_USER_NAME: "CI Test User"
-          GIT_USER_EMAIL: "ci@example.com"
         run: |
-          ./install.sh
+          GIT_USER_NAME="CI Test User" GIT_USER_EMAIL="ci@example.com" ./install.sh
       - name: Install test dependencies
         run: |
           ./bin/setup
