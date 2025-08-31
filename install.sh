@@ -667,25 +667,25 @@ main() {
   log_info "Initializing dotfiles from $script_dir..."
   log_info "Summary: Chezmoi available at $chezmoi and configured successfully"
 
-  # Build chezmoi init command with prompt arguments if env vars are set
-  init_args="--apply --source=$script_dir"
+  # Execute the initialization command with proper argument handling
+  set -- --apply --source="$script_dir"
   
   # Add promptString arguments if environment variables are set
   if [ -n "${GIT_USER_NAME:-}" ]; then
-    init_args="$init_args --promptString Git\ user.name=$GIT_USER_NAME"
+    set -- "$@" --promptString "Git user.name=$GIT_USER_NAME"
   fi
   if [ -n "${GIT_USER_EMAIL:-}" ]; then
-    init_args="$init_args --promptString Git\ user.email=$GIT_USER_EMAIL"
+    set -- "$@" --promptString "Git user.email=$GIT_USER_EMAIL"
   fi
   
   # Add any additional passthrough arguments
   if [ -n "$CHEZMOI_ARGS" ]; then
-    init_args="$init_args $CHEZMOI_ARGS"
+    # shellcheck disable=SC2086
+    set -- "$@" $CHEZMOI_ARGS
   fi
   
   # Execute the initialization command
-  # shellcheck disable=SC2086
-  exec "$chezmoi" init $init_args
+  exec "$chezmoi" init "$@"
 }
 
 main "$@"
