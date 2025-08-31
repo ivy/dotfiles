@@ -90,7 +90,7 @@ find_existing_repo() {
     local potential_orgs
     
     # Get list of potential organizations
-    potential_orgs=(${(f)"$(get_potential_orgs)"})
+    readarray -t potential_orgs < <(get_potential_orgs)
     
     # Check each organization for existing repository
     for org in "${potential_orgs[@]}"; do
