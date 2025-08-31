@@ -49,6 +49,18 @@ You can customize the installation behavior with these environment variables:
 - `DEBUG=1` - Enable debug output during installation
 - `VERIFY_SIGNATURES=false` - Disable signature verification (not recommended)
 
+#### Non-Interactive Installation
+
+For CI/CD or automated environments where no TTY is available, set these variables to bypass interactive prompts:
+
+- `GIT_USER_NAME="Your Name"` - Git user name for commits
+- `GIT_USER_EMAIL="your.email@example.com"` - Git user email for commits
+
+Example for CI environments:
+```bash
+GIT_USER_NAME="CI User" GIT_USER_EMAIL="ci@example.com" ./install.sh
+```
+
 For a complete list of options, run `./install.sh --help`.
 
 ## License

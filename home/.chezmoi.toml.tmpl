@@ -2,8 +2,8 @@
 # It prompts for user input and creates the initial config file
 # Prompt functions (promptString, promptStringOnce, etc.) are only available here
 
-{{- $gitName := promptString "Git user.name" -}}
-{{- $gitEmail := promptString "Git user.email" -}}
+{{- $gitName := env "GIT_USER_NAME" | default (promptStringOnce . "git.name" "Git user.name") -}}
+{{- $gitEmail := env "GIT_USER_EMAIL" | default (promptStringOnce . "git.email" "Git user.email") -}}
 
 sourceDir = "{{ .chezmoi.workingTree }}"
 
