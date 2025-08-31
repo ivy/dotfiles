@@ -12,6 +12,7 @@ packages:
       - atuin
       - awscli
       - bat
+      - codex
       - coreutils
       - curl
       - duf
