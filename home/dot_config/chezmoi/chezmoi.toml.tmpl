@@ -1,2 +1,6 @@
+# This is the regular config template that runs during 'chezmoi apply'
+# It processes after the init template and can access data stored in the config
+# No prompt functions are available here - use stored data instead
+
 # Allows us to maintain Chezmoi outside of `~/.local/share/chezmoi/`.
 sourceDir = "{{ .chezmoi.workingTree }}"

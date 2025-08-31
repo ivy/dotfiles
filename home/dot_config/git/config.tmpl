@@ -1,6 +1,6 @@
 [user]
-	name = 
-	email = 
+	name = {{ .git.name | quote }}
+	email = {{ .git.email | quote }}
 
 [init]
 	defaultBranch = main
@@ -105,3 +105,6 @@
 
 [branch]
 	sort = -committerdate
+
+[include]
+	path = ~/.config/git/config.local

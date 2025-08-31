@@ -1,0 +1,12 @@
+# This is the init template that runs during 'chezmoi init'
+# It prompts for user input and creates the initial config file
+# Prompt functions (promptString, promptStringOnce, etc.) are only available here
+
+{{- $gitName := promptString "Git user.name" -}}
+{{- $gitEmail := promptString "Git user.email" -}}
+
+sourceDir = "{{ .chezmoi.workingTree }}"
+
+[data.git]
+name = {{ $gitName | quote }}
+email = {{ $gitEmail | quote }}
