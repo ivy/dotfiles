@@ -198,6 +198,11 @@ alias tree='eza --icons=always --tree'
 # Aliases for colorized commands
 alias grep='grep -Hn --color=auto'
 
+# Shadow codex command to auto-authenticate with 1Password
+{{- if and (lookPath "op") (lookPath "codex") }}
+alias codex='OPENAI_API_KEY=$(op read "op://Personal/openai-codex/credential") command codex'
+{{- end }}
+
 # Suffix aliases - automatically open files by extension
 alias -s md="glow --pager"
 

@@ -94,6 +94,7 @@ packages:
 
       # Security
       - 1password
+      - 1password-cli
 
       # Audio
       - loopback
