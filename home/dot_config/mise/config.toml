@@ -1,2 +1,3 @@
 [tools]
 "aqua:dandavison/delta" = "latest"
+python = "3.13.7"

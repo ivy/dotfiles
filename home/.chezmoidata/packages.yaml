@@ -22,7 +22,6 @@ packages:
       - mas
       - mise
       - neovim
-      - pipx
       - ripgrep
       - tree
 

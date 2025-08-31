@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# python version hash: {{ include "dot_config/mise/config.toml" | regexFind "python = \"[^\"]*\"" | sha256sum }}
+
+[ -n "${DEBUG:-}" ] && set -o xtrace
+set -o errexit
+set -o nounset
+
+# Only run if mise is available
+if ! command -v mise >/dev/null 2>&1; then
+    echo "mise not found, skipping Python tools installation"
+    exit 0
+fi
+
+# Only run if Python is available via mise
+if ! mise which python >/dev/null 2>&1; then
+    echo "Python not available via mise, skipping Python tools installation"
+    exit 0
+fi
+
+echo "Installing Python tools..."
+
+# Use mise's Python to upgrade pip and install pipx
+"$(mise which python)" -m pip install --upgrade pip
+"$(mise which python)" -m pip install --user pipx
+
+echo "Python tools installation complete"
