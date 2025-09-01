@@ -23,6 +23,7 @@ File: `renovate.json5`
 Enabled managers and file discovery:
 
 - `pip_requirements`: `home/dot_config/dotfiles/requirements.txt`
+- `npm`: `home/dot_config/dotfiles/package.json`
 - `mise`: `.mise.toml`, `home/dot_config/mise/config.toml`
 - `docker-compose`: `home/dot_config/docker-compose/*.yml`
 - `devcontainer`: `.devcontainer/devcontainer.json`
@@ -34,6 +35,7 @@ Grouping and automerge rules:
 - `devcontainer`: group by manager, automerge minor/patch/digest
 - `docker-compose`: group by manager, automerge digest updates
 - `pip_requirements`: grouped as `python-tools` (no automerge)
+- `npm`: grouped as `node-tools` (no automerge)
 - `mise`: grouped as `mise-tools` (no automerge)
 
 Why: high-signal, low-risk updates (actions/devcontainer/digests) are auto‑merged to keep things current; others require review.
@@ -54,7 +56,10 @@ These files purposely centralize versions so Renovate can update them automatica
   - Renovate updates native mise tools via the Mise manager, and Aqua‑prefixed tools via a custom regex manager (GitHub Releases datasource).
 
 - `home/dot_config/dotfiles/requirements.txt`
-  - Pinned versions for Python tools (installed via pipx). Updated by Renovate’s pip manager.
+  - Pinned versions for Python tools (installed via pipx). Updated by Renovate's pip manager.
+
+- `home/dot_config/dotfiles/package.json`
+  - Pinned versions for Node.js CLI tools (installed globally via npm). Updated by Renovate's npm manager.
 
 - `.devcontainer/devcontainer.json`
   - Base image and all features pinned to immutable `@sha256:` digests. Updated by `devcontainer` manager.
@@ -117,6 +122,7 @@ Note: When adding new externals, add a matching regex rule so Renovate can keep 
 - Docker/Devcontainer: PRs updating only digests or minor/patch releases; digests grouped and auto‑merged.
 - GitHub Actions: digest pinning and minor/patch updates grouped and auto‑merged.
 - Python tools: PRs update `requirements.txt` pinned versions.
+- Node.js tools: PRs update `package.json` pinned versions.
 - Mise tools: PRs update `.mise.toml` and `home/dot_config/mise/config.toml` pins.
 - CLI versions: PRs update `cli-versions.toml` (e.g., `cosign`).
 - Chezmoi externals: PRs replace commit SHAs in tarball URLs or `revision = "..."`.

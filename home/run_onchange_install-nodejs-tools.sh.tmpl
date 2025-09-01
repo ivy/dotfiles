@@ -1,0 +1,48 @@
+#!/bin/sh
+
+# node version hash: {{ include "dot_config/mise/config.toml" | regexFind "node = \"[^\"]*\"" | sha256sum }}
+# node tools manifest hash: {{ include "dot_config/dotfiles/package.json" | sha256sum }}
+
+[ -n "${DEBUG:-}" ] && set -o xtrace
+set -o errexit
+set -o nounset
+
+# Only run if mise is available
+if ! command -v mise >/dev/null 2>&1; then
+    echo "mise not found, skipping Node.js tools installation"
+    exit 0
+fi
+
+# Only run if Node.js is available via mise
+if ! mise which node >/dev/null 2>&1; then
+    echo "Node.js not available via mise, skipping Node.js tools installation"
+    exit 0
+fi
+
+# Only run if jq is available
+if ! which jq >/dev/null 2>&1; then
+    echo "jq not available, skipping Node.js tools installation"
+    exit 0
+fi
+
+# Get tool paths once
+NPM="$(mise which npm)"
+
+echo "Installing Node.js tools..."
+
+# Install Node tools from package.json manifest
+MANIFEST="${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles/package.json"
+if [ -f "$MANIFEST" ]; then
+    echo "Installing pinned npm tools from $MANIFEST..."
+    
+    # Extract pkg@version pairs from devDependencies
+    jq -r '.devDependencies // {} | to_entries[] | "\(.key)@\(.value)"' "$MANIFEST" | while read -r spec; do
+        echo "Installing $spec..."
+        # NPM hardening: disable scripts, audit, and fund for security
+        "$NPM" install --global --ignore-scripts --no-audit --no-fund "$spec"
+    done
+else
+    echo "No package.json found at $MANIFEST, skipping Node.js tools installation"
+fi
+
+echo "Node.js tools installation complete"

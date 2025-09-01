@@ -16,8 +16,8 @@
     "mise",
     "docker-compose",
     "devcontainer",
-    "github-actions"
-    // Add "npm" later if opting for Node tools via package.json
+    "github-actions",
+    "npm"
   ],
 
   // Actions: pin to digests for reproducibility  
@@ -37,6 +37,11 @@
   },
   "github-actions": {
     "fileMatch": ["^\\.github/workflows/.*\\.ya?ml$"]
+  },
+  "npm": {
+    "fileMatch": [
+      "^home/dot_config/dotfiles/package\\\\.json$"
+    ]
   },
 
   // Grouping + automerge for safe/low-risk updates
@@ -74,6 +79,15 @@
       "matchManagers": ["mise"],
       "groupName": "mise-tools",
       "automerge": false
+    },
+    {
+      "matchManagers": ["npm"],
+      "groupName": "node-tools",
+      "rangeStrategy": "pin",
+      "automerge": false,
+      "matchPaths": [
+        "home/dot_config/dotfiles/package.json"
+      ]
     }
   ],
 

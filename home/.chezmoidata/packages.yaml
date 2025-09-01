@@ -61,7 +61,6 @@ packages:
       - lazygit
 
       # Parsing utilities
-      - jq
       - yq
 
       # Documentation & diagramming
@@ -77,7 +76,6 @@ packages:
       - zstd
     casks:
       # Development tools
-      - claude-code
       - cursor
       - ngrok
       - visual-studio-code
