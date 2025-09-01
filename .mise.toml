@@ -2,7 +2,7 @@
 # Development tools for shell scripting and testing
 
 [tools]
-"aqua:bats-core/bats-core" = "latest"
-"aqua:koalaman/shellcheck" = "latest"
-"aqua:mikefarah/yq" = "latest"
-shfmt = "latest"
+"aqua:bats-core/bats-core" = "v1.12.0"
+"aqua:koalaman/shellcheck" = "v0.11.0"
+"aqua:mikefarah/yq" = "v4.47.1"
+shfmt = "v3.12.0"

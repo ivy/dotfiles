@@ -73,3 +73,7 @@ tags
 
 # https://lefthook.dev/configuration/source_dir_local.html
 /.lefthook-local/
+
+.obsidian/
+
+.claude/settings.local.json

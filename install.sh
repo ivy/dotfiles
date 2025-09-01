@@ -333,9 +333,18 @@ install_cosign() {
   # Convert system format from linux_arm64 to linux-arm64 for cosign
   cosign_system=$(echo "$system" | sed 's/_/-/g')
 
-  if ! $download_cmd "$GITHUB_RELEASES_URL/$COSIGN_REPO/releases/latest/download/cosign-$cosign_system" >"$cosign_binary"; then
+  # Use specific version or latest
+  if [ "$COSIGN_VERSION" = "latest" ]; then
+    cosign_url="$GITHUB_RELEASES_URL/$COSIGN_REPO/releases/latest/download/cosign-$cosign_system"
+  else
+    # Remove 'v' prefix if present for URL construction
+    cosign_version_clean=$(echo "$COSIGN_VERSION" | sed 's/^v//')
+    cosign_url="$GITHUB_RELEASES_URL/$COSIGN_REPO/releases/download/v$cosign_version_clean/cosign-$cosign_system"
+  fi
+
+  if ! $download_cmd "$cosign_url" >"$cosign_binary"; then
     log_error "Failed to download cosign"
-    log_error "URL attempted: $GITHUB_RELEASES_URL/$COSIGN_REPO/releases/latest/download/cosign-$cosign_system"
+    log_error "URL attempted: $cosign_url"
     exit 1
   fi
 
@@ -636,7 +645,12 @@ main() {
   # Set configuration variables after parsing arguments
   readonly BIN_DIR="${BIN_DIR:-$HOME/.local/bin}"
   readonly CHEZMOI_VERSION="${CHEZMOI_VERSION:-latest}"
-  readonly COSIGN_VERSION="${COSIGN_VERSION:-latest}"
+  # Try to read cosign version from versions file, fallback to latest
+  COSIGN_VERSION_FROM_FILE=""
+  if [ -f "$script_dir/home/dot_config/versions/cli-versions.toml" ]; then
+    COSIGN_VERSION_FROM_FILE="$(grep '^cosign' "$script_dir/home/dot_config/versions/cli-versions.toml" | cut -d'"' -f2 2>/dev/null || echo "")"
+  fi
+  readonly COSIGN_VERSION="${COSIGN_VERSION:-${COSIGN_VERSION_FROM_FILE:-latest}}"
   readonly VERIFY_SIGNATURES="${VERIFY_SIGNATURES:-true}"
   readonly SKIP_PACKAGE_MANAGER="${SKIP_PACKAGE_MANAGER:-false}"
   readonly REINSTALL_TOOLS="${REINSTALL_TOOLS:-false}"
