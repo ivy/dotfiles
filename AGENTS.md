@@ -27,26 +27,23 @@ REINSTALL_TOOLS=true ./install.sh
 - `DEBUG=1` - Enable debug output
 - `VERIFY_SIGNATURES=false` - Disable signature verification
 
-## Tool Management
+## Subagent Routing: Packages, Images, Versions
 
-### Mise (Tool Version Manager)
-The repository uses [mise](https://github.com/jdx/mise) for tool version management:
-- Configuration: `home/dot_config/mise/config.toml`
-- Install tools: `mise install --yes`
-- Tools are defined globally and installed via `run_onchange_install-mise-tools.sh.tmpl`
+All changes involving packages, container images, or version manifests must be reviewed by the Package Manager subagent. This is essential for security (immutable pins), reproducibility, and keeping Renovate automation intact.
 
-### Package Management (macOS)
-- Uses Homebrew for package installation via `run_onchange_install-packages-darwin.sh.tmpl`
-- Supports brew packages, casks, and Mac App Store apps through templates
-- Package definitions are templated and rendered by Chezmoi
-- **Preference**: Install tools through package managers when they are stable and unlikely to diverge in versions across projects (e.g., neovim, lazygit, ripgrep, fd, fzf)
+Always invoke the Package Manager subagent before editing any of the following:
+- Docker Compose files (image tags/digests)
+- Devcontainer images and features
+- Mise tool declarations (.mise.toml, home/dot_config/mise/config.toml)
+- Homebrew/cask/mas package definitions
+- Python tools requirements (home/dot_config/python-tools/requirements.txt)
+- Chezmoi externals (home/.chezmoiexternal.toml.tmpl)
+- Version manifests used by scripts (home/dot_config/versions/*.toml)
+- GitHub Actions versions/digests in workflows
 
-#### Adding New Packages
-To add new packages, edit `home/.chezmoidata/packages.yaml`:
-- **Brew packages**: Add to `packages.darwin.brews` array
-- **Casks**: Add to `packages.darwin.casks` array  
-- **Mac App Store**: Add app ID to `packages.darwin.mas` array
-Run `chezmoi apply` to install new packages.
+Why: The Package Manager subagent enforces immutable pins (versions/digests/SHAs) and ensures Renovate can update them safely. Direct edits risk drift, broken automation, or security regressions.
+
+For background and exact conventions, see doc/renovate.md.
 
 ## Architecture
 
@@ -101,10 +98,11 @@ bats -t test/
 
 ### Claude Code Workflow
 When making configuration changes:
-1. Always run `chezmoi diff` before applying to preview changes
-2. Run `chezmoi apply` to apply configuration changes
-3. After each logical change, create a git commit with a descriptive Conventional Commit message
-4. Use commit prefixes: `feat:` for new features/packages, `fix:` for corrections, `chore:` for maintenance
+1. If the task touches packages, images, or version manifests, consult the Package Manager subagent first
+2. Always run `chezmoi diff` before applying to preview changes
+3. Run `chezmoi apply` to apply configuration changes
+4. After each logical change, create a git commit with a descriptive Conventional Commit message
+5. Use commit prefixes: `feat:` for new features/packages, `fix:` for corrections, `chore:` for maintenance
 
 ### Adding New Dotfiles
 1. Add file to appropriate location in `home/` with `dot_` prefix
