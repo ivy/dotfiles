@@ -359,3 +359,10 @@ if [[ -n "$ZSH_HIGHLIGHT_VERSION" ]]; then
 fi
 
 {{- end }}
+
+# Git-safe PATH modification - MUST RUN LAST
+# Prepends .git/safe/../../bin to PATH for per-repository trusted binaries
+# This allows each git repository to provide its own trusted executables
+# Inspired by: https://thoughtbot.com/blog/git-safe
+# Note: Placed at end to ensure it takes precedence over all other PATH modifications
+export PATH=".git/safe/../../bin:$PATH"
