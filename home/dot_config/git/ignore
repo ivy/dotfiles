@@ -1,9 +1,14 @@
-# macOS
+# General
 .DS_Store
+__MACOSX/
 .AppleDouble
 .LSOverride
-Icon
+Icon[]
+
+# Thumbnails
 ._*
+
+# Files that might appear in the root of a volume
 .DocumentRevisions-V100
 .fseventsd
 .Spotlight-V100
@@ -11,286 +16,60 @@ Icon
 .Trashes
 .VolumeIcon.icns
 .com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
 .AppleDB
 .AppleDesktop
 Network Trash Folder
 Temporary Items
 .apdisk
 
-# Windows
-Thumbs.db
-Thumbs.db:encryptable
-ehthumbs.db
-ehthumbs_vista.db
-*.tmp
-*.temp
-Desktop.ini
-$RECYCLE.BIN/
-*.cab
-*.msi
-*.msix
-*.msm
-*.msp
-*.lnk
+# https://mise.jdx.dev/configuration.html
+# https://mise.jdx.dev/configuration/environments.html
+.mise.*.local.toml
+.mise.local.toml
+mise.*.local.toml
+mise.local.toml
+.mise/*.local.toml
+mise/*.local.toml
 
-# Linux
-*~
-.fuse_hidden*
-.directory
-.Trash-*
-.nfs*
+# https://mise.jdx.dev/configuration.html#tool-versions
+#.tool-versions
 
-# Editor files
-*.swp
-*.swo
-*~
-.vscode/
-.idea/
-*.sublime-project
-*.sublime-workspace
-.vim/
-.netrwhist
-.obsidian/
-
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-lerna-debug.log*
-
-# Runtime data
-pids
-*.pid
-*.seed
-*.pid.lock
-
-# Coverage directory used by tools like istanbul
-coverage/
-*.lcov
-.nyc_output
-
-# node_modules
-node_modules/
-jspm_packages/
-
-# Optional npm cache directory
-.npm
-
-# Optional eslint cache
-.eslintcache
-
-# Optional stylelint cache
-.stylelintcache
-
-# Microbundle cache
-.rpt2_cache/
-.rts2_cache_cjs/
-.rts2_cache_es/
-.rts2_cache_umd/
-
-# Optional REPL history
-.node_repl_history
-
-# Output of 'npm pack'
-*.tgz
-
-# Yarn Integrity file
-.yarn-integrity
-
-# dotenv environment variables file
-.env
-.env.test
-.env.production
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# parcel-bundler cache (https://parceljs.org/)
-.cache
-.parcel-cache
-
-# Next.js build output
-.next
-
-# Nuxt.js build / generate output
-.nuxt
-dist
-
-# Gatsby files
-.cache/
-public
-
-# Storybook build outputs
-.out
-.storybook-out
-
-# Temporary folders
-tmp/
-temp/
-
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-pip-wheel-metadata/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
-*.manifest
-*.spec
-pip-log.txt
-pip-delete-this-directory.txt
-.tox/
-.nox/
-.coverage
-.pytest_cache/
-.hypothesis/
-venv/
-env/
-ENV/
-env.bak/
-venv.bak/
-
-# Ruby
-*.gem
-*.rbc
-/.config
-/coverage/
-/InstalledFiles
-/pkg/
-/spec/reports/
-/spec/examples.txt
-/test/tmp/
-/test/version_tmp/
-/tmp/
-.bundle/
-vendor/bundle
-lib/bundler/man/
-.rvmrc
-.rbenv-version
-.ruby-version
-.ruby-gemset
-
-# Java
-*.class
-*.jar
-*.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
-hs_err_pid*
-
-# Go
-*.exe
-*.exe~
-*.dll
-*.so
-*.dylib
-*.test
-*.out
-go.work
-
-# Rust
-target/
-Cargo.lock
-
-# Docker
-.dockerignore
-
-# Terraform
-*.tfstate
-*.tfstate.*
-.terraform/
-.terraform.lock.hcl
-
-# Ansible
-*.retry
-
-# Vagrant
-.vagrant/
-
-# JetBrains
-.idea/
-*.iws
-*.iml
-*.ipr
-
-# NetBeans
-nbproject/private/
-nbbuild/
-dist/
-nbdist/
-.nb-gradle/
-
-# Visual Studio Code
-.vscode/
-*.code-workspace
-
-# Sublime Text
-*.sublime-project
-*.sublime-workspace
-
-# Emacs
-*~
-\#*\#
-/.emacs.desktop
-/.emacs.desktop.lock
-*.elc
-auto-save-list
-tramp
-.\#*
-.org-id-locations
-*_archive
-*_flymake.*
-/eshell/history
-/eshell/lastdir
-/elpa/
-/auto/
-/url/
-/server/
-/.cask/
-/var/
-
-# Vim
+# Swap
 [._]*.s[a-v][a-z]
+# comment out the next line if you don't need vector files
+!*.svg
 [._]*.sw[a-p]
 [._]s[a-rt-v][a-z]
 [._]ss[a-gi-z]
 [._]sw[a-p]
+
+# Session
 Session.vim
 Sessionx.vim
+
+# Temporary
 .netrwhist
 *~
+# Auto-generated tag files
 tags
+# Persistent undo
 [._]*.un~
 
-# Backup files
-*.bak
-*.gho
-*.ori
-*.orig
-*.tmp
+# https://lefthook.dev/configuration/#config-file-name
+/.lefthook-local.json
+/.lefthook-local.toml
+/.lefthook-local.yaml
+/.lefthook-local.yml
+/lefthook-local.json
+/lefthook-local.toml
+/lefthook-local.yaml
+/lefthook-local.yml
+/.config/lefthook-local.json
+/.config/lefthook-local.toml
+/.config/lefthook-local.yaml
+/.config/lefthook-local.yml
 
-# Claude Code
-.claude/settings.local.json
+# https://lefthook.dev/configuration/source_dir_local.html
+/.lefthook-local/
