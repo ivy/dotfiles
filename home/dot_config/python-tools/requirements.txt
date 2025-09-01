@@ -1,4 +1,0 @@
-# Python tools installed via pipx with pinned versions
-# This file is managed by dotfiles and automatically updated by Dependabot/Renovate
-
-gitingest==0.3.1

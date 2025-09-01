@@ -1,0 +1,4 @@
+# Python tools pin manifest for pipx-installed CLI tools
+# Managed by Renovate (pip_requirements). See docs/renovate.md for policy.
+
+gitingest==0.3.1
