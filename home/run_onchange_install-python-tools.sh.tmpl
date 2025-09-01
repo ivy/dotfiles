@@ -1,6 +1,7 @@
-#!/bin/bash
+#!/bin/sh
 
 # python version hash: {{ include "dot_config/mise/config.toml" | regexFind "python = \"[^\"]*\"" | sha256sum }}
+# python tools requirements hash: {{ include "dot_config/python-tools/requirements.txt" | sha256sum }}
 
 [ -n "${DEBUG:-}" ] && set -o xtrace
 set -o errexit
@@ -18,10 +19,25 @@ if ! mise which python >/dev/null 2>&1; then
     exit 0
 fi
 
+# Get Python path once
+PYTHON="$(mise which python)"
+
 echo "Installing Python tools..."
 
 # Use mise's Python to upgrade pip and install pipx
-"$(mise which python)" -m pip install --upgrade pip
-"$(mise which python)" -m pip install --user pipx
+"$PYTHON" -m pip install --upgrade pip pipx
+
+# Install Python tools via pipx from requirements.txt
+REQ_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/python-tools/requirements.txt"
+if [ -f "$REQ_FILE" ]; then
+  echo "Installing pinned pipx tools from $REQ_FILE..."
+  # Ignore comments and blank lines
+  grep -Ev '^(#|\s*$)' "$REQ_FILE" | while read -r spec; do
+    # --force updates existing venvs when version pins change
+    "$PYTHON" -m pipx install --force "$spec"
+  done
+else
+  echo "No requirements.txt found at $REQ_FILE, skipping Python tools installation"
+fi
 
 echo "Python tools installation complete"
