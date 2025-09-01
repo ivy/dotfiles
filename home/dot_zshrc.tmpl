@@ -203,6 +203,11 @@ alias grep='grep -Hn --color=auto'
 alias codex='OPENAI_API_KEY=$(op read "op://Personal/openai-codex/credential") command codex'
 {{- end }}
 
+# Shortcut to use claude with API credentials from 1Password instead of normal login
+{{- if and (lookPath "op") (lookPath "claude") }}
+alias claude-api='ANTHROPIC_API_KEY=$(op read "op://Personal/claude-code/credential") command claude'
+{{- end }}
+
 # Suffix aliases - automatically open files by extension
 alias -s md="glow --pager"
 
