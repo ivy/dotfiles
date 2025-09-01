@@ -50,6 +50,7 @@ $RECYCLE.BIN/
 *.sublime-workspace
 .vim/
 .netrwhist
+.obsidian/
 
 # Logs
 logs
