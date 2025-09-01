@@ -115,6 +115,54 @@
         "^(?<depName>[^@\\n]+)@(?<currentValue>[^\\n#]+)"
       ],
       "datasourceTemplate": "npm"
+    },
+    // Chezmoi external dependencies - ohmyzsh tarball pin
+    {
+      "customType": "regex",
+      "fileMatch": ["^home/\\.chezmoiexternal\\.toml\\.tmpl$"],
+      "matchStrings": [
+        "ohmyzsh/ohmyzsh/archive/(?<currentDigest>[a-f0-9]{7,40})\\.tar\\.gz"
+      ],
+      "datasourceTemplate": "git-refs",
+      "currentValueTemplate": "master",
+      "depNameTemplate": "ohmyzsh/ohmyzsh",
+      "packageNameTemplate": "https://github.com/ohmyzsh/ohmyzsh"
+    },
+    // Chezmoi external dependencies - zsh-autosuggestions tarball pin
+    {
+      "customType": "regex",
+      "fileMatch": ["^home/\\.chezmoiexternal\\.toml\\.tmpl$"],
+      "matchStrings": [
+        "zsh-users/zsh-autosuggestions/archive/(?<currentDigest>[a-f0-9]{7,40})\\.tar\\.gz"
+      ],
+      "datasourceTemplate": "git-refs",
+      "currentValueTemplate": "master",
+      "depNameTemplate": "zsh-users/zsh-autosuggestions",
+      "packageNameTemplate": "https://github.com/zsh-users/zsh-autosuggestions"
+    },
+    // Chezmoi external dependencies - zsh-syntax-highlighting tarball pin
+    {
+      "customType": "regex",
+      "fileMatch": ["^home/\\.chezmoiexternal\\.toml\\.tmpl$"],
+      "matchStrings": [
+        "zsh-users/zsh-syntax-highlighting/archive/(?<currentDigest>[a-f0-9]{7,40})\\.tar\\.gz"
+      ],
+      "datasourceTemplate": "git-refs",
+      "currentValueTemplate": "master",
+      "depNameTemplate": "zsh-users/zsh-syntax-highlighting",
+      "packageNameTemplate": "https://github.com/zsh-users/zsh-syntax-highlighting"
+    },
+    // Chezmoi external dependencies - gpakosz/.tmux git-repo revision pin
+    {
+      "customType": "regex",
+      "fileMatch": ["^home/\\.chezmoiexternal\\.toml\\.tmpl$"],
+      "matchStrings": [
+        "(?m)^\\s*revision\\s*=\\s*\"(?<currentDigest>[a-f0-9]{7,40})\""
+      ],
+      "datasourceTemplate": "git-refs",
+      "currentValueTemplate": "master",
+      "depNameTemplate": "gpakosz/.tmux",
+      "packageNameTemplate": "https://github.com/gpakosz/.tmux"
     }
   ]
 }
