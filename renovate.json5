@@ -20,9 +20,7 @@
     // Add "npm" later if opting for Node tools via package.json
   ],
 
-  // Compose / Actions: pin to digests for reproducibility
-  "docker": { "pinDigests": true },
-  "docker-compose": { "pinDigests": true },
+  // Actions: pin to digests for reproducibility  
   "github-actions": { "pinDigests": true },
 
   // File discovery
@@ -43,6 +41,8 @@
 
   // Grouping + automerge for safe/low-risk updates
   "packageRules": [
+    // Docker digest pinning for reproducibility
+    {"matchCategories": ["docker"], "pinDigests": true},
     {
       "matchManagers": ["github-actions"],
       "groupName": "github-actions",
