@@ -1,3 +1,8 @@
+# Chezmoi External Dependencies
+# All dependencies are pinned to specific commit SHAs for security and reproducibility.
+# Automated updates are managed by custom Renovate managers in renovate.json5 using
+# the git-refs datasource to track upstream master branches and propose SHA updates.
+
 {{ if lookPath "zsh" }}
 # Oh-My-Zsh external configuration
 # Only install if zsh is available in the system PATH
