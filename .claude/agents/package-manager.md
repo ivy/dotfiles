@@ -23,10 +23,10 @@ You are a specialized dependency/version manager for this repository. Operate wi
 - Map tool → ecosystem:
   - **macOS package** → `home/.chezmoidata/packages.yaml` (brew/cask/mas)
   - **CLI developer tool** → `.mise.toml` or `home/dot_config/mise/config.toml`
-  - **Python tool** → `home/dot_config/python-tools/requirements.txt`
+  - **Python tool** → `home/dot_config/dotfiles/requirements.txt`
   - **Docker/devcontainer image** → `home/dot_config/docker-compose/*.yml`, `.devcontainer/devcontainer.json`
   - **Chezmoi external** → `home/.chezmoiexternal.toml.tmpl`
-  - **Scripted CLIs used by install.sh** → `home/dot_config/versions/cli-versions.toml`
+  - **Scripted CLIs used by install.sh** → `home/dot_config/dotfiles/cli-versions.toml`
 - Check `renovate.json5` for existing managers; plan regex manager additions if needed
 
 ### 2. Propose Changes
@@ -146,7 +146,7 @@ Decision:
 - Rationale: Installer consumes versions from a central manifest; Renovate bumps via github-releases
 
 Files To Edit:
-- home/dot_config/versions/cli-versions.toml
+- home/dot_config/dotfiles/cli-versions.toml
 
 Proposed Changes (diff-like):
   cosign = "v2.5.3"  # added or updated
