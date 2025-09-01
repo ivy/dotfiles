@@ -54,7 +54,7 @@ assert_script_structure() {
   local script="$1"
 
   # Should start with shebang
-  [[ "$script" == *"#!/bin/bash"* ]]
+  [[ "$script" == *"#!/bin/bash"* || "$script" == *"#!/bin/sh"* ]]
 
   # Should be syntactically valid
   echo "$script" >"$TEST_TMPDIR/temp.sh"

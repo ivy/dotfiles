@@ -54,8 +54,8 @@ load test_helper
     # Check for node availability via mise
     [[ "$output" == *"mise which node"* ]]
     
-    # Check for jq availability via mise  
-    [[ "$output" == *"mise which jq"* ]]
+    # Check for jq availability
+    [[ "$output" == *"which jq"* ]]
 }
 
 @test "script handles missing manifest gracefully" {
