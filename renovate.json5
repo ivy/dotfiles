@@ -26,7 +26,7 @@
   // File discovery
   "pip_requirements": {
     "fileMatch": [
-      "^home/dot_config/python-tools/requirements\\.txt$"
+      "^home/dot_config/dotfiles/requirements\\.txt$"
     ]
   },
   "devcontainer": {
@@ -82,7 +82,7 @@
     // Pin cosign version in a versions file (see step 4)
     {
       "customType": "regex",
-      "fileMatch": ["^home/dot_config/versions/cli-versions\\.toml$"],
+      "fileMatch": ["^home/dot_config/dotfiles/cli-versions\\.toml$"],
       "matchStrings": [
         "(?m)^cosign\\s*=\\s*\"(?<currentValue>v?[^\"]+)\""
       ],
