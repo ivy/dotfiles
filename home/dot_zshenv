@@ -14,6 +14,9 @@ if [[ -d "$HOME/.local/bin" && ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
   export PATH="$HOME/.local/bin:$PATH"
 fi
 
+# Editor configuration
+export EDITOR="nvim"
+
 # Pager configuration
 export PAGER="less"
 export LESS="-FRX"
