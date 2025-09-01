@@ -647,8 +647,8 @@ main() {
   readonly CHEZMOI_VERSION="${CHEZMOI_VERSION:-latest}"
   # Try to read cosign version from versions file, fallback to latest
   COSIGN_VERSION_FROM_FILE=""
-  if [ -f "$script_dir/home/dot_config/versions/cli-versions.toml" ]; then
-    COSIGN_VERSION_FROM_FILE="$(grep '^cosign' "$script_dir/home/dot_config/versions/cli-versions.toml" | cut -d'"' -f2 2>/dev/null || echo "")"
+  if [ -f "$script_dir/home/dot_config/dotfiles/cli-versions.toml" ]; then
+    COSIGN_VERSION_FROM_FILE="$(grep '^cosign' "$script_dir/home/dot_config/dotfiles/cli-versions.toml" | cut -d'"' -f2 2>/dev/null || echo "")"
   fi
   readonly COSIGN_VERSION="${COSIGN_VERSION:-${COSIGN_VERSION_FROM_FILE:-latest}}"
   readonly VERIFY_SIGNATURES="${VERIFY_SIGNATURES:-true}"
