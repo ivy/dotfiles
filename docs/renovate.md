@@ -22,7 +22,7 @@ File: `renovate.json5`
 
 Enabled managers and file discovery:
 
-- `pip_requirements`: `home/dot_config/python-tools/requirements.txt`
+- `pip_requirements`: `home/dot_config/dotfiles/requirements.txt`
 - `mise`: `.mise.toml`, `home/dot_config/mise/config.toml`
 - `docker-compose`: `home/dot_config/docker-compose/*.yml`
 - `devcontainer`: `.devcontainer/devcontainer.json`
@@ -44,7 +44,7 @@ Why: high-signal, low-risk updates (actions/devcontainer/digests) are auto‑mer
 
 These files purposely centralize versions so Renovate can update them automatically:
 
-- `home/dot_config/versions/cli-versions.toml`
+- `home/dot_config/dotfiles/cli-versions.toml`
   - Holds pinned CLI versions used by the installer and scripts.
   - Currently: `cosign` (used for signature verification). Renovate updates via GitHub Releases.
 
@@ -53,7 +53,7 @@ These files purposely centralize versions so Renovate can update them automatica
   - Both native mise tools (e.g., `python = "3.13.7"`) and Aqua‑sourced tools (`"aqua:owner/repo" = "vX.Y.Z"`).
   - Renovate updates native mise tools via the Mise manager, and Aqua‑prefixed tools via a custom regex manager (GitHub Releases datasource).
 
-- `home/dot_config/python-tools/requirements.txt`
+- `home/dot_config/dotfiles/requirements.txt`
   - Pinned versions for Python tools (installed via pipx). Updated by Renovate’s pip manager.
 
 - `.devcontainer/devcontainer.json`
@@ -76,7 +76,7 @@ Defined in `renovate.json5`:
 
 1) CLI versions (GitHub Releases)
 
-- File: `home/dot_config/versions/cli-versions.toml`
+- File: `home/dot_config/dotfiles/cli-versions.toml`
 - Pattern: `^cosign\s*=\s*"(?<currentValue>v?[^\"]+)"`
 - Datasource: `github-releases`, `depNameTemplate: sigstore/cosign`
 
@@ -131,7 +131,7 @@ Note: When adding new externals, add a matching regex rule so Renovate can keep 
   - Renovate will propose version bumps automatically.
 
 - Add a new CLI pin managed by scripts:
-  - Add an entry to `home/dot_config/versions/cli-versions.toml`.
+  - Add an entry to `home/dot_config/dotfiles/cli-versions.toml`.
   - Add code to read it where needed (e.g., `install.sh` reads `cosign`).
   - Add a `customManagers` regex rule if it’s not a standard ecosystem.
 

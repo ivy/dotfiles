@@ -36,9 +36,9 @@ Always invoke the Package Manager subagent before editing any of the following:
 - Devcontainer images and features
 - Mise tool declarations (.mise.toml, home/dot_config/mise/config.toml)
 - Homebrew/cask/mas package definitions
-- Python tools requirements (home/dot_config/python-tools/requirements.txt)
+- Python tools requirements (home/dot_config/dotfiles/requirements.txt)
 - Chezmoi externals (home/.chezmoiexternal.toml.tmpl)
-- Version manifests used by scripts (home/dot_config/versions/*.toml)
+- Version manifests used by scripts (home/dot_config/dotfiles/*.toml)
 - GitHub Actions versions/digests in workflows
 
 Why: The Package Manager subagent enforces immutable pins (versions/digests/SHAs) and ensures Renovate can update them safely. Direct edits risk drift, broken automation, or security regressions.
