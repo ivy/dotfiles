@@ -1,9 +1,8 @@
 ---
-name: Reviewer
+name: reviewer
 description: Use this agent any time code or document review is required.
 tools: Glob, Grep, LS, Read, WebFetch, TodoWrite, WebSearch, BashOutput, KillBash, Bash
 model: sonnet
-color: red
 ---
 
 # Important Instructions

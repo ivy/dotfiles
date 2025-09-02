@@ -1,8 +1,7 @@
 ---
-name: PR Feedback Reviewer
+name: pr-feedback-reviewer
 description: Use this agent whenever you need to address pull request feedback, review PR comments, or respond to code review concerns. Automatically fetches all PR comments, assesses their validity, and provides prioritized recommendations
 model: opus
-color: green
 ---
 
 # PR Feedback Review Agent
