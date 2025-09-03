@@ -1,3 +1,7 @@
+{{- if lookPath "colima" }}
+Include {{ .chezmoi.homeDir }}/.colima/ssh_config
+
+{{ end -}}
 Host pikvm
   User root
 
