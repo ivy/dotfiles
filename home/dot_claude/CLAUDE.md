@@ -42,10 +42,24 @@ Authoritative policy for installing and managing developer tools:
 - Include positive and negative test cases
 - Use descriptive test names explaining the scenario
 
+#### Test Safety & Isolation
+- **Always use test-safe fixtures and paths**: Never use real system paths or actual program names in tests
+- **Sandbox all test operations**: Use temporary directories, mock services, or isolated test environments
+- **Safe naming conventions**: Use clearly fictional names (e.g., `com.example.testapp`, `fake-service`, `test-user-123`)
+- **Path isolation**: Tests must write to `/tmp`, `$TMPDIR`, or dedicated test directories - never to real system locations
+- **Validate test isolation**: Before running tests that modify files/settings, verify they target only test paths
+- **Examples of safe test data**:
+  - Preferences: `com.example.testapp` instead of `com.apple.Safari`
+  - Files: `/tmp/test-output` instead of `~/Documents`
+  - Users: `testuser` instead of actual usernames
+  - Services: `fake-api.example.com` instead of real endpoints
+
 ## Execution Safety
 
 - Preview first: use tool-specific diff/plan or `--dry-run` before applying changes.
 - Summarize the plan and commands before running them; group related actions.
+- **Test isolation verification**: Before executing tests, confirm they target only safe paths and use fictional data
+- **System protection**: Never write tests or scripts that could modify real user data, preferences, or system files
 
 ## Specialized Agents
 
