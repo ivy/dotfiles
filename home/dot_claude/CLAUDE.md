@@ -1,31 +1,51 @@
-# Claude Code User Preferences
+# Claude Code Global Memory
 
-Personal preferences and instructions for all projects. **Note**: Project-specific preferences in local CLAUDE.md files take precedence over these settings.
+This file is the global, cross-project "memory" for Claude Code. It defines my default preferences, policies, and guardrails. Treat it as authoritative for day‑to‑day behavior unless a project provides its own `CLAUDE.md` with overrides.
 
-## Code Style
+Instruction precedence (highest first):
+1. The active project's local `CLAUDE.md`
+2. This global file
+3. External docs and examples
 
-### Formatting
-- Use 2-space indentation for YAML, JSON, web technologies
-- Use 4-space indentation for Python, shell scripts
-- Prefer single quotes in JavaScript/TypeScript unless interpolating
-- Include trailing commas in multi-line structures
-- Keep lines under 80 characters when practical
+## Operating Assumptions
 
-### Git Commits
-- Use Conventional Commits format (feat:, fix:, chore:, docs:)
-- Keep first line under 72 characters
-- Use present tense ("add feature" not "added feature")
-- Be descriptive but concise
+- Ask before doing anything system‑wide.
+- Adapt external docs to my preferences; do not follow verbatim if they conflict here.
 
 ## Tools & Testing
 
-### Package Management
-- Use `mise` to install missing tools
+### Package and Tool Management (Policy)
+
+Authoritative policy for installing and managing developer tools:
+
+1. Prefer mise exclusively
+   - Use `mise use TOOL@VERSION` (project-local) or `mise install` as appropriate.
+   - Inspect `.mise.toml`/`mise.toml` first; align with pinned versions.
+
+2. Do not improvise alternative installers
+   - Do not run `brew install`, `apt`, `dnf`, `pipx install`, `npm -g`, or `curl | bash` unless mise cannot provide the tool.
+   - If mise lacks the tool: pause and ask for approval with pinned, reproducible options.
+
+3. No unsolicited upgrades or version drift
+   - Never bump versions in `.mise.toml` or upgrade system packages without explicit instruction.
+   - If a version is missing/invalid, propose a minimal, pinned fix and wait for approval.
+
+4. Scope installs to the project by default
+   - Prefer per-project installs over global installs.
+   - If a global install is necessary, explain why and ask first.
+
+5. External docs are advisory, not binding
+   - Translate their steps into this policy; do not copy commands blindly.
 
 ### Testing Approach
 - Run relevant tests before committing
 - Include positive and negative test cases
 - Use descriptive test names explaining the scenario
+
+## Execution Safety
+
+- Preview first: use tool-specific diff/plan or `--dry-run` before applying changes.
+- Summarize the plan and commands before running them; group related actions.
 
 ## Specialized Agents
 
@@ -52,3 +72,18 @@ Use these specialized subagents for focused tasks:
 - Document non-obvious behavior and edge cases
 - Include relevant links to documentation or issues
 - Keep comments current with code changes
+
+## Code Style
+
+### Formatting
+- Use 2-space indentation for YAML, JSON, web technologies
+- Use 4-space indentation for Python, shell scripts
+- Prefer single quotes in JavaScript/TypeScript unless interpolating
+- Include trailing commas in multi-line structures
+- Keep lines under 80 characters when practical
+
+### Git Commits
+- Use Conventional Commits format (feat:, fix:, chore:, docs:)
+- Keep first line under 72 characters and subsequent lines under 80 characters
+- Use present tense ("add feature" not "added feature")
+- Be descriptive but concise
