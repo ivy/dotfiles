@@ -23,6 +23,7 @@ packages:
       - mas
       - mise
       - neovim
+      - pkl-lsp
       - ripgrep
       - tree
 
