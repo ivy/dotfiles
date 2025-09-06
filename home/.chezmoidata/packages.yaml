@@ -6,6 +6,7 @@ packages:
     brews:
       # Security & authentication
       - cosign
+      - git-crypt
       - gnupg
 
       # Core CLI utilities
