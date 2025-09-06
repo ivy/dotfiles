@@ -8,8 +8,9 @@ Handle $ARGUMENTS in this order:
    - If ambiguous, ask the user to clarify which repository they want
 
 Steps:
-1. Run `gitingest -o docs/reference/<user>-<repo_name>.txt <repo_url>` to fetch the complete codebase
-2. Read the generated documentation file to understand the repository
-3. Provide a brief confirmation of what was fetched (repository name, main purpose, and file location)
+1. Run `mkdir -p docs/reference/` to ensure the output directory exists
+2. Run `gitingest -o docs/reference/<user>-<repo_name>.txt <repo_url>` to fetch the complete codebase
+3. Read the generated documentation file to understand the repository
+4. Provide a brief confirmation of what was fetched (repository name, main purpose, and file location)
 
 The generated file will be available for future prompts and questions about the repository. You can reference specific parts of the codebase or ask implementation questions based on the fetched content.
