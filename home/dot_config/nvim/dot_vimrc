@@ -1,0 +1,413 @@
+" ~/.vimrc
+set nocompatible
+
+" ================ General Config ====================
+set autoread                   "Reload files changed outside vim
+set backspace=indent,eol,start "Allow backspace in insert mode
+set encoding=UTF-8 nobomb
+set fileformats+=mac
+set gcr=a:blinkon0             "Disable cursor blink
+set nohidden                   " Current buffer cannot be hidden without saving
+set history=1000               "Store lots of :cmdline history
+set shell=/bin/bash
+set showcmd                    "Show incomplete cmds down the bottom
+set showmode                   "Show current mode down the bottom
+set ttimeout
+set ttimeoutlen=100
+set visualbell                 "No sounds, visual bell quiets audible bell
+set secure
+set modelines=5
+set title                      "Set the title in xterm
+set incsearch
+set nojoinspaces               "don't double space after . when joining
+set undolevels=10000
+set viminfo=%,h,'1000,"1000,:1000,n~/.viminfo
+set lazyredraw
+
+" Swap files
+set writebackup
+set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/tmp
+set directory=~/.vim-tmp,~/.tmp,~/tmp,/tmp
+
+" Search
+set hlsearch " Highlight search terms
+set incsearch  " Show matches while searching
+"set ignorecase
+set smartcase
+
+" Make <C-L> clear highlight and redraw
+nnoremap <C-L> :nohls<CR><C-L>
+inoremap <C-L> <C-O>:nohls<CR>
+
+" =============== vim-plug Initialization ===============
+
+if filereadable(expand("~/.vim/vimrc.bundles"))
+  source ~/.vim/vimrc.bundles
+endif
+
+if filereadable(expand("~/.vimrc.neocomplete"))
+  source ~/.vimrc.neocomplete
+endif
+
+
+" =============== Formatting ===============
+
+" set sane autoindent and 2 space soft tabs
+syntax enable
+"set synmaxcol=140
+set cindent
+set ai                                " Auto indent
+set smartindent
+set expandtab shiftwidth=2 tabstop=8 softtabstop=2 " nice tab and shift widths
+"this uses tabs only for indentation and not for alignment
+"set smarttabs
+
+"set showbreak=→              " right arrow character
+set scrolloff=2              " minlines to show around cursor
+set sidescrolloff=8          " minchars to show around cursor
+set showmatch                " when inserting a bracket, briefly flash its match
+set mat=2                    " How many tenths of a second to blink when matching brackets
+set formatoptions-=o         " dont continue comments when pushing o/O
+
+" trailing space highlighting
+set list
+set listchars=tab:▷⋅,trail:⋅,nbsp:⋅
+
+"some stuff to get the mouse going in term
+set mouse=a
+set ttymouse=xterm2
+
+" i like status always
+set laststatus=2
+set statusline=%<%f%=\ [%1*%M%*%n%R]\ y\ %-19(%3l,%02c%03V%)
+
+
+" grep
+map <leader>a :Ag<space>
+map <leader>a* :Ag<space><cword><CR>
+let g:ag_prg="ag --vimgrep --smart-case --nogroup --nocolor"
+
+set grepprg=ag\ --nogroup\ --nocolor
+if &grepformat !~# '%c'
+  set grepformat^=%f:%l:%c:%m
+endif
+
+filetype on
+filetype plugin on
+filetype indent on
+colorscheme elflord
+
+" never see ^M again! (DOS text files)
+autocmd BufRead * silent! %s/^M$//
+
+" Jump to line and column of mark instead of just line (swap the two)
+nnoremap ' `
+nnoremap ` '
+
+" Move between windows with Ctrl + hjkl
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+" C-l conflicts with clear search, but I don
+nnoremap <C-l> <C-w>l
+
+let mapleader = ","
+
+nmap <silent> <Leader>] :TlistToggle<CR>
+nmap <silent> <Leader>[ <Plug>ToggleProject
+nmap <silent> <M-S-Left> <ESC>:bp<CR>
+nmap <Leader>U <ESC>:TlistUpdate<CR>
+nmap <Leader>M <ESC>:wa<CR>:make<CR>
+nmap <Leader>D <ESC>:w<CR>:diffthis<CR>
+nmap <Leader>d <ESC>:w<CR>:diffoff<CR>
+nmap <silent><Leader>q <ESC>:copen<CR>
+nmap <silent><Leader>n <ESC>:cn<CR>
+nmap <silent><Leader>; <ESC>d/;/e<CR>
+" I hate hitting F1 when I mean escape (less common on Mac keyboard)
+map <F1> <Esc>
+inoremap <F1> <Esc>
+inoremap jk <Esc>
+inoremap <S-Tab> <C-V><Tab>
+
+" If I don't let off the shift key quick enough
+command! Q :q
+command! W :w
+command! Wa :wa
+command! Wqa :wqa
+command! E :e
+
+" If I miss the : (I despise entering Ex mode on accident)
+nmap Q <Nop>
+" I don't use recording so save me the mistake
+nmap q :
+" Save a shift key press also
+nmap ; :
+
+" Align bindings
+" map <leader>a= to :Align = (rather than :Align := )
+"map <leader>a= :Align =<CR> this is broken
+map <leader>ah :Align =><CR>
+map <leader>a# :Align #<CR>
+map <leader>a{ :Align {<CR>
+map <leader>A :Align [A-Z].*<CR>:'<,'>s/\s*$//<CR>:nohls<CR>
+map <leader>= ggVG=<CR>
+map <leader>ct :set et <bar> retab<CR>
+
+" Ruby
+map <leader>rs :!ruby -c %:p<CR>
+map <leader>r19 :s/\v:([0-9a-z_]+)\s+\=\>\s+/\1: /g<CR>
+map <leader>r18 :s/\v([0-9a-z_"']+):\s+(.*)/:\1 => \2/g<CR>
+
+" completion
+set wildmenu
+"set completeopt=longest,menu
+set wildmode=list:longest,list:full
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.log,.git,*/bundle/*
+
+" ctrlp - nice file search menus
+let g:ctrlp_custom_ignore = '\.git$\|\.hg$\|\.svn$'
+map <leader>f :CtrlP<CR>
+map <leader>g :CtrlPBuffer<CR>
+map <leader>cf :CtrlPClearCache<CR>
+" Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+"let g:ctrlp_custom_ignore = '\.git$\|\.hg$\|\.svn$'
+" ag is fast enough that CtrlP doesn't need to cache
+let g:ctrlp_use_caching = 0
+
+" airline
+"if !exists('g:airline_symbols')
+"  let g:airline_symbols = {}
+"endif
+"
+"let g:airline_symbols.crypt = '🔒'
+"let g:airline_symbols.linenr = '␊'
+"let g:airline_symbols.linenr = '␤'
+"let g:airline_symbols.linenr = '¶'
+"let g:airline_symbols.branch = '⎇'
+"let g:airline_symbols.paste = 'ρ'
+"let g:airline_symbols.notexists = '∄'
+"let g:airline_symbols.whitespace = 'Ξ'
+"let g:airline_symbols.space = "\ua0"
+
+" Syntastic
+
+set statusline+=%#warningmsg#
+set statusline+=%*
+
+"let g:syntastic_always_populate_loc_list = 1
+"let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+" Lightline
+let g:lightline = {
+      \ 'colorscheme': 'jellybeans',
+      \ 'mode_map': { 'c': 'NORMAL' },
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ], ['ctrlpmark'] ],
+      \   'right': [ [ 'syntastic', 'lineinfo' ], ['percent'], [ 'fileformat', 'fileencoding', 'filetype' ] ]
+      \ },
+      \ 'component_function': {
+      \   'modified': 'LightLineModified',
+      \   'readonly': 'LightLineReadonly',
+      \   'fugitive': 'LightLineFugitive',
+      \   'filename': 'LightLineFilename',
+      \   'fileformat': 'LightLineFileformat',
+      \   'filetype': 'LightLineFiletype',
+      \   'fileencoding': 'LightLineFileencoding',
+      \   'mode': 'LightLineMode',
+      \ },
+      \ 'component_expand': {
+      \   'syntastic': 'SyntasticStatuslineFlag',
+      \ },
+      \ 'component_type': {
+      \   'syntastic': 'error',
+      \ },
+      \ 'subseparator': { 'left': '|', 'right': '|' }
+      \ }
+
+function! LightLineModified()
+  return &ft =~ 'help\|vimfiler\|gundo' ? '' : &modified ? '+' : &modifiable ? '' : '-'
+endfunction
+
+function! LightLineReadonly()
+  return &ft !~? 'help\|vimfiler\|gundo' && &readonly ? '🔏 ' : ''
+endfunction
+
+function! LightLineFilename()
+  return ('' != LightLineReadonly() ? LightLineReadonly() . ' ' : '') .
+        \ (&ft == 'vimfiler' ? vimfiler#get_status_string() :
+        \  &ft == 'unite' ? unite#get_status_string() :
+        \  &ft == 'vimshell' ? vimshell#get_status_string() :
+        \ '' != expand('%:t') ? expand('%:t') : '[No Name]') .
+        \ ('' != LightLineModified() ? ' ' . LightLineModified() : '')
+endfunction
+
+function! LightLineFugitive()
+  if &ft !~? 'vimfiler\|gundo' && exists("*fugitive#head")
+    let _ = fugitive#head()
+    return strlen(_) ? '⎇ '._ : ''
+  endif
+  return ''
+endfunction
+
+augroup AutoSyntastic
+  autocmd!
+  autocmd BufWritePost *.c,*.cpp call s:syntastic()
+augroup END
+function! s:syntastic()
+  SyntasticCheck
+  call lightline#update()
+endfunction
+
+function! LightLineFileformat()
+  return winwidth(0) > 70 ? &fileformat : ''
+endfunction
+
+function! LightLineFiletype()
+  return winwidth(0) > 60 ? (strlen(&filetype) ? &filetype : 'no ft') : ''
+endfunction
+
+function! LightLineFileencoding()
+  return winwidth(0) > 70 ? (strlen(&fenc) ? &fenc : &enc) : ''
+endfunction
+
+function! LightLineMode()
+  return winwidth(0) > 60 ? lightline#mode() : ''
+endfunction
+
+set noshowmode
+" end lightline
+
+" Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
+vmap <Enter> <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. <Leader>aip)
+nmap <Leader>l <Plug>(EasyAlign)
+
+" Make sure tab works
+"au VimEnter * map <Tab> <Esc>
+"au VimEnter * imap <Tab> <Esc>
+"au VimEnter * vmap <Tab> <Esc>
+
+"let Tlist_Ctags_Cmd="/usr/local/bin/ctags"
+"let Tlist_Compact_Format=1
+"let Tlist_Close_On_Select=0         " Enable to close on selecting a tag
+"let Tlist_GainFocus_On_ToggleOpen=1 " Open on toggle
+"let Tlist_Use_Right_Window=1        " Window on the right
+"let Tlist_Auto_Update=1             " Keep Tlist up to date
+"let Tlist_Auto_Open=0               " Auto open Tlist
+"let Tlist_Inc_WinWidth=0
+"let Tlist_Show_Menu=1
+"let Tlist_Exit_OnlyWindow=0         " When enabled, Exit when only Tlist is open
+"let Tlist_File_Fold_Auto_Close=1    " Fold files that aren't open
+let g:project_window_increment=100
+
+" project commands
+"let g:proj_run1=":!ctags -R"
+"let g:proj_run2=":!todo --mono"
+"let g:proj_run3=":!rem -ga -q"
+"let g:proj_run4=":!cscope -bR"
+"let g:proj_flags="istc"
+
+
+" set it to a big window if in gui mode
+if has("gui_running")
+
+
+  " Omg fuck these bubbles
+  set noballooneval
+
+  " a - use system select; c - console dialogs instead of popup; g - grey menu items; r - right scrollbar always; L - left scrollbar when :vs
+  set guioptions='acgrL'
+
+  " Save files when vim loses focus
+  "au FocusLost * silent! wa
+
+  set gcr=a:blinkwait0            " Don't blink the cursor
+  set guifont=MonoLisa:h12.00     " Set a nice font
+  set autoread                    " Load files that change
+  colorscheme jellybeans          " Ugly colors in term
+  set number                      " show line numbers only in gui where they don't screw up mouse select
+  set cursorline                  " Highlight the cursor line in gui mode
+  set lines=56 columns=195
+endif
+
+if has("gui_macvim")
+  " Press Ctrl-Tab to switch between open tabs (like browser tabs) to
+  " the right side. Ctrl-Shift-Tab goes the other way.
+  noremap <C-Tab> :tabnext<CR>
+  noremap <C-S-Tab> :tabprev<CR>
+
+  " Switch to specific tab numbers with Command-number
+  noremap <D-1> :tabn 1<CR>
+  noremap <D-2> :tabn 2<CR>
+  noremap <D-3> :tabn 3<CR>
+  noremap <D-4> :tabn 4<CR>
+  noremap <D-5> :tabn 5<CR>
+  noremap <D-6> :tabn 6<CR>
+  noremap <D-7> :tabn 7<CR>
+  noremap <D-8> :tabn 8<CR>
+  noremap <D-9> :tabn 9<CR>
+  " Command-0 goes to the last tab
+  noremap <D-0> :tablast<CR>
+endif
+
+" gitgutter
+hi clear SignColumn      " Fix gitgutter ugly background
+hi link GitGutterAdd          diffAdded " an added line
+hi link GitGutterChange       Function " a changed line
+hi link GitGutterDelete       diffRemoved " at least one removed line
+hi link GitGutterChangeDelete Function " a changed line followed by at least one removed line
+
+" Only do this part when compiled with support for autocommands
+if has("autocmd")
+  " In text files, always limit the width of text to 78 characters
+  autocmd BufRead *.txt set tw=78
+  " When editing a file, always jump to the last cursor position
+  autocmd BufReadPost *
+  \ if line("'\"") > 0 && line ("'\"") <= line("$") |
+  \   exe "normal! g'\"" |
+  \ endif
+
+  " make find search for files here, then in the cd dir
+  autocmd FileType ruby set path=./**,**
+  setl path=./**,**
+endif
+
+
+
+" spell checking on
+nmap <Leader>S <ESC>:setlocal spell spelllang=en_us<CR>
+set mousemodel=popup
+
+set tags=tags
+
+" fix up the backspace
+set backspace=2 " make backspace work normal (non-vi style)
+"set whichwrap+=<,>,h,l  " backspace and cursor keys wrap to next/prev lines
+
+
+" special 'save my session and exit' binding
+nmap <F2> <Esc>:call DoProjectClose()<CR>:wa<CR>:mksession!<CR>:qa<CR>
+
+"nnoremap <Leader>l mayiw`a:exe "!dict -P - $(echo " . @" . "\| recode latin1..utf-8)"<CR>
+"vnoremap <Leader>l may`a:exe "!dict -P - $(echo " . @" . "\| recode latin1..utf-8)"<CR>
+
+"
+"if has("cscope")
+"  " uncoment this and set if vim can't find it
+"  "set csprg=/usr/local/bin/cscope
+"  set csto=0
+"  set cst
+"  set nocsverb
+"  " add any database in current directory
+"  if filereadable("cscope.out")
+"    cs add cscope.out
+"    " else add database pointed to by environment
+"  elseif $CSCOPE_DB != ""
+"    cs add $CSCOPE_DB
+"  endif
+"  set csverb
+"endif
