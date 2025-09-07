@@ -8,7 +8,7 @@ export ZSH="$HOME/.oh-my-zsh"
 # load a random theme each time Oh My Zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-# ZSH_THEME="robbyrussell"
+ZSH_THEME="garyblessington"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -17,7 +17,7 @@ export ZSH="$HOME/.oh-my-zsh"
 # ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
 
 # Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
+CASE_SENSITIVE="true"
 
 # Uncomment the following line to use hyphen-insensitive completion.
 # Case-sensitive completion must be off. _ and - will be interchangeable.
@@ -114,16 +114,16 @@ _zsh_autosuggest_bind_vim_mode() {
     # Clear default bindings
     bindkey -M viins '^[[C' forward-char  # Right arrow baseline
     bindkey -M viins '^[[D' backward-char # Left arrow baseline
-    
+
     # Insert mode bindings
     bindkey -M viins '^F' vi-forward-word  # Ctrl+F: accept word
     bindkey -M viins '^E' vi-end-of-line   # Ctrl+E: accept to end
     bindkey -M viins '^]' autosuggest-accept  # Ctrl+]: accept full
-    
+
     # Visual mode support
     bindkey -M vicmd '^]' autosuggest-accept
     bindkey -M visual '^]' autosuggest-accept
-    
+
     # Quick accepts in normal mode
     bindkey -M vicmd 'L' vi-end-of-line
     bindkey -M vicmd 'A' vi-add-eol       # A should accept and go to end
@@ -203,6 +203,8 @@ alias grep='grep -Hn --color=auto'
 alias codex='OPENAI_API_KEY=$(op read "op://Personal/openai-codex/credential") command codex'
 {{- end }}
 
+[ -f "$XDG_CONFIG_HOME/zsh/local.zsh" ] && source "$XDG_CONFIG_HOME/zsh/local.zsh"
+
 # Shortcut to use claude with API credentials from 1Password instead of normal login
 {{- if and (lookPath "op") (lookPath "claude") }}
 alias claude-api='ANTHROPIC_API_KEY=$(op read "op://Personal/claude-code/credential") command claude'
@@ -218,7 +220,7 @@ alias -s md="glow --pager"
 
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
+#   export EDITOR="$(command -v vim)"
 # else
 #   export EDITOR='nvim'
 # fi
@@ -242,21 +244,21 @@ alias -s md="glow --pager"
 function reload! {
     # Find the actual zsh binary path using multiple fallback methods
     local zsh_path
-    
+
     # Method 1: Linux - /proc/$$/exe symlinks to the actual executable
     if [[ -r /proc/$$/exe ]]; then
         zsh_path=$(readlink /proc/$$/exe)
-    
+
     # Method 2: macOS/BSD - Use lsof to find the binary from open file descriptors
     # This works because the shell binary stays open as the executing process
     elif command -v lsof >/dev/null && zsh_path=$(lsof -p $$ -Fn | awk '/^n.*zsh$/{print substr($0,2); exit}'); then
         :  # zsh_path already set by command substitution
-    
+
     # Method 3: Non-login shells - $0 contains the actual path when not a login shell
     # Login shells have $0 as "-zsh" but regular shells show the full path
     elif [[ $0 != -* ]]; then
         zsh_path=$0
-    
+
     # Method 4: Login shell detection - If $0 starts with '-', we're in a login shell
     # Use getent/dscl to find the user's actual shell from the system database
     elif [[ $0 == -* ]]; then
@@ -270,13 +272,13 @@ function reload! {
             # Fallback to $SHELL if system tools unavailable
             zsh_path=$SHELL
         fi
-    
+
     # Method 5: Final fallback - Use $SHELL environment variable
     # This may not be the currently running shell but is the user's preferred shell
     else
         zsh_path=$SHELL
     fi
-    
+
     exec "$zsh_path" "$@"
 }
 
@@ -308,32 +310,32 @@ typeset -gA ZSH_HIGHLIGHT_STYLES=(
     'precommand'               'fg=green,underline'
     'alias'                    'fg=cyan'
     'function'                 'fg=cyan'
-    
+
     # Paths
     'path'                     'fg=white,underline'
     'path_prefix'              'fg=white'
     'path_approx'              'fg=yellow'
-    
+
     # Options and arguments
     'single-hyphen-option'     'fg=magenta'
     'double-hyphen-option'     'fg=magenta'
-    
+
     # Quotes and globbing
     'single-quoted-argument'   'fg=yellow'
     'double-quoted-argument'   'fg=yellow'
     'dollar-quoted-argument'   'fg=yellow'
     'back-quoted-argument'     'fg=magenta'
     'globbing'                 'fg=cyan,bold'
-    
+
     # Variables
     'assign'                   'fg=white'
     'parameter'                'fg=yellow'
-    
+
     # Errors
     'unknown-token'            'fg=red,bold'
     'reserved-word'            'fg=magenta'
     'commandseparator'         'fg=white'
-    
+
     # Brackets
     'bracket-level-1'          'fg=blue,bold'
     'bracket-level-2'          'fg=green,bold'
@@ -357,7 +359,7 @@ if [[ -n "$ZSH_HIGHLIGHT_VERSION" ]]; then
     function zle-keymap-select {
         zle && zle .reset-prompt && zle -R
     }
-    
+
     # Ensure highlighting works in all vim modes
     zle -N zle-keymap-select
     zle -N zle-line-init
