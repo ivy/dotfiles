@@ -1,18 +1,30 @@
 [user]
 	name = {{ .git.name }}
 	email = {{ .git.email }}
+	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBUOchTXDNe34jfmbmvuPuK4Vi8ClJkbmwkKrULyDh3U
 
-[init]
-	defaultBranch = main
+[gpg]
+	format = ssh
+
+[gpg "ssh"]
+	program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+
+[commit]
+	gpgsign = true
+	template = /Users/martin.emde/.gitmessage
 
 [core]
-	editor = nvim
 	excludesfile = ~/.config/git/ignore
+	whitespace = trailing-space,space-before-tab
+	editor = "nvim -f"
 	autocrlf = input
 	pager = delta
 
 [interactive]
 	diffFilter = delta --color-only
+
+[apply]
+	whitespace = fix
 
 [delta]
 	navigate = true
@@ -43,32 +55,82 @@
 
 [alias]
 	# Basic shortcuts
-	co = checkout
-	br = branch
-	ci = commit
-	st = status
+	ec      = config --global -e
+	co			= checkout
+	cp      = cherry-pick
+	a       = add -p
+	ap      = add -p
+	ci      = commit
+	cif     = commit --fixup
+	cia     = commit --amend
+	ciah    = commit --amend -C HEAD
+	ciar    = commit --amend -C HEAD --reset-author
+	fix     = commit --fixup HEAD
+	amend   = commit --amend
+	wip     = !git add -u && git commit -m "WIP" -n
+	unwip   = reset HEAD~1
+	st      = status
+	b				= branch
+	br      = branch
+	m       = merge
+	rb      = rebase
+	ri			= rebase --interactive
+	rbi     = rebase --interactive --autosquash
+	rbim    = rebase --interactive --autosquash origin/main
+	rbc     = rebase --continue
+	rba     = rebase --abort
+	rbs     = rebase --skip
+	rs      = reset
+	f       = fetch
+	please  = push --force-with-lease
+	pf      = push --force-with-lease
+	d       = diff
+	dc      = diff --cached
+	dw      = diff --word-diff-regex=.
+	dcw     = diff --color-words
+	pl      = pull --prune
+	pr      = pull --rebase --prune
 
 	# Better logging
-	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
-	lga = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --all
+	l       = log --oneline --graph --decorate
+	lg			= log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+	lga			= log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --all
+	ld      = log --pretty=format:"%h%x09%an%x09%ad%x09%s"
+	lr      = "!git --no-pager log --oneline --graph --decorate -10"
+	long    = log --pretty=fuller --decorate
+
+	# Branch management
+	pending = "!f() { git diff origin/${1-main} HEAD --name-status; }; f"
+	cb      = symbolic-ref --short HEAD
+	rhom    = reset --hard origin/main
+	rhob    = "!git cb >/dev/null && git reset --hard origin/`git cb`"
+	undo    = reset HEAD~1 --mixed
+	bclean  = "!f() { git checkout origin/${1-main} && for b in $(git for-each-ref refs/heads --format=\"%(refname:short)\" | grep -v ${1-main}); do if [[ ! $(git cherry -v \"origin/${1-main}\" $b | grep \"^+\") ]]; then git branch -D $b; fi; done };f"
+	bdone   = "!f() { git checkout origin/${1-main} && git pull --prune && git bclean ${1-main}; }; f"
+	recent  = "for-each-ref --format='%(committerdate:relative) %(refname:short) %(objectname:short)' --sort=-committerdate refs/heads/ --count 20"
+	recency = "for-each-ref --format='%(committerdate:relative) %(refname:short) %(objectname:short)' --sort=-committerdate refs/heads/"
+	cleanup = "!git branch --merged | grep -v '\\*\\|main\\|master\\|develop' | xargs -n 1 git branch -d"
+
+	# Conflict resolution
+	edit-unmerged = "!$VISUAL `git diff --name-only --diff-filter=U`"
+	add-unmerged = "!git add `git diff --name-only --diff-filter=U`"
+	theirs-unmerged = "!git checkout —theirs `git diff --name-only --diff-filter=U`"
+	ours-unmerged = "!git checkout —ours `git diff --name-only --diff-filter=U`"
 
 	# Show files in a commit
 	show-files = show --pretty="" --name-only
 
-	# Undo last commit
-	undo = reset HEAD~1 --mixed
-
-	# Clean up merged branches
-	cleanup = "!git branch --merged | grep -v '\\*\\|main\\|master\\|develop' | xargs -n 1 git branch -d"
-
 	# Quick commit and push
 	cap = "!git add . && git commit -m"
 
-	# Interactive rebase
-	ri = rebase -i
-
 	# Show current branch
 	current = branch --show-current
+
+	# Hotfix workflow
+	hotfix = "!git flow hotfix start `date '+%Y%m%d-%H%M'`"
+
+[branch]
+	sort = -committerdate
 
 [color]
 	ui = auto
@@ -93,8 +155,57 @@
 	changed = yellow
 	untracked = cyan
 
+[interactive]
+	diffFilter = delta --color-only
+
+[delta]
+	navigate = true
+	light = false
+	side-by-side = true
+	line-numbers = true
+
+[merge]
+	tool = vimdiff
+	summary = true
+	stat = true
+	conflictstyle = diff3
+
+[diff]
+	mnemonicprefix = true
+	renames = copies
+	algorithm = histogram
+	colorMoved = default
+
+[pull]
+	rebase = true
+	ff = only
+
+[push]
+	default = current
+	autoSetupRemote = true
+
+[rebase]
+	autosquash = true
+	autoStash = true
+
+[status]
+	showUntrackedFiles = all
+
+[log]
+	date = relative
+
 [help]
-	autocorrect = 1
+	autocorrect = 18
+
+[advice]
+	pushUpdateRejected = false
+	statusHints = false
+	statusUoption = false
+	commitBeforeMerge = false
+	resolveConflict = false
+	detachedHead = false
+	rmHints = false
+	skippedCherryPicks = false
 
 [rerere]
 	enabled = true
@@ -102,8 +213,17 @@
 [column]
 	ui = auto
 
-[branch]
-	sort = -committerdate
+[filter "lfs"]
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+
+[credential]
+	helper = osxkeychain
+
+[init]
+	defaultBranch = main
 
 [include]
 	path = ~/.config/git/config.local
