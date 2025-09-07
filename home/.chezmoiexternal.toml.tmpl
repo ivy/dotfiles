@@ -37,3 +37,27 @@
     url = "https://github.com/gpakosz/.tmux.git"
     revision = "23f6e11e65657406be2b2557148d831c631778d7"
     refreshPeriod = "24h"
+
+{{ if lookPath "bat" }}
+# Catppuccin themes for bat
+# Pin to specific commit SHA for security and reproducibility
+[".config/bat/themes/Catppuccin Latte.tmTheme"]
+    type = "file"
+    url = "https://github.com/catppuccin/bat/raw/6810349b28055dce54076712fc05fc68da4b8ec0/themes/Catppuccin%20Latte.tmTheme"
+    refreshPeriod = "168h"
+
+[".config/bat/themes/Catppuccin Frappe.tmTheme"]
+    type = "file"
+    url = "https://github.com/catppuccin/bat/raw/6810349b28055dce54076712fc05fc68da4b8ec0/themes/Catppuccin%20Frappe.tmTheme"
+    refreshPeriod = "168h"
+
+[".config/bat/themes/Catppuccin Macchiato.tmTheme"]
+    type = "file"
+    url = "https://github.com/catppuccin/bat/raw/6810349b28055dce54076712fc05fc68da4b8ec0/themes/Catppuccin%20Macchiato.tmTheme"
+    refreshPeriod = "168h"
+
+[".config/bat/themes/Catppuccin Mocha.tmTheme"]
+    type = "file"
+    url = "https://github.com/catppuccin/bat/raw/6810349b28055dce54076712fc05fc68da4b8ec0/themes/Catppuccin%20Mocha.tmTheme"
+    refreshPeriod = "168h"
+{{ end }}
