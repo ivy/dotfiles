@@ -86,9 +86,8 @@ packages:
       # Productivity
       - obsidian
       - amethyst
-
-      # Media
-      - vlc
+      - keymapp
+      - monitorcontrol
 
       # Security
       - 1password
@@ -97,17 +96,13 @@ packages:
       # Audio
       - loopback
 
-      # Fonts
-      - font-fira-code-nerd-font
+      # System monitoring
+      - stats
 
       # Terminal
       - ghostty
     mas:
-      # Productivity
+      - 1365531024 # 1Blocker
       - 1532419400 # MeetingBar
       - 1592917505 # Noir
-
-      # Utilities
-      - 1365531024 # 1Blocker
-      - 641027709  # Color Picker
-
+      - 1622835804 # Kagi for Safari
