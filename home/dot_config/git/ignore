@@ -24,19 +24,8 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-# https://mise.jdx.dev/configuration.html
-# https://mise.jdx.dev/configuration/environments.html
-.mise.*.local.toml
-.mise.local.toml
-mise.*.local.toml
-mise.local.toml
-.mise/*.local.toml
-mise/*.local.toml
-
-# https://mise.jdx.dev/configuration.html#tool-versions
-#.tool-versions
-
-# Swap
+# Swap files
+.*.sw?
 [._]*.s[a-v][a-z]
 # comment out the next line if you don't need vector files
 !*.svg
@@ -56,6 +45,33 @@ Sessionx.vim
 tags
 # Persistent undo
 [._]*.un~
+
+# Ruby/Rails
+.bundle
+.rbx
+
+# Editor files
+*.sublime-workspace
+*.sublime-project
+
+# Personal files
+ignore/*
+*.memde
+scratch
+
+# Tool configurations
+# https://mise.jdx.dev/configuration.html
+# https://mise.jdx.dev/configuration/environments.html
+.mise.*.local.toml
+.mise.local.toml
+mise.*.local.toml
+mise.local.toml
+mise.toml
+.mise/*.local.toml
+mise/*.local.toml
+
+# https://mise.jdx.dev/configuration.html#tool-versions
+#.tool-versions
 
 # https://lefthook.dev/configuration/#config-file-name
 /.lefthook-local.json
