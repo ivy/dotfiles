@@ -1,17 +1,362 @@
 {
-    "window.commandCenter": 1,
-    "editor.rulers": [
-        80
-    ],
-    "go.formatTool": "goimports",
-    "workbench.colorTheme": "Catppuccin Mocha",
-    "git.autofetch": true,
-    "window.autoDetectColorScheme": true,
-    "workbench.preferredLightColorTheme": "Catppuccin Latte",
-    "editor.accessibilitySupport": "off",
-    "cursor.composer.shouldChimeAfterChatFinishes": true,
-    "cursor.composer.shouldAllowCustomModes": true,
-    "workbench.preferredDarkColorTheme": "Catppuccin Mocha",
-    "editor.fontFamily": "'FiraCode Nerd Font', Menlo, Monaco, 'Courier New', monospace",
-    "editor.fontLigatures": true
+  // ================================================================
+  // EDITOR CORE SETTINGS
+  // ================================================================
+
+  // File formatting and saving
+  "editor.formatOnSaveMode": "file",
+  "files.autoSave": "onWindowChange",
+  "files.trimTrailingWhitespace": true,
+  "files.trimFinalNewlines": true,
+  "files.insertFinalNewline": true,
+
+  // Font and display settings
+  /* MonoLisa ligature settings
+   * zero: slashed 0
+   * ss01: high *
+   * ss02: script variant
+   * ss03: round g
+   * ss04: basic g
+   * ss06: alternate @
+   * ss07: curlier braces {}
+   * ss08: round parens ()
+   * ss09: large <= & >= ligatures
+   * ss10: flat <= & >= ligatures
+   * ss11: x in 0x00
+   * ss12: thin backslash \n
+   * ss13: strike-through $
+   * ss14: alternate &
+   * ss15: i without serif
+   * ss16: r without serif
+   * ss18: alternate @
+   */
+  "editor.fontFamily": "MonoLisa Nerd Font, MonoLisa, Helvetica",
+  "editor.fontLigatures": "'calt', 'liga', 'zero', 'ss02', 'ss04', 'ss10', 'ss11', 'ss12', 'ss14', 'ss15', 'ss16'",
+  "editor.fontWeight": "300",
+  "editor.fontSize": 13,
+  "editor.lineHeight": 0,
+  "editor.renderWhitespace": "none",
+  "editor.renderFinalNewline": "on",
+
+  // Code structure and indentation
+  "editor.insertSpaces": false,
+  "editor.tabSize": 2,
+  "editor.indentSize": "tabSize",
+  "editor.autoClosingBrackets": "never",
+  "editor.autoClosingQuotes": "never",
+  "editor.bracketPairColorization.enabled": false,
+  "editor.guides.bracketPairs": true,
+
+  // Unicode and accessibility
+  "editor.unicodeHighlight.allowedLocales": {
+    "fr": true
+  },
+  "editor.accessibilitySupport": "off",
+  "editor.codeActionsOnSave": {},
+
+  // Integrated Terminal
+  "terminal.integrated.scrollback": 10000,
+  "terminal.integrated.fontSize": 13,
+  "terminal.integrated.copyOnSelection": true,
+
+  // ================================================================
+  // EDITOR SUGGESTIONS & INTELLISENSE
+  // ================================================================
+
+  /*
+   * Optimized for Cursor AI tab completions
+   * Disables most traditional IntelliSense to avoid conflicts
+   */
+
+  // Keep AI Tab completions enabled
+  "editor.inlineSuggest.enabled": true,
+
+  // Disable traditional suggestions to avoid conflicts
+  "editor.suggestSelection": "first",
+  "editor.suggestOnTriggerCharacters": false, // Controls if suggestions should automatically show up when typing trigger characters
+  "editor.snippetSuggestions": "none", // Prevent snippets from competing with AI
+  "editor.suggest.showSnippets": false,
+  "editor.suggest.showKeywords": false,
+  "editor.quickSuggestions": {
+    "other": "off" // Disable annoying constant suggestions
+  },
+
+  // Keep Tab for accepting inline AI, not snippets/Emmet
+  "editor.tabCompletion": "off",
+  "editor.acceptSuggestionOnEnter": "off",
+  "emmet.triggerExpansionOnTab": false,
+
+  // Kill TS/JS language IntelliSense (optional, reduces popups with AI)
+  "typescript.suggest.enabled": false,
+  "javascript.suggest.enabled": false,
+
+  // ================================================================
+  // VIM CONFIGURATION
+  // ================================================================
+
+  // Vim behavior settings
+  "vim.easymotion": true,
+  "vim.joinspaces": false,
+  "vim.replaceWithRegister": true,
+  "vim.startofline": false,
+  "vim.sneak": true,
+  "vim.sneakReplacesF": true,
+  "vim.sneakUseIgnorecaseAndSmartcase": true,
+  "vim.visualstar": true,
+  "vim.ignorecase": false,
+  "vim.normalModeKeyBindings": [],
+
+  // Custom vim keybindings
+  // Maps vi undo to vscode undo and adds navigation shortcuts
+  "vim.normalModeKeyBindingsNonRecursive": [
+    // Fix undo to use VSCode's undo system
+    {
+      "before": ["u"],
+      "commands": ["undo"]
+    },
+    {
+      "before": ["C-r"],
+      "commands": ["redo"]
+    },
+    // Navigate between editor groups (splits)
+    {
+      "before": ["<C-h>"],
+      "commands": ["workbench.action.focusLeftGroup"]
+    },
+    {
+      "before": ["<C-l>"],
+      "commands": ["workbench.action.focusRightGroup"]
+    },
+    {
+      "before": ["<C-k>"],
+      "commands": ["workbench.action.focusAboveGroup"]
+    },
+    {
+      "before": ["<C-j>"],
+      "commands": ["workbench.action.focusBelowGroup"]
+    },
+    // File explorer (NERDTree equivalent)
+    {
+      "before": ["<C-b>"],
+      "commands": ["workbench.view.explorer"]
+    },
+    // Switch to AI chat
+    {
+      "before": ["<C-a>"],
+      "commands": ["workbench.action.chat.focusInput"]
+    },
+    // Navigate tabs within group
+    {
+      "before": ["<C-p>"],
+      "commands": ["workbench.action.previousEditorInGroup"]
+    },
+    {
+      "before": ["<C-n>"],
+      "commands": ["workbench.action.nextEditorInGroup"]
+    },
+    // Navigate all open editors (buffers)
+    {
+      "before": ["<C-m>"],
+      "commands": ["workbench.action.previousEditor"]
+    },
+    {
+      "before": ["<C-n>"],
+      "commands": ["workbench.action.nextEditor"]
+    }
+  ],
+
+  // ================================================================
+  // LANGUAGE-SPECIFIC SETTINGS
+  // ================================================================
+
+  // Web Technologies (JavaScript/TypeScript/Svelte)
+  "[svelte]": {
+    "editor.tabSize": 4,
+    "editor.formatOnSave": true,
+    "editor.insertSpaces": false,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.tabSize": 4,
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "editor.formatOnType": true,
+    "editor.insertSpaces": false,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  // Markup and styling
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  // Backend languages
+  "[ruby]": {
+    // "editor.defaultFormatter": "Shopify.ruby-lsp", // Alternative formatter
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "editor.insertSpaces": true,
+    "files.trimTrailingWhitespace": true,
+    "files.trimFinalNewlines": true,
+    "files.insertFinalNewline": true,
+    "editor.rulers": [100],
+    "editor.semanticHighlighting.enabled": true,
+    "editor.tabSize": 2
+  },
+  "[python]": {
+    "editor.formatOnType": true
+  },
+  "[go]": {
+    "editor.tabSize": 4
+  },
+
+  // ================================================================
+  // WORKBENCH & UI SETTINGS
+  // ================================================================
+
+  // Theme and appearance
+  "workbench.colorTheme": "Ocean Low Tide",
+  "workbench.preferredLightColorTheme": "Material Theme Ocean",
+  "workbench.preferredDarkColorTheme": "Ocean Low Tide",
+  "workbench.preferredHighContrastColorTheme": "Material Theme Ocean High Contrast",
+  "workbench.preferredHighContrastLightColorTheme": "Material Theme Ocean High Contrast",
+  "workbench.iconTheme": "eq-material-theme-icons-ocean",
+  "window.autoDetectColorScheme": true,
+  "workbench.colorCustomizations": {
+    "editor.selectionBackground": "#135564",
+    "selection.background": "#1c5c6a"
+  },
+
+  // Editor tabs and layout
+  "workbench.editorAssociations": {},
+  "workbench.editor.tabCloseButton": "left",
+  "workbench.editor.pinnedTabSizing": "compact",
+  "workbench.editor.limit.enabled": true,
+  "workbench.editor.tabActionLocation": "left",
+
+  // Window settings
+  "window.zoomPerWindow": false,
+
+  // ================================================================
+  // SEARCH & EXPLORER SETTINGS
+  // ================================================================
+
+  "search.followSymlinks": false,
+  "explorer.confirmDragAndDrop": false,
+
+  // ================================================================
+  // GIT SETTINGS
+  // ================================================================
+
+  "git.autofetch": true,
+  "git.openRepositoryInParentFolders": "always",
+
+  // ================================================================
+  // EXTENSION SETTINGS
+  // ================================================================
+
+  // GitHub Copilot
+  "github.copilot.enable": {
+    "*": true,
+    "plaintext": true,
+    "scminput": false,
+    "yaml": true
+  },
+  "github.copilot.editor.enableAutoCompletions": true,
+
+  // GitHub Pull Requests
+  "githubPullRequests.pullBranch": "never",
+  "githubPullRequests.terminalLinksHandler": "github",
+
+  // Cursor-specific settings
+  "cursor.cpp.enablePartialAccepts": true,
+  "cursor.composer.shouldChimeAfterChatFinishes": true,
+  "cursor.composer.shouldAllowCustomModes": true,
+  "cursor.composer.backspaceRemoveContext": false,
+  "cursor.cpp.disabledLanguages": ["markdown", "plaintext"],
+
+  // Spell checking (disabled for all file types)
+  "cSpell.enabledFileTypes": {
+    "*": false
+  },
+
+  // Red Hat telemetry
+  "redhat.telemetry.enabled": false,
+
+  // ================================================================
+  // LANGUAGE SERVER SETTINGS
+  // ================================================================
+
+  // TypeScript/JavaScript
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "typescript.autoClosingTags": false,
+  "javascript.autoClosingTags": false,
+
+  // Svelte
+  "svelte.enable-ts-plugin": true,
+
+  // Go
+  "gopls": { "ui.semanticTokens": true },
+
+  // HTML
+  "html.autoClosingTags": false,
+
+  // C++
+  "C_Cpp.default.compilerPath": "",
+
+  // ================================================================
+  // YAML & OTHER FORMATS
+  // ================================================================
+
+  // AWS CloudFormation YAML tags
+  "yaml.customTags": [
+    "!And",
+    "!And sequence",
+    "!If",
+    "!If sequence",
+    "!Not",
+    "!Not sequence",
+    "!Equals",
+    "!Equals sequence",
+    "!Or",
+    "!Or sequence",
+    "!FindInMap",
+    "!FindInMap sequence",
+    "!Base64",
+    "!Join",
+    "!Join sequence",
+    "!Cidr",
+    "!Ref",
+    "!Sub",
+    "!Sub sequence",
+    "!GetAtt",
+    "!GetAZs",
+    "!ImportValue",
+    "!ImportValue sequence",
+    "!Select",
+    "!Select sequence",
+    "!Split",
+    "!Split sequence"
+  ],
+
+  // ================================================================
+  // MISCELLANEOUS SETTINGS
+  // ================================================================
+
+  "update.showReleaseNotes": false,
+  "update.releaseTrack": "prerelease",
+  "window.zoomLevel": -1,
 }
