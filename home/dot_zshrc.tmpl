@@ -65,6 +65,10 @@ zstyle ':omz:update' mode reminder  # just remind me to update when it's time
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
+# Change cursor shape in vi mode between normal/insert
+# VI_MODE_RESET_PROMPT_ON_MODE_CHANGE=true
+VI_MODE_SET_CURSOR=true
+
 # Which plugins would you like to load?
 # Standard plugins can be found in $ZSH/plugins/
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
@@ -72,9 +76,11 @@ zstyle ':omz:update' mode reminder  # just remind me to update when it's time
 # Add wisely, as too many plugins slow down shell startup.
 # shellcheck disable=SC2034
 plugins=(
+  gh
   git
   mise
   starship
+  vi-mode
 )
 
 source "$ZSH"/oh-my-zsh.sh
@@ -373,3 +379,5 @@ fi
 # Inspired by: https://thoughtbot.com/blog/git-safe
 # Note: Placed at end to ensure it takes precedence over all other PATH modifications
 export PATH=".git/safe/../../bin:$PATH"
+
+# vi: ft=zsh
