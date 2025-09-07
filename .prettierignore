@@ -1,0 +1,14 @@
+# Ignore chezmoi specific files that shouldn't be formatted
+.chezmoiroot
+.chezmoiignore
+.chezmoi*
+
+# Ignore generated/external files
+*.patch
+*.diff
+node_modules/
+.git/
+
+# Keep template syntax intact - only format the content, not the templates
+# Comment out if you want to format .tmpl files too:
+# *.tmpl
