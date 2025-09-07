@@ -9,6 +9,11 @@ export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 export XDG_DATA_DIRS="${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
 export XDG_CONFIG_DIRS="${XDG_CONFIG_DIRS:-/etc/xdg}"
 
+# Add bun global bin directory to PATH if not already present
+if [[ -d "$HOME/.cache/.bun/bin" && ":$PATH:" != *":$HOME/.cache/.bun/bin:"* ]]; then
+  export PATH="$HOME/.cache/.bun/bin:$PATH"
+fi
+
 # Add ~/.local/bin to front of PATH if not already present
 if [[ -d "$HOME/.local/bin" && ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
   export PATH="$HOME/.local/bin:$PATH"
