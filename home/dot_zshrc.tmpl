@@ -96,12 +96,16 @@ eval "$(atuin init zsh)"
 # Speed-optimized zsh-autosuggestions loading
 # All checks done at template generation time by chezmoi
 
+# Load zpty module for completion strategy
+zmodload zsh/zpty
+
 # Pre-configure before loading for maximum speed
 export ZSH_AUTOSUGGEST_USE_ASYNC=1
 export ZSH_AUTOSUGGEST_MANUAL_REBIND=1  # We'll handle rebinding for vim mode
 export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 export ZSH_AUTOSUGGEST_HISTORY_IGNORE="?(#c50,)"  # Ignore commands > 50 chars
 export ZSH_AUTOSUGGEST_COMPLETION_IGNORE="* --help"  # Skip help completions
+export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd completion)
 
 # Catpuccin theme support - optimized for Ghostty + tmux
 if [[ "${TERM}" == "xterm-ghostty" ]] || [[ -n "${TMUX}" ]]; then
