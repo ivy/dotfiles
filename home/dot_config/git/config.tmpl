@@ -17,6 +17,7 @@
 [delta]
 	navigate = true
 	line-numbers = true
+	syntax-theme = "Catppuccin Mocha"
 
 [merge]
 	conflictstyle = zdiff3
@@ -46,26 +47,26 @@
 	br = branch
 	ci = commit
 	st = status
-	
+
 	# Better logging
 	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 	lga = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --all
-	
+
 	# Show files in a commit
 	show-files = show --pretty="" --name-only
-	
+
 	# Undo last commit
 	undo = reset HEAD~1 --mixed
-	
+
 	# Clean up merged branches
 	cleanup = "!git branch --merged | grep -v '\\*\\|main\\|master\\|develop' | xargs -n 1 git branch -d"
-	
+
 	# Quick commit and push
 	cap = "!git add . && git commit -m"
-	
+
 	# Interactive rebase
 	ri = rebase -i
-	
+
 	# Show current branch
 	current = branch --show-current
 
