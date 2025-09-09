@@ -362,12 +362,10 @@ source {{ $zshSyntaxHighlightPath }}
 # Ensure highlighting updates properly in vim modes
 if [[ -n "$ZSH_HIGHLIGHT_VERSION" ]]; then
     # Force rehighlight on mode change
-    function zle-keymap-select {
-        zle && zle .reset-prompt && zle -R
-    }
+    # Removed zle-keymap-select override to preserve vi-mode cursor changes
 
     # Ensure highlighting works in all vim modes
-    zle -N zle-keymap-select
+    # Note: vi-mode plugin already registers zle-keymap-select
     zle -N zle-line-init
 fi
 
