@@ -1,0 +1,11 @@
+# Catppuccin theme for bat
+--theme="Catppuccin Mocha"
+
+# Show line numbers
+--style="numbers,changes,header"
+
+# Use italic text on the terminal
+--italic-text=always
+
+# Show file headers
+--decorations=always
