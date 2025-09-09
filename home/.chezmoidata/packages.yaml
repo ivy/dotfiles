@@ -87,7 +87,7 @@ packages:
       - obsidian
       - amethyst
       - keymapp
-      - monitorcontrol
+
 
       # Security
       - 1password
