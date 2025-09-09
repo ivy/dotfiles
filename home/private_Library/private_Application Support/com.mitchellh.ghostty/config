@@ -33,5 +33,11 @@ keybind = cmd+shift+d=new_split:down
 keybind = cmd+t=new_tab
 keybind = cmd+w=close_tab
 
+# Shift+Enter for Claude Code
+keybind = shift+enter=text:\x1b\r
+
+# Cursor color configuration
+cursor-invert-fg-bg = true
+
 # Theme
 theme = light:catppuccin-latte,dark:catppuccin-mocha
