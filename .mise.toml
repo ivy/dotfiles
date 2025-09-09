@@ -6,3 +6,4 @@
 "aqua:koalaman/shellcheck" = "v0.11.0"
 "aqua:mikefarah/yq" = "v4.47.1"
 shfmt = "v3.12.0"
+prettier = "3.6.2"
