@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# node version hash: {{ include "dot_config/mise/config.toml" | regexFind "node = \"[^\"]*\"" | sha256sum }}
+# bun version hash: {{ include "dot_config/mise/config.toml" | regexFind "bun = \"[^\"]*\"" | sha256sum }}
 # node tools manifest hash: {{ include "dot_config/dotfiles/package.json" | sha256sum }}
 
 [ -n "${DEBUG:-}" ] && set -o xtrace
@@ -13,9 +13,9 @@ if ! command -v mise >/dev/null 2>&1; then
     exit 0
 fi
 
-# Only run if Node.js is available via mise
-if ! mise which node >/dev/null 2>&1; then
-    echo "Node.js not available via mise, skipping Node.js tools installation"
+# Only run if bun is available via mise
+if ! mise which bun >/dev/null 2>&1; then
+    echo "bun not available via mise, skipping Node.js tools installation"
     exit 0
 fi
 
@@ -26,20 +26,20 @@ if ! which jq >/dev/null 2>&1; then
 fi
 
 # Get tool paths once
-NPM="$(mise which npm)"
+BUN="$(mise which bun)"
 
 echo "Installing Node.js tools..."
 
 # Install Node tools from package.json manifest
 MANIFEST="${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles/package.json"
 if [ -f "$MANIFEST" ]; then
-    echo "Installing pinned npm tools from $MANIFEST..."
+    echo "Installing pinned tools from $MANIFEST using bun..."
     
     # Extract pkg@version pairs from devDependencies
     jq -r '.devDependencies // {} | to_entries[] | "\(.key)@\(.value)"' "$MANIFEST" | while read -r spec; do
         echo "Installing $spec..."
-        # NPM hardening: disable scripts, audit, and fund for security
-        "$NPM" install --global --ignore-scripts --no-audit --no-fund "$spec"
+        # Use bun to install globally
+        "$BUN" add --global "$spec"
     done
 else
     echo "No package.json found at $MANIFEST, skipping Node.js tools installation"
