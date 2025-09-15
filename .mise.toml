@@ -4,5 +4,5 @@
 [tools]
 "aqua:bats-core/bats-core" = "v1.12.0"
 "aqua:koalaman/shellcheck" = "v0.11.0"
-"aqua:mikefarah/yq" = "v4.47.1"
+"aqua:mikefarah/yq" = "v4.47.2"
 shfmt = "v3.12.0"
