@@ -97,7 +97,17 @@ Use these specialized subagents for focused tasks:
 - Keep lines under 80 characters when practical
 
 ### Git Commits
-- Use Conventional Commits format (feat:, fix:, chore:, docs:)
+
+#### Commit Best Practices
+- **Commit early and often**: Create small, focused commits as you complete each logical change
+- **Critical file selection**: Use `git diff --name-only` to review changes and think critically about what to include
+- **Never use lazy approaches**: NEVER use `git add -A` or `git add .` - be intentional about every file
+- **Only commit relevant files**: Include only files modified during the conversation or directly relevant to the task
+- **Small, concise commits**: Each commit should represent one logical change that can be understood independently
+- **Explain WHY, not just WHAT**: Commit messages should focus on the reasoning behind changes, not just describe them
+
+#### Commit Message Format
+- Use Conventional Commits format (feat:, fix:, chore:, docs:, refactor:, test:, style:)
 - Keep first line under 72 characters and subsequent lines under 80 characters
 - Use present tense ("add feature" not "added feature")
-- Be descriptive but concise
+- Explain *why* a change was made to provide valuable context to future readers
