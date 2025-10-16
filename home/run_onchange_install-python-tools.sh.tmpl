@@ -33,8 +33,16 @@ if [ -f "$REQ_FILE" ]; then
   echo "Installing pinned pipx tools from $REQ_FILE..."
   # Ignore comments and blank lines
   grep -Ev '^(#|\s*$)' "$REQ_FILE" | while read -r spec; do
-    # --force updates existing venvs when version pins change
-    "$PYTHON" -m pipx install --force "$spec"
+    # Extract package name from spec (e.g., "gitingest==0.3.1" -> "gitingest")
+    pkg_name="${spec%%[=<>]*}"
+
+    # Try to install with --force (updates existing venvs when version pins change)
+    if ! "$PYTHON" -m pipx install --force "$spec"; then
+      # If install fails, the venv might be broken. Try uninstalling first.
+      echo "Installation failed, attempting to uninstall and reinstall $pkg_name..."
+      "$PYTHON" -m pipx uninstall "$pkg_name" 2>/dev/null || true
+      "$PYTHON" -m pipx install "$spec"
+    fi
   done
 else
   echo "No requirements.txt found at $REQ_FILE, skipping Python tools installation"
