@@ -25,22 +25,22 @@
 
   // File discovery
   "pip_requirements": {
-    "fileMatch": [
-      "^home/dot_config/dotfiles/requirements\\.txt$"
+    "managerFilePatterns": [
+      "/^home/dot_config/dotfiles/requirements\\.txt$/"
     ]
   },
   "devcontainer": {
-    "fileMatch": ["^\\.devcontainer/devcontainer\\.json$"]
+    "managerFilePatterns": ["/^\\.devcontainer/devcontainer\\.json$/"]
   },
   "docker-compose": {
-    "fileMatch": ["^home/dot_config/docker-compose/.*\\.ya?ml$"]
+    "managerFilePatterns": ["/^home/dot_config/docker-compose/.*\\.ya?ml$/"]
   },
   "github-actions": {
-    "fileMatch": ["^\\.github/workflows/.*\\.ya?ml$"]
+    "managerFilePatterns": ["/^\\.github/workflows/.*\\.ya?ml$/"]
   },
   "npm": {
-    "fileMatch": [
-      "^home/dot_config/dotfiles/package\\\\.json$"
+    "managerFilePatterns": [
+      "/^home/dot_config/dotfiles/package\\\\.json$/"
     ]
   },
 
@@ -85,7 +85,7 @@
       "groupName": "node-tools",
       "rangeStrategy": "pin",
       "automerge": false,
-      "matchPaths": [
+      "matchFileNames": [
         "home/dot_config/dotfiles/package.json"
       ]
     }
@@ -96,9 +96,9 @@
     // Pin cosign version in a versions file (see step 4)
     {
       "customType": "regex",
-      "fileMatch": ["^home/dot_config/dotfiles/cli-versions\\.toml$"],
+      "managerFilePatterns": ["/^home/dot_config/dotfiles/cli-versions\\.toml$/"],
       "matchStrings": [
-        "(?m)^cosign\\s*=\\s*\"(?<currentValue>v?[^\"]+)\""
+        "^cosign\\s*=\\s*\"(?<currentValue>v?[^\"]+)\""
       ],
       "depNameTemplate": "sigstore/cosign",
       "datasourceTemplate": "github-releases"
@@ -106,7 +106,7 @@
     // Handle aqua-prefixed tools in mise TOML files
     {
       "customType": "regex",
-      "fileMatch": ["\\.mise\\.toml$", "^home/dot_config/mise/config\\.toml$"],
+      "managerFilePatterns": ["/\\.mise\\.toml$/", "/^home/dot_config/mise/config\\.toml$/"],
       "matchStrings": [
         "\"aqua:(?<depName>[^/]+/[^\"]+)\"\\s*=\\s*\"(?<currentValue>v?[^\"]+)\""
       ],
@@ -115,7 +115,7 @@
     // Optional: Go tools (see step 3b)
     {
       "customType": "regex",
-      "fileMatch": ["^home/dot_config/go-tools/tools\\.txt$"],
+      "managerFilePatterns": ["/^home/dot_config/go-tools/tools\\.txt$/"],
       "matchStrings": [
         "^(?<depName>[^\\s@]+)@(?<currentValue>v?[^\\s#]+)"
       ],
@@ -124,7 +124,7 @@
     // Optional: Node tools in tools.txt (see step 3a alt)
     {
       "customType": "regex",
-      "fileMatch": ["^home/dot_config/node-tools/tools\\.txt$"],
+      "managerFilePatterns": ["/^home/dot_config/node-tools/tools\\.txt$/"],
       "matchStrings": [
         "^(?<depName>[^@\\n]+)@(?<currentValue>[^\\n#]+)"
       ],
@@ -133,7 +133,7 @@
     // Chezmoi external dependencies - ohmyzsh tarball pin
     {
       "customType": "regex",
-      "fileMatch": ["^home/\\.chezmoiexternal\\.toml\\.tmpl$"],
+      "managerFilePatterns": ["/^home/\\.chezmoiexternal\\.toml\\.tmpl$/"],
       "matchStrings": [
         "ohmyzsh/ohmyzsh/archive/(?<currentDigest>[a-f0-9]{7,40})\\.tar\\.gz"
       ],
@@ -145,7 +145,7 @@
     // Chezmoi external dependencies - zsh-autosuggestions tarball pin
     {
       "customType": "regex",
-      "fileMatch": ["^home/\\.chezmoiexternal\\.toml\\.tmpl$"],
+      "managerFilePatterns": ["/^home/\\.chezmoiexternal\\.toml\\.tmpl$/"],
       "matchStrings": [
         "zsh-users/zsh-autosuggestions/archive/(?<currentDigest>[a-f0-9]{7,40})\\.tar\\.gz"
       ],
@@ -157,7 +157,7 @@
     // Chezmoi external dependencies - zsh-syntax-highlighting tarball pin
     {
       "customType": "regex",
-      "fileMatch": ["^home/\\.chezmoiexternal\\.toml\\.tmpl$"],
+      "managerFilePatterns": ["/^home/\\.chezmoiexternal\\.toml\\.tmpl$/"],
       "matchStrings": [
         "zsh-users/zsh-syntax-highlighting/archive/(?<currentDigest>[a-f0-9]{7,40})\\.tar\\.gz"
       ],
@@ -169,9 +169,9 @@
     // Chezmoi external dependencies - gpakosz/.tmux git-repo revision pin
     {
       "customType": "regex",
-      "fileMatch": ["^home/\\.chezmoiexternal\\.toml\\.tmpl$"],
+      "managerFilePatterns": ["/^home/\\.chezmoiexternal\\.toml\\.tmpl$/"],
       "matchStrings": [
-        "(?m)^\\s*revision\\s*=\\s*\"(?<currentDigest>[a-f0-9]{7,40})\""
+        "^\\s*revision\\s*=\\s*\"(?<currentDigest>[a-f0-9]{7,40})\""
       ],
       "datasourceTemplate": "git-refs",
       "currentValueTemplate": "master",

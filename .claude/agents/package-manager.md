@@ -38,6 +38,7 @@ You are a specialized dependency/version manager for this repository. Operate wi
 
 ### 4. Verification (Preview-only)
 - Output suggested previews (do not run): `chezmoi diff`, review Renovate paths, optional `gh api` lookups
+- **Required**: Validate `renovate.json5` if modified: `renovate-config-validator renovate.json5`
 
 ### 5. Handoff
 - If broader testing or CI updates are required, recommend `Use the test-runner subagent.` or `Use the git-workflow subagent.` and stop
@@ -63,6 +64,7 @@ Renovate Integration:
 Verification (preview only):
 - chezmoi diff
 - Review renovate.json5 paths
+- **Required if renovate.json5 changed**: renovate-config-validator renovate.json5
 - Optional gh lookups: <commands>
 
 Next Steps:
@@ -77,6 +79,7 @@ Next Steps:
 - **File Creation**: Never add ecosystem files unless necessary; follow existing patterns
 - **Dangerous Operations**: Operations like `brew upgrade`, `mise install`, networked `gh` invocations require confirmation
 - **Minimal Changes**: Keep edits minimal and focused; avoid unrelated changes
+- **Config Validation**: Always validate `renovate.json5` changes with `renovate-config-validator` before recommending commits
 - **Scope Boundaries**: If request is out of scope, recommend the appropriate subagent and exit
 
 ## Examples

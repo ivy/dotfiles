@@ -213,10 +213,31 @@ gh api repos/gpakosz/.tmux/commits/master --jq .sha
 
 ---
 
+## Config Validation
+
+Always validate Renovate configuration changes before committing:
+
+```bash
+# Validate configuration syntax and migrations
+renovate-config-validator renovate.json5
+
+# Check for syntax errors and deprecated patterns
+npx renovate-config-validator renovate.json5
+```
+
+The validator will:
+- Check JSON5 syntax and schema compliance
+- Identify deprecated configuration patterns (e.g., `fileMatch` → `managerFilePatterns`)
+- Suggest automatic migrations for outdated syntax
+- Validate regex patterns and datasource configurations
+
+**Important**: Always apply suggested migrations from the validator output to keep the config modern and prevent future breaking changes.
+
 ## Maintenance Tips
 
 - Prefer explicit versions over `latest`; let Renovate do the bumping.
 - When adding a new external or bespoke versions file, add a matching `customManagers` rule.
 - Keep tag+digest for images: readable tag for humans, digest for reproducibility.
 - Use the gh commands above to sanity‑check SHAs/tags when reviewing Renovate PRs.
+- **Always validate renovate.json5 with `renovate-config-validator` before committing changes.**
 

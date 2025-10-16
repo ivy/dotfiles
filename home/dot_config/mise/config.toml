@@ -2,4 +2,5 @@
 "aqua:dandavison/delta" = "0.18.2"
 "aqua:jqlang/jq" = "1.7.1"
 node = "22.20.0"
+pkl = "0.29.1"
 python = "3.14.0"
