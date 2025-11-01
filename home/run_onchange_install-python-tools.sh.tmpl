@@ -2,6 +2,7 @@
 
 # python version hash: {{ include "dot_config/mise/config.toml" | regexFind "python = \"[^\"]*\"" | sha256sum }}
 # python tools requirements hash: {{ include "dot_config/dotfiles/requirements.txt" | sha256sum }}
+# mise tools script hash: {{ include "run_onchange_00-install-mise-tools.sh.tmpl" | sha256sum }}
 
 [ -n "${DEBUG:-}" ] && set -o xtrace
 set -o errexit
