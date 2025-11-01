@@ -43,7 +43,7 @@ start() {
     "$TAILSCALE_STATE_DIR" \
     "$WEBUI_DATA_DIR"
 
-  docker-compose -f "$COMPOSE_FILE" up -d --pull always
+  docker-compose -f "$COMPOSE_FILE" up --detach --pull=always
 }
 
 stop() {
@@ -51,7 +51,8 @@ stop() {
 }
 
 restart() {
-  docker-compose -f "$COMPOSE_FILE" restart
+  stop || true
+  start
 }
 
 logs() {
@@ -109,38 +110,38 @@ main() {
   shift
 
   case "$cmd" in
-    status)
-      status
-      ;;
-    start)
-      start
-      ;;
-    stop)
-      stop
-      ;;
-    restart)
-      restart
-      ;;
-    logs)
-      logs "$@"
-      ;;
-    pull)
-      pull
-      ;;
-    update)
-      update
-      ;;
-    shell)
-      shell
-      ;;
-    help)
-      usage
-      ;;
-    *)
-      echo "Unknown command: $cmd" >&2
-      usage >&2
-      exit 1
-      ;;
+  status)
+    status
+    ;;
+  start)
+    start
+    ;;
+  stop)
+    stop
+    ;;
+  restart)
+    restart
+    ;;
+  logs)
+    logs "$@"
+    ;;
+  pull)
+    pull
+    ;;
+  update)
+    update
+    ;;
+  shell)
+    shell
+    ;;
+  help)
+    usage
+    ;;
+  *)
+    echo "Unknown command: $cmd" >&2
+    usage >&2
+    exit 1
+    ;;
   esac
 }
 
