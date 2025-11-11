@@ -2,6 +2,6 @@
   "name": "node-global-tools",
   "private": true,
   "devDependencies": {
-    "@anthropic-ai/claude-code": "2.0.31"
+    "@anthropic-ai/claude-code": "2.0.37"
   }
 }
