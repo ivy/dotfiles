@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   tailscale:
-    image: tailscale/tailscale:latest@sha256:8eb8b450a85856807e8a216c4697333e15f8701cb6d344bed851bf6aa6a9605c
+    image: tailscale/tailscale:latest@sha256:4dacf554cf34e84c15fb816aa68fb3428993c3d27feeafb86a9b3eb94248c40f
     hostname: ${TS_HOSTNAME:-open-webui}
     environment:
       - TS_AUTHKEY=${TS_AUTHKEY}
@@ -20,7 +20,7 @@ services:
     restart: unless-stopped
 
   open-webui:
-    image: ghcr.io/open-webui/open-webui:main@sha256:53a4d2fc8c7a7cc620cd18e6fe416ed9940f2db87fddf837e3aa55111bec6995
+    image: ghcr.io/open-webui/open-webui:main@sha256:d1ffcfc4fa8aa8ef1caf2bf638e1a62ec8c26d25f2279a2279b95fde6502debb
     container_name: open-webui-app
     depends_on:
       - tailscale
