@@ -91,7 +91,13 @@ Defined in `renovate.json5`:
 - Pattern: `"aqua:(?<depName>[^/]+/[^\"]+)"\s*=\s*"(?<currentValue>v?[^\"]+)"`
 - Datasource: `github-releases` (e.g., `aqua:mikefarah/yq` → `mikefarah/yq`)
 
-3) Optional Go/Node tool manifests (present if we add these files later)
+3) Ubi‑prefixed tools in mise TOML (GitHub Releases)
+
+- Files: `.mise.toml`, `home/dot_config/mise/config.toml`
+- Pattern: `"ubi:(?<depName>[^/]+/[^\"]+)"\s*=\s*"(?<currentValue>v?[^\"]+)"`
+- Datasource: `github-releases` (e.g., `ubi:sst/opencode` → `sst/opencode`)
+
+5) Optional Go/Node tool manifests (present if we add these files later)
 
 - Go tools file: `home/dot_config/go-tools/tools.txt`
   - Pattern: `^(?<depName>[^\s@]+)@(?<currentValue>v?[^\s#]+)`
@@ -101,7 +107,7 @@ Defined in `renovate.json5`:
   - Pattern: `^(?<depName>[^@\n]+)@(?<currentValue>[^\n#]+)`
   - Datasource: `npm`
 
-4) Chezmoi externals pinned to SHAs (Git Refs)
+6) Chezmoi externals pinned to SHAs (Git Refs)
 
 - File: `home/.chezmoiexternal.toml.tmpl`
 - Datasource: `git-refs` with `currentValueTemplate: "master"` (we track the upstream default branch and replace our pinned SHA when the branch moves).

@@ -112,6 +112,15 @@
       ],
       "datasourceTemplate": "github-releases"
     },
+    // Handle ubi-prefixed tools in mise TOML files
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/\\.mise\\.toml$/", "/^home/dot_config/mise/config\\.toml$/"],
+      "matchStrings": [
+        "\"ubi:(?<depName>[^/]+/[^\"]+)\"\\s*=\\s*\"(?<currentValue>v?[^\"]+)\""
+      ],
+      "datasourceTemplate": "github-releases"
+    },
     // Optional: Go tools (see step 3b)
     {
       "customType": "regex",
