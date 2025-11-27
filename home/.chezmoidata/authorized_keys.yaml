@@ -1,0 +1,3 @@
+authorized_keys:
+  - ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBLZ2q5Zr/nEUc6xCuBeWklD2o2XH+mXBClTdYC4FK7gPDjO1U+XlDCOfeESg46oxxhk0pe6ElrYcKVdjJgBJII8= ivy@iphone-16-pro
+  - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPl4kdn9XQ9cokjTbiYsPpVOGrk67ej17RrDeaipe5X1 ivy@macbook-air
