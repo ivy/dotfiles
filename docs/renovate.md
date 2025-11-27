@@ -22,9 +22,7 @@ File: `renovate.json5`
 
 Enabled managers and file discovery:
 
-- `pip_requirements`: `home/dot_config/dotfiles/requirements.txt`
-- `npm`: `home/dot_config/dotfiles/package.json`
-- `mise`: `.mise.toml`, `home/dot_config/mise/config.toml`
+- `mise`: `.mise.toml`, `home/dot_config/mise/config.toml` (includes npm and Python tools via custom regex managers)
 - `docker-compose`: `home/dot_config/docker-compose/*.yml`
 - `devcontainer`: `.devcontainer/devcontainer.json`
 - `github-actions`: `.github/workflows/*.yml` (with digest pinning)
@@ -34,9 +32,7 @@ Grouping and automerge rules:
 - `github-actions`: group by manager, automerge minor/patch/digest
 - `devcontainer`: group by manager, automerge minor/patch/digest
 - `docker-compose`: group by manager, automerge digest updates
-- `pip_requirements`: grouped as `python-tools` (no automerge)
-- `npm`: grouped as `node-tools` (no automerge)
-- `mise`: grouped as `mise-tools` (no automerge)
+- `mise`: grouped as `mise-tools` (no automerge; includes npm and Python packages)
 
 Why: high-signal, low-risk updates (actions/devcontainer/digests) are auto‑merged to keep things current; others require review.
 
@@ -52,14 +48,13 @@ These files purposely centralize versions so Renovate can update them automatica
 
 - `.mise.toml` and `home/dot_config/mise/config.toml`
   - Define tool versions managed by [mise]. Pins explicit versions (no `latest`).
-  - Both native mise tools (e.g., `python = "3.13.7"`) and Aqua‑sourced tools (`"aqua:owner/repo" = "vX.Y.Z"`).
-  - Renovate updates native mise tools via the Mise manager, and Aqua‑prefixed tools via a custom regex manager (GitHub Releases datasource).
-
-- `home/dot_config/dotfiles/requirements.txt`
-  - Pinned versions for Python tools (installed via pipx). Updated by Renovate's pip manager.
-
-- `home/dot_config/dotfiles/package.json`
-  - Pinned versions for Node.js CLI tools (installed globally via npm). Updated by Renovate's npm manager.
+  - Supports multiple backends:
+    - Native mise tools (e.g., `python = "3.13.7"`, `node = "24.11.1"`)
+    - Aqua‑sourced tools (`"aqua:owner/repo" = "vX.Y.Z"`)
+    - Ubi‑sourced tools (`"ubi:owner/repo" = "vX.Y.Z"`)
+    - npm packages (`"npm:@scope/package" = "X.Y.Z"`)
+    - Python/pipx tools (`"pipx:package" = "X.Y.Z"`)
+  - Renovate updates all these via custom regex managers with appropriate datasources (npm, pypi, github-releases).
 
 - `.devcontainer/devcontainer.json`
   - Base image and all features pinned to immutable `@sha256:` digests. Updated by `devcontainer` manager.
@@ -97,7 +92,19 @@ Defined in `renovate.json5`:
 - Pattern: `"ubi:(?<depName>[^/]+/[^\"]+)"\s*=\s*"(?<currentValue>v?[^\"]+)"`
 - Datasource: `github-releases` (e.g., `ubi:sst/opencode` → `sst/opencode`)
 
-5) Optional Go/Node tool manifests (present if we add these files later)
+4) npm‑prefixed tools in mise TOML (npm registry)
+
+- Files: `.mise.toml`, `home/dot_config/mise/config.toml`
+- Pattern: `"npm:(?<depName>[^\"]+)"\s*=\s*"(?<currentValue>[^\"]+)"`
+- Datasource: `npm` (e.g., `npm:@anthropic-ai/claude-code` → `@anthropic-ai/claude-code`)
+
+5) pipx‑prefixed tools in mise TOML (PyPI)
+
+- Files: `.mise.toml`, `home/dot_config/mise/config.toml`
+- Pattern: `"pipx:(?<depName>[^\"]+)"\s*=\s*"(?<currentValue>[^\"]+)"`
+- Datasource: `pypi` (e.g., `pipx:gitingest` → `gitingest`)
+
+6) Optional Go/Node tool manifests (present if we add these files later)
 
 - Go tools file: `home/dot_config/go-tools/tools.txt`
   - Pattern: `^(?<depName>[^\s@]+)@(?<currentValue>v?[^\s#]+)`
@@ -107,7 +114,7 @@ Defined in `renovate.json5`:
   - Pattern: `^(?<depName>[^@\n]+)@(?<currentValue>[^\n#]+)`
   - Datasource: `npm`
 
-6) Chezmoi externals pinned to SHAs (Git Refs)
+7) Chezmoi externals pinned to SHAs (Git Refs)
 
 - File: `home/.chezmoiexternal.toml.tmpl`
 - Datasource: `git-refs` with `currentValueTemplate: "master"` (we track the upstream default branch and replace our pinned SHA when the branch moves).
@@ -127,9 +134,11 @@ Note: When adding new externals, add a matching regex rule so Renovate can keep 
 
 - Docker/Devcontainer: PRs updating only digests or minor/patch releases; digests grouped and auto‑merged.
 - GitHub Actions: digest pinning and minor/patch updates grouped and auto‑merged.
-- Python tools: PRs update `requirements.txt` pinned versions.
-- Node.js tools: PRs update `package.json` pinned versions.
-- Mise tools: PRs update `.mise.toml` and `home/dot_config/mise/config.toml` pins.
+- Mise tools: PRs update `.mise.toml` and `home/dot_config/mise/config.toml` pins, including:
+  - Native runtimes (Python, Node.js, etc.)
+  - Aqua/Ubi tools (from GitHub releases)
+  - npm packages (via `npm:` prefix)
+  - Python/pipx tools (via `pipx:` prefix)
 - CLI versions: PRs update `cli-versions.toml` (e.g., `cosign`).
 - Chezmoi externals: PRs replace commit SHAs in tarball URLs or `revision = "..."`.
 
@@ -138,9 +147,12 @@ Note: When adding new externals, add a matching regex rule so Renovate can keep 
 ## How to Add or Change Pins
 
 - Add a new mise tool:
-  - Native: add to `[tools]` with an exact version (e.g., `shfmt = "v3.12.0"`).
+  - Native runtime: add to `[tools]` with an exact version (e.g., `node = "24.11.1"`, `python = "3.14.0"`).
   - Aqua‑sourced: use `"aqua:owner/repo" = "vX.Y.Z"` to source releases from GitHub.
-  - Renovate will propose version bumps automatically.
+  - Ubi‑sourced: use `"ubi:owner/repo" = "vX.Y.Z"` to source releases from GitHub.
+  - npm package: use `"npm:package-name" = "X.Y.Z"` or `"npm:@scope/package" = "X.Y.Z"`.
+  - Python/pipx tool: use `"pipx:package-name" = "X.Y.Z"`.
+  - Renovate will propose version bumps automatically via custom regex managers.
 
 - Add a new CLI pin managed by scripts:
   - Add an entry to `home/dot_config/dotfiles/cli-versions.toml`.

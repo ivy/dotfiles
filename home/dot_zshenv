@@ -23,3 +23,5 @@ export LESS="-FRX"
 
 # NPM security hardening - disable postinstall scripts for global CLI tools
 export NPM_CONFIG_IGNORE_SCRIPTS=1
+export NPM_CONFIG_AUDIT=false
+export NPM_CONFIG_FUND=false

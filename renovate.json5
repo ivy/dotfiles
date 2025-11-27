@@ -12,23 +12,16 @@
 
   // Managers enabled for this repo
   "enabledManagers": [
-    "pip_requirements",
     "mise",
     "docker-compose",
     "devcontainer",
-    "github-actions",
-    "npm"
+    "github-actions"
   ],
 
   // Actions: pin to digests for reproducibility  
   "github-actions": { "pinDigests": true },
 
   // File discovery
-  "pip_requirements": {
-    "managerFilePatterns": [
-      "/^home/dot_config/dotfiles/requirements\\.txt$/"
-    ]
-  },
   "devcontainer": {
     "managerFilePatterns": ["/^\\.devcontainer/devcontainer\\.json$/"]
   },
@@ -37,11 +30,6 @@
   },
   "github-actions": {
     "managerFilePatterns": ["/^\\.github/workflows/.*\\.ya?ml$/"]
-  },
-  "npm": {
-    "managerFilePatterns": [
-      "/^home/dot_config/dotfiles/package\\\\.json$/"
-    ]
   },
 
   // Grouping + automerge for safe/low-risk updates
@@ -70,24 +58,9 @@
       "matchUpdateTypes": ["digest"]
     },
     {
-      "matchManagers": ["pip_requirements"],
-      "groupName": "python-tools",
-      "matchUpdateTypes": ["minor", "patch"],
-      "automerge": false
-    },
-    {
       "matchManagers": ["mise"],
       "groupName": "mise-tools",
       "automerge": false
-    },
-    {
-      "matchManagers": ["npm"],
-      "groupName": "node-tools",
-      "rangeStrategy": "pin",
-      "automerge": false,
-      "matchFileNames": [
-        "home/dot_config/dotfiles/package.json"
-      ]
     }
   ],
 
@@ -120,6 +93,24 @@
         "\"ubi:(?<depName>[^/]+/[^\"]+)\"\\s*=\\s*\"(?<currentValue>v?[^\"]+)\""
       ],
       "datasourceTemplate": "github-releases"
+    },
+    // Handle npm-prefixed tools in mise TOML files
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/\\.mise\\.toml$/", "/^home/dot_config/mise/config\\.toml$/"],
+      "matchStrings": [
+        "\"npm:(?<depName>[^\"]+)\"\\s*=\\s*\"(?<currentValue>[^\"]+)\""
+      ],
+      "datasourceTemplate": "npm"
+    },
+    // Handle pipx-prefixed tools in mise TOML files
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/\\.mise\\.toml$/", "/^home/dot_config/mise/config\\.toml$/"],
+      "matchStrings": [
+        "\"pipx:(?<depName>[^\"]+)\"\\s*=\\s*\"(?<currentValue>[^\"]+)\""
+      ],
+      "datasourceTemplate": "pypi"
     },
     // Optional: Go tools (see step 3b)
     {
