@@ -44,5 +44,8 @@ bind-key C-l send-keys C-l \; clear-history
 # Split panes
 bind | split-window -h
 
+# Quick window switcher with mouse support (mobile-friendly)
+bind w choose-tree -Zw
+
 # Override default prefix+e to open Claude in chezmoi directory
 bind e run-shell 'tmux new-window -c "$(chezmoi data | jq -r .chezmoi.workingTree)" -n "dotfiles" "claude"'
