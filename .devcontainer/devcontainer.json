@@ -7,7 +7,7 @@
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	"features": {
 		"ghcr.io/devcontainers-extra/features/mise:1@sha256:5c389ab1e3c8e44e5e0ff119f6868d54dbb781bc860bd8587dc66209cb8c4a8c": {},
-		"ghcr.io/devcontainers/features/docker-in-docker:2@sha256:7f32d985aac6929b4f37cf8a0bdb9196473e9e192281a3d708207a70633f83df": {
+		"ghcr.io/devcontainers/features/docker-in-docker:2@sha256:ac0a882e936ba6275d7f4ed5ebfc09e4ddca8cbcaeaad18b412beacddeb2fa91": {
 			"version": "latest",
 			"enableNonRootDocker": "true"
 		},
