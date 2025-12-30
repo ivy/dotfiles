@@ -208,6 +208,12 @@ alias codex='OPENAI_API_KEY=$(op read "op://Personal/openai-codex/credential") c
 alias claude-api='ANTHROPIC_API_KEY=$(op read "op://Personal/claude-code/credential") command claude'
 {{- end }}
 
+{{- if and (lookPath "gh") (lookPath "mise") }}
+# Wrap mise to use GitHub token from gh CLI
+# Fixes "API rate limit exceeded" errors when mise downloads tools from GitHub releases
+alias mise='GITHUB_TOKEN="$(gh auth token)" command mise'
+{{- end }}
+
 # Suffix aliases - automatically open files by extension
 alias -s md="glow --pager"
 
