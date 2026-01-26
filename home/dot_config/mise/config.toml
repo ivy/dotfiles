@@ -22,6 +22,7 @@ pkl = "0.30.2"
 "github:sst/opencode" = "1.1.14"
 
 # Python tools via pipx
+"pipx:claude-conversation-extractor" = "1.1.2"
 "pipx:gitingest" = "0.3.1"
 
 # Node tools via npm
