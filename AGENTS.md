@@ -27,21 +27,32 @@ REINSTALL_TOOLS=true ./install.sh
 - `DEBUG=1` - Enable debug output
 - `VERIFY_SIGNATURES=false` - Disable signature verification
 
-## Subagent Routing: Packages, Images, Versions
+## Package Installation
 
-All changes involving packages, container images, or version manifests must be reviewed by the Package Manager subagent. This is essential for security (immutable pins), reproducibility, and keeping Renovate automation intact.
+**For installing new packages, tools, or CLIs**: Use the `/install` skill. It handles package type detection, version discovery, manifest updates, and commits.
 
-Always invoke the Package Manager subagent before editing any of the following:
+```
+/install <package-name>
+```
+
+The skill prefers mise over Homebrew, pins exact versions, and follows the repository's conventions automatically.
+
+## Package Manager Subagent: Complex Changes
+
+Use the Package Manager subagent (not `/install`) only for:
+- **Version conflicts** or upgrade decisions
+- **Container images** (Docker Compose, devcontainer)
+- **Security-sensitive changes** requiring review
+- **Bulk updates** or Renovate configuration
+- **GitHub Actions** version/digest updates
+
+Files requiring subagent review:
 - Docker Compose files (image tags/digests)
 - Devcontainer images and features
-- Mise tool declarations (.mise.toml, home/dot_config/mise/config.toml)
-- Homebrew/cask/mas package definitions
-- Python tools requirements (home/dot_config/dotfiles/requirements.txt)
 - Chezmoi externals (home/.chezmoiexternal.toml.tmpl)
-- Version manifests used by scripts (home/dot_config/dotfiles/*.toml)
 - GitHub Actions versions/digests in workflows
 
-Why: The Package Manager subagent enforces immutable pins (versions/digests/SHAs) and ensures Renovate can update them safely. Direct edits risk drift, broken automation, or security regressions.
+Why: The subagent enforces immutable pins (versions/digests/SHAs) and ensures Renovate can update them safely.
 
 For background and exact conventions, see doc/renovate.md.
 
@@ -125,7 +136,7 @@ chezmoi status                         # 4. Confirm clean state
 ### Claude Code Workflow
 
 When making configuration changes:
-1. **Route packages/versions** to Package Manager subagent first (see Subagent Routing above)
+1. **For package installs**: Use `/install <package>` (not manual edits)
 2. **Edit only in `home/`**—never touch `~` or `~/.config` directly
 3. **Run `chezmoi diff`** and verify only your intended changes appear
 4. **Apply selectively** if diff shows unrelated changes: `chezmoi apply [target ...]`
