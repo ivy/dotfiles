@@ -3,7 +3,7 @@ name: write-skill
 description: Use when the user wants to create a new Claude Code skill. Guides skill creation with playbook patterns.
 argument-hint: "[skill-name] [purpose...]"
 disable-model-invocation: true
-allowed-tools: Read, Glob, Grep, Write
+allowed-tools: Read, Glob, Grep, Write, Bash(chezmoi apply:*)
 ---
 
 # Skill Creation Playbook
@@ -38,7 +38,7 @@ If unclear, ask:
 
 ### 2. Draft Skill
 
-Create `~/.claude/skills/<name>/SKILL.md`:
+Create `$(chezmoi source-path)/dot_claude/skills/<name>/SKILL.md`:
 
 ```yaml
 ---
@@ -63,6 +63,8 @@ allowed-tools: <minimal safe subset>
 ## Examples
 <Varied inputs and outcomes>
 ```
+
+After writing, run `chezmoi apply ~/.claude/skills/<name>` to deploy.
 
 ### 3. Principles
 
