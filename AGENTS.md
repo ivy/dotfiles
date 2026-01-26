@@ -89,20 +89,48 @@ bats -t test/
 
 ## Development Workflow
 
-### Making Changes
-1. Edit files in the `home/` directory structure
-2. Template files (`.tmpl`) will be processed by Chezmoi
-3. Test changes: `chezmoi diff` to see what would change
-4. Apply changes: `chezmoi apply`
-5. Commit each change with a descriptive Conventional Commit message (e.g., `feat: add package`, `fix: correct template syntax`)
+### Critical: Source Directory Only
+
+**NEVER edit files directly in `~` or `~/.config/`.** Chezmoi manages the home directory; all edits must be made in the project's `home/` directory. Changes to destination files will be overwritten on next apply.
+
+| To modify this destination... | Edit this source file |
+|-------------------------------|----------------------|
+| `~/.zshrc` | `home/dot_zshrc` |
+| `~/.config/mise/config.toml` | `home/dot_config/mise/config.toml` |
+| `~/.config/ghostty/config` | `home/dot_config/ghostty/config` |
+
+### Chezmoi Workflow
+
+Follow this sequence for every change:
+
+1. **Edit source files** in `home/` (never destination)
+2. **Preview changes** with `chezmoi diff`
+   - Review output carefully—ensure only intended changes appear
+   - If unrelated changes appear, investigate before proceeding
+3. **Apply changes**
+   - Full apply: `chezmoi apply`
+   - Partial apply (when diff shows unrelated changes): `chezmoi apply ~/.zshrc ~/.config/mise/config.toml`
+4. **Validate** with `chezmoi status`
+   - Clean status means destination matches source
+   - Any remaining differences indicate incomplete apply or external modifications
+
+```bash
+# Example workflow
+vim home/dot_zshrc                     # 1. Edit source
+chezmoi diff                           # 2. Preview all changes
+chezmoi apply ~/.zshrc                 # 3. Apply specific target
+chezmoi status                         # 4. Confirm clean state
+```
 
 ### Claude Code Workflow
+
 When making configuration changes:
-1. If the task touches packages, images, or version manifests, consult the Package Manager subagent first
-2. Always run `chezmoi diff` before applying to preview changes
-3. Run `chezmoi apply` to apply configuration changes
-4. After each logical change, create a git commit with a descriptive Conventional Commit message
-5. Use commit prefixes: `feat:` for new features/packages, `fix:` for corrections, `chore:` for maintenance
+1. **Route packages/versions** to Package Manager subagent first (see Subagent Routing above)
+2. **Edit only in `home/`**—never touch `~` or `~/.config` directly
+3. **Run `chezmoi diff`** and verify only your intended changes appear
+4. **Apply selectively** if diff shows unrelated changes: `chezmoi apply [target ...]`
+5. **Run `chezmoi status`** to confirm destination matches source
+6. **Commit** with Conventional Commit message after each logical change
 
 ### Adding New Dotfiles
 1. Add file to appropriate location in `home/` with `dot_` prefix
