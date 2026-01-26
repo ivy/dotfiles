@@ -7,11 +7,11 @@
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	"features": {
 		"ghcr.io/devcontainers-extra/features/mise:1@sha256:5c389ab1e3c8e44e5e0ff119f6868d54dbb781bc860bd8587dc66209cb8c4a8c": {},
-		"ghcr.io/devcontainers/features/docker-in-docker:2@sha256:ac0a882e936ba6275d7f4ed5ebfc09e4ddca8cbcaeaad18b412beacddeb2fa91": {
+		"ghcr.io/devcontainers/features/docker-in-docker:2@sha256:445e84b0c213225bfdae977a72b4125f65e38eadcd49616dae04f1af24aa122d": {
 			"version": "latest",
 			"enableNonRootDocker": "true"
 		},
-		"ghcr.io/devcontainers/features/git:1@sha256:f24645e64ad39a596131a50ec96f7d5cf7a2a87544cce772dd4b7182a233e98a": {},
+		"ghcr.io/devcontainers/features/git:1@sha256:27905dc196c01f77d6ba8709cb82eeaf330b3b108772e2f02d1cd0d826de1251": {},
 		"ghcr.io/devcontainers/features/github-cli:1@sha256:1ad1ec1a806cc9926c84ca5b147427bba03b97e14e91f9df89af83726039ecaf": {}
 	},
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
