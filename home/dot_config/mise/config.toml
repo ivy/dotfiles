@@ -1,10 +1,29 @@
+# Mise tool configuration for user environment
+# See docs/package-management.md for adding/updating packages
+#
+# Backend priority (prefer earlier options):
+#   1. Native mise tools (runtimes like python, node)
+#   2. aqua: - best security/features, no plugins
+#   3. github: - tools not in aqua registry
+#   4. pipx: - Python CLI tools (requires python)
+#   5. npm: - Node CLI tools (requires node)
+
 [tools]
+# Runtimes (install first - required by pipx/npm backends)
+node = "24.13.0"
+python = "3.14.2"
+pkl = "0.30.2"
+
+# Aqua registry (preferred for CLI tools)
 "aqua:dandavison/delta" = "0.18.2"
 "aqua:jqlang/jq" = "1.7.1"
+
+# GitHub releases (tools not in aqua)
 "github:sst/opencode" = "1.1.14"
+
+# Python tools via pipx
+"pipx:gitingest" = "0.3.1"
+
+# Node tools via npm
 "npm:@anthropic-ai/claude-code" = "2.1.19"
 "npm:@openai/codex" = "0.91.0"
-"pipx:gitingest" = "0.3.1"
-node = "24.13.0"
-pkl = "0.30.2"
-python = "3.14.2"
