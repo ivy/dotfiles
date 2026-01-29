@@ -5,7 +5,8 @@
     ":semanticCommits",
     ":disableDependencyDashboard"
   ],
-  "schedule": ["before 9am on monday"],
+  // Create PRs Mon-Fri mornings so they're ready for daily review
+  "schedule": ["before 9am every weekday"],
   "labels": ["deps", "automated"],
   "prHourlyLimit": 2,
   "prConcurrentLimit": 5,
