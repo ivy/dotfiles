@@ -21,6 +21,9 @@ pkl = "0.30.2"
 # GitHub releases (tools not in aqua)
 "github:sst/opencode" = "1.1.14"
 
+# pipx itself (must be installed before any pipx: packages below)
+pipx = "1.7.1"
+
 # Python tools via pipx
 "pipx:claude-conversation-extractor" = "1.1.2"
 "pipx:gitingest" = "0.3.1"
