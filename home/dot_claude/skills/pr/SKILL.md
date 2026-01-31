@@ -4,8 +4,6 @@ description: Use when creating a pull request. Opens PR in browser for review.
 argument-hint: "[additional context]"
 model: sonnet
 allowed-tools:
-  - Bash($SKILL_DIR/gh-pr-create-web:*)
-  - Bash(git:*)
   - Glob
   - Read
 ---
@@ -84,15 +82,15 @@ git push -u origin <branch-name>
 
 Default command:
 ```bash
-$SKILL_DIR/gh-pr-create-web --web --title "..." --body "..."
+~/.claude/skills/pr/gh-pr-create-web --title "..." --body "..."
 ```
 
 With template file:
 ```bash
-$SKILL_DIR/gh-pr-create-web --web --template ".github/pull_request_template.md"
+~/.claude/skills/pr/gh-pr-create-web --template ".github/pull_request_template.md"
 ```
 
-The shim enforces `--web` flag for safety, ensuring all PRs open in browser for human review.
+The shim enforces `--web` flag, ensuring PRs open in browser for human review.
 
 ### 5. Report Result
 

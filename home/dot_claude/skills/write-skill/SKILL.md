@@ -9,6 +9,8 @@ allowed-tools: Read, Glob, Grep, Write, Bash(chezmoi apply:*), Bash(chezmoi diff
 
 # Skill Creation Playbook
 
+**CRITICAL: Before deploying any skill, spawn a reviewer agent with REVIEW.md to audit `allowed-tools`. Overly permissive tool access (e.g., `Bash(git:*)`) can cause data loss or leak secrets.**
+
 Create skills as flexible playbooks, not rigid scripts.
 
 ## Arguments
@@ -104,9 +106,15 @@ allowed-tools: <minimal safe subset>
 - Refer to "arguments" after the Arguments section
 - `\${CLAUDE_SESSION_ID}` for session-specific context
 
-### 5. Review
+### 5. Review (REQUIRED)
 
-Ask reviewer agent to audit for verbosity, tool scope, edge cases, invocation clarity.
+**Spawn a reviewer agent** with this skill's `REVIEW.md` file to audit:
+- `allowed-tools` against red flags (reject `Bash(git:*)`, `Bash(npm:*)`, etc.)
+- Narrowing principle: most specific pattern used?
+- Publication risks: commands that send data externally?
+- Deletion risks: commands that remove data?
+
+Also check verbosity, edge cases, and invocation clarity.
 
 ## Quick Reference
 
@@ -121,6 +129,7 @@ Ask reviewer agent to audit for verbosity, tool scope, edge cases, invocation cl
 
 ## Supplementary Docs
 
+- **REVIEW.md** - **REQUIRED** checklist for auditing `allowed-tools` before deployment
 - **MODEL-SELECTION.md** - When to use haiku vs sonnet vs opus
 - **SHIM-PATTERN.md** - Wrapper scripts for enforcing constraints (advanced)
 
