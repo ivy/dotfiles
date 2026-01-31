@@ -80,6 +80,14 @@ Use these specialized subagents for focused tasks:
 - **Purpose**: Writes production-quality shell scripts with proper error handling and best practices
 - **Features**: Safety headers, function patterns, long flags, shellcheck validation
 
+## Skills
+
+When asked to perform these tasks, invoke the corresponding skill using the `Skill` tool:
+
+| Task | Skill tool invocation |
+|------|----------------------|
+| Commit changes | `Skill` with `skill: "commit"` |
+
 ## Comments & Communication
 
 - Write comments explaining "why" not "what"
@@ -95,19 +103,3 @@ Use these specialized subagents for focused tasks:
 - Prefer single quotes in JavaScript/TypeScript unless interpolating
 - Include trailing commas in multi-line structures
 - Keep lines under 80 characters when practical
-
-### Git Commits
-
-#### Commit Best Practices
-- **Commit early and often**: Create small, focused commits as you complete each logical change
-- **Critical file selection**: Use `git diff --name-only` to review changes and think critically about what to include
-- **Never use lazy approaches**: NEVER use `git add -A` or `git add .` - be intentional about every file
-- **Only commit relevant files**: Include only files modified during the conversation or directly relevant to the task
-- **Small, concise commits**: Each commit should represent one logical change that can be understood independently
-- **Explain WHY, not just WHAT**: Commit messages should focus on the reasoning behind changes, not just describe them
-
-#### Commit Message Format
-- Use Conventional Commits format (feat:, fix:, chore:, docs:, refactor:, test:, style:)
-- Keep first line under 72 characters and subsequent lines under 80 characters
-- Use present tense ("add feature" not "added feature")
-- Explain *why* a change was made to provide valuable context to future readers
