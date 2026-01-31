@@ -70,7 +70,30 @@ Be honest about downsides. Every option has them.
 - Include a fallback/contingency if assumptions break
 - Suggest concrete next steps to validate and execute
 
-### 6. Keep It Efficient
+### 6. Invoke ADR When Appropriate
+
+After reaching a decision, consider whether it warrants an Architecture Decision Record. If the decision is **architecturally significant**, invoke the `/adr` skill to draft one:
+
+**Criteria for architectural significance:**
+- Affects system quality or structure beyond a single component
+- Involves trade-offs worth preserving for future team members
+- Constrains or enables future architectural choices
+
+**Invoke `/adr` for decisions like:**
+- Database technology selection
+- API design patterns (REST vs GraphQL vs gRPC)
+- Authentication/authorization approach
+- Monorepo vs polyrepo
+- Event streaming architecture
+
+**Skip ADR for:**
+- Library version choices
+- Code style preferences
+- Single-component implementation details
+
+When criteria are met, invoke the skill directly—the user can accept or decline.
+
+### 7. Keep It Efficient
 
 Use concise structure. Avoid lectures. Respect the user's time.
 
@@ -133,4 +156,4 @@ Revisit if: team triples, services exceed 15, or release independence becomes cr
 2. Set up path-filtered CI for affected-only builds
 3. Establish a shared libs directory structure
 
-Want me to evaluate the tooling options?
+[Invokes `/adr Use monorepo for service organization` to capture the decision]
