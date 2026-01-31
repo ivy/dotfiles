@@ -2,41 +2,73 @@
 
 Use this checklist when reviewing skills before deployment. Give this file to the reviewer agent.
 
+## Understanding `allowed-tools`
+
+**Critical distinction:** `allowed-tools` controls what runs WITHOUT user approval, not what the skill CAN use.
+
+- Tools IN `allowed-tools` → execute automatically
+- Tools NOT in `allowed-tools` → prompt user for approval before executing
+
+A skill can instruct execution of any tool. Omitting dangerous tools from `allowed-tools` is the CORRECT safety pattern—it ensures the user approves those operations.
+
+### Good Pattern: Gate Dangerous Operations
+
+```yaml
+# PR skill - auto-allows only safe reads, gates publication
+allowed-tools:
+  - Glob
+  - Read
+# git push, gh pr create → will prompt for approval ✓
+```
+
+This skill can still run `git push` and `gh pr create`—it just requires user confirmation first. This is safe and intentional.
+
+### Bad Pattern: Auto-Allow Dangerous Operations
+
+```yaml
+# Dangerous - auto-allows publication without approval
+allowed-tools:
+  - Bash(git:*)
+  - Bash(gh:*)
+```
+
 ## The Cardinal Rule
 
 **If you can't undo it locally, don't auto-allow it.**
 
+Operations that publish externally, delete data, or modify system state should require user approval (i.e., be OMITTED from `allowed-tools`).
+
 ## Red Flags (Reject immediately)
 
-These patterns in `allowed-tools` permit dangerous operations:
+These patterns in `allowed-tools` auto-permit dangerous operations:
 
 | Pattern | Why it's dangerous |
 |---------|-------------------|
-| `Bash(git:*)` | Permits push, reset --hard, clean -f, force push |
-| `Bash(npm:*)` | Permits publish, global install, token access |
-| `Bash(docker:*)` | Permits push, login, system prune |
-| `Bash(gh:*)` | Permits create, merge, delete, release |
-| `Bash(curl:*)` | Permits POST, DELETE, data exfiltration |
+| `Bash(git:*)` | Auto-permits push, reset --hard, clean -f, force push |
+| `Bash(npm:*)` | Auto-permits publish, global install, token access |
+| `Bash(docker:*)` | Auto-permits push, login, system prune |
+| `Bash(gh:*)` | Auto-permits create, merge, delete, release |
+| `Bash(curl:*)` | Auto-permits POST, DELETE, data exfiltration |
 | `Bash(rm -rf:*)` | Unrestricted recursive deletion |
 | Any `--force` without justification | Bypasses safety checks |
 
 ## Quick Decision Rules
 
-Before allowing a command, ask:
+Before AUTO-ALLOWING a command (adding to `allowed-tools`):
 
-1. **Can it publish externally?** (push, deploy, create) → DENY
-2. **Can it delete data?** (rm, clean, reset --hard) → DENY
-3. **Can it expose secrets?** (cat sensitive, env vars) → DENY
-4. **Does it affect global state?** (install -g, system config) → DENY
+1. **Can it publish externally?** (push, deploy, create) → OMIT (require approval)
+2. **Can it delete data?** (rm, clean, reset --hard) → OMIT (require approval)
+3. **Can it expose secrets?** (cat sensitive, env vars) → OMIT (require approval)
+4. **Does it affect global state?** (install -g, system config) → OMIT (require approval)
 5. **Is it read-only?** (status, log, diff, view, list) → ALLOW
-6. **Is it local and reversible?** (add, build) → CONDITIONAL
+6. **Is it local and reversible?** (add, stage, build) → CONDITIONAL
 
-## Safe vs Unsafe by Tool
+## Safe vs Unsafe to Auto-Allow
 
 ### Git
 
 ```yaml
-# SAFE - read-only, local inspection
+# SAFE to auto-allow - read-only, local inspection
 - Bash(git status:*)
 - Bash(git log:*)
 - Bash(git diff:*)
@@ -47,17 +79,18 @@ Before allowing a command, ask:
 # CONDITIONAL - local staging (reversible)
 - Bash(git add:*)
 
-# NEVER - requires user approval
-- Bash(git push:*)        # external publication
-- Bash(git reset --hard:*) # data loss
-- Bash(git clean:*)        # data loss
-- Bash(git checkout .:*)   # data loss
+# NEVER auto-allow - require user approval
+# (omit from allowed-tools, skill can still use them)
+# - git push         # external publication
+# - git reset --hard # data loss
+# - git clean        # data loss
+# - git checkout .   # data loss
 ```
 
 ### npm/yarn/pnpm
 
 ```yaml
-# SAFE - read-only
+# SAFE to auto-allow - read-only
 - Bash(npm view:*)
 - Bash(npm ls:*)
 - Bash(npm audit:*)
@@ -66,29 +99,29 @@ Before allowing a command, ask:
 - Bash(npm test:*)
 - Bash(npm run lint:*)
 
-# NEVER
-- Bash(npm publish:*)     # external publication
-- Bash(npm install -g:*)  # system-wide
+# NEVER auto-allow
+# - npm publish      # external publication
+# - npm install -g   # system-wide
 ```
 
 ### GitHub CLI
 
 ```yaml
-# SAFE - read-only
+# SAFE to auto-allow - read-only
 - Bash(gh pr view:*)
 - Bash(gh pr list:*)
 - Bash(gh issue view:*)
 
-# NEVER
-- Bash(gh pr create:*)    # external publication
-- Bash(gh pr merge:*)     # modifies remote
-- Bash(gh release create:*) # external publication
+# NEVER auto-allow
+# - gh pr create     # external publication
+# - gh pr merge      # modifies remote
+# - gh release create # external publication
 ```
 
 ### Docker
 
 ```yaml
-# SAFE - inspection
+# SAFE to auto-allow - inspection
 - Bash(docker ps:*)
 - Bash(docker images:*)
 - Bash(docker logs:*)
@@ -96,52 +129,67 @@ Before allowing a command, ask:
 # CONDITIONAL
 - Bash(docker build:*)
 
-# NEVER
-- Bash(docker push:*)     # external publication
-- Bash(docker login:*)    # credential handling
+# NEVER auto-allow
+# - docker push      # external publication
+# - docker login     # credential handling
 ```
 
 ## Mental Models
 
 ### The "Unattended Machine" Test
 
-> Would you be comfortable if this skill ran while you were away?
+> Would you be comfortable if auto-allowed operations ran while you were away?
 
-If you'd want to review what happened, those operations need approval.
+Operations requiring review should be omitted from `allowed-tools` so they prompt.
 
 ### The "Intern with Root" Test
 
-> Would you give an unsupervised intern permission to run this automatically?
+> Would you give an unsupervised intern permission to run these automatically?
 
-Captures both skill level AND trust level required.
+Captures both skill level AND trust level required for auto-approval.
 
 ## Review Process
 
-1. **Check `allowed-tools`** against red flags above
-2. **Apply narrowing principle**: Is the most specific pattern used?
-3. **Verify shims use hardcoded paths** (not `$SKILL_DIR` - that doesn't exist)
-4. **Check for publication risks**: Any command that sends data externally?
-5. **Check for deletion risks**: Any command that removes data?
+1. **Check `allowed-tools`** against red flags above—are dangerous ops auto-allowed?
+2. **Verify dangerous operations are gated**: Instructions may use git push, gh create, etc.—that's fine IF they're not in `allowed-tools`
+3. **Apply narrowing principle**: Is the most specific pattern used for auto-allowed tools?
+4. **Verify shims use hardcoded paths** (not `$SKILL_DIR`—that doesn't exist)
+5. **Check instruction clarity**: Are dangerous operations clearly documented so users know what they're approving?
 
 ## Good Examples
 
 ```yaml
-# Narrow, specific permissions
+# Narrow auto-permissions, dangerous ops require approval
 allowed-tools:
+  - Glob
+  - Read
   - Bash(git status:*)
   - Bash(git log --oneline:*)
   - Bash(gh pr view:*)
-  - Read
+# git push, gh pr create intentionally omitted → user approves
+```
+
+```yaml
+# Read-only skill - no Bash needed at all
+allowed-tools:
   - Glob
+  - Read
+  - Grep
 ```
 
 ## Bad Examples
 
 ```yaml
-# TOO BROAD - reject this
+# TOO BROAD - auto-allows dangerous operations
 allowed-tools:
   - Bash(git:*)
   - Bash(npm:*)
+```
+
+```yaml
+# UNNECESSARY - adding safe read commands that could be narrower
+allowed-tools:
+  - Bash(git:*)  # Should be Bash(git status:*), Bash(git log:*), etc.
 ```
 
 ## Shim Pattern Note

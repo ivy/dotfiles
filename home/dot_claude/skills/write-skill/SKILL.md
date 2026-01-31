@@ -93,7 +93,7 @@ allowed-tools: <minimal safe subset>
 - `description`: "Use when..." for auto-invoke
 - `context: fork`: noisy output that won't inform follow-up
 - `disable-model-invocation: true`: side-effect skills
-- `allowed-tools`: narrow scope—`Bash(git mob:*)` not `Bash(git:*)`
+- `allowed-tools`: tools that run WITHOUT user approval (omitted tools still work but prompt user)
 
 **Arguments:**
 - Free-form: `[package | url...]` not `<package>`
