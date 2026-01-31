@@ -1,0 +1,85 @@
+# Model Selection for Skills
+
+Use the `model:` frontmatter field to right-size capability and cost.
+
+## Quick Guide
+
+| Model | Cost | Use when... |
+|-------|------|-------------|
+| haiku | $ | Mechanical, template-filling, no judgment calls |
+| sonnet | $$ | Standard coding, writing, moderate reasoning |
+| opus | $$$ | Complex analysis, nuanced decisions, architectural reasoning |
+
+**Default strategy:** Start with haiku. Upgrade if the skill fails on edge cases or requires judgment.
+
+## Decision Tree
+
+```
+Is the task mechanical with clear rules?
+├─ Yes → haiku
+│   Examples: copy to clipboard, format output, run single command
+│
+└─ No → Does it require reading code and making inferences?
+        ├─ No → haiku (probably)
+        │
+        └─ Yes → Does it require architectural decisions or nuanced judgment?
+                ├─ No → sonnet
+                │   Examples: PR creation, code formatting, test generation
+                │
+                └─ Yes → opus
+                    Examples: code review, refactoring plans, debugging complex issues
+```
+
+## Examples by Model
+
+### haiku
+
+```yaml
+# /copy - just pipes to pbcopy
+model: haiku
+```
+
+```yaml
+# /format-json - mechanical transformation
+model: haiku
+```
+
+### sonnet
+
+```yaml
+# /pr - reads commits, drafts PR body, adapts to templates
+model: sonnet
+```
+
+```yaml
+# /gfm - writes markdown following conventions
+model: sonnet
+```
+
+### opus
+
+```yaml
+# /review - evaluates code quality, suggests improvements
+model: opus
+```
+
+```yaml
+# /debug - traces through code to find root cause
+model: opus
+```
+
+## When to Upgrade
+
+Upgrade from haiku → sonnet when:
+- Skill needs to understand context, not just transform it
+- Output quality varies based on input complexity
+- Skill makes decisions beyond pattern matching
+
+Upgrade from sonnet → opus when:
+- Skill evaluates trade-offs or makes recommendations
+- Output requires understanding system architecture
+- Skill handles ambiguous or incomplete requirements
+
+## Cost Consideration
+
+Model selection affects every invocation. A skill used 100x/day at opus costs significantly more than at haiku. Match capability to need.

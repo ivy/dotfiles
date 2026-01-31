@@ -2,6 +2,7 @@
 name: write-skill
 description: Use when the user wants to create a new Claude Code skill. Guides skill creation with playbook patterns.
 argument-hint: "[global|local] [skill-name] [purpose...]"
+model: opus
 disable-model-invocation: true
 allowed-tools: Read, Glob, Grep, Write, Bash(chezmoi apply:*), Bash(chezmoi diff:*), Bash(chezmoi status:*), Bash(rm -rf:*)
 ---
@@ -57,6 +58,7 @@ If unclear, ask:
 name: <kebab-case>
 description: <When to use + what it does>
 argument-hint: <flexible, use brackets>
+model: <haiku|sonnet|opus>  # see MODEL-SELECTION.md
 disable-model-invocation: <true if user-only>
 context: <fork if output not needed>
 allowed-tools: <minimal safe subset>
@@ -115,6 +117,12 @@ Ask reviewer agent to audit for verbosity, tool scope, edge cases, invocation cl
 | Hidden from `/` menu | `user-invocable: false` |
 | Isolate context | `context: fork` |
 | Specific agent | `context: fork` + `agent: Explore` |
+| Right-size capability | `model: haiku\|sonnet\|opus` |
+
+## Supplementary Docs
+
+- **MODEL-SELECTION.md** - When to use haiku vs sonnet vs opus
+- **SHIM-PATTERN.md** - Wrapper scripts for enforcing constraints (advanced)
 
 | Safe | Unsafe |
 |------|--------|
