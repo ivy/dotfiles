@@ -1,0 +1,23 @@
+#!/bin/bash
+# Shim for gh pr create that enforces --web flag for safety.
+# This ensures PRs always open in browser for human review before submission.
+
+set -euo pipefail
+
+# Verify --web flag is present
+has_web=false
+for arg in "$@"; do
+  if [[ "$arg" == "--web" ]]; then
+    has_web=true
+    break
+  fi
+done
+
+if [[ "$has_web" != "true" ]]; then
+  echo "Error: This shim only allows 'gh pr create --web' for safety." >&2
+  echo "PRs must open in browser for human review before submission." >&2
+  exit 1
+fi
+
+# Pass through to real gh command
+exec gh pr create "$@"
