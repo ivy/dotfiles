@@ -2,9 +2,8 @@
 name: gitingest
 description: Use when the user wants to fetch and contextualize a GitHub repository for future reference.
 argument-hint: [url | user/repo | repo-name] [filters...]
-disable-model-invocation: true
 allowed-tools:
-  - Bash(mkdir:*)
+  - Bash(mkdir docs/reference)
   - Bash(gitingest:*)
   - Read
 ---
