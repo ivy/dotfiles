@@ -16,6 +16,10 @@ allowed-tools:
 $ARGUMENTS
 ```
 
+## Constraints
+
+**Never use `git -C <path>`** — always run git commands from the current working directory. The `-C` flag rewrites the command in a way that doesn't match `allowed-tools` patterns, forcing unnecessary user approval. Plain `git status`, `git log`, etc. already operate on the repo you're in.
+
 ## Instructions
 
 ### 1. Assess Current State
