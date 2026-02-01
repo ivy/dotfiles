@@ -1,0 +1,32 @@
+aliases:
+  # Simple 1:1 tool replacements: if tool is on PATH, alias original → tool
+  replacements:
+    - { tool: bat, replaces: cat }
+    - { tool: duf, replaces: df }
+    - { tool: gdircolors, replaces: dircolors }
+    - { tool: dust, replaces: du }
+    - { tool: hub, replaces: git }
+    - { tool: colormake, replaces: make }
+    - { tool: htop, replaces: top }
+
+  # Aliases with custom command strings (flags, options)
+  # Only emitted if `tool` is on PATH
+  custom:
+    - { tool: eza, replaces: eza, command: "eza --icons=always --group-directories-first" }
+    - { tool: eza, replaces: ll, command: "eza --icons=always --long --group-directories-first" }
+    - { tool: eza, replaces: la, command: "eza --icons=always --long --all --group-directories-first" }
+    - { tool: eza, replaces: tree, command: "eza --icons=always --tree" }
+
+  # Fallback chains: try tools in order, first match wins
+  fallbacks:
+    - replaces: ls
+      chain:
+        - { tool: eza, command: "eza --icons=always --group-directories-first" }
+        - { tool: gls, command: gls }
+    - replaces: vi
+      chain:
+        - { tool: nvim, command: nvim }
+        - { tool: vim, command: vim }
+    - replaces: vim
+      chain:
+        - { tool: nvim, command: nvim }

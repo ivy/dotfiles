@@ -95,45 +95,25 @@ _zsh_autosuggest_should_fetch() {
 bindkey -v
 
 # Tool-replacement aliases (change output format — breaks agent expectations)
-{{- if lookPath "bat" }}
-alias cat='bat'
+{{- range .aliases.replacements }}
+{{- if lookPath .tool }}
+alias {{ .replaces }}='{{ .tool }}'
 {{- end }}
-{{- if lookPath "duf" }}
-alias df='duf'
 {{- end }}
-{{- if lookPath "gdircolors" }}
-alias dircolors='gdircolors'
+{{- range .aliases.custom }}
+{{- if lookPath .tool }}
+alias {{ .replaces }}='{{ .command }}'
 {{- end }}
-{{- if lookPath "dust" }}
-alias du='dust'
 {{- end }}
-{{- if lookPath "hub" }}
-alias git='hub'
-{{- end }}
-{{- if lookPath "eza" }}
-alias ls='eza --icons=always --group-directories-first'
-{{- else if lookPath "gls" }}
-alias ls='gls'
-{{- end }}
-{{- if lookPath "colormake" }}
-alias make='colormake'
-{{- end }}
-{{- if lookPath "htop" }}
-alias top='htop'
-{{- end }}
-{{- if lookPath "nvim" }}
-alias vi='nvim'
-alias vim='nvim'
-{{- else if lookPath "vim" }}
-alias vi='vim'
-{{- end }}
-
-# Enhanced eza aliases with icons
-{{- if lookPath "eza" }}
-alias eza='eza --icons=always --group-directories-first'
-alias ll='eza --icons=always --long --group-directories-first'
-alias la='eza --icons=always --long --all --group-directories-first'
-alias tree='eza --icons=always --tree'
+{{- range .aliases.fallbacks }}
+{{-   $replaces := .replaces }}
+{{-   $matched := false }}
+{{-   range .chain }}
+{{-     if and (not $matched) (lookPath .tool) }}
+{{-       $matched = true }}
+alias {{ $replaces }}='{{ .command }}'
+{{-     end }}
+{{-   end }}
 {{- end }}
 
 # grep with extra flags (filename, line numbers)
