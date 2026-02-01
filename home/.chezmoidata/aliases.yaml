@@ -16,6 +16,7 @@ aliases:
     - { tool: eza, replaces: ll, command: "eza --icons=always --long --group-directories-first" }
     - { tool: eza, replaces: la, command: "eza --icons=always --long --all --group-directories-first" }
     - { tool: eza, replaces: tree, command: "eza --icons=always --tree" }
+    - { tool: claude-chill, replaces: claude, command: "claude-chill -- claude" }
 
   # Fallback chains: try tools in order, first match wins
   fallbacks:

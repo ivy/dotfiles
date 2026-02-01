@@ -229,7 +229,11 @@ alias codex='OPENAI_API_KEY=$(op read "op://Personal/openai-codex/credential") c
 
 # Shortcut to use claude with API credentials from 1Password instead of normal login
 {{- if and (lookPath "op") (lookPath "claude") }}
+{{- if lookPath "claude-chill" }}
+alias claude-api='ANTHROPIC_API_KEY=$(op read "op://Personal/claude-code/credential") claude-chill -- claude'
+{{- else }}
 alias claude-api='ANTHROPIC_API_KEY=$(op read "op://Personal/claude-code/credential") command claude'
+{{- end }}
 {{- end }}
 
 {{- if and (lookPath "gh") (lookPath "mise") }}
