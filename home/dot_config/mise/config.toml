@@ -23,7 +23,7 @@ pkl = "0.30.2"
 "github:sst/opencode" = "1.1.14"
 
 # pipx itself (must be installed before any pipx: packages below)
-pipx = "1.7.1"
+pipx = "1.8.0"
 
 # Python tools via pipx
 "pipx:claude-conversation-extractor" = "1.1.2"
@@ -33,6 +33,6 @@ pipx = "1.7.1"
 "cargo:https://github.com/davidbeesley/claude-chill" = { version = "rev:b821abdd2aaa4bdb86fd9dce83c92dca980d70ad" }
 
 # Node tools via npm
-"npm:@anthropic-ai/claude-code" = "2.1.19"
-"npm:@openai/codex" = "0.91.0"
+"npm:@anthropic-ai/claude-code" = "2.1.29"
+"npm:@openai/codex" = "0.94.0"
 "npm:git-mob" = "4.0.1"
