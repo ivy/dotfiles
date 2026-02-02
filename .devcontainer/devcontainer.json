@@ -3,7 +3,7 @@
 {
 	"name": "Dotfiles Development",
 	// Use Debian bookworm base image
-	"image": "mcr.microsoft.com/devcontainers/base:bookworm@sha256:1d5ccf8d7fe290a16617e55a2f10dcf7856c765d4894bf6e9cf54ec0491a4a7f",
+	"image": "mcr.microsoft.com/devcontainers/base:bookworm@sha256:15143a8c806afb8db57ae2c92876c112d7a6a1ced31cd7aa8b414201782757a4",
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	"features": {
 		"ghcr.io/devcontainers-extra/features/mise:1@sha256:5c389ab1e3c8e44e5e0ff119f6868d54dbb781bc860bd8587dc66209cb8c4a8c": {},
@@ -12,7 +12,7 @@
 			"enableNonRootDocker": "true"
 		},
 		"ghcr.io/devcontainers/features/git:1@sha256:27905dc196c01f77d6ba8709cb82eeaf330b3b108772e2f02d1cd0d826de1251": {},
-		"ghcr.io/devcontainers/features/github-cli:1@sha256:1ad1ec1a806cc9926c84ca5b147427bba03b97e14e91f9df89af83726039ecaf": {}
+		"ghcr.io/devcontainers/features/github-cli:1@sha256:d22f50b70ed75339b4eed1ba9ecde3a1791f90e88d37936517e3bace0bbad671": {}
 	},
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
