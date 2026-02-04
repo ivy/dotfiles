@@ -6,8 +6,7 @@ model: sonnet
 allowed-tools:
   - Glob
   - Read
-  - Bash(claude-extract --list:*)
-  - Bash(claude-extract --extract:*)
+  - Bash(~/.claude/skills/pr/claude-extract-session:*)
 ---
 
 # Create Pull Request
@@ -79,22 +78,20 @@ Draft the content but don't show it to the user for approval - proceed directly 
 
 ### 3.1 Export Conversation Log and Create Gist
 
-Export the current session's conversation log and upload as a private Gist:
+Export **only the current session** and pipe directly to a secret Gist:
 
-1. Find the current session number:
-   ```bash
-   claude-extract --list 2>/dev/null | grep -B5 "${CLAUDE_SESSION_ID:0:8}"
-   ```
-2. Extract the session number from output (e.g., "17. " means session 17)
-3. Export to markdown:
-   ```bash
-   claude-extract --extract <number> --detailed
-   ```
-4. Create a private Gist with meaningful filename:
-   ```bash
-   gh gist create --private --filename "pr-conversation-<branch-name>.md" <exported-file>
-   ```
-5. Capture the Gist URL from the output and include it in the PR body after the horizontal rule
+```bash
+~/.claude/skills/pr/claude-extract-session "${CLAUDE_SESSION_ID}" \
+  | gh gist create --filename "pr-conversation-<branch-name>.md" -
+```
+
+The shim:
+- Takes the current session ID (provided by the `${CLAUDE_SESSION_ID}` substitution)
+- Extracts **only that session** with `--detailed` output
+- Writes markdown to stdout (no files created on disk)
+- Pipes directly to `gh gist create` (secret by default)
+
+Capture the Gist URL from the output and include it in the PR body after the horizontal rule.
 
 ### 4. Push and Create PR
 
