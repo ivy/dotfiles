@@ -42,6 +42,8 @@ Operations that publish externally, delete data, or modify system state should r
 
 These patterns in `allowed-tools` auto-permit dangerous operations:
 
+**Format rule:** `allowed-tools` MUST use YAML list format with one tool per line. Single-line format makes dangerous patterns easy to miss during review.
+
 | Pattern | Why it's dangerous |
 |---------|-------------------|
 | `WebFetch` | Prompt injection vector—external content influences agent |
@@ -53,7 +55,9 @@ These patterns in `allowed-tools` auto-permit dangerous operations:
 | `Bash(docker:*)` | Auto-permits push, login, system prune |
 | `Bash(gh:*)` | Auto-permits create, merge, delete, release |
 | `Bash(curl:*)` | Auto-permits POST, DELETE, data exfiltration |
+| `Bash(rm:*)` | Auto-permits any file/directory deletion |
 | `Bash(rm -rf:*)` | Unrestricted recursive deletion |
+| `Bash(rm -r:*)` | Recursive deletion without force |
 | Any `--force` without justification | Bypasses safety checks |
 
 ## Quick Decision Rules

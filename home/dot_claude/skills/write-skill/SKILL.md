@@ -4,7 +4,15 @@ description: Use when the user wants to create a new Claude Code skill. Guides s
 argument-hint: "[global|local] [skill-name] [purpose...]"
 model: opus
 disable-model-invocation: true
-allowed-tools: Read, Glob, Grep, Write, Bash(chezmoi apply:*), Bash(chezmoi diff:*), Bash(chezmoi status:*), Bash(rm -rf:*)
+allowed-tools:
+  - Read
+  - Glob
+  - Grep
+  - Write
+  - Bash(chezmoi apply:*)
+  - Bash(chezmoi diff:*)
+  - Bash(chezmoi status:*)
+  - Bash(ls:*)
 ---
 
 # Skill Creation Playbook
@@ -18,6 +26,22 @@ Create skills as flexible playbooks, not rigid scripts.
 ```
 $ARGUMENTS
 ```
+
+## Pre-computed Context
+
+The following paths and listings were computed before this skill was invoked:
+
+**Chezmoi source path:** !`chezmoi source-path 2>/dev/null || echo "(chezmoi not available)"`
+**Global skills source:** !`chezmoi source-path 2>/dev/null`/dot_claude/skills
+**Global skills deployed:** ~/.claude/skills
+
+**Existing global skills:**
+!`ls -1 ~/.claude/skills/ 2>/dev/null || echo "(none)"`
+
+**Existing local skills:**
+!`ls -1 .claude/skills/ 2>/dev/null || echo "(none)"`
+
+Use these paths directly. Do not run `chezmoi source-path` again.
 
 ## Process
 
