@@ -16,7 +16,7 @@ Write Architecture Decision Records through collaborative exploration, not trans
 ## Arguments
 
 ```
-[decision topic or question]
+$ARGUMENTS
 ```
 
 Examples:

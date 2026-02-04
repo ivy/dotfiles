@@ -16,14 +16,9 @@ Collaborate on problems by pressure-testing assumptions, surfacing constraints, 
 ## Arguments
 
 ```
-[problem, question, or decision to think through]
+$ARGUMENTS
 ```
 
-Examples:
-- `How should we structure the caching layer?`
-- `Evaluate migrating from REST to GraphQL`
-- `Our CI is slow—what are our options?`
-- `Should we build or buy for auth?`
 
 ## Instructions
 

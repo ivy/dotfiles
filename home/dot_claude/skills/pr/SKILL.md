@@ -16,7 +16,7 @@ Opens a pull request in the browser for final review and submission.
 ## Arguments
 
 ```
-[additional context]
+$ARGUMENTS
 ```
 
 Optional context to incorporate into the PR description - details not covered in commits, important considerations, areas needing attention, or anything to emphasize for reviewers.

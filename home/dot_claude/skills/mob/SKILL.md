@@ -13,6 +13,12 @@ allowed-tools:
 
 # Mob Programming Co-author Manager
 
+## Arguments
+
+```
+$ARGUMENTS
+```
+
 ## Workflow
 
 ### 1. Solo Mode
