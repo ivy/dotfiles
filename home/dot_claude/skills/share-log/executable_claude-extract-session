@@ -1,0 +1,183 @@
+#!/usr/bin/env bash
+#
+# claude-extract-session - Extract a Claude session by session ID
+#
+# Usage: claude-extract-session <session-id>
+#
+# Takes a session ID (UUID or agent-prefixed ID) and outputs the detailed
+# markdown conversation to stdout.
+
+[[ -n "${DEBUG:-}" ]] && set -o xtrace
+set -o errexit
+set -o errtrace
+set -o nounset
+set -o pipefail
+
+readonly SCRIPT_NAME="${0##*/}"
+
+# Print message to stderr
+log() {
+    printf '%s: %s\n' "${SCRIPT_NAME}" "$*" >&2
+}
+
+# Print error and exit
+die() {
+    log "error: $*"
+    exit 1
+}
+
+# Show usage information
+usage() {
+    cat >&2 <<EOF
+Usage: ${SCRIPT_NAME} <session-id>
+
+Extract a Claude session by its session ID and output markdown to stdout.
+
+Arguments:
+    session-id    UUID (e.g., 907cd44d-b368-4cd3-b569-ccc25192f01d) or
+                  agent-prefixed ID (e.g., agent-a5b6c7d8)
+
+Options:
+    -h, --help    Show this help message
+
+Examples:
+    ${SCRIPT_NAME} 907cd44d-b368-4cd3-b569-ccc25192f01d
+    ${SCRIPT_NAME} agent-a5b6c7d8
+EOF
+    exit 1
+}
+
+# Validate session ID format (UUID or agent-prefixed)
+validate_session_id() {
+    local session_id="$1"
+
+    # UUID format: 8-4-4-4-12 hex characters
+    local uuid_pattern='^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+
+    # Agent-prefixed format: agent-<hex>
+    local agent_pattern='^agent-[0-9a-fA-F]+$'
+
+    if [[ "${session_id}" =~ ${uuid_pattern} ]]; then
+        return 0
+    elif [[ "${session_id}" =~ ${agent_pattern} ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+# Find session number from claude-extract --list output
+find_session_number() {
+    local target_id="$1"
+    local session_prefix
+
+    # Extract first 8 characters for matching (claude-extract truncates IDs)
+    session_prefix="${target_id:0:8}"
+
+    log "searching for session starting with '${session_prefix}'..."
+
+    # Parse claude-extract --list output to find matching session
+    # Format:
+    #   N. <folder>
+    #      Session: <truncated-id>...
+    local list_output
+    list_output=$(claude-extract --list 2>&1) || die "failed to list sessions"
+
+    local current_number=""
+    local found_number=""
+
+    while IFS= read -r line; do
+        # Match numbered entry line (e.g., "1. <folder>")
+        if [[ "${line}" =~ ^[[:space:]]*([0-9]+)\. ]]; then
+            current_number="${BASH_REMATCH[1]}"
+        fi
+
+        # Match session line (e.g., "   Session: 907cd44d...")
+        if [[ "${line}" =~ Session:[[:space:]]*([^.]+) ]]; then
+            local session_id="${BASH_REMATCH[1]}"
+            if [[ "${session_id}" == "${session_prefix}"* ]]; then
+                found_number="${current_number}"
+                break
+            fi
+        fi
+    done <<< "${list_output}"
+
+    if [[ -z "${found_number}" ]]; then
+        die "session '${target_id}' not found in claude-extract list"
+    fi
+
+    printf '%s' "${found_number}"
+}
+
+# Extract session to temp directory and output markdown
+extract_session() {
+    local session_number="$1"
+    local tmpdir
+
+    # Create temporary directory for extraction
+    tmpdir=$(mktemp -d) || die "failed to create temporary directory"
+
+    # Ensure cleanup on exit
+    trap 'rm -rf "${tmpdir}"' EXIT
+
+    log "extracting session #${session_number}..."
+
+    # Run claude-extract with detailed output
+    if ! claude-extract \
+        --detailed \
+        --extract "${session_number}" \
+        --output "${tmpdir}" \
+        >&2; then
+        die "failed to extract session"
+    fi
+
+    # Find the generated markdown file
+    local md_files
+    md_files=("${tmpdir}"/*.md)
+
+    if [[ ! -f "${md_files[0]}" ]]; then
+        die "no markdown file found in extraction output"
+    fi
+
+    if [[ "${#md_files[@]}" -gt 1 ]]; then
+        log "warning: multiple markdown files found, using first"
+    fi
+
+    # Output markdown content to stdout
+    cat "${md_files[0]}"
+}
+
+main() {
+    # Handle help flag
+    if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
+        usage
+    fi
+
+    # Validate arguments
+    if [[ $# -ne 1 ]]; then
+        die "expected 1 argument, got $#. Use --help for usage."
+    fi
+
+    local session_id="$1"
+
+    # Validate session ID format
+    if ! validate_session_id "${session_id}"; then
+        die "invalid session ID format: '${session_id}'"
+    fi
+
+    # Check claude-extract is available
+    if ! command -v claude-extract &>/dev/null; then
+        die "claude-extract not found in PATH"
+    fi
+
+    # Find session number from list
+    local session_number
+    session_number=$(find_session_number "${session_id}")
+
+    log "found session at index #${session_number}"
+
+    # Extract and output
+    extract_session "${session_number}"
+}
+
+main "$@"
