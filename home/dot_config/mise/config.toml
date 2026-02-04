@@ -34,5 +34,5 @@ pipx = "1.8.0"
 
 # Node tools via npm
 "npm:@anthropic-ai/claude-code" = "2.1.31"
-"npm:@openai/codex" = "0.94.0"
+"npm:@openai/codex" = "0.95.0"
 "npm:git-mob" = "4.0.1"
