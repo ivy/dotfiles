@@ -12,6 +12,7 @@ allowed-tools:
   - Bash(chezmoi apply:*)
   - Bash(chezmoi diff:*)
   - Bash(chezmoi status:*)
+  - Bash(chezmoi source-path:*)
   - Bash(ls:*)
 ---
 
@@ -34,14 +35,6 @@ The following paths and listings were computed before this skill was invoked:
 **Chezmoi source path:** !`chezmoi source-path 2>/dev/null || echo "(chezmoi not available)"`
 **Global skills source:** !`chezmoi source-path 2>/dev/null`/dot_claude/skills
 **Global skills deployed:** ~/.claude/skills
-
-**Existing global skills:**
-!`ls -1 ~/.claude/skills/ 2>/dev/null || echo "(none)"`
-
-**Existing local skills:**
-!`ls -1 .claude/skills/ 2>/dev/null || echo "(none)"`
-
-Use these paths directly. Do not run `chezmoi source-path` again.
 
 ## Process
 
