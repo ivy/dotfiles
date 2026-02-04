@@ -102,17 +102,11 @@ git push -u origin <branch-name>
 
 **Then create PR using the shim:**
 
-Default command:
 ```bash
 ~/.claude/skills/pr/gh-pr-create-web --title "..." --body "..."
 ```
 
-With template file:
-```bash
-~/.claude/skills/pr/gh-pr-create-web --template ".github/pull_request_template.md"
-```
-
-The shim enforces `--web` flag, ensuring PRs open in browser for human review.
+The shim automatically adds `--web`, ensuring PRs open in browser for human review. Do NOT add `--web` yourself—the shim handles it.
 
 ### 5. Report Result
 
