@@ -24,6 +24,17 @@ $ARGUMENTS
 
 If arguments include a path, `cd` there first. Otherwise, operate on the current working directory.
 
+## Pre-computed Context
+
+The following checks ran before this skill was invoked:
+
+**AGENTS.md exists:** !`test -f AGENTS.md && echo "yes" || echo "no"`
+**CLAUDE.md exists:** !`test -e CLAUDE.md && echo "yes" || echo "no"`
+**CLAUDE.md is symlink:** !`test -L CLAUDE.md && echo "yes" || echo "no"`
+**CLAUDE.md symlink target:** !`readlink CLAUDE.md 2>/dev/null || echo "(not a symlink or does not exist)"`
+
+Use this context to skip redundant checks. If CLAUDE.md is already a symlink pointing to AGENTS.md, don't recreate it.
+
 ## Deliverables
 
 1. Create (or update) a root-level file named `AGENTS.md`.
