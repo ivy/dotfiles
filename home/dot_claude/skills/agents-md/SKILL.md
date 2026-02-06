@@ -4,12 +4,16 @@ description: "Use when asked to create or update an AGENTS.md onboarding file fo
 argument-hint: "[repo-path | directory]"
 model: opus
 allowed-tools:
-  - Read
+  - Bash(file:*)
+  - Bash(ls:*)
+  - Bash(readlink:*)
+  - Bash(test -L:*)
+  - Bash(test -e:*)
+  - Bash(test -f:*)
+  - Bash(tree:*)
   - Glob
   - Grep
-  - Bash(ls:*)
-  - Bash(tree:*)
-  - Bash(file:*)
+  - Read
 ---
 
 # AGENTS.md Generator
