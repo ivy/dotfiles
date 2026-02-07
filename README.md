@@ -17,7 +17,6 @@ Built on [Chezmoi](https://www.chezmoi.io/) for dotfile management, [Renovate](h
 | Deps | [Renovate](renovate.json5) | Automated updates for mise, Actions, Docker, Neovim plugins, and Chezmoi externals |
 | CI | [GitHub Actions](.github/workflows/) | ShellCheck + BATS on push, Claude Code review on PRs |
 | Agents | [Claude Code](.claude/) | Skills, hooks, specialized subagents — agents manage the environment end-to-end |
-| Containers | [Devcontainer](.devcontainer/) | Debian Bookworm with mise, Docker-in-Docker, and GitHub CLI |
 
 Every dependency is version-pinned. Every update flows through automation.
 

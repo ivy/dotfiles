@@ -15,7 +15,6 @@
   "enabledManagers": [
     "mise",
     "docker-compose",
-    "devcontainer",
     "github-actions"
   ],
 
@@ -23,9 +22,6 @@
   "github-actions": { "pinDigests": true },
 
   // File discovery
-  "devcontainer": {
-    "managerFilePatterns": ["/^\\.devcontainer/devcontainer\\.json$/"]
-  },
   "docker-compose": {
     "managerFilePatterns": ["/^home/dot_config/docker-compose/.*\\.ya?ml$/"]
   },
@@ -40,13 +36,6 @@
     {
       "matchManagers": ["github-actions"],
       "groupName": "github-actions",
-      "automerge": true,
-      "automergeType": "pr",
-      "matchUpdateTypes": ["minor", "patch", "digest"]
-    },
-    {
-      "matchManagers": ["devcontainer"],
-      "groupName": "devcontainer",
       "automerge": true,
       "automergeType": "pr",
       "matchUpdateTypes": ["minor", "patch", "digest"]
