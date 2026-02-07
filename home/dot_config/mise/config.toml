@@ -12,7 +12,7 @@
 # Runtimes (install first - required by pipx/npm backends)
 node = "24.13.0"
 python = "3.14.3"
-rust = "1.87.0"
+rust = "1.93.0"
 pkl = "0.30.2"
 
 # Aqua registry (preferred for CLI tools)
@@ -48,5 +48,5 @@ pipx = "1.8.0"
 "cargo:https://github.com/davidbeesley/claude-chill" = { version = "rev:b821abdd2aaa4bdb86fd9dce83c92dca980d70ad" }
 
 # Node tools via npm
-"npm:@openai/codex" = "0.95.0"
+"npm:@openai/codex" = "0.98.0"
 "npm:git-mob" = "4.0.1"
