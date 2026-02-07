@@ -130,14 +130,8 @@ alias -s md="glow --pager"
 # ============================================================================
 # Speed-optimized configuration with compile-time checks
 
-# Configure highlighters BEFORE loading the plugin
-typeset -gA ZSH_HIGHLIGHT_HIGHLIGHTERS=(
-    main 1
-    brackets 1
-    pattern 1
-    cursor 0  # Disabled for performance
-    root 0    # Disabled unless needed
-)
+# Configure highlighters BEFORE loading the plugin (must be a regular array)
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
 
 # Performance optimization for large buffers
 export ZSH_HIGHLIGHT_MAXLENGTH=20000
@@ -193,17 +187,9 @@ typeset -gA ZSH_HIGHLIGHT_PATTERNS=(
 # Load the plugin - MUST BE LAST
 source {{ $zshSyntaxHighlightPath }}
 
-# Ensure highlighting updates properly in vim modes
-if [[ -n "$ZSH_HIGHLIGHT_VERSION" ]]; then
-    # Force rehighlight on mode change
-    function zle-keymap-select {
-        zle && zle .reset-prompt && zle -R
-    }
-
-    # Ensure highlighting works in all vim modes
-    zle -N zle-keymap-select
-    zle -N zle-line-init
-fi
+# On zsh 5.9+, syntax highlighting uses zle-line-pre-redraw hook (no widget
+# wrapping needed). Starship already handles prompt refresh on keymap change
+# via its own zle-keymap-select widget — no custom override required.
 
 {{- end }}
 

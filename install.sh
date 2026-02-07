@@ -417,7 +417,24 @@ install_mise() {
       return 0
     fi
   elif command -v dnf >/dev/null 2>&1; then
+    # Try COPR repository first (mise is not in official Fedora repos)
+    if command -v dnf5 >/dev/null 2>&1; then
+      run_with_sudo dnf5 copr enable -y jdx/mise 2>/dev/null || true
+    else
+      run_with_sudo dnf copr enable -y jdx/mise 2>/dev/null || true
+    fi
     if try_package_install "mise" "dnf" "run_with_sudo dnf install -y mise"; then
+      return 0
+    fi
+  fi
+
+  # Fallback: official mise installer (works on any Linux/macOS)
+  log_info "Trying mise official installer..."
+  if curl -fsSL https://mise.run | sh 2>/dev/null; then
+    # mise installer puts binary in ~/.local/bin or ~/.local/share/mise/bin
+    export PATH="$HOME/.local/bin:$HOME/.local/share/mise/bin:$PATH"
+    if command -v mise >/dev/null 2>&1; then
+      log_info "mise installed via official installer: $(command -v mise)"
       return 0
     fi
   fi

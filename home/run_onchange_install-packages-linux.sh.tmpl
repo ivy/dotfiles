@@ -1,0 +1,22 @@
+{{ if eq .chezmoi.os "linux" -}}
+#!/bin/bash
+
+[ -n "${DEBUG:-}" ] && set -o xtrace
+set -o errexit
+set -o nounset
+
+# Only run if dnf is available
+if ! command -v dnf >/dev/null 2>&1; then
+    echo "dnf not found, skipping package installation"
+    exit 0
+fi
+
+echo "Installing packages via dnf..."
+
+sudo dnf install -y \
+{{ range .packages.linux.dnf -}}
+    {{ . }} \
+{{ end }}
+
+echo "Package installation complete"
+{{ end -}}

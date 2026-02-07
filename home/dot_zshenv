@@ -14,6 +14,12 @@ if [[ -d "$HOME/.local/bin" && ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
   export PATH="$HOME/.local/bin:$PATH"
 fi
 
+# Add mise shims to PATH early so tools are available during plugin loading
+# (mise activate in .zshrc adds hooks for dynamic version switching later)
+if [[ -d "$HOME/.local/share/mise/shims" && ":$PATH:" != *":$HOME/.local/share/mise/shims:"* ]]; then
+  export PATH="$HOME/.local/share/mise/shims:$PATH"
+fi
+
 # Editor configuration
 export EDITOR="nvim"
 

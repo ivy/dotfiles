@@ -10,22 +10,13 @@ packages:
       - gnupg
 
       # Core CLI utilities
-      - atuin
       - awscli
-      - bat
-      - codex
       - coreutils
       - curl
-      - duf
-      - dust
-      - eza
-      - fd
-      - fzf
       - mas
       - mise
       - neovim
       - pkl-lsp
-      - ripgrep
       - tree
 
       # System monitoring
@@ -34,9 +25,6 @@ packages:
 
       # Terminal multiplexer
       - tmux
-
-      # Shell prompt
-      - starship
 
       # System & certificates
       - ca-certificates
@@ -56,17 +44,11 @@ packages:
       - flac
 
       # Git
-      - delta
       - gh
       - git
       - git-lfs
-      - lazygit
-
-      # Parsing utilities
-      - yq
 
       # Documentation & diagramming
-      - glow
       - mermaid-cli
       - pandoc
       - texinfo
@@ -113,3 +95,15 @@ packages:
       - 1365531024 # 1Blocker
       - 641027709  # Color Picker
 
+  linux:
+    dnf:
+      # Core system tools
+      - ca-certificates
+      - git
+      - git-lfs
+      - gh
+      - htop
+      - neovim
+      - tmux
+      - util-linux-user
+      - zsh
