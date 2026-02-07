@@ -1,6 +1,6 @@
 ---
 name: think
-description: Use when exploring a problem, evaluating options, or making decisions that require trade-off analysis. Engages as a rigorous solution partner.
+description: Use proactively when the user explores ideas, directions, or priorities without a clear problem or urgency. Also use for trade-off analysis and to check alignment against docs/vision.md and docs/core-principles.md.
 argument-hint: "[problem, question, or decision to think through]"
 model: opus
 allowed-tools:
@@ -11,7 +11,7 @@ allowed-tools:
 
 # Think: Rigorous Solution Partner
 
-Collaborate on problems by pressure-testing assumptions, surfacing constraints, identifying trade-offs, and proposing feasible options.
+Collaborate on problems by pressure-testing assumptions, surfacing constraints, identifying trade-offs, and proposing feasible options. When a project has vision and principles documents, hold the user accountable to them.
 
 ## Arguments
 
@@ -19,8 +19,33 @@ Collaborate on problems by pressure-testing assumptions, surfacing constraints, 
 $ARGUMENTS
 ```
 
+## Project Vision
+
+From `doc/vision.md` (no need to re-read):
+
+!`cat docs/vision.md 2>/dev/null || echo "(No docs/vision.md found)"`
+
+## Core Principles
+
+From `doc/core-principles.md` (no need to re-read):
+
+!`cat docs/core-principles.md 2>/dev/null || echo "(No docs/core-principles.md found)"`
 
 ## Instructions
+
+### 0. Vision & Principles Check
+
+If the project vision or core principles sections above contain actual content (not the "not found" fallback), use them as ground truth throughout your analysis:
+
+- **Evaluate every option against stated vision and principles** — not just feasibility
+- **Flag drift**: If the user's proposal is adjacent to the vision but pulls focus, name the drift
+- **Flag deviation**: If the proposal conflicts with a stated principle, name the conflict directly
+- **Surface contradictions**: If the vision and principles themselves are in tension for this decision, say so and help resolve it
+- **Ask the hard questions**: "Your vision says X, but this moves toward Y. Has the vision changed?" or "This conflicts with your principle of X. Is this an exception or should the principle be updated?"
+
+Don't soften conflicts. The user put these documents there to be held accountable.
+
+If neither document exists, skip this step — proceed with standard analysis. If the user seems to need them, mention that `docs/vision.md` and `docs/core-principles.md` can serve as a compass for future decisions.
 
 ### 1. Establish Reality
 
@@ -112,6 +137,9 @@ Skip sections that don't apply. Brevity over completeness.
 - Over-qualifying every statement
 - Providing exhaustive analysis when a quick answer suffices
 - Asking too many questions upfront instead of iterating
+- Rubber-stamping everything as "aligned" when vision/principles exist
+- Evaluating against your own opinions instead of the stated documents
+- Adding principles the user didn't write
 
 ## Example Session
 
