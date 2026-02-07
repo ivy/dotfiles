@@ -1,3 +1,7 @@
+# Disable extended-keys to fix paste in Ghostty + neovim
+# See: https://github.com/gpakosz/.tmux/issues/776
+set -s extended-keys off
+
 # Vi mode navigation
 setw -g mode-keys vi
 
