@@ -1,4 +1,7 @@
 {
+  "AllowFunnel": {
+    "${TS_CERT_DOMAIN}:443": false
+  },
   "TCP": {
     "443": {
       "HTTPS": true
@@ -12,8 +15,5 @@
         }
       }
     }
-  },
-  "AllowFunnel": {
-    "${TS_CERT_DOMAIN}:443": false
   }
 }

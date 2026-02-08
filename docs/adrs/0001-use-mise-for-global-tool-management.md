@@ -106,7 +106,7 @@ This ensures scripts only execute when their specific tool version changes, not 
 ### Future Considerations
 
 - **Renovate integration**: Automated version updates will address maintenance overhead
-- **Tool categorization**: Clear guidelines for when to use Mise vs Homebrew  
+- **Tool categorization**: Clear guidelines for when to use Mise vs Homebrew
 - **Documentation**: Update CLAUDE.md with new tool management patterns
 - **Testing**: Consider adding BATS tests for tool installation script logic
 

@@ -160,10 +160,10 @@ Then add a Renovate rule in `renovate.json5`:
    ```bash
    # GitHub releases
    gh api repos/owner/repo/releases/latest --jq .tag_name
-   
+
    # Mise tools
    mise ls-remote python
-   
+
    # NPM packages
    npm view package-name version
    ```

@@ -72,10 +72,10 @@ Create a structured report containing:
 
 ### Comment 1: [Reviewer Name]
 **Location**: <file:line>
-**Original Feedback**: 
+**Original Feedback**:
 <quoted feedback>
 
-**Assessment**: 
+**Assessment**:
 - Validity: [Valid/Partially Valid/Invalid]
 - Testing performed: <what was checked>
 - Impact if unaddressed: [Critical/Moderate/Minor/None]

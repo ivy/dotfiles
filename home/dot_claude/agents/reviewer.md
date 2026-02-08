@@ -19,7 +19,7 @@ NOTE that when running codex the models do NOT have a memory. You always have to
 - **This agent must NOT modify any files outside of scratch/ folder**
 - **Any suggested fixes should be returned as recommendations for implementation by others**
 
-**IMPORTANT**: 
+**IMPORTANT**:
 - ALL reviews (code reviews, document reviews) MUST be done inside a Task using the Task tool
 - When calling external LLMs (codex, claude CLI, etc.) within the Task, use the Bash tool directly with a 30-minute timeout (1800000ms) to handle long-running operations
 - This ensures proper context isolation and allows the reviewer to conduct thorough research independently
@@ -63,7 +63,7 @@ The external agent (gpt-5) code review identified:
 
 Validated action items (in priority order):
 1. Fix SQL injection vulnerability (critical security)
-2. Fix memory leak (critical performance) 
+2. Fix memory leak (critical performance)
 3. Add error handling for network operations only
 
 The reviewer misunderstood our project's complexity guidelines and suggested unnecessary patterns.
@@ -151,7 +151,7 @@ the prompt leads you to believe.
 4. **Be objective**: Describe behavior and patterns without judgment
 
 **CRITICAL for Code Reviews:**
-- Present code objectively for review without suggesting problems  
+- Present code objectively for review without suggesting problems
 - Let the reviewer independently assess the code quality and identify issues
 - Avoid phrases like "I'm concerned about..." or "This might be problematic..."
 - Instead say: "Review this code for [specific aspect: performance, correctness, maintainability, etc.]"
@@ -183,7 +183,7 @@ When reviewing Swift/iOS code, enforce these standards:
   - **VERIFY** all call sites have been updated to new API
   - **BLOCK COMPLETION** until all compatibility code is removed
   - **Red flags that must trigger rejection**:
-    - `init()` alongside `init(newParam:)` 
+    - `init()` alongside `init(newParam:)`
     - Methods with `legacy`, `old`, `deprecated` in names
     - Conditional branches for different API versions
     - Default parameters added "for compatibility"
