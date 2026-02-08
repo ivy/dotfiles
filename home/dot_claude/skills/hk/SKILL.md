@@ -113,6 +113,9 @@ Check for additional context that affects configuration:
 - Is this a chezmoi repo? (template exclusions needed)
 - Does the project use conventional commits? (check pre-computed context git log, or look for `commitlint`, `.commitlintrc`)
 - What YAML files exist outside `.github/`? (affects yaml linter inclusion)
+- Are there JSONC files? (`.json` files with `//` comments — VS Code/Cursor configs). Exclude from jq.
+- Are there reference/vendor directories? (`docs/reference/`, `vendor/`, gitingest dumps). Exclude from content-sensitive checks (`detect-private-key`, `markdown-lint`).
+- Are there other projects nested in subdirectories with their own `hk.pkl`? Add them to the global `exclude`.
 
 #### 5. Fetch Latest hk Version
 
@@ -167,10 +170,14 @@ If conventional commits detected, add:
 
 Write the plan including:
 1. **Detected stacks** — list each with confidence level
-2. **Proposed `hk.pkl`** — full file content
-3. **Tools to install** — `mise use` commands needed
+2. **Proposed `hk.pkl`** — full file content, including global `exclude` for nested projects
+3. **Tools to install** — exact `mise use tool@VERSION` commands (resolve versions via `mise ls-remote`)
 4. **Gotchas noted** — any stack-specific warnings that apply
-5. **Config files needed** — `.editorconfig`, `.stylua.toml`, etc. if missing
+5. **Config files needed** — `.markdownlint.json`, `.stylua.toml`, `.editorconfig`, etc.
+6. **Commit strategy** — the exact sequence of commits:
+   - Commit 1: config files (`hk.pkl`, `.mise.toml`, `.markdownlint.json`, `.stylua.toml`, etc.)
+   - Commit 2: `hk fix --all` auto-formatted changes to tracked files
+   - Commit 3: manual fixes for hook-blocking issues (e.g., ghalint workflow hardening)
 
 Call `ExitPlanMode` and wait for approval.
 
@@ -178,33 +185,41 @@ Call `ExitPlanMode` and wait for approval.
 
 Run these steps in order:
 
-1. **Install tools** via `mise use`:
+1. **Install tools one at a time** with pinned versions:
    ```bash
-   mise use hk
-   # then each stack's tool install commands
+   mise use hk@X.Y.Z
+   mise use ghalint@X.Y.Z
+   # etc. — one tool per command to avoid partial failures
    ```
+   After each install, verify it landed in the project `.mise.toml` (not global config).
+   Use `mise x -- TOOL --version` if the tool isn't in PATH yet (avoids shell reload).
 
-2. **Write `hk.pkl`** using the Write tool
+2. **Write config files** — `hk.pkl`, `.markdownlint.json`, `.stylua.toml`, etc.
 
 3. **Install hooks**:
    ```bash
-   hk install
+   mise x -- hk install
    ```
 
 4. **Validate config**:
    ```bash
-   hk validate
+   mise x -- hk validate
    ```
 
 5. **Run checks**:
    ```bash
-   hk check --all
+   mise x -- hk check --all
    ```
 
 6. **If check failures**, offer to fix:
    ```bash
-   hk fix --all
+   mise x -- hk fix --all
    ```
    Then re-run `hk check --all` to verify.
 
-7. **Report results** — summarize what was installed, configured, and any remaining issues.
+7. **Commit in sequence** (per the plan's commit strategy):
+   - Commit 1: config files only
+   - Commit 2: auto-formatted changes from `hk fix`
+   - Commit 3: manual fixes (e.g., ghalint workflow hardening) if needed
+
+8. **Report results** — summarize what was installed, configured, and any remaining issues.

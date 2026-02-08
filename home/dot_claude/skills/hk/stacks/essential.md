@@ -25,17 +25,20 @@ Always included — no indicator files needed.
 ## Tool Install Commands
 
 ```bash
-mise use editorconfig-checker
-mise use jq
-mise use markdownlint-cli    # provides the `markdownlint` binary
-mise use mise                 # usually already installed
+mise use editorconfig-checker@VERSION
+mise use jq@VERSION
+mise use npm:markdownlint-cli@VERSION   # NOT aqua — aqua only has markdownlint-cli2
+mise use mise@VERSION                    # usually already installed
 ```
+
+Resolve each VERSION with `mise ls-remote TOOL | tail -1` before running.
 
 ## Gotchas
 
 - **editorconfig-checker**: The binary is called `ec`, not `editorconfig-checker`. Requires a `.editorconfig` file in the project root — the builtin is useless without one.
-- **jq**: The `fix` command uses `jq -S` which **sorts object keys**. This is intentional for consistency but may surprise users. If key order matters, override the fix command.
-- **markdown-lint**: Requires `markdownlint` CLI (from `markdownlint-cli` npm package). Install via `mise use npm:markdownlint-cli` or `mise use aqua:igorshubovych/markdownlint-cli`. Respects `.markdownlint.json` or `.markdownlint.yaml` config.
+- **jq + JSONC**: The `fix` command uses `jq -S` which **sorts object keys** and **cannot parse JSONC** (JSON with `//` comments). Scan `.json` files for `//` comments — if any exist (common in VS Code/Cursor configs like `keybindings.json`, `settings.json`), exclude them: `exclude = List("**/.vscode/**", "**/private_Library/**")`. Alternatively, exclude the specific files.
+- **markdown-lint**: Requires `markdownlint` CLI. **Use `npm:markdownlint-cli`** — the aqua registry does not have `markdownlint-cli` (only `markdownlint-cli2`, which has a different CLI interface). On existing repos, defaults produce thousands of errors. **Always generate a `.markdownlint.json`** during planning — run `markdownlint --disable MD013 -- '**/*.md' 2>&1 | wc -l` to gauge noise, then disable the noisiest rules upfront.
+- **detect-private-key**: Triggers false positives on reference docs, gitingest dumps, and vendored text files that mention "PRIVATE KEY" in documentation. Exclude directories like `docs/reference/`, `vendor/`, or any large text dump directories.
 - **mise builtin**: Has an extensive glob list covering all mise config file locations. The `check` command runs `mise fmt --check` (ignores `{{files}}`).
 - **trailing-whitespace and newlines**: These are fast, zero-dependency builtins built into hk itself. Always include them.
 
@@ -46,7 +49,6 @@ mise use mise                 # usually already installed
 ["check-merge-conflict"] = Builtins.check_merge_conflict
 ["check-executables-have-shebangs"] = Builtins.check_executables_have_shebangs
 ["check-symlinks"] = Builtins.check_symlinks
-["detect-private-key"] = Builtins.detect_private_key
 ["mixed-line-ending"] = Builtins.mixed_line_ending
 ["trailing-whitespace"] = Builtins.trailing_whitespace
 ["newlines"] = Builtins.newlines
@@ -54,11 +56,20 @@ mise use mise                 # usually already installed
 // Only if .editorconfig exists
 ["editorconfig-checker"] = Builtins.editorconfig_checker
 
-// JSON formatting
-["jq"] = Builtins.jq
+// JSON formatting — exclude JSONC files (VS Code/Cursor configs with // comments)
+["jq"] = (Builtins.jq) {
+  exclude = List("**/.vscode/**", "**/private_Library/**")
+}
 
-// Markdown linting
-["markdown-lint"] = Builtins.markdown_lint
+// Markdown linting — exclude vendor/reference dumps
+["markdown-lint"] = (Builtins.markdown_lint) {
+  exclude = "docs/reference/"
+}
+
+// Detect private keys — exclude reference docs (gitingest dumps mention keys)
+["detect-private-key"] = (Builtins.detect_private_key) {
+  exclude = "docs/reference/"
+}
 
 // mise config formatting
 ["mise"] = Builtins.mise

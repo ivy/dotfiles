@@ -26,6 +26,7 @@ mise use ghalint
 
 - **Both builtins are `const`**: They cannot be overridden with `(Builtins.ghalint_workflow) { ... }`. Use them as-is or write a custom step instead.
 - **ghalint_workflow runs without `{{files}}`**: The check command is `ghalint run` (no file arguments). It scans `.github/workflows/*` via its own glob. This means it always checks all workflows, not just staged files.
+- **ghalint blocks commits on pre-existing issues**: Since `ghalint run` checks ALL workflow files (not just staged ones), pre-existing violations (missing `timeout-minutes`, missing job-level `permissions`, unpinned actions) will block every commit. Either: (a) fix all workflow issues as part of the bootstrap, or (b) write a custom step with a `slow` profile so it doesn't block commits by default.
 - **ghalint_action**: Only include if the project has an `action.yml` or `action.yaml` in the root. Its glob is `List("**/action.*")` with `types = List("yaml")`.
 - **Overlap with yaml linters**: If you also include yamlfmt/yamllint, exclude `.github/workflows/` from them to avoid double-linting GHA workflow files. ghalint is more specific and useful for workflows.
 
