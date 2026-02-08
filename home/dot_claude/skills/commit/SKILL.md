@@ -61,7 +61,7 @@ Exclude:
 **Types:** `feat`, `fix`, `chore`, `docs`, `refactor`, `test`, `style`
 
 **Rules:**
-- Subject line ≤72 characters
+- Subject line ≤72 characters (including mood emoji)
 - Present tense ("add" not "added")
 - Focus on WHY, not WHAT (the diff shows what)
 - Body lines ≤80 characters
@@ -70,11 +70,30 @@ Exclude:
 - **Arguments provide message** → use it (adjust format if needed)
 - **No message** → draft based on staged changes, explain reasoning
 
+**Mood emoji:** End every subject line with a GitHub emoji that reflects the vibe of the conversation or task. Intuit mood from context — the ticket being worked on, the user's tone, frustration level, excitement, etc.
+
+Palette (use these or any GitHub emoji that fits):
+
+| Emoji | Shortcode | Mood |
+|-------|-----------|------|
+| :sparkles: | `:sparkles:` | excited about something new |
+| :tada: | `:tada:` | celebration, milestone |
+| :fire: | `:fire:` | on a roll, crushing it |
+| :bug: | `:bug:` | squashing something annoying |
+| :face_with_spiral_eyes: | `:face_with_spiral_eyes:` | confused, dizzy, "what even is this" |
+| :rage: | `:rage:` | frustrated, fighting the tools |
+| :relieved: | `:relieved:` | finally fixed, weight off shoulders |
+| :broom: | `:broom:` | tidying up, chores |
+| :thinking: | `:thinking:` | exploratory, not sure yet |
+| :coffin: | `:coffin:` | killing dead code, removing things |
+| :rocket: | `:rocket:` | shipping, deploying, launching |
+| :nail_care: | `:nail_care:` | polish, aesthetics, making it pretty |
+
 ### 4. Execute Commit
 
 ```bash
 git commit -m "$(cat <<'EOF'
-type(scope): subject line here
+type(scope): subject line here :emoji:
 
 Optional body explaining why this change was made.
 EOF
@@ -101,4 +120,12 @@ If arguments include `--amend`:
 /commit fix login redirect        → stage relevant files, commit with message
 /commit --amend                   → amend previous commit
 /commit src/auth.ts src/login.ts  → stage specific files, draft message, commit
+```
+
+Example commit messages with mood:
+```
+feat(auth): add OAuth2 login flow :sparkles:
+fix(auth): resolve login redirect loop :relieved:
+chore(deps): bump mise tool versions :broom:
+refactor(cli): remove dead argument parser :coffin:
 ```
