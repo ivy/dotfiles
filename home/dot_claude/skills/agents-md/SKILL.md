@@ -36,6 +36,7 @@ The following checks ran before this skill was invoked:
 **CLAUDE.md exists:** !`test -e CLAUDE.md && echo "yes" || echo "no"`
 **CLAUDE.md is symlink:** !`test -L CLAUDE.md && echo "yes" || echo "no"`
 **CLAUDE.md symlink target:** !`readlink CLAUDE.md 2>/dev/null || echo "(not a symlink or does not exist)"`
+**AGENTS.local.md exists:** !`test -f AGENTS.local.md && echo "yes" || echo "no"`
 
 Use this context to skip redundant checks. If CLAUDE.md is already a symlink pointing to AGENTS.md, don't recreate it.
 
@@ -134,6 +135,7 @@ Follow THIS structure (keep each section short and skimmable):
 ### 3. Implementation Details (files + symlink)
 
 - Write `AGENTS.md` where specified.
+- If `AGENTS.local.md` exists, include `@AGENTS.local.md` near the top of the file (e.g. right after the title or introduction). Agents read `@`-references intuitively — no markdown link or explanation needed. Some projects provide a local `/agents-local-md` skill to generate this file — if the project has one, suggest running it.
 - Create/update the symlink so `CLAUDE.md` -> `AGENTS.md` (relative symlink).
 - If `CLAUDE.md` exists as a real file, replace it with a symlink.
 

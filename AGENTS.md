@@ -1,5 +1,7 @@
 # AGENTS.md
 
+@AGENTS.local.md
+
 Personal dotfiles managed by coding agents via [Chezmoi](https://www.chezmoi.io/). Targets macOS (darwin) and Fedora Linux. See [docs/vision.md](docs/vision.md) and [docs/core-principles.md](docs/core-principles.md) for the philosophy behind this setup.
 
 ## The Stack
