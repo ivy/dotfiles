@@ -1,0 +1,59 @@
+amends "package://github.com/jdx/hk/releases/download/v1.35.0/hk@1.35.0#/Config.pkl"
+import "package://github.com/jdx/hk/releases/download/v1.35.0/hk@1.35.0#/Builtins.pkl"
+
+local linters = new Mapping<String, Step|Group> {
+  // Essential
+  ["check-merge-conflict"] = Builtins.check_merge_conflict
+  ["check-executables-have-shebangs"] = Builtins.check_executables_have_shebangs
+  ["check-symlinks"] = Builtins.check_symlinks
+  ["detect-private-key"] = (Builtins.detect_private_key) {
+    exclude = "docs/reference/**"
+  }
+  ["mixed-line-ending"] = Builtins.mixed_line_ending
+  ["trailing-whitespace"] = Builtins.trailing_whitespace
+  ["newlines"] = Builtins.newlines
+  ["jq"] = (Builtins.jq) {
+    exclude = "**/*keybindings.json"
+  }
+  ["markdown-lint"] = (Builtins.markdown_lint) {
+    exclude = "docs/reference/**"
+  }
+  ["mise"] = Builtins.mise
+
+  // Shell — exclude chezmoi templates
+  ["shellcheck"] = (Builtins.shellcheck) {
+    exclude = "**/*.tmpl"
+  }
+  ["shfmt"] = (Builtins.shfmt) {
+    exclude = "**/*.tmpl"
+  }
+
+  // GitHub Actions
+  ["ghalint-workflow"] = Builtins.ghalint_workflow
+
+  // Lua
+  ["stylua"] = Builtins.stylua
+}
+
+hooks = new {
+  ["pre-commit"] {
+    fix = true
+    stash = "git"
+    steps = linters
+  }
+  ["pre-push"] {
+    steps = linters
+  }
+  ["commit-msg"] {
+    steps {
+      ["check-conventional-commit"] = Builtins.check_conventional_commit
+    }
+  }
+  ["check"] {
+    steps = linters
+  }
+  ["fix"] {
+    fix = true
+    steps = linters
+  }
+}
