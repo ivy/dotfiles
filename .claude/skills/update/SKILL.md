@@ -13,6 +13,7 @@ allowed-tools:
   - Bash(git stash:*)
   - Bash(git add:*)
   - Bash(chezmoi diff:*)
+  - Bash(test -f:*)
   - Read
   # NOTE: These require user approval for safety:
   # - gh pr merge (modifies remote state)
@@ -37,6 +38,20 @@ Options:
 - `--dry-run` - Show what would be done without making changes
 
 ## Instructions
+
+### 0. Check AGENTS.local.md Freshness
+
+```bash
+test -f AGENTS.local.md && echo "exists" || echo "missing"
+```
+
+If the file exists, read it and check the `Generated:` date line.
+
+- **Missing:** suggest "Run `/agents-local-md` to generate machine-specific context"
+- **Older than 7 days:** suggest "Run `/agents-local-md --force` to refresh machine context"
+- **Fresh:** no action needed
+
+This is **advisory only** — continue the update regardless.
 
 ### 1. Check for Uncommitted Work
 
