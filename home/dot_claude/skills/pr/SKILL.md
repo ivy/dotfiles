@@ -50,7 +50,24 @@ If there are only untracked files (not relevant to the PR), proceed without aski
 
 ### 3. Draft PR Content
 
-**Title:** Derive from branch name or commits. Use conventional format if repo follows it.
+**Title:** Derive from branch name or commits. Use conventional format if repo follows it. End with a mood emoji that reflects the vibe of the conversation or task.
+
+Palette (use these or any GitHub emoji that fits):
+
+| Emoji | Shortcode | Mood |
+|-------|-----------|------|
+| :sparkles: | `:sparkles:` | excited about something new |
+| :tada: | `:tada:` | celebration, milestone |
+| :fire: | `:fire:` | on a roll, crushing it |
+| :bug: | `:bug:` | squashing something annoying |
+| :face_with_spiral_eyes: | `:face_with_spiral_eyes:` | confused, dizzy, "what even is this" |
+| :rage: | `:rage:` | frustrated, fighting the tools |
+| :relieved: | `:relieved:` | finally fixed, weight off shoulders |
+| :broom: | `:broom:` | tidying up, chores |
+| :thinking: | `:thinking:` | exploratory, not sure yet |
+| :coffin: | `:coffin:` | killing dead code, removing things |
+| :rocket: | `:rocket:` | shipping, deploying, launching |
+| :nail_care: | `:nail_care:` | polish, aesthetics, making it pretty |
 
 **Body:** If template found, fill it in. Otherwise use:
 
