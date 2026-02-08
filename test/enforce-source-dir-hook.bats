@@ -114,6 +114,30 @@ run_hook() {
   [ -z "$output" ]
 }
 
+# --- ~/.claude/ is exempt (Claude Code workspace) ---
+
+@test "Write to ~/.claude/plans/ is allowed" {
+  mkdir -p "$HOME/.claude/plans"
+  run_hook "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$HOME/.claude/plans/some-plan.md\"}}"
+  [ "$status" -eq 0 ]
+  [ -z "$output" ]
+}
+
+@test "Edit to ~/.claude/memory/ is allowed" {
+  mkdir -p "$HOME/.claude/memory"
+  run_hook "{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"$HOME/.claude/memory/MEMORY.md\"}}"
+  [ "$status" -eq 0 ]
+  [ -z "$output" ]
+}
+
+@test "Read ~/.claude/ file has no warning" {
+  mkdir -p "$HOME/.claude"
+  touch "$HOME/.claude/settings.json"
+  run_hook "{\"tool_name\":\"Read\",\"tool_input\":{\"file_path\":\"$HOME/.claude/settings.json\"}}"
+  [ "$status" -eq 0 ]
+  [ -z "$output" ]
+}
+
 # --- Deny message includes target path ---
 
 @test "Deny message includes the target path" {

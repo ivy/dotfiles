@@ -36,9 +36,12 @@ resolve_path() {
 }
 
 # Check if a resolved path is under $HOME but NOT under $CLAUDE_PROJECT_DIR
+# and NOT under ~/.claude (Claude Code's own workspace: plans, memory, settings)
 is_home_not_project() {
   local resolved="$1"
-  [[ "$resolved" == "$HOME"/* ]] && [[ "$resolved" != "$CLAUDE_PROJECT_DIR"/* ]]
+  [[ "$resolved" == "$HOME"/* ]] \
+    && [[ "$resolved" != "$CLAUDE_PROJECT_DIR"/* ]] \
+    && [[ "$resolved" != "$HOME/.claude"/* ]]
 }
 
 case "$tool_name" in
