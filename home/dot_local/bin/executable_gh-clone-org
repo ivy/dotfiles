@@ -29,30 +29,30 @@ BASE_DIR="$HOME/src/github.com"
 
 for org in "$@"; do
     echo "🔍 Fetching repositories for organization: $org"
-    
+
     ORG_DIR="$BASE_DIR/$org"
     mkdir -p "$ORG_DIR"
-    
+
     # Get all repos for the organization
     repos=$(gh repo list "$org" --limit 9999 --json name,url | jq -r '.[] | "\(.name) \(.url)"')
-    
+
     if [[ -z "$repos" ]]; then
         echo "⚠️  No repositories found for organization: $org"
         continue
     fi
-    
+
     total_repos=$(echo "$repos" | wc -l | tr -d ' ')
     echo "📦 Found $total_repos repositories in $org"
-    
+
     current=0
     while IFS=' ' read -r repo_name clone_url; do
         ((current++))
         repo_path="$ORG_DIR/$repo_name"
-        
+
         if [[ -d "$repo_path" ]]; then
             echo "🔄 [$current/$total_repos] Updating $repo_name..."
             cd "$repo_path"
-            
+
             # Check if working tree is clean
             if git diff-index --quiet HEAD -- 2>/dev/null; then
                 echo "📥 [$current/$total_repos] Pulling latest changes for $repo_name..."
@@ -65,7 +65,7 @@ for org in "$@"; do
             fi
             continue
         fi
-        
+
         echo "📥 [$current/$total_repos] Cloning $repo_name..."
         if git clone --recurse-submodules "$clone_url" "$repo_path"; then
             echo "✅ [$current/$total_repos] Successfully cloned $repo_name"
@@ -73,7 +73,7 @@ for org in "$@"; do
             echo "❌ [$current/$total_repos] Failed to clone $repo_name"
         fi
     done <<< "$repos"
-    
+
     echo "🎉 Completed cloning repositories for $org"
     echo
 done

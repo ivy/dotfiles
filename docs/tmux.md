@@ -63,7 +63,7 @@ is_vim="ps -o state= -o comm= -t '#{pane_tty}' \
 
 #### Navigation Keybindings
 - `Ctrl+h` - Move left (tmux pane or vim split)
-- `Ctrl+j` - Move down (tmux pane or vim split)  
+- `Ctrl+j` - Move down (tmux pane or vim split)
 - `Ctrl+k` - Move up (tmux pane or vim split)
 - `Ctrl+l` - Move right (tmux pane or vim split)
 - `Ctrl+\` - Move to previous pane/split
@@ -99,7 +99,7 @@ The external base configuration provides:
 - Window and pane numbering
 - Custom color schemes
 
-### Productivity Features  
+### Productivity Features
 - Smart pane splitting
 - Window and session management
 - Mouse support toggle
@@ -176,7 +176,7 @@ Any setting in the local config will override the base gpakosz configuration:
 set -g base-index 0
 setw -g pane-base-index 0
 
-# Change split keybindings  
+# Change split keybindings
 bind | split-window -h
 bind - split-window -v
 ```
@@ -212,7 +212,7 @@ tmux list-sessions
 - Check tmux version compatibility for `Ctrl+\` binding
 - Verify `ps` command output format on your system
 
-### Configuration Problems  
+### Configuration Problems
 - Use `prefix + r` to reload after changes
 - Check syntax with: `tmux -f ~/.tmux.conf.local -T`
 - View logs: `tmux show-messages`
@@ -230,7 +230,7 @@ chezmoi status
 
 The configuration is optimized for:
 - **Lazy Loading**: Features load on demand
-- **Minimal Overhead**: Efficient status line updates  
+- **Minimal Overhead**: Efficient status line updates
 - **Smart Detection**: Vim detection uses minimal resources
 - **Caching**: External updates only every 24 hours
 

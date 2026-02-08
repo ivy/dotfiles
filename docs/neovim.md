@@ -44,7 +44,7 @@ home/dot_config/nvim/
 
 Enables seamless navigation between Neovim splits and tmux panes using:
 - `Ctrl+h` - Move left
-- `Ctrl+j` - Move down  
+- `Ctrl+j` - Move down
 - `Ctrl+k` - Move up
 - `Ctrl+l` - Move right
 - `Ctrl+\` - Move to previous pane/split
@@ -65,7 +65,7 @@ require("config.lazy")
 
 ### lua/config/ Files
 - **keymaps.lua**: Add custom keybindings here
-- **options.lua**: Override Neovim options  
+- **options.lua**: Override Neovim options
 - **autocmds.lua**: Custom autocommands
 - All files are automatically loaded by LazyVim
 
@@ -96,7 +96,7 @@ return {
 - `:Lazy sync` - Install/update all plugins
 - `:Lazy clean` - Remove unused plugins
 
-### LSP Management  
+### LSP Management
 - `:Mason` - Manage LSP servers, formatters, linters
 - `:LspInfo` - Show LSP client information
 - `:Lazy extras` - Install additional language support
@@ -144,7 +144,7 @@ See `doc/tmux.md` for tmux-side configuration details.
 ## Troubleshooting
 
 ### Plugin Issues
-- `:Lazy log` - View plugin installation logs  
+- `:Lazy log` - View plugin installation logs
 - `:Lazy health` - Check plugin health
 - `:checkhealth` - Neovim health check
 

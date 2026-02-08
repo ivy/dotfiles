@@ -18,7 +18,7 @@
     "github-actions"
   ],
 
-  // Actions: pin to digests for reproducibility  
+  // Actions: pin to digests for reproducibility
   "github-actions": { "pinDigests": true },
 
   // File discovery
