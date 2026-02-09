@@ -80,6 +80,17 @@ Upgrade from sonnet → opus when:
 - Output requires understanding system architecture
 - Skill handles ambiguous or incomplete requirements
 
+## Bedrock Portability
+
+Global skills use the `bedrock-model` chezmoi template partial so they work on both direct API and AWS Bedrock:
+
+**Global skill** (`.md.tmpl`): `model: {{ template "bedrock-model" (dict "tier" "opus" "root" .) }}`
+**Local skill** (plain `.md`): `model: opus` or omit to inherit
+
+The template reads `[data.claude] use_bedrock` from chezmoi config (set during `chezmoi init`). When false, it passes through the friendly name (`opus`). When true, it calls `bin/resolve-bedrock-models` to look up the latest Bedrock inference profile ID.
+
+Chezmoi's `output` function caches the resolver — one AWS API call per `chezmoi apply`, shared across all templates.
+
 ## Cost Consideration
 
 Model selection affects every invocation. A skill used 100x/day at opus costs significantly more than at haiku. Match capability to need.

@@ -59,20 +59,35 @@ If unclear, ask:
 
 ### 3. Draft Subagent
 
-**For global subagents:** Create `$(chezmoi source-path)/dot_claude/agents/<name>.md`
+**For global subagents:** Create `$(chezmoi source-path)/dot_claude/agents/<name>.md.tmpl` (note `.tmpl` extension)
 
-**For local subagents:** Create `.claude/agents/<name>.md` in the current working directory
+**For local subagents:** Create `.claude/agents/<name>.md` in the current working directory (plain `.md`, no template)
 
+**Global subagent template** (`.md.tmpl`):
 ```yaml
 ---
 name: <kebab-case>
 description: <When Claude should delegate + what it does. Use "proactively" for auto-use.>
 tools: <minimal subset - see REVIEW.md>
 disallowedTools: <explicit denials if inheriting>
-model: <haiku|sonnet|opus|inherit>
+model: {{ "{{" }} template "bedrock-model" (dict "tier" "<haiku|sonnet|opus>" "root" .) {{ "}}" }}
 permissionMode: <default|acceptEdits|dontAsk|plan>
 skills: <list of skills to preload>
 hooks: <optional lifecycle hooks>
+---
+
+<System prompt: Who the subagent is, what it does, how it works>
+```
+
+**Local subagent template** (plain `.md`):
+```yaml
+---
+name: <kebab-case>
+description: <When Claude should delegate + what it does. Use "proactively" for auto-use.>
+tools: <minimal subset - see REVIEW.md>
+disallowedTools: <explicit denials if inheriting>
+# model: omit to inherit, or use plain: model: sonnet
+permissionMode: <default|acceptEdits|dontAsk|plan>
 ---
 
 <System prompt: Who the subagent is, what it does, how it works>

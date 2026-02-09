@@ -68,21 +68,39 @@ If unclear, ask:
 
 ### 3. Draft Skill
 
-**For global skills:** Create `$(chezmoi source-path)/dot_claude/skills/<name>/SKILL.md`
+**For global skills:** Create `$(chezmoi source-path)/dot_claude/skills/<name>/SKILL.md.tmpl` (note `.tmpl` extension)
 
-**For local skills:** Create `.claude/skills/<name>/SKILL.md` in the current working directory
+**For local skills:** Create `.claude/skills/<name>/SKILL.md` in the current working directory (plain `.md`, no template)
 
+**Global skill template** (`.md.tmpl`):
 ```yaml
 ---
 name: <kebab-case>
 description: <When to use + what it does>
 argument-hint: <flexible, use brackets>
-model: <haiku|sonnet|opus>  # see MODEL-SELECTION.md
+model: {{ "{{" }} template "bedrock-model" (dict "tier" "<haiku|sonnet|opus>" "root" .) {{ "}}" }}
 disable-model-invocation: <true if user-only>
 context: <fork if output not needed>
 allowed-tools: <minimal safe subset>
 ---
+```
 
+**Local skill template** (plain `.md`):
+```yaml
+---
+name: <kebab-case>
+description: <When to use + what it does>
+argument-hint: <flexible, use brackets>
+# model: omit to inherit session default, or use plain: model: sonnet
+disable-model-invocation: <true if user-only>
+context: <fork if output not needed>
+allowed-tools: <minimal safe subset>
+---
+```
+
+Both follow the same body structure:
+
+```markdown
 # <Title>
 
 ## Arguments
