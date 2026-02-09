@@ -2,7 +2,7 @@
 name: write-skill
 description: Use when the user wants to create a new Claude Code skill. Guides skill creation with playbook patterns.
 argument-hint: "[global|local] [skill-name] [purpose...]"
-model: opus
+model: {{ template "bedrock-model" (dict "tier" "opus" "root" .) }}
 disable-model-invocation: true
 allowed-tools:
   - Read

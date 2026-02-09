@@ -2,7 +2,7 @@
 name: share-log
 description: Use when sharing the current conversation as a Gist. Creates a private Gist with the session log.
 argument-hint: "[description for filename]"
-model: haiku
+model: {{ template "bedrock-model" (dict "tier" "haiku" "root" .) }}
 allowed-tools:
   - Bash(~/.claude/skills/share-log/claude-extract-session:*)
   - Bash(gh gist create:*)

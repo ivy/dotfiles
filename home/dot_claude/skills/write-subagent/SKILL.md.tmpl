@@ -2,7 +2,7 @@
 name: write-subagent
 description: Use when the user wants to create a new Claude Code subagent. Guides subagent creation with focused prompts and constrained tool access.
 argument-hint: "[global|local] [subagent-name] [purpose...]"
-model: opus
+model: {{ template "bedrock-model" (dict "tier" "opus" "root" .) }}
 disable-model-invocation: true
 allowed-tools:
   - Read
