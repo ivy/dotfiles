@@ -2,7 +2,6 @@
 name: update
 description: "Morning update routine: merge Renovate PRs, rebase local work, apply chezmoi changes"
 argument-hint: "[--push | --dry-run]"
-model: sonnet
 context: default
 allowed-tools:
   - Bash(gh pr list:*)

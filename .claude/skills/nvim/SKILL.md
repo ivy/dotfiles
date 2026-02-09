@@ -2,7 +2,6 @@
 name: nvim
 description: "Use when troubleshooting Neovim/LazyVim plugin errors, updating plugins after breaking changes, or diagnosing colorscheme/startup issues."
 argument-hint: "[debug | update | fix <plugin>]"
-model: sonnet
 context: default
 allowed-tools:
   - Read
