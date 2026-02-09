@@ -1,3 +1,6 @@
-{{- if not (dig "claude" "use_bedrock" false .root) }}
+{{- if dig "claude" "use_bedrock" false .root }}
+{{-   $models := output (joinPath .root.chezmoi.workingTree "bin" "resolve-bedrock-models") | fromJson }}
+model: {{ index $models .tier }}
+{{- else }}
 model: {{ .tier }}
 {{- end -}}
