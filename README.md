@@ -28,7 +28,19 @@ For the thinking behind this setup, see [docs/vision.md](docs/vision.md) and [do
 git clone https://github.com/ivy/dotfiles.git && cd dotfiles && ./install.sh
 ```
 
-Run `./install.sh --help` for options, or see [CLAUDE.md](CLAUDE.md) for the full development workflow.
+Interactive install prompts for git identity and AWS Bedrock preference. For headless/CI use:
+
+```bash
+GIT_USER_NAME="Name" GIT_USER_EMAIL="email" USE_BEDROCK=false ./install.sh
+```
+
+| Variable | Purpose | Default |
+|----------|---------|---------|
+| `GIT_USER_NAME` | Git `user.name` | *(prompted)* |
+| `GIT_USER_EMAIL` | Git `user.email` | *(prompted)* |
+| `USE_BEDROCK` | Use AWS Bedrock model IDs for Claude Code skills | `false` *(prompted)* |
+
+Run `./install.sh --help` for all options, or see [CLAUDE.md](CLAUDE.md) for the full development workflow.
 
 ## Not a Product
 
