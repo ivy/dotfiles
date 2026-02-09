@@ -102,7 +102,7 @@ Global subagents use the `bedrock-model` chezmoi template partial so they work o
 **Global subagent** (`.md.tmpl`): `{{- template "bedrock-model" (dict "tier" "opus" "root" .) }}`
 **Local subagent** (plain `.md`): omit `model:` to inherit session default
 
-The template reads `[data.claude] use_bedrock` from chezmoi config (set during `chezmoi init` or via `USE_BEDROCK` env var). When false, it emits `model: <tier>`. When true, the entire `model:` line is omitted — subagents inherit the session model, avoiding the Bedrock billing header leak.
+The template reads `[data.claude] use_bedrock` from chezmoi config (set during `chezmoi init` or via `USE_BEDROCK` env var). When false, it emits friendly names (`model: opus`). When true, it calls `bin/resolve-bedrock-models` to query AWS Bedrock for the latest cross-region inference profile IDs (`model: us.anthropic.claude-opus-4-6-v1`), avoiding the billing header leak.
 
 ## Cost Impact
 
