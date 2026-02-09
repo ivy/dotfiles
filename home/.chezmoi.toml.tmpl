@@ -4,6 +4,7 @@
 
 {{- $gitName := promptString "Git user.name" -}}
 {{- $gitEmail := promptString "Git user.email" -}}
+{{- $useBedrock := promptBoolOnce . "claude.use_bedrock" "Use AWS Bedrock for Claude Code" -}}
 
 # Source Directory Configuration
 # Allows us to maintain Chezmoi outside of the default `~/.local/share/chezmoi/`.
@@ -19,6 +20,9 @@ sourceDir = "{{ .chezmoi.workingTree }}"
 # Used in git config templates and other version control settings
 name = {{ $gitName | quote }}
 email = {{ $gitEmail | quote }}
+
+[data.claude]
+use_bedrock = {{ $useBedrock }}
 
 [onepassword]
 cache = true
