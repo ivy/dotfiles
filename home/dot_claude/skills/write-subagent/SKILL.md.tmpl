@@ -2,7 +2,7 @@
 name: write-subagent
 description: Use when the user wants to create a new Claude Code subagent. Guides subagent creation with focused prompts and constrained tool access.
 argument-hint: "[global|local] [subagent-name] [purpose...]"
-model: {{ template "bedrock-model" (dict "tier" "opus" "root" .) }}
+{{- template "bedrock-model" (dict "tier" "opus" "root" .) }}
 disable-model-invocation: true
 allowed-tools:
   - Read
@@ -70,7 +70,7 @@ name: <kebab-case>
 description: <When Claude should delegate + what it does. Use "proactively" for auto-use.>
 tools: <minimal subset - see REVIEW.md>
 disallowedTools: <explicit denials if inheriting>
-model: {{ "{{" }} template "bedrock-model" (dict "tier" "<haiku|sonnet|opus>" "root" .) {{ "}}" }}
+{{ "{{-" }} template "bedrock-model" (dict "tier" "<haiku|sonnet|opus>" "root" .) {{ "}}" }}
 permissionMode: <default|acceptEdits|dontAsk|plan>
 skills: <list of skills to preload>
 hooks: <optional lifecycle hooks>

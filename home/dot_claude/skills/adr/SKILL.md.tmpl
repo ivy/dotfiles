@@ -2,7 +2,7 @@
 name: adr
 description: Use when writing Architecture Decision Records. Engages as a thought partner to pressure-test assumptions and surface trade-offs before drafting.
 argument-hint: "[decision topic or question]"
-model: {{ template "bedrock-model" (dict "tier" "opus" "root" .) }}
+{{- template "bedrock-model" (dict "tier" "opus" "root" .) }}
 allowed-tools:
   - Read
   - Glob

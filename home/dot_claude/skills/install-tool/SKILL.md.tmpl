@@ -2,7 +2,7 @@
 name: install-tool
 description: "Use when a tool, CLI, or package is needed but not installed, or when the user asks to install/add a tool. Prefers mise for all installations."
 argument-hint: "[tool[@version] | package-name...]"
-model: {{ template "bedrock-model" (dict "tier" "haiku" "root" .) }}
+{{- template "bedrock-model" (dict "tier" "haiku" "root" .) }}
 allowed-tools:
   - Bash(mise search:*)
   - Bash(mise registry:*)

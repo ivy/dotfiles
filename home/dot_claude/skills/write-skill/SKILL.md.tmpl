@@ -2,7 +2,7 @@
 name: write-skill
 description: Use when the user wants to create a new Claude Code skill. Guides skill creation with playbook patterns.
 argument-hint: "[global|local] [skill-name] [purpose...]"
-model: {{ template "bedrock-model" (dict "tier" "opus" "root" .) }}
+{{- template "bedrock-model" (dict "tier" "opus" "root" .) }}
 disable-model-invocation: true
 allowed-tools:
   - Read
@@ -78,7 +78,7 @@ If unclear, ask:
 name: <kebab-case>
 description: <When to use + what it does>
 argument-hint: <flexible, use brackets>
-model: {{ "{{" }} template "bedrock-model" (dict "tier" "<haiku|sonnet|opus>" "root" .) {{ "}}" }}
+{{ "{{-" }} template "bedrock-model" (dict "tier" "<haiku|sonnet|opus>" "root" .) {{ "}}" }}
 disable-model-invocation: <true if user-only>
 context: <fork if output not needed>
 allowed-tools: <minimal safe subset>

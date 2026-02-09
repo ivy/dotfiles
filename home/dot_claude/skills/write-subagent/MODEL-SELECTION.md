@@ -99,12 +99,10 @@ Most subagents should use `inherit` or `haiku`. Explicit opus is rare.
 
 Global subagents use the `bedrock-model` chezmoi template partial so they work on both direct API and AWS Bedrock:
 
-**Global subagent** (`.md.tmpl`): `model: {{ template "bedrock-model" (dict "tier" "opus" "root" .) }}`
-**Local subagent** (plain `.md`): `model: opus` or omit to inherit
+**Global subagent** (`.md.tmpl`): `{{- template "bedrock-model" (dict "tier" "opus" "root" .) }}`
+**Local subagent** (plain `.md`): omit `model:` to inherit session default
 
-The template reads `[data.claude] use_bedrock` from chezmoi config (set during `chezmoi init`). When false, it passes through the friendly name (`opus`). When true, it calls `bin/resolve-bedrock-models` to look up the latest Bedrock inference profile ID.
-
-Chezmoi's `output` function caches the resolver — one AWS API call per `chezmoi apply`, shared across all templates.
+The template reads `[data.claude] use_bedrock` from chezmoi config (set during `chezmoi init` or via `USE_BEDROCK` env var). When false, it emits `model: <tier>`. When true, the entire `model:` line is omitted — subagents inherit the session model, avoiding the Bedrock billing header leak.
 
 ## Cost Impact
 
