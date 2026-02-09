@@ -1,0 +1,12 @@
+[security]
+allowed-users = ["ivy"]
+
+[jail]
+backend = "systemd-run"
+
+[github]
+project-id = "26"
+project-node-id = "PVT_kwHOADgWUM4BOoAC"
+status-field-id = "PVTSSF_lAHOADgWUM4BOoACzg9RZqI"
+in-progress-option-id = "dacd8d8c"
+in-review-option-id = "2f8088e7"
