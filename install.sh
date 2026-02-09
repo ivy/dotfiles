@@ -23,6 +23,7 @@
 #   BIN_DIR: Override installation directory (default: ~/.local/bin)
 #   VERIFY_SIGNATURES: Disable signature verification (default: true)
 #   SKIP_PACKAGE_MANAGER: Force binary download (default: false)
+#   USE_BEDROCK: Use AWS Bedrock for Claude Code model resolution (true/false)
 #   DEBUG: Enable debug output
 #
 # EXAMPLE USAGE:
@@ -115,11 +116,13 @@ ENVIRONMENT VARIABLES:
     BIN_DIR                 Override installation directory (default: ~/.local/bin)
     VERIFY_SIGNATURES       Disable signature verification (default: true)
     SKIP_PACKAGE_MANAGER    Force binary download (default: false)
+    USE_BEDROCK             Use AWS Bedrock for Claude Code (true/false)
     DEBUG                   Enable debug output
 
 EXAMPLES:
     ./install.sh                                    # Install normally
     REINSTALL_TOOLS=true ./install.sh               # Force reinstall everything
+    USE_BEDROCK=true ./install.sh                   # Enable Bedrock model resolution
     ./install.sh -- --force                         # Pass --force to chezmoi init
     ./install.sh -- --one-shot                      # Use chezmoi one-shot mode
     DEBUG=1 ./install.sh                            # Install with debug output
@@ -701,12 +704,15 @@ main() {
 	# Execute the initialization command with proper argument handling
 	set -- --apply --source="$script_dir" --working-tree="$script_dir"
 
-	# Add promptString arguments if environment variables are set
+	# Add prompt arguments if environment variables are set
 	if [ -n "${GIT_USER_NAME:-}" ]; then
 		set -- "$@" --promptString "Git user.name=$GIT_USER_NAME"
 	fi
 	if [ -n "${GIT_USER_EMAIL:-}" ]; then
 		set -- "$@" --promptString "Git user.email=$GIT_USER_EMAIL"
+	fi
+	if [ -n "${USE_BEDROCK:-}" ]; then
+		set -- "$@" --promptBool "Use AWS Bedrock for Claude Code=$USE_BEDROCK"
 	fi
 
 	# Add any additional passthrough arguments
