@@ -2,7 +2,6 @@
 name: agents-local-md
 description: "Generate machine-specific AGENTS.local.md with host facts and system tool details"
 argument-hint: "[--force]"
-model: sonnet
 disable-model-invocation: true
 allowed-tools:
   - Read

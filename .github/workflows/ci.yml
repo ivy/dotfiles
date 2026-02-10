@@ -38,7 +38,7 @@ jobs:
         uses: jdx/mise-action@6d1e696aa24c1aa1bcc1adea0212707c71ab78a8 # v3.6.1
       - name: Install chezmoi
         run: |
-          GIT_USER_NAME="CI Test User" GIT_USER_EMAIL="ci@example.com" ./install.sh
+          GIT_USER_NAME="CI Test User" GIT_USER_EMAIL="ci@example.com" USE_BEDROCK=false ./install.sh
       - name: Install test dependencies
         run: |
           ./bin/setup

@@ -95,6 +95,15 @@ Override from `inherit` when:
 
 Most subagents should use `inherit` or `haiku`. Explicit opus is rare.
 
+## Bedrock Portability
+
+Global subagents use the `bedrock-model` chezmoi template partial so they work on both direct API and AWS Bedrock:
+
+**Global subagent** (`.md.tmpl`): `{{- template "bedrock-model" (dict "tier" "opus" "root" .) }}`
+**Local subagent** (plain `.md`): omit `model:` to inherit session default
+
+The template reads `[data.claude] use_bedrock` from chezmoi config (set during `chezmoi init` or via `USE_BEDROCK` env var). When false, it emits friendly names (`model: opus`). When true, it calls `bin/resolve-bedrock-models` to query AWS Bedrock for the latest cross-region inference profile IDs (`model: us.anthropic.claude-opus-4-6-v1`), avoiding the billing header leak.
+
 ## Cost Impact
 
 Subagents may run for many turns accumulating context. A subagent at opus that runs 50 turns costs significantly more than one at haiku.
