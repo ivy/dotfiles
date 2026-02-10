@@ -10,7 +10,7 @@
 
 [tools]
 # Runtimes (install first - required by pipx/npm backends)
-node = "24.13.0"
+node = "24.13.1"
 python = "3.14.3"
 rust = "1.93.0"
 pkl = "0.30.2"
@@ -21,7 +21,7 @@ pkl = "0.30.2"
 "aqua:technicalpickles/envsense" = "0.6.0"
 
 # CLI tools (cross-platform via aqua - moved from Homebrew)
-"aqua:atuinsh/atuin" = "18.11.0"
+"aqua:atuinsh/atuin" = "18.12.0"
 "aqua:sharkdp/bat" = "0.26.1"
 "aqua:muesli/duf" = "0.9.1"
 "aqua:bootandy/dust" = "1.2.4"
