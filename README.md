@@ -25,7 +25,13 @@ For the thinking behind this setup, see [docs/vision.md](docs/vision.md) and [do
 ## Installation
 
 ```bash
-git clone https://github.com/ivy/dotfiles.git && cd dotfiles && ./install.sh
+# Clone to the expected path
+mkdir -p ~/src/github.com/ivy
+git clone https://github.com/ivy/dotfiles.git ~/src/github.com/ivy/dotfiles
+cd ~/src/github.com/ivy/dotfiles
+
+# Interactive install — prompts for git identity and AWS Bedrock preference
+./install.sh
 ```
 
 Interactive install prompts for git identity and AWS Bedrock preference. For headless/CI use:
