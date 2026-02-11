@@ -62,10 +62,18 @@ temp_dir=""
 
 # Set up cleanup trap
 cleanup() {
+	exit_code=$?
+
 	# Clean up temporary directory
 	if [ -n "$temp_dir" ] && [ -d "$temp_dir" ]; then
 		log_debug "Cleaning up temporary directory: $temp_dir"
 		rm -rf "$temp_dir"
+	fi
+
+	# On failure, point the user to the install log
+	if [ "$exit_code" -ne 0 ] && [ -n "${_DOTFILES_LOG:-}" ]; then
+		printf "\033[31m[ERROR]\033[0m Installation failed (exit code %d)\n" "$exit_code" >&2
+		printf "\033[31m[ERROR]\033[0m Full log: %s\n" "$_DOTFILES_LOG" >&2
 	fi
 }
 trap cleanup EXIT INT TERM
