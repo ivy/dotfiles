@@ -280,6 +280,61 @@ run_with_sudo() {
 }
 
 # =============================================================================
+# HOMEBREW INSTALLATION
+# =============================================================================
+
+# Function to install Homebrew (macOS only — primary source for cosign, mise, chezmoi)
+install_homebrew() {
+	if [ "$SKIP_PACKAGE_MANAGER" = "true" ]; then
+		log_debug "Package manager installation skipped"
+		return 1
+	fi
+
+	# Only install Homebrew on macOS
+	case "$(uname -s)" in
+	Darwin*) ;;
+	*)
+		log_debug "Homebrew installation skipped (not macOS)"
+		return 1
+		;;
+	esac
+
+	# Check if Homebrew is already available
+	if command -v brew >/dev/null 2>&1; then
+		log_info "Homebrew is already installed: $(command -v brew)"
+		return 0
+	fi
+
+	log_info "Installing Homebrew..."
+
+	# Use non-interactive mode when there's no TTY (CI, piped input, etc.)
+	brew_env=""
+	if [ ! -t 0 ]; then
+		brew_env="NONINTERACTIVE=1"
+	fi
+
+	if ! env $brew_env /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; then
+		log_info "Homebrew installation failed, will fall back to binary downloads"
+		return 1
+	fi
+
+	# Add Homebrew to PATH for the rest of this script
+	if [ -x /opt/homebrew/bin/brew ]; then
+		eval "$(/opt/homebrew/bin/brew shellenv)"
+	elif [ -x /usr/local/bin/brew ]; then
+		eval "$(/usr/local/bin/brew shellenv)"
+	fi
+
+	if command -v brew >/dev/null 2>&1; then
+		log_info "Homebrew installed successfully"
+		return 0
+	fi
+
+	log_info "Homebrew installed but not found in PATH"
+	return 1
+}
+
+# =============================================================================
 # COSIGN INSTALLATION
 # =============================================================================
 
@@ -683,6 +738,11 @@ main() {
 
 	# Set up environment and validate requirements
 	setup_environment
+
+	# Install Homebrew on macOS (primary source for cosign, mise, chezmoi)
+	if ! install_homebrew; then
+		log_info "Homebrew not available, tools will be downloaded to $BIN_DIR"
+	fi
 
 	# Install Mise (optional, continue on failure)
 	if ! install_mise; then
