@@ -22,13 +22,5 @@ cask {{ . | quote }}
 {{ end -}}
 EOF
 
-echo "Installing Mac App Store apps..."
-
-{{ if .packages.darwin.mas -}}
-{{ range .packages.darwin.mas -}}
-mas install {{ . }}
-{{ end -}}
-{{ end -}}
-
 echo "Package installation complete"
 {{ end -}}

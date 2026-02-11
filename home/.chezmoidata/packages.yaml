@@ -13,7 +13,6 @@ packages:
       - awscli
       - coreutils
       - curl
-      - mas
       - mise
       - neovim
       - pkl-lsp
@@ -86,14 +85,6 @@ packages:
 
       # Terminal
       - ghostty
-    mas:
-      # Productivity
-      - 1532419400 # MeetingBar
-      - 1592917505 # Noir
-
-      # Utilities
-      - 1365531024 # 1Blocker
-      - 641027709  # Color Picker
 
   linux:
     dnf:
