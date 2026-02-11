@@ -714,6 +714,20 @@ add_to_path() {
 
 # Main execution
 main() {
+	# Re-exec under script(1) to capture a full install log.
+	# The env var guard prevents infinite recursion — the second invocation
+	# sees _DOTFILES_LOG already set and skips straight to the real work.
+	if [ -z "${_DOTFILES_LOG:-}" ]; then
+		_DOTFILES_LOG="/tmp/dotfiles-install-$(date +%Y%m%d-%H%M%S).log"
+		export _DOTFILES_LOG
+		case "$(uname -s)" in
+		Darwin*) exec script -q "$_DOTFILES_LOG" "$0" "$@" ;;
+		*) exec script -qc "$0 $*" "$_DOTFILES_LOG" ;;
+		esac
+		# exec failed (script(1) not available) — continue without logging
+		unset _DOTFILES_LOG
+	fi
+
 	# Parse command line arguments first
 	parse_arguments "$@"
 
@@ -734,6 +748,10 @@ main() {
 		log_info "Starting Chezmoi dotfiles manager installation (force mode)..."
 	else
 		log_info "Starting Chezmoi dotfiles manager installation..."
+	fi
+
+	if [ -n "${_DOTFILES_LOG:-}" ]; then
+		log_info "Install log: $_DOTFILES_LOG"
 	fi
 
 	# Set up environment and validate requirements
