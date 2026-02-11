@@ -790,6 +790,11 @@ main() {
 	# Execute the initialization command with proper argument handling
 	set -- --apply --source="$script_dir" --working-tree="$script_dir"
 
+	# Force chezmoi to re-run run_once_ scripts when reinstalling
+	if [ "$REINSTALL_TOOLS" = "true" ]; then
+		set -- "$@" --force
+	fi
+
 	# Add prompt arguments if environment variables are set
 	if [ -n "${GIT_USER_NAME:-}" ]; then
 		set -- "$@" --promptString "Git user.name=$GIT_USER_NAME"
