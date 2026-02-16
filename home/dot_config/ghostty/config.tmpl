@@ -1,5 +1,4 @@
-# Ghostty configuration (Linux)
-#
+# Ghostty configuration
 # Font Configuration
 font-family = FiraCode Nerd Font Mono
 font-size = 14
@@ -9,11 +8,20 @@ font-feature = +calt,+liga,+dlig
 shell-integration = zsh
 shell-integration-features = cursor,sudo,title
 
+{{ if eq .chezmoi.os "darwin" -}}
+# Keybindings (macOS)
+keybind = global:cmd+grave_accent=toggle_quick_terminal
+keybind = cmd+d=new_split:right
+keybind = cmd+shift+d=new_split:down
+keybind = cmd+t=new_tab
+keybind = cmd+w=close_tab
+{{ else -}}
 # Keybindings (Linux)
 keybind = ctrl+shift+d=new_split:right
 keybind = ctrl+shift+e=new_split:down
 keybind = ctrl+shift+t=new_tab
 keybind = ctrl+shift+w=close_tab
+{{ end -}}
 
 # Theme
-theme = light:catppuccin-latte,dark:catppuccin-mocha
+theme = light:catppuccin-latte.conf,dark:catppuccin-mocha.conf

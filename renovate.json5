@@ -126,6 +126,18 @@
       ],
       "datasourceTemplate": "npm"
     },
+    // Chezmoi external dependencies - catppuccin/ghostty theme tarball pin
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/^home/\\.chezmoiexternal\\.toml\\.tmpl$/"],
+      "matchStrings": [
+        "catppuccin/ghostty/archive/(?<currentDigest>[a-f0-9]{7,40})\\.tar\\.gz"
+      ],
+      "datasourceTemplate": "git-refs",
+      "currentValueTemplate": "main",
+      "depNameTemplate": "catppuccin/ghostty",
+      "packageNameTemplate": "https://github.com/catppuccin/ghostty"
+    },
     // Chezmoi external dependencies - ohmyzsh tarball pin
     {
       "customType": "regex",

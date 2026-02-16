@@ -30,6 +30,14 @@
     refreshPeriod = "168h"  # Weekly updates for stability
 {{ end }}
 
+# Catppuccin Ghostty themes - custom palette variants
+[".config/ghostty/themes"]
+    type = "archive"
+    url = "https://github.com/catppuccin/ghostty/archive/5a58926563ddacbde4a12b4a347464c2c6945393.tar.gz"
+    stripComponents = 2
+    include = ["*/themes/**"]
+    refreshPeriod = "168h"
+
 # Tmux configuration external
 # Clone gpakosz/.tmux configuration repository
 [".tmux"]
