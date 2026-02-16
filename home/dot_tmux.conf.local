@@ -2,6 +2,11 @@
 # See: https://github.com/gpakosz/.tmux/issues/776
 set -s extended-keys off
 
+# Use C-a as sole prefix (unbind C-b for nested sessions)
+set -g prefix C-a
+unbind C-b
+bind C-a send-prefix
+
 # Vi mode navigation
 setw -g mode-keys vi
 
