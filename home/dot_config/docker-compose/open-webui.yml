@@ -20,7 +20,7 @@ services:
     restart: unless-stopped
 
   open-webui:
-    image: ghcr.io/open-webui/open-webui:main@sha256:ffb0275d5c626c8b0713d1c0f002f359ea36c80b5cd584370b116b0563ed849e
+    image: ghcr.io/open-webui/open-webui:main@sha256:2b9d2bec40ff30eb71216065f5244c2861d30b75b4e49c40e39973ee64218cde
     container_name: open-webui-app
     depends_on:
       - tailscale
