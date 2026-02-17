@@ -43,6 +43,7 @@ Conventional commits: !`git log --oneline -10 2>/dev/null || echo "no git histor
 - **Always call `EnterPlanMode` before making any changes.** This skill is plan-first — detection and analysis happen before any writes.
 - Never use `git -C <path>` — it rewrites the command prefix, breaking `allowed-tools` pattern matching and forcing unnecessary user approval.
 - If hk is not installed (pre-computed context shows "not installed"), the plan MUST include `mise use hk` as the first install step.
+- **Always use `--mise` flags**: `hk init --mise` (scaffolds mise.toml with hk task) and `hk install --mise` (hooks execute via `mise x` so tools are in PATH without shell activation).
 
 ### allowed-tools rationale
 
@@ -194,12 +195,17 @@ Run these steps in order:
    After each install, verify it landed in the project `.mise.toml` (not global config).
    Use `mise x -- TOOL --version` if the tool isn't in PATH yet (avoids shell reload).
 
+   If the project has no `.mise.toml` yet, run `mise x -- hk init --mise` after installing hk
+   to scaffold a mise.toml with an hk pre-commit task definition.
+
 2. **Write config files** — `hk.pkl`, `.markdownlint.json`, `.stylua.toml`, etc.
 
-3. **Install hooks**:
+3. **Install hooks** (with mise integration):
    ```bash
-   mise x -- hk install
+   mise x -- hk install --mise
    ```
+   The `--mise` flag makes hooks execute via `mise x`, so all mise-managed tools are
+   automatically in PATH — other developers don't need mise activated in their shell.
 
 4. **Validate config**:
    ```bash
