@@ -12,7 +12,7 @@
 # Runtimes (install first - required by pipx/npm backends)
 node = "24.13.1"
 python = "3.14.3"
-rust = "1.93.0"
+rust = "1.93.1"
 pkl = "0.30.2"
 
 # Aqua registry (preferred for CLI tools)
@@ -32,10 +32,10 @@ eza = "0.23.4"
 "aqua:jesseduffield/lazygit" = "0.59.0"
 "aqua:BurntSushi/ripgrep" = "15.1.0"
 "aqua:starship/starship" = "1.24.2"
-"aqua:mikefarah/yq" = "4.52.2"
+"aqua:mikefarah/yq" = "4.52.4"
 
 # GitHub releases (tools not in aqua)
-"github:sst/opencode" = "1.1.14"
+"github:sst/opencode" = "1.2.6"
 
 # pipx itself (must be installed before any pipx: packages below)
 pipx = "1.8.0"
@@ -48,5 +48,5 @@ pipx = "1.8.0"
 "cargo:https://github.com/davidbeesley/claude-chill" = { version = "rev:b821abdd2aaa4bdb86fd9dce83c92dca980d70ad" }
 
 # Node tools via npm
-"npm:@openai/codex" = "0.99.0"
+"npm:@openai/codex" = "0.104.0"
 "npm:git-mob" = "4.0.1"
