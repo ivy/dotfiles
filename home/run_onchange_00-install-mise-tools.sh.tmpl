@@ -15,6 +15,11 @@ fi
 echo "Installing global mise tools..."
 
 # Install all tools defined in global config
+# Authenticate with GitHub via gh CLI to avoid API rate limits
+{{- if lookPath "gh" }}
+GITHUB_TOKEN=$(gh auth token) mise install --yes
+{{- else }}
 mise install --yes
+{{- end }}
 
 echo "Global mise tools installation complete"
