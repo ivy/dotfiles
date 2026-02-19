@@ -7,6 +7,7 @@ allowed-tools:
   - Bash(gh pr list:*)
   - Bash(gh pr checks:*)
   - Bash(gh pr diff:*)
+  - Bash(gh run view:*)
   - Bash(git fetch:*)
   - Bash(git status:*)
   - Bash(git stash:*)
