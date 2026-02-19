@@ -1,0 +1,145 @@
+#!/usr/bin/env bash
+#
+# sync-claude-settings -- Upsert Bedrock model env vars into Claude Code settings
+#
+# Reads chezmoi data to detect Bedrock mode, resolves the latest model IDs
+# via resolve-bedrock-models, and merges them into ~/.claude/settings.json
+# without disturbing keys that Claude Code manages itself.
+#
+# Usage:
+#   bin/sync-claude-settings          # auto-detect from chezmoi data
+#
+# Requires: chezmoi, jq
+# When use_bedrock=true also requires: aws CLI (via resolve-bedrock-models)
+#
+
+[[ -n "${DEBUG:-}" ]] && set -o xtrace
+set -o errexit
+set -o errtrace
+set -o nounset
+set -o pipefail
+
+SETTINGS="${HOME}/.claude/settings.json"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+require_command() {
+    local cmd="$1"
+    local hint="${2:-}"
+
+    if ! command -v "${cmd}" >/dev/null 2>&1; then
+        printf 'error: required command "%s" not found in PATH\n' "${cmd}" >&2
+        [[ -n "${hint}" ]] && printf '  hint: %s\n' "${hint}" >&2
+        exit 1
+    fi
+}
+
+# Ensure settings file exists with at least an empty object
+ensure_settings() {
+    mkdir -p "$(dirname "${SETTINGS}")"
+    if [[ ! -f "${SETTINGS}" ]]; then
+        printf '{}\n' > "${SETTINGS}"
+    fi
+}
+
+# Back up settings before any mutation
+backup_settings() {
+    cp "${SETTINGS}" "${SETTINGS}.bak"
+    printf 'backed up %s → %s.bak\n' "${SETTINGS}" "${SETTINGS}"
+}
+
+# Remove Bedrock model env vars (use_bedrock=false path)
+cleanup_model_env_vars() {
+    if jq -e '.env.ANTHROPIC_MODEL // .env.ANTHROPIC_DEFAULT_HAIKU_MODEL // .env.ANTHROPIC_DEFAULT_OPUS_MODEL // .env.ANTHROPIC_DEFAULT_SONNET_MODEL' "${SETTINGS}" >/dev/null 2>&1; then
+        printf 'removing Bedrock model env vars from %s\n' "${SETTINGS}"
+        jq 'del(
+            .env.ANTHROPIC_DEFAULT_HAIKU_MODEL,
+            .env.ANTHROPIC_DEFAULT_OPUS_MODEL,
+            .env.ANTHROPIC_DEFAULT_SONNET_MODEL,
+            .env.ANTHROPIC_MODEL
+        )' "${SETTINGS}" > "${SETTINGS}.tmp" && mv "${SETTINGS}.tmp" "${SETTINGS}"
+    else
+        printf 'no Bedrock model env vars to remove\n'
+    fi
+}
+
+# Merge Bedrock model env vars into settings (use_bedrock=true path)
+merge_model_env_vars() {
+    local models haiku sonnet opus
+
+    printf 'resolving Bedrock model IDs...\n'
+    models=$("${SCRIPT_DIR}/resolve-bedrock-models")
+
+    haiku=$(printf '%s' "${models}" | jq -r '.haiku')
+    sonnet=$(printf '%s' "${models}" | jq -r '.sonnet')
+    opus=$(printf '%s' "${models}" | jq -r '.opus')
+
+    printf 'haiku  = %s\n' "${haiku}"
+    printf 'sonnet = %s\n' "${sonnet}"
+    printf 'opus   = %s\n' "${opus}"
+
+    jq --arg haiku "${haiku}" \
+       --arg sonnet "${sonnet}" \
+       --arg opus "${opus}" \
+       '.env = ((.env // {}) + {
+          "ANTHROPIC_DEFAULT_HAIKU_MODEL": $haiku,
+          "ANTHROPIC_DEFAULT_OPUS_MODEL": $opus,
+          "ANTHROPIC_DEFAULT_SONNET_MODEL": $sonnet,
+          "ANTHROPIC_MODEL": $opus
+        })
+        | .model = $opus' \
+       "${SETTINGS}" > "${SETTINGS}.tmp" && mv "${SETTINGS}.tmp" "${SETTINGS}"
+
+    printf 'merged model env vars into %s\n' "${SETTINGS}"
+}
+
+# Validate the resulting settings.json: valid JSON with expected keys intact
+validate_settings() {
+    printf 'validating %s...\n' "${SETTINGS}"
+
+    if ! jq empty "${SETTINGS}" 2>/dev/null; then
+        printf 'error: %s is not valid JSON — restoring backup\n' "${SETTINGS}" >&2
+        cp "${SETTINGS}.bak" "${SETTINGS}"
+        printf 'restored %s from backup\n' "${SETTINGS}" >&2
+        exit 1
+    fi
+
+    # Verify we didn't nuke keys that Claude Code owns
+    local missing
+    missing=$(jq -r '[
+        (if .env              then null else "env" end),
+        (if .model            then null else "model" end)
+    ] | map(select(. != null)) | join(", ")' "${SETTINGS}")
+
+    if [[ -n "${missing}" ]]; then
+        printf 'error: missing expected keys after merge: %s — restoring backup\n' "${missing}" >&2
+        cp "${SETTINGS}.bak" "${SETTINGS}"
+        printf 'restored %s from backup\n' "${SETTINGS}" >&2
+        exit 1
+    fi
+
+    printf 'validation passed\n'
+}
+
+main() {
+    require_command chezmoi
+    require_command jq "install jq: https://jqlang.github.io/jq/"
+
+    ensure_settings
+    backup_settings
+
+    local use_bedrock
+    use_bedrock=$(chezmoi data --format json | jq -r '.claude.use_bedrock')
+
+    if [[ "${use_bedrock}" != "true" ]]; then
+        printf 'use_bedrock=%s — cleaning up model env vars\n' "${use_bedrock}"
+        cleanup_model_env_vars
+        return 0
+    fi
+
+    printf 'use_bedrock=true — resolving and merging Bedrock models\n'
+    merge_model_env_vars
+
+    validate_settings
+}
+
+main "$@"

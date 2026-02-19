@@ -1,0 +1,9 @@
+#!/bin/bash
+# Sync Bedrock model env vars into ~/.claude/settings.json
+# use_bedrock: {{ dig "claude" "use_bedrock" false . }}
+
+[[ -n "${DEBUG:-}" ]] && set -o xtrace
+set -o errexit
+set -o nounset
+
+"{{ .chezmoi.workingTree }}/bin/sync-claude-settings"
