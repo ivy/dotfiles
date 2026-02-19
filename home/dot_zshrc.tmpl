@@ -94,6 +94,11 @@ _zsh_autosuggest_should_fetch() {
 # Enable Vi mode for command line editing
 bindkey -v
 
+# Ctrl+G opens command line in $EDITOR
+autoload -Uz edit-command-line
+zle -N edit-command-line
+bindkey '^G' edit-command-line
+
 # Tool-replacement aliases (change output format — breaks agent expectations)
 {{- range .aliases.replacements }}
 {{- if lookPath .tool }}
