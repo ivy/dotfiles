@@ -27,7 +27,7 @@ pkl = "0.30.2"
 "aqua:bootandy/dust" = "1.2.4"
 eza = "0.23.4"
 "aqua:sharkdp/fd" = "10.3.0"
-"aqua:junegunn/fzf" = "0.67.0"
+"aqua:junegunn/fzf" = "0.68.0"
 "aqua:charmbracelet/glow" = "2.1.1"
 "aqua:jesseduffield/lazygit" = "0.59.0"
 "aqua:BurntSushi/ripgrep" = "15.1.0"
@@ -35,7 +35,7 @@ eza = "0.23.4"
 "aqua:mikefarah/yq" = "4.52.4"
 
 # GitHub releases (tools not in aqua)
-"github:sst/opencode" = "1.2.6"
+"github:sst/opencode" = "1.2.10"
 
 # pipx itself (must be installed before any pipx: packages below)
 pipx = "1.8.0"
