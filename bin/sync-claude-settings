@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 #
-# sync-claude-settings -- Upsert Bedrock model env vars into Claude Code settings
+# sync-claude-settings -- Sync managed settings into Claude Code settings.json
+#
+# Always sets: statusLine (powerline prompt)
+# Conditionally sets: Bedrock model env vars (when use_bedrock=true)
 #
 # Reads chezmoi data to detect Bedrock mode, resolves the latest model IDs
 # via resolve-bedrock-models, and merges them into ~/.claude/settings.json
@@ -45,6 +48,13 @@ ensure_settings() {
 backup_settings() {
     cp "${SETTINGS}" "${SETTINGS}.bak"
     printf 'backed up %s → %s.bak\n' "${SETTINGS}" "${SETTINGS}"
+}
+
+# Set the statusLine command (uses mise-installed claude-powerline)
+set_status_line() {
+    printf 'setting statusLine in %s\n' "${SETTINGS}"
+    jq '.statusLine = {"type": "command", "command": "claude-powerline --style=powerline"}' \
+        "${SETTINGS}" > "${SETTINGS}.tmp" && mv "${SETTINGS}.tmp" "${SETTINGS}"
 }
 
 # Remove Bedrock model env vars (use_bedrock=false path)
@@ -126,6 +136,7 @@ main() {
 
     ensure_settings
     backup_settings
+    set_status_line
 
     local use_bedrock
     use_bedrock=$(chezmoi data --format json | jq -r '.claude.use_bedrock')
