@@ -15,7 +15,6 @@ lockfile = true
 # Runtimes (install first - required by pipx/npm backends)
 node = "latest"
 python = "latest"
-rust = "latest"
 pkl = "latest"
 
 # Aqua registry (preferred for CLI tools)
@@ -46,9 +45,6 @@ pipx = "latest"
 # Python tools via pipx
 "pipx:claude-conversation-extractor" = "latest"
 "pipx:gitingest" = "latest"
-
-# Cargo tools (built from source)
-"cargo:https://github.com/davidbeesley/claude-chill" = { version = "rev:b821abdd2aaa4bdb86fd9dce83c92dca980d70ad" }
 
 # Node tools via npm
 "npm:@openai/codex" = "latest"
