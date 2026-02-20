@@ -1,0 +1,13 @@
+#!/bin/sh
+# Detect macOS appearance and exec claude-powerline with the matching Catppuccin config.
+# Merges shared.json (display, segments, limits) with the theme file (colors only).
+dir="$HOME/.claude/powerline"
+style=$(defaults read -g AppleInterfaceStyle 2>/dev/null | tr '[:upper:]' '[:lower:]')
+case "$style" in
+  dark) theme="catppuccin-mocha.json" ;;
+  *)    theme="catppuccin-latte.json" ;;
+esac
+merged=$(jq -s '.[0] * .[1]' "$dir/shared.json" "$dir/$theme")
+tmp="${TMPDIR:-/tmp}/claude-powerline-config.json"
+printf '%s\n' "$merged" > "$tmp"
+CLAUDE_POWERLINE_CONFIG="$tmp" exec claude-powerline "$@"

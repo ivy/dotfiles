@@ -53,7 +53,7 @@ backup_settings() {
 # Set the statusLine command (uses mise-installed claude-powerline)
 set_status_line() {
     printf 'setting statusLine in %s\n' "${SETTINGS}"
-    jq '.statusLine = {"type": "command", "command": "claude-powerline --style=powerline"}' \
+    jq '.statusLine = {"type": "command", "command": "$HOME/.local/libexec/claude-powerline-theme"}' \
         "${SETTINGS}" > "${SETTINGS}.tmp" && mv "${SETTINGS}.tmp" "${SETTINGS}"
 }
 

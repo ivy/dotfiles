@@ -1,0 +1,38 @@
+{
+  "theme": "custom",
+  "display": {
+    "padding": 1,
+    "style": "capsule",
+    "charset": "unicode",
+    "colorCompatibility": "auto",
+    "autoWrap": true,
+    "budget": {
+      "today": { "amount": 0 }
+    },
+    "lines": [
+      {
+        "segments": {
+          "directory": {
+            "enabled": true,
+            "style": "basename"
+          },
+          "model": {
+            "enabled": true
+          },
+          "context": {
+            "enabled": true,
+            "showPercentageOnly": true,
+            "displayStyle": "text"
+          },
+          "today": {
+            "enabled": true,
+            "type": "cost"
+          }
+        }
+      }
+    ]
+  },
+  "modelContextLimits": {
+    "sonnet": 200000
+  }
+}
