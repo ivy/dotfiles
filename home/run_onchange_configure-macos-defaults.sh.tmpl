@@ -28,4 +28,15 @@ else
     /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
     echo "Spotlight Cmd+Space disabled"
 fi
+
+# Set Raycast hotkey to Cmd+Space
+# Best-effort: may not apply if Raycast is running (cached prefs overwrite on quit)
+current="$(defaults read com.raycast.macos raycastGlobalHotkey 2>/dev/null || true)"
+if [ "$current" = "Command-49" ]; then
+    echo "Raycast Cmd+Space already set, skipping"
+else
+    echo "Setting Raycast hotkey to Cmd+Space..."
+    defaults write com.raycast.macos raycastGlobalHotkey "Command-49"
+    echo "Raycast hotkey set"
+fi
 {{ end -}}
