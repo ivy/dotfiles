@@ -75,7 +75,7 @@
     // Handle aqua-prefixed tools in mise TOML files
     {
       "customType": "regex",
-      "managerFilePatterns": ["/\\.mise\\.toml$/", "/^home/dot_config/mise/config\\.toml$/"],
+      "managerFilePatterns": ["/^mise\\.toml$/", "/^home/dot_config/mise/config\\.toml$/"],
       "matchStrings": [
         "\"aqua:(?<depName>[^/]+/[^\"]+)\"\\s*=\\s*\"(?<currentValue>v?[^\"]+)\""
       ],
@@ -84,7 +84,7 @@
     // Handle ubi-prefixed tools in mise TOML files
     {
       "customType": "regex",
-      "managerFilePatterns": ["/\\.mise\\.toml$/", "/^home/dot_config/mise/config\\.toml$/"],
+      "managerFilePatterns": ["/^mise\\.toml$/", "/^home/dot_config/mise/config\\.toml$/"],
       "matchStrings": [
         "\"ubi:(?<depName>[^/]+/[^\"]+)\"\\s*=\\s*\"(?<currentValue>v?[^\"]+)\""
       ],
@@ -93,7 +93,7 @@
     // Handle npm-prefixed tools in mise TOML files
     {
       "customType": "regex",
-      "managerFilePatterns": ["/\\.mise\\.toml$/", "/^home/dot_config/mise/config\\.toml$/"],
+      "managerFilePatterns": ["/^mise\\.toml$/", "/^home/dot_config/mise/config\\.toml$/"],
       "matchStrings": [
         "\"npm:(?<depName>[^\"]+)\"\\s*=\\s*\"(?<currentValue>[^\"]+)\""
       ],
@@ -102,7 +102,7 @@
     // Handle pipx-prefixed tools in mise TOML files
     {
       "customType": "regex",
-      "managerFilePatterns": ["/\\.mise\\.toml$/", "/^home/dot_config/mise/config\\.toml$/"],
+      "managerFilePatterns": ["/^mise\\.toml$/", "/^home/dot_config/mise/config\\.toml$/"],
       "matchStrings": [
         "\"pipx:(?<depName>[^\"]+)\"\\s*=\\s*\"(?<currentValue>[^\"]+)\""
       ],
