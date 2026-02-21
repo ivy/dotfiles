@@ -22,4 +22,8 @@ GITHUB_TOKEN=$(gh auth token) mise install --yes
 mise install --yes
 {{- end }}
 
+echo "Pruning unused mise tool versions and stale caches..."
+mise prune --yes
+mise cache prune
+
 echo "Global mise tools installation complete"
