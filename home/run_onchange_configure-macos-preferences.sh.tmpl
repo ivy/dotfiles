@@ -91,4 +91,14 @@ else
     killall Dock
     echo "Dock cleared"
 fi
+
+# Show Bluetooth in menu bar
+if [ "$(defaults read com.apple.controlcenter "NSStatusItem VisibleCC Bluetooth" 2>/dev/null)" = "1" ]; then
+    echo "Bluetooth menu bar icon already enabled, skipping"
+else
+    echo "Showing Bluetooth in menu bar..."
+    defaults write com.apple.controlcenter "NSStatusItem VisibleCC Bluetooth" -bool true
+    killall ControlCenter 2>/dev/null || true
+    echo "Bluetooth menu bar icon enabled"
+fi
 {{ end -}}
