@@ -7,7 +7,7 @@ set -o nounset
 
 # Disable Spotlight's Cmd+Space (HotKey 64)
 # Parameters: ASCII 32 (space), virtual keycode 49 (space), modifiers 1048576 (Cmd)
-if defaults read com.apple.symbolichotkeys AppleSymbolicHotKeys 2>/dev/null | grep -A 1 '"64"' | grep -q "enabled = 0"; then
+if [ "$(plutil -extract AppleSymbolicHotKeys.64.enabled raw -o - ~/Library/Preferences/com.apple.symbolichotkeys.plist 2>/dev/null)" = "false" ]; then
     echo "Spotlight Cmd+Space already disabled, skipping"
 else
     echo "Disabling Spotlight Cmd+Space..."
@@ -38,5 +38,16 @@ else
     echo "Setting Raycast hotkey to Cmd+Space..."
     defaults write com.raycast.macos raycastGlobalHotkey "Command-49"
     echo "Raycast hotkey set"
+fi
+
+# Set wallpaper to Monterey Graphic
+wallpaper="/System/Library/Desktop Pictures/Monterey Graphic.madesktop"
+current_wallpaper="$(osascript -e 'tell application "System Events" to get picture of every desktop' 2>/dev/null | head -1 || true)"
+if [ "$current_wallpaper" = "$wallpaper" ]; then
+    echo "Wallpaper already set to Monterey Graphic, skipping"
+else
+    echo "Setting wallpaper to Monterey Graphic..."
+    osascript -e "tell application \"System Events\" to set picture of every desktop to \"$wallpaper\""
+    echo "Wallpaper set"
 fi
 {{ end -}}
