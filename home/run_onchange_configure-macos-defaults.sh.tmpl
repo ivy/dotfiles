@@ -1,0 +1,31 @@
+{{ if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+
+[ -n "${DEBUG:-}" ] && set -o xtrace
+set -o errexit
+set -o nounset
+
+# Disable Spotlight's Cmd+Space (HotKey 64)
+# Parameters: ASCII 32 (space), virtual keycode 49 (space), modifiers 1048576 (Cmd)
+if defaults read com.apple.symbolichotkeys AppleSymbolicHotKeys 2>/dev/null | grep -A 1 '"64"' | grep -q "enabled = 0"; then
+    echo "Spotlight Cmd+Space already disabled, skipping"
+else
+    echo "Disabling Spotlight Cmd+Space..."
+    defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 \
+        '<dict>
+            <key>enabled</key><false/>
+            <key>value</key>
+            <dict>
+                <key>parameters</key>
+                <array>
+                    <integer>32</integer>
+                    <integer>49</integer>
+                    <integer>1048576</integer>
+                </array>
+                <key>type</key><string>standard</string>
+            </dict>
+        </dict>'
+    /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
+    echo "Spotlight Cmd+Space disabled"
+fi
+{{ end -}}
