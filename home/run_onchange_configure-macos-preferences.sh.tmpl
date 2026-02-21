@@ -61,4 +61,24 @@ else
     defaults write NSGlobalDomain InitialKeyRepeat -int 15
     echo "Key repeat set (logout required to take effect)"
 fi
+
+# Enable full keyboard navigation (tab through all controls)
+if [ "$(defaults read NSGlobalDomain AppleKeyboardUIMode 2>/dev/null)" = "2" ]; then
+    echo "Keyboard navigation already enabled, skipping"
+else
+    echo "Enabling keyboard navigation..."
+    defaults write NSGlobalDomain AppleKeyboardUIMode -int 2
+    echo "Keyboard navigation enabled"
+fi
+
+# Enable Ctrl+scroll to zoom
+# com.apple.universalaccess requires sudo; com.apple.Accessibility is user-writable
+if [ "$(defaults read com.apple.Accessibility closeViewScrollWheelToggle 2>/dev/null)" = "1" ]; then
+    echo "Scroll zoom already enabled, skipping"
+else
+    echo "Enabling Ctrl+scroll zoom..."
+    defaults write com.apple.Accessibility closeViewScrollWheelToggle -bool true
+    defaults write com.apple.Accessibility HIDScrollZoomModifierMask -int 262144
+    echo "Scroll zoom enabled (logout required to take effect)"
+fi
 {{ end -}}
