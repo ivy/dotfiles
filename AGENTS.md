@@ -99,7 +99,7 @@ bats test/<file>.bats   # Run one test file
 | Core principles | [docs/core-principles.md](docs/core-principles.md) |
 | Vision | [docs/vision.md](docs/vision.md) |
 | Chezmoi operations | [docs/agents/chezmoi.md](docs/agents/chezmoi.md) |
-| Shell architecture ADR | [docs/adrs/0002-agent-optimized-shell-with-envsense.md](docs/adrs/0002-agent-optimized-shell-with-envsense.md) |
+| Shell architecture ADR | [docs/adrs/002-agent-optimized-shell-with-envsense.md](docs/adrs/002-agent-optimized-shell-with-envsense.md) |
 
 ## Where to Look First
 

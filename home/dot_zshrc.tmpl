@@ -7,7 +7,7 @@ eval "$(mise activate zsh)"
 
 # ============================================================================
 # Agent/CI detection via envsense
-# See: docs/adrs/0002-agent-optimized-shell-with-envsense.md
+# See: docs/adrs/002-agent-optimized-shell-with-envsense.md
 # ============================================================================
 _is_automated=0
 if command -v envsense >/dev/null && envsense check -q --any agent ci; then
