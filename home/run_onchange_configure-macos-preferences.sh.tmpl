@@ -81,4 +81,14 @@ else
     defaults write com.apple.Accessibility HIDScrollZoomModifierMask -int 262144
     echo "Scroll zoom enabled (logout required to take effect)"
 fi
+
+# Clear default Dock icons
+if [ "$(defaults read com.apple.dock persistent-apps 2>/dev/null | grep -c 'tile-data')" = "0" ]; then
+    echo "Dock already empty, skipping"
+else
+    echo "Clearing default Dock icons..."
+    defaults write com.apple.dock persistent-apps -array
+    killall Dock
+    echo "Dock cleared"
+fi
 {{ end -}}
