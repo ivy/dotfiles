@@ -60,13 +60,9 @@ backend = "aqua:jqlang/jq"
 "platforms.windows-x64" = { checksum = "sha256:7451fbbf37feffb9bf262bd97c54f0da558c63f0748e64152dd87b0a07b6d6ab", url = "https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-windows-amd64.exe"}
 
 [[tools."aqua:junegunn/fzf"]]
-version = "0.68.0"
+version = "0.67.0"
 backend = "aqua:junegunn/fzf"
-"platforms.linux-arm64" = { checksum = "sha256:dad9cc3b617305d504dbbf8812c4c9970a6dc7efdce9b5eacbd130d1f1dbc05d", url = "https://github.com/junegunn/fzf/releases/download/v0.68.0/fzf-0.68.0-linux_arm64.tar.gz"}
-"platforms.linux-x64" = { checksum = "sha256:545004a69eb65bb9adf32000971105ac21aea54bbecb618c55414d21b823fe95", url = "https://github.com/junegunn/fzf/releases/download/v0.68.0/fzf-0.68.0-linux_amd64.tar.gz"}
-"platforms.macos-arm64" = { checksum = "sha256:1817524989b3987ebc67d16acbc5526cb51dfbc52ca62babe37c96d9d09a227b", url = "https://github.com/junegunn/fzf/releases/download/v0.68.0/fzf-0.68.0-darwin_arm64.tar.gz"}
-"platforms.macos-x64" = { checksum = "sha256:da3aafc569bdd38c7cb30f992c54c4899c935d8b86b88c2a6831b0733b862caf", url = "https://github.com/junegunn/fzf/releases/download/v0.68.0/fzf-0.68.0-darwin_amd64.tar.gz"}
-"platforms.windows-x64" = { checksum = "sha256:4939ed89f3a75258ea47c55c34422b6b3f28e38b85dbd1e27dc4cf5839d5d310", url = "https://github.com/junegunn/fzf/releases/download/v0.68.0/fzf-0.68.0-windows_amd64.zip"}
+"platforms.macos-arm64" = { checksum = "sha256:b7f34c964d8e52c471c933cef8ec43dc71997c266cafafd1b013bed10fc229a1", url = "https://github.com/junegunn/fzf/releases/download/v0.67.0/fzf-0.67.0-darwin_arm64.tar.gz"}
 
 [[tools."aqua:mikefarah/yq"]]
 version = "4.52.4"
@@ -119,10 +115,6 @@ backend = "aqua:technicalpickles/envsense"
 "platforms.linux-x64" = { checksum = "sha256:4b07fd40bf245dd77529ce408d4f74a9d00146400a3a8c87eae0d65398e3d67d", url = "https://github.com/technicalpickles/envsense/releases/download/0.6.0/envsense-0.6.0-x86_64-unknown-linux-gnu"}
 "platforms.macos-arm64" = { checksum = "sha256:55395bc8fc2db5745b10f38f9ee0f2213fdaea57fdb012a4522f172ed5e9c0ca", url = "https://github.com/technicalpickles/envsense/releases/download/0.6.0/envsense-0.6.0-universal-apple-darwin"}
 "platforms.macos-x64" = { checksum = "sha256:55395bc8fc2db5745b10f38f9ee0f2213fdaea57fdb012a4522f172ed5e9c0ca", url = "https://github.com/technicalpickles/envsense/releases/download/0.6.0/envsense-0.6.0-universal-apple-darwin"}
-
-[[tools."cargo:https://github.com/davidbeesley/claude-chill"]]
-version = "ref:b821abdd2aaa4bdb86fd9dce83c92dca980d70ad"
-backend = "cargo:https://github.com/davidbeesley/claude-chill"
 
 [[tools."cargo:https://github.com/davidbeesley/claude-chill"]]
 version = "rev:b821abdd2aaa4bdb86fd9dce83c92dca980d70ad"
