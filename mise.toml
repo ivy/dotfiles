@@ -9,6 +9,7 @@
 hk = "latest"
 jq = "latest"
 "npm:markdownlint-cli" = "latest"
+pkl = "latest"
 shfmt = "latest"
 stylua = "latest"
 
