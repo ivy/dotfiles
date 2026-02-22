@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   tailscale:
-    image: tailscale/tailscale:v1.92.5@sha256:9ebf0615f6780a61523c7e8f6e857433c80e186d9dfebf022963e97692f579f3
+    image: tailscale/tailscale:v1.92.5@sha256:4a0aaacee6f28e724c1f80c986e5776c9c979d8f7e19274c2cae2d495cc8d625
     hostname: ${TS_HOSTNAME:-open-webui}
     environment:
       - TS_AUTHKEY=${TS_AUTHKEY}
