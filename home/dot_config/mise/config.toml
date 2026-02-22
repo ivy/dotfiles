@@ -8,46 +8,49 @@
 #   4. pipx: - Python CLI tools (requires python)
 #   5. npm: - Node CLI tools (requires node)
 
+[settings]
+lockfile = true
+
 [tools]
 # Runtimes (install first - required by pipx/npm backends)
-node = "24.13.1"
-python = "3.14.3"
-rust = "1.93.1"
-pkl = "0.30.2"
+node = "latest"
+python = "latest"
+rust = "latest"
+pkl = "latest"
 
 # Aqua registry (preferred for CLI tools)
-"aqua:dandavison/delta" = "0.18.2"
-"aqua:jqlang/jq" = "1.7.1"
-"aqua:technicalpickles/envsense" = "0.6.0"
+"aqua:dandavison/delta" = "latest"
+"aqua:jqlang/jq" = "latest"
+"aqua:technicalpickles/envsense" = "latest"
 
 # CLI tools (cross-platform via aqua - moved from Homebrew)
-"aqua:atuinsh/atuin" = "18.12.1"
-"aqua:sharkdp/bat" = "0.26.1"
-"aqua:muesli/duf" = "0.9.1"
-"aqua:bootandy/dust" = "1.2.4"
-eza = "0.23.4"
-"aqua:sharkdp/fd" = "10.3.0"
-"aqua:junegunn/fzf" = "0.68.0"
-"aqua:charmbracelet/glow" = "2.1.1"
-"aqua:jesseduffield/lazygit" = "0.59.0"
-"aqua:BurntSushi/ripgrep" = "15.1.0"
-"aqua:starship/starship" = "1.24.2"
-"aqua:mikefarah/yq" = "4.52.4"
+"aqua:atuinsh/atuin" = "latest"
+"aqua:sharkdp/bat" = "latest"
+"aqua:muesli/duf" = "latest"
+"aqua:bootandy/dust" = "latest"
+eza = "latest"
+"aqua:sharkdp/fd" = "latest"
+"aqua:junegunn/fzf" = "latest"
+"aqua:charmbracelet/glow" = "latest"
+"aqua:jesseduffield/lazygit" = "latest"
+"aqua:BurntSushi/ripgrep" = "latest"
+"aqua:starship/starship" = "latest"
+"aqua:mikefarah/yq" = "latest"
 
 # GitHub releases (tools not in aqua)
-"github:sst/opencode" = "1.2.10"
+"github:sst/opencode" = "latest"
 
 # pipx itself (must be installed before any pipx: packages below)
-pipx = "1.8.0"
+pipx = "latest"
 
 # Python tools via pipx
-"pipx:claude-conversation-extractor" = "1.1.2"
-"pipx:gitingest" = "0.3.1"
+"pipx:claude-conversation-extractor" = "latest"
+"pipx:gitingest" = "latest"
 
 # Cargo tools (built from source)
 "cargo:https://github.com/davidbeesley/claude-chill" = { version = "rev:b821abdd2aaa4bdb86fd9dce83c92dca980d70ad" }
 
 # Node tools via npm
-"npm:@openai/codex" = "0.104.0"
-"npm:@owloops/claude-powerline" = "1.17.2"
-"npm:git-mob" = "4.0.1"
+"npm:@openai/codex" = "latest"
+"npm:@owloops/claude-powerline" = "latest"
+"npm:git-mob" = "latest"

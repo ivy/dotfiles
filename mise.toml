@@ -2,12 +2,12 @@
 # Development tools for shell scripting and testing
 
 [tools]
-"aqua:bats-core/bats-core" = "v1.13.0"
-"aqua:koalaman/shellcheck" = "v0.11.0"
-"aqua:mikefarah/yq" = "v4.52.4"
-"aqua:suzuki-shunsuke/ghalint" = "v1.5.5"
-hk = "1.36.0"
-jq = "1.8.1"
-"npm:markdownlint-cli" = "0.47.0"
-shfmt = "v3.12.0"
-stylua = "2.3.1"
+"aqua:bats-core/bats-core" = "latest"
+"aqua:koalaman/shellcheck" = "latest"
+"aqua:mikefarah/yq" = "latest"
+"aqua:suzuki-shunsuke/ghalint" = "latest"
+hk = "latest"
+jq = "latest"
+"npm:markdownlint-cli" = "latest"
+shfmt = "latest"
+stylua = "latest"
