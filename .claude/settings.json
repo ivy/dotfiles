@@ -19,6 +19,17 @@
         ],
         "matcher": "Bash"
       }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/stop-lint-and-test.sh",
+            "timeout": 120
+          }
+        ]
+      }
     ]
   }
 }

@@ -11,3 +11,11 @@ jq = "latest"
 "npm:markdownlint-cli" = "latest"
 shfmt = "latest"
 stylua = "latest"
+
+[tasks.lint]
+description = "Lint and auto-fix"
+run = "hk fix"
+
+[tasks.test]
+description = "Run test suite"
+run = "bats test/"
