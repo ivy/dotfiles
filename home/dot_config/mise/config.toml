@@ -25,7 +25,7 @@ pkl = "latest"
 
 # CLI tools (cross-platform via aqua - moved from Homebrew)
 "aqua:atuinsh/atuin" = "latest"
-"aqua:sharkdp/bat" = "latest"
+"aqua:sharkdp/bat" = "0.26.0"
 "aqua:muesli/duf" = "latest"
 "aqua:bootandy/dust" = "latest"
 eza = "latest"
