@@ -33,9 +33,6 @@ load test_helper
 	run yq '.packages.darwin.casks' "$packages_file"
 	[ "$status" -eq 0 ]
 
-	# Should have mas array (our script references .packages.darwin.mas)
-	run yq '.packages.darwin.mas' "$packages_file"
-	[ "$status" -eq 0 ]
 }
 
 @test "renders correctly on darwin with packages" {
@@ -46,7 +43,7 @@ load test_helper
 	cat >"$TEST_TMPDIR/real-config.toml" <<EOF
 [data]
     chezmoi = { os = "darwin", homeDir = "$TEST_HOME_DIR", sourceDir = "$TEST_SOURCE_DIR" }
-    packages = { darwin = { brews = [], casks = ["font-fira-code-nerd-font"], mas = ["409183694"] } }
+    packages = { darwin = { brews = [], casks = ["font-fira-code-nerd-font"] } }
 EOF
 
 	# Render our actual script
@@ -69,10 +66,6 @@ EOF
 	# 5. Should handle missing Homebrew gracefully
 	[[ "$output" == *"Homebrew not found"* ]]
 	[[ "$output" == *"exit 0"* ]]
-
-	# 6. Should install Mac App Store apps
-	[[ "$output" == *"Installing Mac App Store apps"* ]]
-	[[ "$output" == *"mas install 409183694"* ]]
 }
 
 @test "does not render on non-darwin systems" {
@@ -83,7 +76,7 @@ EOF
 	cat >"$TEST_TMPDIR/linux-config.toml" <<EOF
 [data]
     chezmoi = { os = "linux", homeDir = "$TEST_HOME_DIR", sourceDir = "$TEST_SOURCE_DIR" }
-    packages = { darwin = { brews = [], casks = ["font-fira-code-nerd-font"], mas = ["409183694"] } }
+    packages = { darwin = { brews = [], casks = ["font-fira-code-nerd-font"] } }
 EOF
 
 	# Render our actual script on linux
@@ -106,7 +99,7 @@ EOF
 
 	# Add our actual packages data
 	cat >>"$TEST_TMPDIR/syntax-config.toml" <<EOF
-    packages = { darwin = { brews = [], casks = ["font-fira-code-nerd-font"], mas = ["409183694"] } }
+    packages = { darwin = { brews = [], casks = ["font-fira-code-nerd-font"] } }
 EOF
 
 	# Render our actual script
@@ -117,24 +110,21 @@ EOF
 	assert_valid_shell "$output"
 }
 
-@test "handles empty mas section gracefully" {
-	# Test that the script handles empty mas section without errors
+@test "handles empty sections gracefully" {
+	# Test that the script handles empty brew/cask sections without errors
 	local script_file="home/run_onchange_install-packages-darwin.sh.tmpl"
 
-	# Create config with empty mas section
-	cat >"$TEST_TMPDIR/empty-mas-config.toml" <<EOF
+	# Create config with empty sections
+	cat >"$TEST_TMPDIR/empty-config.toml" <<EOF
 [data]
     chezmoi = { os = "darwin", homeDir = "$TEST_HOME_DIR", sourceDir = "$TEST_SOURCE_DIR" }
-    packages = { darwin = { brews = [], casks = [], mas = [] } }
+    packages = { darwin = { brews = [], casks = [] } }
 EOF
 
 	# Render our actual script
-	run chezmoi execute-template --config "$TEST_TMPDIR/empty-mas-config.toml" --file "$script_file"
+	run chezmoi execute-template --config "$TEST_TMPDIR/empty-config.toml" --file "$script_file"
 	[ "$status" -eq 0 ]
 
 	# Should still be valid shell syntax
 	assert_valid_shell "$output"
-
-	# Should not contain mas install commands when empty
-	[[ "$output" != *"mas install"* ]]
 }
