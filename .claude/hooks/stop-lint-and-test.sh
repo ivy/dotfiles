@@ -18,9 +18,10 @@ if [[ "$stop_hook_active" == "true" ]]; then
 fi
 
 # Collect changed files (staged + unstaged tracked files)
-mapfile -t files < <(
-	{ git diff --name-only; git diff --cached --name-only; } | sort -u
-)
+files=()
+while IFS= read -r f; do
+	files+=("$f")
+done < <({ git diff --name-only; git diff --cached --name-only; } | sort -u)
 
 # If no tracked files changed, nothing to check
 if [[ ${#files[@]} -eq 0 ]]; then
