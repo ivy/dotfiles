@@ -1,465 +1,570 @@
-// Renovate configuration for dotfiles repository.
-// Full reference: https://docs.renovatebot.com/configuration-options/
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-
-  // Presets: sensible defaults, conventional-commit PR titles, no dashboard issue
-  "extends": [
-    "config:recommended",
-    ":semanticCommits",
-    ":disableDependencyDashboard"
+  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+  extends: [
+    'config:recommended',
+    ':semanticCommits',
+    ':disableDependencyDashboard',
   ],
-
-  // Evaluate schedules in Pacific time
-  "timezone": "America/Los_Angeles",
-
-  // Commit via the GitHub API instead of pushing with git
-  "platformCommit": true,
-
-  // Auto-raise a PR when Renovate config options need migration
-  "configMigration": true,
-
-  // Squash-merge passing PRs automatically; packageRules below can override
-  "automerge": true,
-  "automergeStrategy": "squash",
-
-  // Labels applied to every Renovate PR
-  "labels": ["deps", "automated"],
-
-  // Only these managers are active — everything else (npm, pip, etc.) is ignored
-  "enabledManagers": [
-    "mise",
-    "docker-compose",
-    "github-actions"
+  timezone: 'America/Los_Angeles',
+  platformCommit: 'enabled',
+  configMigration: true,
+  automerge: true,
+  automergeStrategy: 'squash',
+  labels: [
+    'deps',
+    'automated',
   ],
-
-  // Lock file maintenance: regenerate mise.lock to pick up new versions.
-  // Tool configs declare "latest"; lockfiles pin exact versions with checksums.
-  "lockFileMaintenance": {
-    "enabled": true,
-    "schedule": ["at any time"]
-  },
-
-  // ---------------------------------------------------------------------------
-  // Manager-level file discovery
-  // Chezmoi renames dotfiles (`.config` → `dot_config`), so Renovate needs
-  // custom managerFilePatterns to find package files in the chezmoi source tree.
-  // ---------------------------------------------------------------------------
-
-  "mise": {
-    "managerFilePatterns": ["/^home/dot_config/mise/config\\.toml$/"]
-  },
-
-  "docker-compose": {
-    "managerFilePatterns": ["/^home/dot_config/docker-compose/.*\\.ya?ml$/"]
-  },
-
-  // Pin Actions to full-length commit SHAs for reproducibility
-  "github-actions": {
-    "pinDigests": true,
-    "managerFilePatterns": ["/^\\.github/workflows/.*\\.ya?ml$/"]
-  },
-
-  // Pin Docker images to digests for byte-for-byte reproducibility
-  "packageRules": [
-    {"matchCategories": ["docker"], "pinDigests": true}
+  enabledManagers: [
+    'mise',
+    'docker-compose',
+    'github-actions',
   ],
-
-  // ---------------------------------------------------------------------------
-  // Custom regex managers
-  // Handle files Renovate doesn't natively understand. Each entry tells
-  // Renovate: where to look (managerFilePatterns), what to match (matchStrings),
-  // and where to find new versions (datasourceTemplate).
-  // ---------------------------------------------------------------------------
-  "customManagers": [
-
-    // --- Standalone version files ------------------------------------------------
-
-    // cosign binary version pinned in a TOML versions file
+  lockFileMaintenance: {
+    enabled: true,
+    schedule: [
+      'at any time',
+    ],
+  },
+  mise: {
+    managerFilePatterns: [
+      '/^home/dot_config/mise/config\\.toml$/',
+    ],
+  },
+  'docker-compose': {
+    managerFilePatterns: [
+      '/^home/dot_config/docker-compose/.*\\.ya?ml$/',
+    ],
+  },
+  'github-actions': {
+    pinDigests: true,
+    managerFilePatterns: [
+      '/^\\.github/workflows/.*\\.ya?ml$/',
+    ],
+  },
+  packageRules: [
     {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/dot_config/dotfiles/cli-versions\\.toml$/"],
-      "matchStrings": [
-        "^cosign\\s*=\\s*\"(?<currentValue>v?[^\"]+)\""
+      matchCategories: [
+        'docker',
       ],
-      "depNameTemplate": "sigstore/cosign",
-      "datasourceTemplate": "github-releases"
+      pinDigests: true,
     },
-
-    // Go tools installed via `go install` — versions tracked from the Go module proxy
+  ],
+  customManagers: [
     {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/dot_config/go-tools/tools\\.txt$/"],
-      "matchStrings": [
-        "^(?<depName>[^\\s@]+)@(?<currentValue>v?[^\\s#]+)"
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^home/dot_config/dotfiles/cli-versions\\.toml$/',
       ],
-      "datasourceTemplate": "go"
-    },
-
-    // Node.js global tools — versions tracked from npm
-    {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/dot_config/node-tools/tools\\.txt$/"],
-      "matchStrings": [
-        "^(?<depName>[^@\\n]+)@(?<currentValue>[^\\n#]+)"
+      matchStrings: [
+        '^cosign\\s*=\\s*"(?<currentValue>v?[^"]+)"',
       ],
-      "datasourceTemplate": "npm"
+      depNameTemplate: 'sigstore/cosign',
+      datasourceTemplate: 'github-releases',
     },
-
-    // --- Chezmoi external dependencies (.chezmoiexternal.toml.tmpl) --------------
-    // Tarballs and repos that chezmoi downloads on `chezmoi apply`.
-    // Each is pinned to a commit SHA and tracked via the git-refs datasource.
-
-    // catppuccin/ghostty — Ghostty terminal color theme
     {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/\\.chezmoiexternal\\.toml\\.tmpl$/"],
-      "matchStrings": [
-        "catppuccin/ghostty/archive/(?<currentDigest>[a-f0-9]{7,40})\\.tar\\.gz"
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^home/dot_config/go-tools/tools\\.txt$/',
       ],
-      "datasourceTemplate": "git-refs",
-      "currentValueTemplate": "main",
-      "depNameTemplate": "catppuccin/ghostty",
-      "packageNameTemplate": "https://github.com/catppuccin/ghostty"
-    },
-
-    // ohmyzsh/ohmyzsh — Oh My Zsh framework
-    {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/\\.chezmoiexternal\\.toml\\.tmpl$/"],
-      "matchStrings": [
-        "ohmyzsh/ohmyzsh/archive/(?<currentDigest>[a-f0-9]{7,40})\\.tar\\.gz"
+      matchStrings: [
+        '^(?<depName>[^\\s@]+)@(?<currentValue>v?[^\\s#]+)',
       ],
-      "datasourceTemplate": "git-refs",
-      "currentValueTemplate": "master",
-      "depNameTemplate": "ohmyzsh/ohmyzsh",
-      "packageNameTemplate": "https://github.com/ohmyzsh/ohmyzsh"
+      datasourceTemplate: 'go',
     },
-
-    // zsh-users/zsh-autosuggestions — fish-like command suggestions for zsh
     {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/\\.chezmoiexternal\\.toml\\.tmpl$/"],
-      "matchStrings": [
-        "zsh-users/zsh-autosuggestions/archive/(?<currentDigest>[a-f0-9]{7,40})\\.tar\\.gz"
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^home/dot_config/node-tools/tools\\.txt$/',
       ],
-      "datasourceTemplate": "git-refs",
-      "currentValueTemplate": "master",
-      "depNameTemplate": "zsh-users/zsh-autosuggestions",
-      "packageNameTemplate": "https://github.com/zsh-users/zsh-autosuggestions"
-    },
-
-    // zsh-users/zsh-syntax-highlighting — command syntax highlighting for zsh
-    {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/\\.chezmoiexternal\\.toml\\.tmpl$/"],
-      "matchStrings": [
-        "zsh-users/zsh-syntax-highlighting/archive/(?<currentDigest>[a-f0-9]{7,40})\\.tar\\.gz"
+      matchStrings: [
+        '^(?<depName>[^@\\n]+)@(?<currentValue>[^\\n#]+)',
       ],
-      "datasourceTemplate": "git-refs",
-      "currentValueTemplate": "master",
-      "depNameTemplate": "zsh-users/zsh-syntax-highlighting",
-      "packageNameTemplate": "https://github.com/zsh-users/zsh-syntax-highlighting"
+      datasourceTemplate: 'npm',
     },
-
-    // gpakosz/.tmux — tmux configuration framework (cloned as git-repo, not tarball)
     {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/\\.chezmoiexternal\\.toml\\.tmpl$/"],
-      "matchStrings": [
-        "^\\s*revision\\s*=\\s*\"(?<currentDigest>[a-f0-9]{7,40})\""
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^home/\\.chezmoiexternal\\.toml\\.tmpl$/',
       ],
-      "datasourceTemplate": "git-refs",
-      "currentValueTemplate": "master",
-      "depNameTemplate": "gpakosz/.tmux",
-      "packageNameTemplate": "https://github.com/gpakosz/.tmux"
-    },
-
-    // --- lazy.nvim lockfile (home/dot_config/nvim/lazy-lock.json) ----------------
-    // Neovim plugins managed by lazy.nvim. The lockfile stores each plugin by
-    // its directory name (e.g. "LazyVim"), not the full GitHub slug
-    // (e.g. "LazyVim/LazyVim"), so each plugin needs its own custom manager
-    // to map the short name → GitHub owner/repo.
-
-    {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/dot_config/nvim/lazy-lock\\.json$/"],
-      "matchStrings": ["\"LazyVim\":\\s*\\{[^}]*\"branch\":\\s*\"(?<currentValue>[^\"]+)\"[^}]*\"commit\":\\s*\"(?<currentDigest>[a-f0-9]{40})\""],
-      "datasourceTemplate": "git-refs",
-      "depNameTemplate": "LazyVim/LazyVim",
-      "packageNameTemplate": "https://github.com/LazyVim/LazyVim"
+      matchStrings: [
+        'catppuccin/ghostty/archive/(?<currentDigest>[a-f0-9]{7,40})\\.tar\\.gz',
+      ],
+      datasourceTemplate: 'git-refs',
+      currentValueTemplate: 'main',
+      depNameTemplate: 'catppuccin/ghostty',
+      packageNameTemplate: 'https://github.com/catppuccin/ghostty',
     },
     {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/dot_config/nvim/lazy-lock\\.json$/"],
-      "matchStrings": ["\"LuaSnip\":\\s*\\{[^}]*\"branch\":\\s*\"(?<currentValue>[^\"]+)\"[^}]*\"commit\":\\s*\"(?<currentDigest>[a-f0-9]{40})\""],
-      "datasourceTemplate": "git-refs",
-      "depNameTemplate": "L3MON4D3/LuaSnip",
-      "packageNameTemplate": "https://github.com/L3MON4D3/LuaSnip"
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^home/\\.chezmoiexternal\\.toml\\.tmpl$/',
+      ],
+      matchStrings: [
+        'ohmyzsh/ohmyzsh/archive/(?<currentDigest>[a-f0-9]{7,40})\\.tar\\.gz',
+      ],
+      datasourceTemplate: 'git-refs',
+      currentValueTemplate: 'master',
+      depNameTemplate: 'ohmyzsh/ohmyzsh',
+      packageNameTemplate: 'https://github.com/ohmyzsh/ohmyzsh',
     },
     {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/dot_config/nvim/lazy-lock\\.json$/"],
-      "matchStrings": ["\"blink\\.cmp\":\\s*\\{[^}]*\"branch\":\\s*\"(?<currentValue>[^\"]+)\"[^}]*\"commit\":\\s*\"(?<currentDigest>[a-f0-9]{40})\""],
-      "datasourceTemplate": "git-refs",
-      "depNameTemplate": "Saghen/blink.cmp",
-      "packageNameTemplate": "https://github.com/Saghen/blink.cmp"
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^home/\\.chezmoiexternal\\.toml\\.tmpl$/',
+      ],
+      matchStrings: [
+        'zsh-users/zsh-autosuggestions/archive/(?<currentDigest>[a-f0-9]{7,40})\\.tar\\.gz',
+      ],
+      datasourceTemplate: 'git-refs',
+      currentValueTemplate: 'master',
+      depNameTemplate: 'zsh-users/zsh-autosuggestions',
+      packageNameTemplate: 'https://github.com/zsh-users/zsh-autosuggestions',
     },
     {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/dot_config/nvim/lazy-lock\\.json$/"],
-      "matchStrings": ["\"bufferline\\.nvim\":\\s*\\{[^}]*\"branch\":\\s*\"(?<currentValue>[^\"]+)\"[^}]*\"commit\":\\s*\"(?<currentDigest>[a-f0-9]{40})\""],
-      "datasourceTemplate": "git-refs",
-      "depNameTemplate": "akinsho/bufferline.nvim",
-      "packageNameTemplate": "https://github.com/akinsho/bufferline.nvim"
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^home/\\.chezmoiexternal\\.toml\\.tmpl$/',
+      ],
+      matchStrings: [
+        'zsh-users/zsh-syntax-highlighting/archive/(?<currentDigest>[a-f0-9]{7,40})\\.tar\\.gz',
+      ],
+      datasourceTemplate: 'git-refs',
+      currentValueTemplate: 'master',
+      depNameTemplate: 'zsh-users/zsh-syntax-highlighting',
+      packageNameTemplate: 'https://github.com/zsh-users/zsh-syntax-highlighting',
     },
     {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/dot_config/nvim/lazy-lock\\.json$/"],
-      "matchStrings": ["\"catppuccin\":\\s*\\{[^}]*\"branch\":\\s*\"(?<currentValue>[^\"]+)\"[^}]*\"commit\":\\s*\"(?<currentDigest>[a-f0-9]{40})\""],
-      "datasourceTemplate": "git-refs",
-      "depNameTemplate": "catppuccin/nvim",
-      "packageNameTemplate": "https://github.com/catppuccin/nvim"
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^home/\\.chezmoiexternal\\.toml\\.tmpl$/',
+      ],
+      matchStrings: [
+        '^\\s*revision\\s*=\\s*"(?<currentDigest>[a-f0-9]{7,40})"',
+      ],
+      datasourceTemplate: 'git-refs',
+      currentValueTemplate: 'master',
+      depNameTemplate: 'gpakosz/.tmux',
+      packageNameTemplate: 'https://github.com/gpakosz/.tmux',
     },
     {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/dot_config/nvim/lazy-lock\\.json$/"],
-      "matchStrings": ["\"conform\\.nvim\":\\s*\\{[^}]*\"branch\":\\s*\"(?<currentValue>[^\"]+)\"[^}]*\"commit\":\\s*\"(?<currentDigest>[a-f0-9]{40})\""],
-      "datasourceTemplate": "git-refs",
-      "depNameTemplate": "stevearc/conform.nvim",
-      "packageNameTemplate": "https://github.com/stevearc/conform.nvim"
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^home/dot_config/nvim/lazy-lock\\.json$/',
+      ],
+      matchStrings: [
+        '"LazyVim":\\s*\\{[^}]*"branch":\\s*"(?<currentValue>[^"]+)"[^}]*"commit":\\s*"(?<currentDigest>[a-f0-9]{40})"',
+      ],
+      datasourceTemplate: 'git-refs',
+      depNameTemplate: 'LazyVim/LazyVim',
+      packageNameTemplate: 'https://github.com/LazyVim/LazyVim',
     },
     {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/dot_config/nvim/lazy-lock\\.json$/"],
-      "matchStrings": ["\"flash\\.nvim\":\\s*\\{[^}]*\"branch\":\\s*\"(?<currentValue>[^\"]+)\"[^}]*\"commit\":\\s*\"(?<currentDigest>[a-f0-9]{40})\""],
-      "datasourceTemplate": "git-refs",
-      "depNameTemplate": "folke/flash.nvim",
-      "packageNameTemplate": "https://github.com/folke/flash.nvim"
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^home/dot_config/nvim/lazy-lock\\.json$/',
+      ],
+      matchStrings: [
+        '"LuaSnip":\\s*\\{[^}]*"branch":\\s*"(?<currentValue>[^"]+)"[^}]*"commit":\\s*"(?<currentDigest>[a-f0-9]{40})"',
+      ],
+      datasourceTemplate: 'git-refs',
+      depNameTemplate: 'L3MON4D3/LuaSnip',
+      packageNameTemplate: 'https://github.com/L3MON4D3/LuaSnip',
     },
     {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/dot_config/nvim/lazy-lock\\.json$/"],
-      "matchStrings": ["\"friendly-snippets\":\\s*\\{[^}]*\"branch\":\\s*\"(?<currentValue>[^\"]+)\"[^}]*\"commit\":\\s*\"(?<currentDigest>[a-f0-9]{40})\""],
-      "datasourceTemplate": "git-refs",
-      "depNameTemplate": "rafamadriz/friendly-snippets",
-      "packageNameTemplate": "https://github.com/rafamadriz/friendly-snippets"
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^home/dot_config/nvim/lazy-lock\\.json$/',
+      ],
+      matchStrings: [
+        '"blink\\.cmp":\\s*\\{[^}]*"branch":\\s*"(?<currentValue>[^"]+)"[^}]*"commit":\\s*"(?<currentDigest>[a-f0-9]{40})"',
+      ],
+      datasourceTemplate: 'git-refs',
+      depNameTemplate: 'Saghen/blink.cmp',
+      packageNameTemplate: 'https://github.com/Saghen/blink.cmp',
     },
     {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/dot_config/nvim/lazy-lock\\.json$/"],
-      "matchStrings": ["\"gitsigns\\.nvim\":\\s*\\{[^}]*\"branch\":\\s*\"(?<currentValue>[^\"]+)\"[^}]*\"commit\":\\s*\"(?<currentDigest>[a-f0-9]{40})\""],
-      "datasourceTemplate": "git-refs",
-      "depNameTemplate": "lewis6991/gitsigns.nvim",
-      "packageNameTemplate": "https://github.com/lewis6991/gitsigns.nvim"
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^home/dot_config/nvim/lazy-lock\\.json$/',
+      ],
+      matchStrings: [
+        '"bufferline\\.nvim":\\s*\\{[^}]*"branch":\\s*"(?<currentValue>[^"]+)"[^}]*"commit":\\s*"(?<currentDigest>[a-f0-9]{40})"',
+      ],
+      datasourceTemplate: 'git-refs',
+      depNameTemplate: 'akinsho/bufferline.nvim',
+      packageNameTemplate: 'https://github.com/akinsho/bufferline.nvim',
     },
     {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/dot_config/nvim/lazy-lock\\.json$/"],
-      "matchStrings": ["\"grug-far\\.nvim\":\\s*\\{[^}]*\"branch\":\\s*\"(?<currentValue>[^\"]+)\"[^}]*\"commit\":\\s*\"(?<currentDigest>[a-f0-9]{40})\""],
-      "datasourceTemplate": "git-refs",
-      "depNameTemplate": "MagicDuck/grug-far.nvim",
-      "packageNameTemplate": "https://github.com/MagicDuck/grug-far.nvim"
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^home/dot_config/nvim/lazy-lock\\.json$/',
+      ],
+      matchStrings: [
+        '"catppuccin":\\s*\\{[^}]*"branch":\\s*"(?<currentValue>[^"]+)"[^}]*"commit":\\s*"(?<currentDigest>[a-f0-9]{40})"',
+      ],
+      datasourceTemplate: 'git-refs',
+      depNameTemplate: 'catppuccin/nvim',
+      packageNameTemplate: 'https://github.com/catppuccin/nvim',
     },
     {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/dot_config/nvim/lazy-lock\\.json$/"],
-      "matchStrings": ["\"lazy\\.nvim\":\\s*\\{[^}]*\"branch\":\\s*\"(?<currentValue>[^\"]+)\"[^}]*\"commit\":\\s*\"(?<currentDigest>[a-f0-9]{40})\""],
-      "datasourceTemplate": "git-refs",
-      "depNameTemplate": "folke/lazy.nvim",
-      "packageNameTemplate": "https://github.com/folke/lazy.nvim"
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^home/dot_config/nvim/lazy-lock\\.json$/',
+      ],
+      matchStrings: [
+        '"conform\\.nvim":\\s*\\{[^}]*"branch":\\s*"(?<currentValue>[^"]+)"[^}]*"commit":\\s*"(?<currentDigest>[a-f0-9]{40})"',
+      ],
+      datasourceTemplate: 'git-refs',
+      depNameTemplate: 'stevearc/conform.nvim',
+      packageNameTemplate: 'https://github.com/stevearc/conform.nvim',
     },
     {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/dot_config/nvim/lazy-lock\\.json$/"],
-      "matchStrings": ["\"lazydev\\.nvim\":\\s*\\{[^}]*\"branch\":\\s*\"(?<currentValue>[^\"]+)\"[^}]*\"commit\":\\s*\"(?<currentDigest>[a-f0-9]{40})\""],
-      "datasourceTemplate": "git-refs",
-      "depNameTemplate": "folke/lazydev.nvim",
-      "packageNameTemplate": "https://github.com/folke/lazydev.nvim"
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^home/dot_config/nvim/lazy-lock\\.json$/',
+      ],
+      matchStrings: [
+        '"flash\\.nvim":\\s*\\{[^}]*"branch":\\s*"(?<currentValue>[^"]+)"[^}]*"commit":\\s*"(?<currentDigest>[a-f0-9]{40})"',
+      ],
+      datasourceTemplate: 'git-refs',
+      depNameTemplate: 'folke/flash.nvim',
+      packageNameTemplate: 'https://github.com/folke/flash.nvim',
     },
     {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/dot_config/nvim/lazy-lock\\.json$/"],
-      "matchStrings": ["\"lualine\\.nvim\":\\s*\\{[^}]*\"branch\":\\s*\"(?<currentValue>[^\"]+)\"[^}]*\"commit\":\\s*\"(?<currentDigest>[a-f0-9]{40})\""],
-      "datasourceTemplate": "git-refs",
-      "depNameTemplate": "nvim-lualine/lualine.nvim",
-      "packageNameTemplate": "https://github.com/nvim-lualine/lualine.nvim"
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^home/dot_config/nvim/lazy-lock\\.json$/',
+      ],
+      matchStrings: [
+        '"friendly-snippets":\\s*\\{[^}]*"branch":\\s*"(?<currentValue>[^"]+)"[^}]*"commit":\\s*"(?<currentDigest>[a-f0-9]{40})"',
+      ],
+      datasourceTemplate: 'git-refs',
+      depNameTemplate: 'rafamadriz/friendly-snippets',
+      packageNameTemplate: 'https://github.com/rafamadriz/friendly-snippets',
     },
     {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/dot_config/nvim/lazy-lock\\.json$/"],
-      "matchStrings": ["\"mason-lspconfig\\.nvim\":\\s*\\{[^}]*\"branch\":\\s*\"(?<currentValue>[^\"]+)\"[^}]*\"commit\":\\s*\"(?<currentDigest>[a-f0-9]{40})\""],
-      "datasourceTemplate": "git-refs",
-      "depNameTemplate": "williamboman/mason-lspconfig.nvim",
-      "packageNameTemplate": "https://github.com/williamboman/mason-lspconfig.nvim"
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^home/dot_config/nvim/lazy-lock\\.json$/',
+      ],
+      matchStrings: [
+        '"gitsigns\\.nvim":\\s*\\{[^}]*"branch":\\s*"(?<currentValue>[^"]+)"[^}]*"commit":\\s*"(?<currentDigest>[a-f0-9]{40})"',
+      ],
+      datasourceTemplate: 'git-refs',
+      depNameTemplate: 'lewis6991/gitsigns.nvim',
+      packageNameTemplate: 'https://github.com/lewis6991/gitsigns.nvim',
     },
     {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/dot_config/nvim/lazy-lock\\.json$/"],
-      "matchStrings": ["\"mason\\.nvim\":\\s*\\{[^}]*\"branch\":\\s*\"(?<currentValue>[^\"]+)\"[^}]*\"commit\":\\s*\"(?<currentDigest>[a-f0-9]{40})\""],
-      "datasourceTemplate": "git-refs",
-      "depNameTemplate": "williamboman/mason.nvim",
-      "packageNameTemplate": "https://github.com/williamboman/mason.nvim"
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^home/dot_config/nvim/lazy-lock\\.json$/',
+      ],
+      matchStrings: [
+        '"grug-far\\.nvim":\\s*\\{[^}]*"branch":\\s*"(?<currentValue>[^"]+)"[^}]*"commit":\\s*"(?<currentDigest>[a-f0-9]{40})"',
+      ],
+      datasourceTemplate: 'git-refs',
+      depNameTemplate: 'MagicDuck/grug-far.nvim',
+      packageNameTemplate: 'https://github.com/MagicDuck/grug-far.nvim',
     },
     {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/dot_config/nvim/lazy-lock\\.json$/"],
-      "matchStrings": ["\"mini\\.ai\":\\s*\\{[^}]*\"branch\":\\s*\"(?<currentValue>[^\"]+)\"[^}]*\"commit\":\\s*\"(?<currentDigest>[a-f0-9]{40})\""],
-      "datasourceTemplate": "git-refs",
-      "depNameTemplate": "echasnovski/mini.ai",
-      "packageNameTemplate": "https://github.com/echasnovski/mini.ai"
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^home/dot_config/nvim/lazy-lock\\.json$/',
+      ],
+      matchStrings: [
+        '"lazy\\.nvim":\\s*\\{[^}]*"branch":\\s*"(?<currentValue>[^"]+)"[^}]*"commit":\\s*"(?<currentDigest>[a-f0-9]{40})"',
+      ],
+      datasourceTemplate: 'git-refs',
+      depNameTemplate: 'folke/lazy.nvim',
+      packageNameTemplate: 'https://github.com/folke/lazy.nvim',
     },
     {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/dot_config/nvim/lazy-lock\\.json$/"],
-      "matchStrings": ["\"mini\\.icons\":\\s*\\{[^}]*\"branch\":\\s*\"(?<currentValue>[^\"]+)\"[^}]*\"commit\":\\s*\"(?<currentDigest>[a-f0-9]{40})\""],
-      "datasourceTemplate": "git-refs",
-      "depNameTemplate": "echasnovski/mini.icons",
-      "packageNameTemplate": "https://github.com/echasnovski/mini.icons"
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^home/dot_config/nvim/lazy-lock\\.json$/',
+      ],
+      matchStrings: [
+        '"lazydev\\.nvim":\\s*\\{[^}]*"branch":\\s*"(?<currentValue>[^"]+)"[^}]*"commit":\\s*"(?<currentDigest>[a-f0-9]{40})"',
+      ],
+      datasourceTemplate: 'git-refs',
+      depNameTemplate: 'folke/lazydev.nvim',
+      packageNameTemplate: 'https://github.com/folke/lazydev.nvim',
     },
     {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/dot_config/nvim/lazy-lock\\.json$/"],
-      "matchStrings": ["\"mini\\.pairs\":\\s*\\{[^}]*\"branch\":\\s*\"(?<currentValue>[^\"]+)\"[^}]*\"commit\":\\s*\"(?<currentDigest>[a-f0-9]{40})\""],
-      "datasourceTemplate": "git-refs",
-      "depNameTemplate": "echasnovski/mini.pairs",
-      "packageNameTemplate": "https://github.com/echasnovski/mini.pairs"
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^home/dot_config/nvim/lazy-lock\\.json$/',
+      ],
+      matchStrings: [
+        '"lualine\\.nvim":\\s*\\{[^}]*"branch":\\s*"(?<currentValue>[^"]+)"[^}]*"commit":\\s*"(?<currentDigest>[a-f0-9]{40})"',
+      ],
+      datasourceTemplate: 'git-refs',
+      depNameTemplate: 'nvim-lualine/lualine.nvim',
+      packageNameTemplate: 'https://github.com/nvim-lualine/lualine.nvim',
     },
     {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/dot_config/nvim/lazy-lock\\.json$/"],
-      "matchStrings": ["\"noice\\.nvim\":\\s*\\{[^}]*\"branch\":\\s*\"(?<currentValue>[^\"]+)\"[^}]*\"commit\":\\s*\"(?<currentDigest>[a-f0-9]{40})\""],
-      "datasourceTemplate": "git-refs",
-      "depNameTemplate": "folke/noice.nvim",
-      "packageNameTemplate": "https://github.com/folke/noice.nvim"
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^home/dot_config/nvim/lazy-lock\\.json$/',
+      ],
+      matchStrings: [
+        '"mason-lspconfig\\.nvim":\\s*\\{[^}]*"branch":\\s*"(?<currentValue>[^"]+)"[^}]*"commit":\\s*"(?<currentDigest>[a-f0-9]{40})"',
+      ],
+      datasourceTemplate: 'git-refs',
+      depNameTemplate: 'williamboman/mason-lspconfig.nvim',
+      packageNameTemplate: 'https://github.com/williamboman/mason-lspconfig.nvim',
     },
     {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/dot_config/nvim/lazy-lock\\.json$/"],
-      "matchStrings": ["\"nui\\.nvim\":\\s*\\{[^}]*\"branch\":\\s*\"(?<currentValue>[^\"]+)\"[^}]*\"commit\":\\s*\"(?<currentDigest>[a-f0-9]{40})\""],
-      "datasourceTemplate": "git-refs",
-      "depNameTemplate": "MunifTanjim/nui.nvim",
-      "packageNameTemplate": "https://github.com/MunifTanjim/nui.nvim"
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^home/dot_config/nvim/lazy-lock\\.json$/',
+      ],
+      matchStrings: [
+        '"mason\\.nvim":\\s*\\{[^}]*"branch":\\s*"(?<currentValue>[^"]+)"[^}]*"commit":\\s*"(?<currentDigest>[a-f0-9]{40})"',
+      ],
+      datasourceTemplate: 'git-refs',
+      depNameTemplate: 'williamboman/mason.nvim',
+      packageNameTemplate: 'https://github.com/williamboman/mason.nvim',
     },
     {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/dot_config/nvim/lazy-lock\\.json$/"],
-      "matchStrings": ["\"nvim-lint\":\\s*\\{[^}]*\"branch\":\\s*\"(?<currentValue>[^\"]+)\"[^}]*\"commit\":\\s*\"(?<currentDigest>[a-f0-9]{40})\""],
-      "datasourceTemplate": "git-refs",
-      "depNameTemplate": "mfussenegger/nvim-lint",
-      "packageNameTemplate": "https://github.com/mfussenegger/nvim-lint"
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^home/dot_config/nvim/lazy-lock\\.json$/',
+      ],
+      matchStrings: [
+        '"mini\\.ai":\\s*\\{[^}]*"branch":\\s*"(?<currentValue>[^"]+)"[^}]*"commit":\\s*"(?<currentDigest>[a-f0-9]{40})"',
+      ],
+      datasourceTemplate: 'git-refs',
+      depNameTemplate: 'echasnovski/mini.ai',
+      packageNameTemplate: 'https://github.com/echasnovski/mini.ai',
     },
     {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/dot_config/nvim/lazy-lock\\.json$/"],
-      "matchStrings": ["\"nvim-lspconfig\":\\s*\\{[^}]*\"branch\":\\s*\"(?<currentValue>[^\"]+)\"[^}]*\"commit\":\\s*\"(?<currentDigest>[a-f0-9]{40})\""],
-      "datasourceTemplate": "git-refs",
-      "depNameTemplate": "neovim/nvim-lspconfig",
-      "packageNameTemplate": "https://github.com/neovim/nvim-lspconfig"
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^home/dot_config/nvim/lazy-lock\\.json$/',
+      ],
+      matchStrings: [
+        '"mini\\.icons":\\s*\\{[^}]*"branch":\\s*"(?<currentValue>[^"]+)"[^}]*"commit":\\s*"(?<currentDigest>[a-f0-9]{40})"',
+      ],
+      datasourceTemplate: 'git-refs',
+      depNameTemplate: 'echasnovski/mini.icons',
+      packageNameTemplate: 'https://github.com/echasnovski/mini.icons',
     },
     {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/dot_config/nvim/lazy-lock\\.json$/"],
-      "matchStrings": ["\"nvim-treesitter\":\\s*\\{[^}]*\"branch\":\\s*\"(?<currentValue>[^\"]+)\"[^}]*\"commit\":\\s*\"(?<currentDigest>[a-f0-9]{40})\""],
-      "datasourceTemplate": "git-refs",
-      "depNameTemplate": "nvim-treesitter/nvim-treesitter",
-      "packageNameTemplate": "https://github.com/nvim-treesitter/nvim-treesitter"
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^home/dot_config/nvim/lazy-lock\\.json$/',
+      ],
+      matchStrings: [
+        '"mini\\.pairs":\\s*\\{[^}]*"branch":\\s*"(?<currentValue>[^"]+)"[^}]*"commit":\\s*"(?<currentDigest>[a-f0-9]{40})"',
+      ],
+      datasourceTemplate: 'git-refs',
+      depNameTemplate: 'echasnovski/mini.pairs',
+      packageNameTemplate: 'https://github.com/echasnovski/mini.pairs',
     },
     {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/dot_config/nvim/lazy-lock\\.json$/"],
-      "matchStrings": ["\"nvim-treesitter-textobjects\":\\s*\\{[^}]*\"branch\":\\s*\"(?<currentValue>[^\"]+)\"[^}]*\"commit\":\\s*\"(?<currentDigest>[a-f0-9]{40})\""],
-      "datasourceTemplate": "git-refs",
-      "depNameTemplate": "nvim-treesitter/nvim-treesitter-textobjects",
-      "packageNameTemplate": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects"
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^home/dot_config/nvim/lazy-lock\\.json$/',
+      ],
+      matchStrings: [
+        '"noice\\.nvim":\\s*\\{[^}]*"branch":\\s*"(?<currentValue>[^"]+)"[^}]*"commit":\\s*"(?<currentDigest>[a-f0-9]{40})"',
+      ],
+      datasourceTemplate: 'git-refs',
+      depNameTemplate: 'folke/noice.nvim',
+      packageNameTemplate: 'https://github.com/folke/noice.nvim',
     },
     {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/dot_config/nvim/lazy-lock\\.json$/"],
-      "matchStrings": ["\"nvim-ts-autotag\":\\s*\\{[^}]*\"branch\":\\s*\"(?<currentValue>[^\"]+)\"[^}]*\"commit\":\\s*\"(?<currentDigest>[a-f0-9]{40})\""],
-      "datasourceTemplate": "git-refs",
-      "depNameTemplate": "windwp/nvim-ts-autotag",
-      "packageNameTemplate": "https://github.com/windwp/nvim-ts-autotag"
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^home/dot_config/nvim/lazy-lock\\.json$/',
+      ],
+      matchStrings: [
+        '"nui\\.nvim":\\s*\\{[^}]*"branch":\\s*"(?<currentValue>[^"]+)"[^}]*"commit":\\s*"(?<currentDigest>[a-f0-9]{40})"',
+      ],
+      datasourceTemplate: 'git-refs',
+      depNameTemplate: 'MunifTanjim/nui.nvim',
+      packageNameTemplate: 'https://github.com/MunifTanjim/nui.nvim',
     },
     {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/dot_config/nvim/lazy-lock\\.json$/"],
-      "matchStrings": ["\"persistence\\.nvim\":\\s*\\{[^}]*\"branch\":\\s*\"(?<currentValue>[^\"]+)\"[^}]*\"commit\":\\s*\"(?<currentDigest>[a-f0-9]{40})\""],
-      "datasourceTemplate": "git-refs",
-      "depNameTemplate": "folke/persistence.nvim",
-      "packageNameTemplate": "https://github.com/folke/persistence.nvim"
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^home/dot_config/nvim/lazy-lock\\.json$/',
+      ],
+      matchStrings: [
+        '"nvim-lint":\\s*\\{[^}]*"branch":\\s*"(?<currentValue>[^"]+)"[^}]*"commit":\\s*"(?<currentDigest>[a-f0-9]{40})"',
+      ],
+      datasourceTemplate: 'git-refs',
+      depNameTemplate: 'mfussenegger/nvim-lint',
+      packageNameTemplate: 'https://github.com/mfussenegger/nvim-lint',
     },
     {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/dot_config/nvim/lazy-lock\\.json$/"],
-      "matchStrings": ["\"pkl-neovim\":\\s*\\{[^}]*\"branch\":\\s*\"(?<currentValue>[^\"]+)\"[^}]*\"commit\":\\s*\"(?<currentDigest>[a-f0-9]{40})\""],
-      "datasourceTemplate": "git-refs",
-      "depNameTemplate": "apple/pkl-neovim",
-      "packageNameTemplate": "https://github.com/apple/pkl-neovim"
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^home/dot_config/nvim/lazy-lock\\.json$/',
+      ],
+      matchStrings: [
+        '"nvim-lspconfig":\\s*\\{[^}]*"branch":\\s*"(?<currentValue>[^"]+)"[^}]*"commit":\\s*"(?<currentDigest>[a-f0-9]{40})"',
+      ],
+      datasourceTemplate: 'git-refs',
+      depNameTemplate: 'neovim/nvim-lspconfig',
+      packageNameTemplate: 'https://github.com/neovim/nvim-lspconfig',
     },
     {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/dot_config/nvim/lazy-lock\\.json$/"],
-      "matchStrings": ["\"plenary\\.nvim\":\\s*\\{[^}]*\"branch\":\\s*\"(?<currentValue>[^\"]+)\"[^}]*\"commit\":\\s*\"(?<currentDigest>[a-f0-9]{40})\""],
-      "datasourceTemplate": "git-refs",
-      "depNameTemplate": "nvim-lua/plenary.nvim",
-      "packageNameTemplate": "https://github.com/nvim-lua/plenary.nvim"
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^home/dot_config/nvim/lazy-lock\\.json$/',
+      ],
+      matchStrings: [
+        '"nvim-treesitter":\\s*\\{[^}]*"branch":\\s*"(?<currentValue>[^"]+)"[^}]*"commit":\\s*"(?<currentDigest>[a-f0-9]{40})"',
+      ],
+      datasourceTemplate: 'git-refs',
+      depNameTemplate: 'nvim-treesitter/nvim-treesitter',
+      packageNameTemplate: 'https://github.com/nvim-treesitter/nvim-treesitter',
     },
     {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/dot_config/nvim/lazy-lock\\.json$/"],
-      "matchStrings": ["\"snacks\\.nvim\":\\s*\\{[^}]*\"branch\":\\s*\"(?<currentValue>[^\"]+)\"[^}]*\"commit\":\\s*\"(?<currentDigest>[a-f0-9]{40})\""],
-      "datasourceTemplate": "git-refs",
-      "depNameTemplate": "folke/snacks.nvim",
-      "packageNameTemplate": "https://github.com/folke/snacks.nvim"
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^home/dot_config/nvim/lazy-lock\\.json$/',
+      ],
+      matchStrings: [
+        '"nvim-treesitter-textobjects":\\s*\\{[^}]*"branch":\\s*"(?<currentValue>[^"]+)"[^}]*"commit":\\s*"(?<currentDigest>[a-f0-9]{40})"',
+      ],
+      datasourceTemplate: 'git-refs',
+      depNameTemplate: 'nvim-treesitter/nvim-treesitter-textobjects',
+      packageNameTemplate: 'https://github.com/nvim-treesitter/nvim-treesitter-textobjects',
     },
     {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/dot_config/nvim/lazy-lock\\.json$/"],
-      "matchStrings": ["\"todo-comments\\.nvim\":\\s*\\{[^}]*\"branch\":\\s*\"(?<currentValue>[^\"]+)\"[^}]*\"commit\":\\s*\"(?<currentDigest>[a-f0-9]{40})\""],
-      "datasourceTemplate": "git-refs",
-      "depNameTemplate": "folke/todo-comments.nvim",
-      "packageNameTemplate": "https://github.com/folke/todo-comments.nvim"
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^home/dot_config/nvim/lazy-lock\\.json$/',
+      ],
+      matchStrings: [
+        '"nvim-ts-autotag":\\s*\\{[^}]*"branch":\\s*"(?<currentValue>[^"]+)"[^}]*"commit":\\s*"(?<currentDigest>[a-f0-9]{40})"',
+      ],
+      datasourceTemplate: 'git-refs',
+      depNameTemplate: 'windwp/nvim-ts-autotag',
+      packageNameTemplate: 'https://github.com/windwp/nvim-ts-autotag',
     },
     {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/dot_config/nvim/lazy-lock\\.json$/"],
-      "matchStrings": ["\"tokyonight\\.nvim\":\\s*\\{[^}]*\"branch\":\\s*\"(?<currentValue>[^\"]+)\"[^}]*\"commit\":\\s*\"(?<currentDigest>[a-f0-9]{40})\""],
-      "datasourceTemplate": "git-refs",
-      "depNameTemplate": "folke/tokyonight.nvim",
-      "packageNameTemplate": "https://github.com/folke/tokyonight.nvim"
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^home/dot_config/nvim/lazy-lock\\.json$/',
+      ],
+      matchStrings: [
+        '"persistence\\.nvim":\\s*\\{[^}]*"branch":\\s*"(?<currentValue>[^"]+)"[^}]*"commit":\\s*"(?<currentDigest>[a-f0-9]{40})"',
+      ],
+      datasourceTemplate: 'git-refs',
+      depNameTemplate: 'folke/persistence.nvim',
+      packageNameTemplate: 'https://github.com/folke/persistence.nvim',
     },
     {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/dot_config/nvim/lazy-lock\\.json$/"],
-      "matchStrings": ["\"trouble\\.nvim\":\\s*\\{[^}]*\"branch\":\\s*\"(?<currentValue>[^\"]+)\"[^}]*\"commit\":\\s*\"(?<currentDigest>[a-f0-9]{40})\""],
-      "datasourceTemplate": "git-refs",
-      "depNameTemplate": "folke/trouble.nvim",
-      "packageNameTemplate": "https://github.com/folke/trouble.nvim"
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^home/dot_config/nvim/lazy-lock\\.json$/',
+      ],
+      matchStrings: [
+        '"pkl-neovim":\\s*\\{[^}]*"branch":\\s*"(?<currentValue>[^"]+)"[^}]*"commit":\\s*"(?<currentDigest>[a-f0-9]{40})"',
+      ],
+      datasourceTemplate: 'git-refs',
+      depNameTemplate: 'apple/pkl-neovim',
+      packageNameTemplate: 'https://github.com/apple/pkl-neovim',
     },
     {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/dot_config/nvim/lazy-lock\\.json$/"],
-      "matchStrings": ["\"ts-comments\\.nvim\":\\s*\\{[^}]*\"branch\":\\s*\"(?<currentValue>[^\"]+)\"[^}]*\"commit\":\\s*\"(?<currentDigest>[a-f0-9]{40})\""],
-      "datasourceTemplate": "git-refs",
-      "depNameTemplate": "folke/ts-comments.nvim",
-      "packageNameTemplate": "https://github.com/folke/ts-comments.nvim"
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^home/dot_config/nvim/lazy-lock\\.json$/',
+      ],
+      matchStrings: [
+        '"plenary\\.nvim":\\s*\\{[^}]*"branch":\\s*"(?<currentValue>[^"]+)"[^}]*"commit":\\s*"(?<currentDigest>[a-f0-9]{40})"',
+      ],
+      datasourceTemplate: 'git-refs',
+      depNameTemplate: 'nvim-lua/plenary.nvim',
+      packageNameTemplate: 'https://github.com/nvim-lua/plenary.nvim',
     },
     {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/dot_config/nvim/lazy-lock\\.json$/"],
-      "matchStrings": ["\"vim-tmux-navigator\":\\s*\\{[^}]*\"branch\":\\s*\"(?<currentValue>[^\"]+)\"[^}]*\"commit\":\\s*\"(?<currentDigest>[a-f0-9]{40})\""],
-      "datasourceTemplate": "git-refs",
-      "depNameTemplate": "christoomey/vim-tmux-navigator",
-      "packageNameTemplate": "https://github.com/christoomey/vim-tmux-navigator"
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^home/dot_config/nvim/lazy-lock\\.json$/',
+      ],
+      matchStrings: [
+        '"snacks\\.nvim":\\s*\\{[^}]*"branch":\\s*"(?<currentValue>[^"]+)"[^}]*"commit":\\s*"(?<currentDigest>[a-f0-9]{40})"',
+      ],
+      datasourceTemplate: 'git-refs',
+      depNameTemplate: 'folke/snacks.nvim',
+      packageNameTemplate: 'https://github.com/folke/snacks.nvim',
     },
     {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/dot_config/nvim/lazy-lock\\.json$/"],
-      "matchStrings": ["\"which-key\\.nvim\":\\s*\\{[^}]*\"branch\":\\s*\"(?<currentValue>[^\"]+)\"[^}]*\"commit\":\\s*\"(?<currentDigest>[a-f0-9]{40})\""],
-      "datasourceTemplate": "git-refs",
-      "depNameTemplate": "folke/which-key.nvim",
-      "packageNameTemplate": "https://github.com/folke/which-key.nvim"
-    }
-  ]
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^home/dot_config/nvim/lazy-lock\\.json$/',
+      ],
+      matchStrings: [
+        '"todo-comments\\.nvim":\\s*\\{[^}]*"branch":\\s*"(?<currentValue>[^"]+)"[^}]*"commit":\\s*"(?<currentDigest>[a-f0-9]{40})"',
+      ],
+      datasourceTemplate: 'git-refs',
+      depNameTemplate: 'folke/todo-comments.nvim',
+      packageNameTemplate: 'https://github.com/folke/todo-comments.nvim',
+    },
+    {
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^home/dot_config/nvim/lazy-lock\\.json$/',
+      ],
+      matchStrings: [
+        '"tokyonight\\.nvim":\\s*\\{[^}]*"branch":\\s*"(?<currentValue>[^"]+)"[^}]*"commit":\\s*"(?<currentDigest>[a-f0-9]{40})"',
+      ],
+      datasourceTemplate: 'git-refs',
+      depNameTemplate: 'folke/tokyonight.nvim',
+      packageNameTemplate: 'https://github.com/folke/tokyonight.nvim',
+    },
+    {
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^home/dot_config/nvim/lazy-lock\\.json$/',
+      ],
+      matchStrings: [
+        '"trouble\\.nvim":\\s*\\{[^}]*"branch":\\s*"(?<currentValue>[^"]+)"[^}]*"commit":\\s*"(?<currentDigest>[a-f0-9]{40})"',
+      ],
+      datasourceTemplate: 'git-refs',
+      depNameTemplate: 'folke/trouble.nvim',
+      packageNameTemplate: 'https://github.com/folke/trouble.nvim',
+    },
+    {
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^home/dot_config/nvim/lazy-lock\\.json$/',
+      ],
+      matchStrings: [
+        '"ts-comments\\.nvim":\\s*\\{[^}]*"branch":\\s*"(?<currentValue>[^"]+)"[^}]*"commit":\\s*"(?<currentDigest>[a-f0-9]{40})"',
+      ],
+      datasourceTemplate: 'git-refs',
+      depNameTemplate: 'folke/ts-comments.nvim',
+      packageNameTemplate: 'https://github.com/folke/ts-comments.nvim',
+    },
+    {
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^home/dot_config/nvim/lazy-lock\\.json$/',
+      ],
+      matchStrings: [
+        '"vim-tmux-navigator":\\s*\\{[^}]*"branch":\\s*"(?<currentValue>[^"]+)"[^}]*"commit":\\s*"(?<currentDigest>[a-f0-9]{40})"',
+      ],
+      datasourceTemplate: 'git-refs',
+      depNameTemplate: 'christoomey/vim-tmux-navigator',
+      packageNameTemplate: 'https://github.com/christoomey/vim-tmux-navigator',
+    },
+    {
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^home/dot_config/nvim/lazy-lock\\.json$/',
+      ],
+      matchStrings: [
+        '"which-key\\.nvim":\\s*\\{[^}]*"branch":\\s*"(?<currentValue>[^"]+)"[^}]*"commit":\\s*"(?<currentDigest>[a-f0-9]{40})"',
+      ],
+      datasourceTemplate: 'git-refs',
+      depNameTemplate: 'folke/which-key.nvim',
+      packageNameTemplate: 'https://github.com/folke/which-key.nvim',
+    },
+  ],
 }
