@@ -18,6 +18,18 @@
     "github-actions"
   ],
 
+  // Lock file maintenance: regenerate mise.lock files to pick up new versions
+  // Configs declare "latest", lockfiles pin exact versions with checksums
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["at any time"]
+  },
+
+  // File discovery: chezmoi uses dot_ prefix instead of literal dots
+  "mise": {
+    "managerFilePatterns": ["/^home/dot_config/mise/config\\.toml$/"]
+  },
+
   // Actions: pin to digests for reproducibility
   "github-actions": { "pinDigests": true },
 
@@ -71,42 +83,6 @@
       ],
       "depNameTemplate": "sigstore/cosign",
       "datasourceTemplate": "github-releases"
-    },
-    // Handle aqua-prefixed tools in mise TOML files
-    {
-      "customType": "regex",
-      "managerFilePatterns": ["/^mise\\.toml$/", "/^home/dot_config/mise/config\\.toml$/"],
-      "matchStrings": [
-        "\"aqua:(?<depName>[^/]+/[^\"]+)\"\\s*=\\s*\"(?<currentValue>v?[^\"]+)\""
-      ],
-      "datasourceTemplate": "github-releases"
-    },
-    // Handle ubi-prefixed tools in mise TOML files
-    {
-      "customType": "regex",
-      "managerFilePatterns": ["/^mise\\.toml$/", "/^home/dot_config/mise/config\\.toml$/"],
-      "matchStrings": [
-        "\"ubi:(?<depName>[^/]+/[^\"]+)\"\\s*=\\s*\"(?<currentValue>v?[^\"]+)\""
-      ],
-      "datasourceTemplate": "github-releases"
-    },
-    // Handle npm-prefixed tools in mise TOML files
-    {
-      "customType": "regex",
-      "managerFilePatterns": ["/^mise\\.toml$/", "/^home/dot_config/mise/config\\.toml$/"],
-      "matchStrings": [
-        "\"npm:(?<depName>[^\"]+)\"\\s*=\\s*\"(?<currentValue>[^\"]+)\""
-      ],
-      "datasourceTemplate": "npm"
-    },
-    // Handle pipx-prefixed tools in mise TOML files
-    {
-      "customType": "regex",
-      "managerFilePatterns": ["/^mise\\.toml$/", "/^home/dot_config/mise/config\\.toml$/"],
-      "matchStrings": [
-        "\"pipx:(?<depName>[^\"]+)\"\\s*=\\s*\"(?<currentValue>[^\"]+)\""
-      ],
-      "datasourceTemplate": "pypi"
     },
     // Optional: Go tools (see step 3b)
     {
