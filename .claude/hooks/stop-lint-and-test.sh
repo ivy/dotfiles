@@ -9,6 +9,8 @@
 
 set -euo pipefail
 
+cd "$(dirname "${BASH_SOURCE[0]}")/../.."
+
 input=$(cat)
 
 # Prevent infinite loops: if the stop hook is already active, allow the stop
@@ -21,7 +23,10 @@ fi
 files=()
 while IFS= read -r f; do
 	files+=("$f")
-done < <({ git diff --name-only; git diff --cached --name-only; } | sort -u)
+done < <({
+	git diff --name-only
+	git diff --cached --name-only
+} | sort -u)
 
 # If no tracked files changed, nothing to check
 if [[ ${#files[@]} -eq 0 ]]; then
