@@ -1,80 +1,81 @@
+// Renovate configuration for dotfiles repository.
+// Full reference: https://docs.renovatebot.com/configuration-options/
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+
+  // Presets: sensible defaults, conventional-commit PR titles, no dashboard issue
   "extends": [
     "config:recommended",
     ":semanticCommits",
     ":disableDependencyDashboard"
   ],
-  // Create PRs Mon-Fri mornings so they're ready for daily review
-  "schedule": ["before 9am every weekday"],
-  "labels": ["deps", "automated"],
-  "prHourlyLimit": 2,
-  "prConcurrentLimit": 5,
 
-  // Managers enabled for this repo
+  // Evaluate schedules in Pacific time
+  "timezone": "America/Los_Angeles",
+
+  // Commit via the GitHub API instead of pushing with git
+  "platformCommit": true,
+
+  // Auto-raise a PR when Renovate config options need migration
+  "configMigration": true,
+
+  // Squash-merge passing PRs automatically; packageRules below can override
+  "automerge": true,
+  "automergeStrategy": "squash",
+
+  // Labels applied to every Renovate PR
+  "labels": ["deps", "automated"],
+
+  // Only these managers are active — everything else (npm, pip, etc.) is ignored
   "enabledManagers": [
     "mise",
     "docker-compose",
     "github-actions"
   ],
 
-  // Lock file maintenance: regenerate mise.lock files to pick up new versions
-  // Configs declare "latest", lockfiles pin exact versions with checksums
+  // Lock file maintenance: regenerate mise.lock to pick up new versions.
+  // Tool configs declare "latest"; lockfiles pin exact versions with checksums.
   "lockFileMaintenance": {
     "enabled": true,
     "schedule": ["at any time"]
   },
 
-  // File discovery: chezmoi uses dot_ prefix instead of literal dots
+  // ---------------------------------------------------------------------------
+  // Manager-level file discovery
+  // Chezmoi renames dotfiles (`.config` → `dot_config`), so Renovate needs
+  // custom managerFilePatterns to find package files in the chezmoi source tree.
+  // ---------------------------------------------------------------------------
+
   "mise": {
     "managerFilePatterns": ["/^home/dot_config/mise/config\\.toml$/"]
   },
 
-  // Actions: pin to digests for reproducibility
-  "github-actions": { "pinDigests": true },
-
-  // File discovery
   "docker-compose": {
     "managerFilePatterns": ["/^home/dot_config/docker-compose/.*\\.ya?ml$/"]
   },
+
+  // Pin Actions to full-length commit SHAs for reproducibility
   "github-actions": {
+    "pinDigests": true,
     "managerFilePatterns": ["/^\\.github/workflows/.*\\.ya?ml$/"]
   },
 
-  // Grouping + automerge for safe/low-risk updates
+  // Pin Docker images to digests for byte-for-byte reproducibility
   "packageRules": [
-    // Docker digest pinning for reproducibility
-    {"matchCategories": ["docker"], "pinDigests": true},
-    {
-      "matchManagers": ["github-actions"],
-      "groupName": "github-actions",
-      "automerge": true,
-      "automergeType": "pr",
-      "matchUpdateTypes": ["minor", "patch", "digest"]
-    },
-    {
-      "matchManagers": ["docker-compose"],
-      "groupName": "docker-compose",
-      "automerge": true,
-      "automergeType": "pr",
-      "matchUpdateTypes": ["digest"]
-    },
-    {
-      "matchManagers": ["mise"],
-      "groupName": "mise-tools",
-      "automerge": false
-    },
-    // lazy.nvim plugins - group digest updates, no automerge (plugins can break)
-    {
-      "matchFileNames": ["home/dot_config/nvim/lazy-lock.json"],
-      "groupName": "lazy-nvim-plugins",
-      "automerge": false
-    }
+    {"matchCategories": ["docker"], "pinDigests": true}
   ],
 
-  // Custom managers to pin nonstandard files
+  // ---------------------------------------------------------------------------
+  // Custom regex managers
+  // Handle files Renovate doesn't natively understand. Each entry tells
+  // Renovate: where to look (managerFilePatterns), what to match (matchStrings),
+  // and where to find new versions (datasourceTemplate).
+  // ---------------------------------------------------------------------------
   "customManagers": [
-    // Pin cosign version in a versions file (see step 4)
+
+    // --- Standalone version files ------------------------------------------------
+
+    // cosign binary version pinned in a TOML versions file
     {
       "customType": "regex",
       "managerFilePatterns": ["/^home/dot_config/dotfiles/cli-versions\\.toml$/"],
@@ -84,7 +85,8 @@
       "depNameTemplate": "sigstore/cosign",
       "datasourceTemplate": "github-releases"
     },
-    // Optional: Go tools (see step 3b)
+
+    // Go tools installed via `go install` — versions tracked from the Go module proxy
     {
       "customType": "regex",
       "managerFilePatterns": ["/^home/dot_config/go-tools/tools\\.txt$/"],
@@ -93,7 +95,8 @@
       ],
       "datasourceTemplate": "go"
     },
-    // Optional: Node tools in tools.txt (see step 3a alt)
+
+    // Node.js global tools — versions tracked from npm
     {
       "customType": "regex",
       "managerFilePatterns": ["/^home/dot_config/node-tools/tools\\.txt$/"],
@@ -102,7 +105,12 @@
       ],
       "datasourceTemplate": "npm"
     },
-    // Chezmoi external dependencies - catppuccin/ghostty theme tarball pin
+
+    // --- Chezmoi external dependencies (.chezmoiexternal.toml.tmpl) --------------
+    // Tarballs and repos that chezmoi downloads on `chezmoi apply`.
+    // Each is pinned to a commit SHA and tracked via the git-refs datasource.
+
+    // catppuccin/ghostty — Ghostty terminal color theme
     {
       "customType": "regex",
       "managerFilePatterns": ["/^home/\\.chezmoiexternal\\.toml\\.tmpl$/"],
@@ -114,7 +122,8 @@
       "depNameTemplate": "catppuccin/ghostty",
       "packageNameTemplate": "https://github.com/catppuccin/ghostty"
     },
-    // Chezmoi external dependencies - ohmyzsh tarball pin
+
+    // ohmyzsh/ohmyzsh — Oh My Zsh framework
     {
       "customType": "regex",
       "managerFilePatterns": ["/^home/\\.chezmoiexternal\\.toml\\.tmpl$/"],
@@ -126,7 +135,8 @@
       "depNameTemplate": "ohmyzsh/ohmyzsh",
       "packageNameTemplate": "https://github.com/ohmyzsh/ohmyzsh"
     },
-    // Chezmoi external dependencies - zsh-autosuggestions tarball pin
+
+    // zsh-users/zsh-autosuggestions — fish-like command suggestions for zsh
     {
       "customType": "regex",
       "managerFilePatterns": ["/^home/\\.chezmoiexternal\\.toml\\.tmpl$/"],
@@ -138,7 +148,8 @@
       "depNameTemplate": "zsh-users/zsh-autosuggestions",
       "packageNameTemplate": "https://github.com/zsh-users/zsh-autosuggestions"
     },
-    // Chezmoi external dependencies - zsh-syntax-highlighting tarball pin
+
+    // zsh-users/zsh-syntax-highlighting — command syntax highlighting for zsh
     {
       "customType": "regex",
       "managerFilePatterns": ["/^home/\\.chezmoiexternal\\.toml\\.tmpl$/"],
@@ -150,7 +161,8 @@
       "depNameTemplate": "zsh-users/zsh-syntax-highlighting",
       "packageNameTemplate": "https://github.com/zsh-users/zsh-syntax-highlighting"
     },
-    // Chezmoi external dependencies - gpakosz/.tmux git-repo revision pin
+
+    // gpakosz/.tmux — tmux configuration framework (cloned as git-repo, not tarball)
     {
       "customType": "regex",
       "managerFilePatterns": ["/^home/\\.chezmoiexternal\\.toml\\.tmpl$/"],
@@ -163,11 +175,12 @@
       "packageNameTemplate": "https://github.com/gpakosz/.tmux"
     },
 
-    // ==========================================================================
-    // lazy.nvim lockfile - pin Neovim plugin commits via git-refs
-    // Each plugin needs its own manager because the lockfile only stores the
-    // directory name (e.g., "LazyVim"), not the full GitHub path (LazyVim/LazyVim)
-    // ==========================================================================
+    // --- lazy.nvim lockfile (home/dot_config/nvim/lazy-lock.json) ----------------
+    // Neovim plugins managed by lazy.nvim. The lockfile stores each plugin by
+    // its directory name (e.g. "LazyVim"), not the full GitHub slug
+    // (e.g. "LazyVim/LazyVim"), so each plugin needs its own custom manager
+    // to map the short name → GitHub owner/repo.
+
     {
       "customType": "regex",
       "managerFilePatterns": ["/^home/dot_config/nvim/lazy-lock\\.json$/"],
