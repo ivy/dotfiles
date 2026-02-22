@@ -1,5 +1,5 @@
 [[tools."aqua:bats-core/bats-core"]]
-version = "v1.13.0"
+version = "1.13.0"
 backend = "aqua:bats-core/bats-core"
 "platforms.linux-arm64" = { url = "https://github.com/bats-core/bats-core/archive/refs/tags/v1.13.0.tar.gz"}
 "platforms.linux-x64" = { url = "https://github.com/bats-core/bats-core/archive/refs/tags/v1.13.0.tar.gz"}
@@ -7,22 +7,13 @@ backend = "aqua:bats-core/bats-core"
 "platforms.macos-x64" = { url = "https://github.com/bats-core/bats-core/archive/refs/tags/v1.13.0.tar.gz"}
 
 [[tools."aqua:koalaman/shellcheck"]]
-version = "v0.11.0"
+version = "0.11.0"
 backend = "aqua:koalaman/shellcheck"
 "platforms.linux-arm64" = { checksum = "sha256:12b331c1d2db6b9eb13cfca64306b1b157a86eb69db83023e261eaa7e7c14588", url = "https://github.com/koalaman/shellcheck/releases/download/v0.11.0/shellcheck-v0.11.0.linux.aarch64.tar.xz"}
 "platforms.linux-x64" = { checksum = "sha256:8c3be12b05d5c177a04c29e3c78ce89ac86f1595681cab149b65b97c4e227198", url = "https://github.com/koalaman/shellcheck/releases/download/v0.11.0/shellcheck-v0.11.0.linux.x86_64.tar.xz"}
 "platforms.macos-arm64" = { checksum = "sha256:56affdd8de5527894dca6dc3d7e0a99a873b0f004d7aabc30ae407d3f48b0a79", url = "https://github.com/koalaman/shellcheck/releases/download/v0.11.0/shellcheck-v0.11.0.darwin.aarch64.tar.xz"}
 "platforms.macos-x64" = { checksum = "sha256:3c89db4edcab7cf1c27bff178882e0f6f27f7afdf54e859fa041fca10febe4c6", url = "https://github.com/koalaman/shellcheck/releases/download/v0.11.0/shellcheck-v0.11.0.darwin.x86_64.tar.xz"}
 "platforms.windows-x64" = { checksum = "sha256:8a4e35ab0b331c85d73567b12f2a444df187f483e5079ceffa6bda1faa2e740e", url = "https://github.com/koalaman/shellcheck/releases/download/v0.11.0/shellcheck-v0.11.0.zip"}
-
-[[tools."aqua:mikefarah/yq"]]
-version = "v4.52.4"
-backend = "aqua:mikefarah/yq"
-"platforms.linux-arm64" = { checksum = "sha256:4c2cc022a129be5cc1187959bb4b09bebc7fb543c5837b93001c68f97ce39a5d", url = "https://github.com/mikefarah/yq/releases/download/v4.52.4/yq_linux_arm64"}
-"platforms.linux-x64" = { checksum = "sha256:0c4d965ea944b64b8fddaf7f27779ee3034e5693263786506ccd1c120f184e8c", url = "https://github.com/mikefarah/yq/releases/download/v4.52.4/yq_linux_amd64"}
-"platforms.macos-arm64" = { checksum = "sha256:6bfa43a439936644d63c70308832390c8838290d064970eaada216219c218a13", url = "https://github.com/mikefarah/yq/releases/download/v4.52.4/yq_darwin_arm64"}
-"platforms.macos-x64" = { checksum = "sha256:d72a75fe9953c707d395f653d90095b133675ddd61aa738e1ac9a73c6c05e8be", url = "https://github.com/mikefarah/yq/releases/download/v4.52.4/yq_darwin_amd64"}
-"platforms.windows-x64" = { checksum = "sha256:b7c4186f8a3e32879ddf99389bf59a4b2861f0f1b41ef58647d903b0a11e8151", url = "https://github.com/mikefarah/yq/releases/download/v4.52.4/yq_windows_amd64.exe"}
 
 [[tools."aqua:mikefarah/yq"]]
 version = "4.52.4"
@@ -34,7 +25,7 @@ backend = "aqua:mikefarah/yq"
 "platforms.windows-x64" = { checksum = "sha256:b7c4186f8a3e32879ddf99389bf59a4b2861f0f1b41ef58647d903b0a11e8151", url = "https://github.com/mikefarah/yq/releases/download/v4.52.4/yq_windows_amd64.exe"}
 
 [[tools."aqua:suzuki-shunsuke/ghalint"]]
-version = "v1.5.5"
+version = "1.5.5"
 backend = "aqua:suzuki-shunsuke/ghalint"
 "platforms.linux-arm64" = { checksum = "sha256:c3ab464130015d733bfc75a2851f4fc5b3cb966aca2ed8bc0fa2a029bc0ee6af", url = "https://github.com/suzuki-shunsuke/ghalint/releases/download/v1.5.5/ghalint_1.5.5_linux_arm64.tar.gz"}
 "platforms.linux-x64" = { checksum = "sha256:579cbf9024f86a8255ce8acdd56c7792f0f9a7e76063d64cfb7b66ff65c396e4", url = "https://github.com/suzuki-shunsuke/ghalint/releases/download/v1.5.5/ghalint_1.5.5_linux_amd64.tar.gz"}
@@ -59,10 +50,6 @@ backend = "aqua:jqlang/jq"
 "platforms.macos-x64" = { checksum = "sha256:e80dbe0d2a2597e3c11c404f03337b981d74b4a8504b70586c354b7697a7c27f", url = "https://github.com/jqlang/jq/releases/download/jq-1.8.1/jq-macos-amd64"}
 "platforms.windows-x64" = { checksum = "sha256:23cb60a1354eed6bcc8d9b9735e8c7b388cd1fdcb75726b93bc299ef22dd9334", url = "https://github.com/jqlang/jq/releases/download/jq-1.8.1/jq-windows-amd64.exe"}
 
-[[tools."npm:markdownlint-cli"]]
-version = "0.47.0"
-backend = "npm:markdownlint-cli"
-
 [[tools.pkl]]
 version = "0.30.2"
 backend = "aqua:apple/pkl"
@@ -73,7 +60,7 @@ backend = "aqua:apple/pkl"
 "platforms.windows-x64" = { checksum = "sha256:19e92aa59bcf4e54963b6e3b419af7e1b939f5793b44f4a08d60bab1217106f4", url = "https://github.com/apple/pkl/releases/download/0.30.2/pkl-windows-amd64.exe"}
 
 [[tools.shfmt]]
-version = "v3.12.0"
+version = "3.12.0"
 backend = "aqua:mvdan/sh"
 "platforms.linux-arm64" = { checksum = "sha256:5f3fe3fa6a9f766e6a182ba79a94bef8afedafc57db0b1ad32b0f67fae971ba4", url = "https://github.com/mvdan/sh/releases/download/v3.12.0/shfmt_v3.12.0_linux_arm64"}
 "platforms.linux-x64" = { checksum = "sha256:d9fbb2a9c33d13f47e7618cf362a914d029d02a6df124064fff04fd688a745ea", url = "https://github.com/mvdan/sh/releases/download/v3.12.0/shfmt_v3.12.0_linux_amd64"}
