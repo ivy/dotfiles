@@ -37,6 +37,28 @@ home/dot_config/tmux-powerline/
 
 The upstream tmux-powerline is installed as a chezmoi external to `~/.config/tmux/plugins/tmux-powerline/`.
 
+## Nerd Font glyphs
+
+**Always use UTF-8 byte escapes** — never literal Unicode characters (invisible to LLMs) and never `$'\uXXXX'` Unicode escapes (not interpreted in tmux-powerline's sourcing context).
+
+```bash
+# Correct — UTF-8 byte escape, works everywhere
+local icon=$'\xf3\xb0\x8c\x8c'  # U+F030C nf-md-keyboard
+
+# Wrong — literal glyph, LLMs cannot read or write these reliably
+local icon=""
+
+# Wrong — $'\uXXXX' not interpreted by tmux-powerline; renders as literal text
+local icon=$'\uf030c'
+```
+
+To find the UTF-8 bytes for any codepoint:
+```bash
+python3 -c "print('U+F030C =', ' '.join(f'\\\\x{b:02x}' for b in chr(0xF030C).encode()))"
+```
+
+Separator glyphs in theme files follow the same rule — see lines 36-40 of `catppuccin-mocha.sh`.
+
 ## Right-side segments
 
 | Segment | Always shown | Trigger condition | Icon |

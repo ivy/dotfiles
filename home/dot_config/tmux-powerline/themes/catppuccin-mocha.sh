@@ -33,11 +33,11 @@ base="#1e1e2e"
 mantle="#181825"
 crust="#11111b"
 
-# --- Powerline separators (Nerd Font) ----------------------------------------
-TMUX_POWERLINE_SEPARATOR_LEFT_BOLD=""
-TMUX_POWERLINE_SEPARATOR_LEFT_THIN=""
-TMUX_POWERLINE_SEPARATOR_RIGHT_BOLD=""
-TMUX_POWERLINE_SEPARATOR_RIGHT_THIN=""
+# --- Powerline separators (Nerd Font slants) ---------------------------------
+TMUX_POWERLINE_SEPARATOR_LEFT_BOLD=$'\xee\x82\xba'  # U+E0BA nf-pl-left_hard_divider_inverse
+TMUX_POWERLINE_SEPARATOR_LEFT_THIN=$'\xee\x82\xbb'  # U+E0BB nf-pl-left_soft_divider_inverse
+TMUX_POWERLINE_SEPARATOR_RIGHT_BOLD=$'\xee\x82\xbc' # U+E0BC nf-pl-right_hard_divider_inverse
+TMUX_POWERLINE_SEPARATOR_RIGHT_THIN=$'\xee\x82\xbd' # U+E0BD nf-pl-right_soft_divider_inverse
 TMUX_POWERLINE_SEPARATOR_THIN="|"
 
 # --- Alert helpers (color escalation for notification rail) ------------------
