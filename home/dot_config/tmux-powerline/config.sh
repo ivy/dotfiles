@@ -7,7 +7,7 @@ export TMUX_POWERLINE_PATCHED_FONT_IN_USE="true"
 
 # Theme — Catppuccin, auto-detected from macOS appearance
 # (matches Ghostty, Neovim, and Claude Code; see docs/catppuccin.md)
-_style=$(defaults read -g AppleInterfaceStyle 2>/dev/null | tr '[:upper:]' '[:lower:]')
+_style=$(defaults read -g AppleInterfaceStyle 2>/dev/null | tr '[:upper:]' '[:lower:]' || true)
 case "$_style" in
   dark) export TMUX_POWERLINE_THEME="catppuccin-mocha" ;;
   *)    export TMUX_POWERLINE_THEME="catppuccin-latte" ;;
