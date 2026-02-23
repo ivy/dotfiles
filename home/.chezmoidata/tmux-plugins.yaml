@@ -7,3 +7,7 @@ tmuxPlugins:
     repo: tmux-plugins/tmux-sensible
     ref: master
     commit: 25cb91f42d020f675bb0a2ce3fbd3a5d96119efa
+  - name: tmux-powerline
+    repo: erikw/tmux-powerline
+    ref: main
+    commit: d70011158dc389070d6ed7a67b65367206b6ddec
