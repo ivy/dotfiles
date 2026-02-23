@@ -86,12 +86,13 @@ have no way to inherit the local system's appearance setting. This is
 out-of-scope for this ADR but needs to be solved eventually — likely by
 propagating appearance as an environment variable through SSH/tmux.
 
-### No shared detection utility
+### ~~No shared detection utility~~ — Resolved
 
-Each tool that detects appearance reimplements the same logic (see
-`home/dot_local/libexec/executable_claude-powerline-theme` for the current
-pattern). A shared shell function or utility SHOULD be extracted to avoid
-duplication. This will likely be solved alongside the remote detection gap.
+A shared utility now exists at
+`home/dot_local/libexec/dotfiles/executable_appearance`. It outputs `dark` or
+`light`, always exits 0, and supports an env-var override
+(`BG`) for remote/non-macOS systems. All tools that need
+appearance detection call this utility instead of reimplementing the logic.
 
 ### Per-tool status
 
@@ -99,9 +100,9 @@ duplication. This will likely be solved alongside the remote detection gap.
 |------|-----------|-------------|-----|
 | Ghostty | Native port | Native OS integration | — |
 | Neovim | `catppuccin/nvim` plugin | Plugin handles it | — |
-| Claude Powerline | Custom JSON themes | `defaults read` | — |
+| Claude Powerline | Custom JSON themes | `appearance` utility | — |
 | Zsh | ANSI names via terminal | Inherits from terminal | — |
-| tmux status bar | Custom theme | `defaults read` | — |
+| tmux status bar | Custom theme | `appearance` utility | — |
 | Mise | Supports `catppuccin` | Not configured | Not set to catppuccin |
 
 ## More Information
@@ -110,7 +111,7 @@ duplication. This will likely be solved alongside the remote detection gap.
 
 ### Revisit When
 
-* A shared appearance-detection utility is implemented (resolves both known gaps)
+* ~~A shared appearance-detection utility is implemented (resolves both known gaps)~~
 * Remote appearance propagation is solved (SSH, containers)
 * A tool is encountered where Catppuccin pastels genuinely impair readability
 * Frappe or Macchiato variants are needed for a specific use case

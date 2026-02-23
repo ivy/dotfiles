@@ -222,17 +222,18 @@ When building a custom theme, use these conventions:
 | Slightly raised surface | Surface 0 |
 | Borders / dividers | Surface 1 |
 
-### Appearance Detection Pattern
+### Appearance Detection
 
-Until a shared utility exists, use this pattern for macOS detection:
+Use the shared `appearance` utility — it outputs `dark` or `light`, always
+exits 0, and supports env-var override for remote systems:
 
 ```sh
-style=$(defaults read -g AppleInterfaceStyle 2>/dev/null | tr '[:upper:]' '[:lower:]')
-case "$style" in
+case "$("$HOME/.local/libexec/dotfiles/appearance")" in
   dark) variant="mocha" ;;
   *)    variant="latte" ;;
 esac
 ```
 
-See `home/dot_local/libexec/executable_claude-powerline-theme` for a working
-example.
+The utility checks (in order): `BG` env var, macOS `defaults
+read`, then falls back to `light`. See
+`home/dot_local/libexec/dotfiles/executable_appearance` for the implementation.

@@ -1,0 +1,29 @@
+#!/bin/sh
+# Output the current system appearance: "dark" or "light".
+# Always exits 0 — callers never need to guard against failure.
+#
+# Detection order:
+#   1. BG env var (override / remote propagation)
+#   2. macOS `defaults read` (local desktop)
+#   3. Fallback: "light"
+
+if [ -n "$BG" ]; then
+  case "$BG" in
+    dark) echo "dark" ;;
+    *)    echo "light" ;;
+  esac
+  exit 0
+fi
+
+case "$(uname -s)" in
+  Darwin)
+    if defaults read -g AppleInterfaceStyle >/dev/null 2>&1; then
+      echo "dark"
+    else
+      echo "light"
+    fi
+    ;;
+  *)
+    echo "light"
+    ;;
+esac
