@@ -41,7 +41,6 @@ TMUX_POWERLINE_SEPARATOR_RIGHT_THIN=""
 TMUX_POWERLINE_SEPARATOR_THIN="|"
 
 # --- Alert helpers (color escalation for notification rail) ------------------
-# shellcheck source=../helpers/alert_helpers.sh
 source "${XDG_CONFIG_HOME:-$HOME/.config}/tmux-powerline/helpers/alert_helpers.sh"
 
 # --- Theme defaults -----------------------------------------------------------
@@ -98,7 +97,7 @@ fi
 # shellcheck disable=SC1143,SC2128
 if [ -z "$TMUX_POWERLINE_RIGHT_STATUS_SEGMENTS" ]; then
 	TMUX_POWERLINE_RIGHT_STATUS_SEGMENTS=(
-		"mode_indicator $surface1 $text"
+		"mode_indicator $mantle $text"
 		"alert_hostname $mauve $crust"
 		"github_notifications $lavender $crust"
 		"alert_load $(tp_alert_color_load) $crust"

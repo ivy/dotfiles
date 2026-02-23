@@ -7,8 +7,8 @@ Status bar via [erikw/tmux-powerline](https://github.com/erikw/tmux-powerline) w
 The status bar is silent by default and loud when something needs attention. It does not duplicate information already visible elsewhere (macOS menu bar: time/date/battery; shell prompt: cwd/git; Neovim statusline: cwd/branch).
 
 ```
-[session:win.pane]  ···  [window tabs]  ···  [mode] [host?] [gh?] [load?] [mem?] [disk?]
-     left                   center                     right (conditional)
+[ session:win.pane]  ···  [window tabs]  ···  [mode] [host?] [gh?] [load?] [mem?] [disk?]
+      left                    center                     right (conditional)
 ```
 
 **Left** — session identity only (`session:window.pane`).\
@@ -25,6 +25,7 @@ home/dot_config/tmux-powerline/
   helpers/
     alert_helpers.sh            # tp_alert_color_* functions for color escalation
   segments/
+    mode_indicator.sh           # Custom: silent in normal mode, icons only (overrides upstream)
     alert_hostname.sh           # Shows hostname in SSH/container sessions
     alert_load.sh               # Shows load when 1-min load > core count
     alert_mem.sh                # Shows memory usage when > 80%
@@ -40,8 +41,8 @@ The upstream tmux-powerline is installed as a chezmoi external to `~/.config/tmu
 
 | Segment | Always shown | Trigger condition | Icon |
 |---------|-------------|-------------------|------|
-| `mode_indicator` | yes | — | varies by mode |
-| `alert_hostname` | no | `$SSH_CONNECTION`, `$SSH_TTY`, `$SSH_CLIENT` set, or `/.dockerenv` exists | short hostname |
+| `mode_indicator` | yes | — | `` normal / `` prefix / `󰍽` mouse / `` copy / `󰏤` suspend |
+| `alert_hostname` | no | `$SSH_CONNECTION`, `$SSH_TTY`, `$SSH_CLIENT` set, or `/.dockerenv` exists | `` + short hostname |
 | `github_notifications` | no | unread count > 0 (upstream segment behavior) | bell icon + count |
 | `alert_load` | no | 1-min load average > CPU core count | ` ` + load averages |
 | `alert_mem` | no | memory usage ≥ 80% | ` ` + used GB |
@@ -82,6 +83,7 @@ These functions echo a color hex string (e.g. `#f9e2af`), which becomes the back
 | `TMUX_POWERLINE_STATUS_INTERVAL` | `5` | Refresh every 5 seconds |
 | `TMUX_POWERLINE_STATUS_LEFT_LENGTH` | `30` | Narrow — session info only |
 | `TMUX_POWERLINE_STATUS_RIGHT_LENGTH` | `90` | Wide enough for all alerts firing simultaneously |
+| `TMUX_POWERLINE_SEG_TMUX_SESSION_INFO_FORMAT` | `#S:#I.#P` | Terminal icon prefix on session info |
 | `TMUX_POWERLINE_SEG_GITHUB_NOTIFICATIONS_TOKEN` | from `gh auth token` | Auth for GitHub API |
 | `TMUX_POWERLINE_SEG_GITHUB_NOTIFICATIONS_HIDE_NO_NOTIFICATIONS` | `yes` | Hides segment when count is zero |
 | `TMUX_POWERLINE_SEG_GITHUB_NOTIFICATIONS_SYMBOL_MODE` | `yes` | Shows icon instead of text label |
