@@ -1,0 +1,216 @@
+name: Renovate Supply-Chain Security Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  supply-chain-review:
+    if: github.event.pull_request.user.login == 'ivy-s-renovate-bot[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      pull-requests: write
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Supply-chain security review
+        id: review
+        uses: anthropics/claude-code-action@edd85d61533cbba7b57ed0ca4af1750b1fdfd3c4 # beta
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          use_sticky_comment: true
+
+          # HACK(ivy): This will check *Git* diffs, not the actual published
+          # packages. For now, it's better than nothing and still highly
+          # experimental! At some point, I'd like to find a safe way to pull
+          # directly from package repositories, unpack, and analyze them.
+          prompt: |
+            You are a supply-chain security analyst. Review this Renovate dependency
+            update PR for indicators of supply-chain compromise.
+
+            REPO: ${{ github.repository }}
+            PR NUMBER: ${{ github.event.pull_request.number }}
+
+            ## Step 1: Parse the update
+
+            Run `gh pr diff ${{ github.event.pull_request.number }}` to identify each
+            dependency being updated. Extract: package name (owner/repo), old version
+            or ref, new version or ref, and ecosystem (GitHub Actions, mise/aqua tool,
+            Docker image, chezmoi external, Neovim plugin).
+
+            ## Step 2: Investigate upstream changes
+
+            For each dependency, query the GitHub API to compare old and new versions:
+
+            ```bash
+            # Release metadata
+            gh api repos/OWNER/REPO/releases/tags/vVERSION \
+              --jq '{name, author: .author.login, created_at, body}' 2>/dev/null
+
+            # Diff between versions — look at commit authors and changed files
+            gh api repos/OWNER/REPO/compare/OLD_REF...NEW_REF --jq '{
+              total_commits: .total_commits,
+              authors: [.commits[].author.login] | unique,
+              files: [.files[] | {filename, status, additions, deletions}]
+            }'
+            ```
+
+            Adapt the tag format to the project (some use `v1.2.3`, others `1.2.3`).
+            If one format 404s, try the other.
+
+            **GitHub Actions deserve the deepest scrutiny** — they execute arbitrary
+            code in CI. For Actions updates, also inspect changes to `action.yml`,
+            `Dockerfile`, entrypoint scripts, and any new `run:` blocks.
+
+            ## Step 3: Assess risk
+
+            Flag these supply-chain attack indicators:
+
+            **CRITICAL** (must block merge):
+            - Repository ownership transfer or rename
+            - Release published by a previously-unseen maintainer
+            - Obfuscated or encoded payloads in changed files
+            - New postinstall / lifecycle scripts
+            - Actions: new secrets access, unexpected outbound network calls
+
+            **HIGH** (needs human review before merge):
+            - Major version jump without clear motivation in release notes
+            - Significant new transitive dependencies added
+            - Binary or compiled artifacts introduced
+            - Release < 72 hours old from an infrequent contributor
+
+            **MEDIUM** (note for awareness):
+            - Unusually large diff relative to the semver bump type
+            - Upstream CI/CD pipeline changes
+            - Vague or missing release notes
+
+            **LOW / CLEAR**:
+            - Routine patch or minor bump with focused diff and clear changelog
+            - Well-known, established maintainer
+
+            ## Step 4: Post findings
+
+            Post **one** PR comment with this structure:
+
+            ### Supply-Chain Security Review
+
+            **Overall risk: CLEAR / LOW / MEDIUM / HIGH / CRITICAL**
+
+            | Dependency | Version | Risk | Finding |
+            |------------|---------|------|---------|
+            | owner/repo | 1.0→1.1 | LOW  | Routine patch, 3 commits, same maintainer |
+
+            For MEDIUM or above, add a **Details** section with evidence
+            (commit SHAs, changed filenames, new authors, etc.).
+
+            For CLEAR/LOW, keep the entire comment to a few sentences.
+
+            ## Step 5: Return structured verdict
+
+            Your final response MUST be the structured JSON output matching the
+            required schema. Set risk_level to your overall assessment and summary
+            to a one-sentence explanation.
+
+          claude_args: |
+            --allowedTools "Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr comment:*),Bash(gh api:*),Read" --json-schema '{"type":"object","properties":{"risk_level":{"type":"string","enum":["CLEAR","LOW","MEDIUM","HIGH","CRITICAL"]},"summary":{"type":"string"}},"required":["risk_level","summary"]}'
+
+      - name: Gate automerge on risk level
+        id: gate
+        if: always()
+        env:
+          VERDICT: ${{ steps.review.outputs.structured_output }}
+        run: |
+          # Fail closed if structured output is missing (review crashed or was compromised)
+          if [[ -z "$VERDICT" ]]; then
+            echo "::error::No structured output from review — failing closed"
+            exit 1
+          fi
+
+          # Write to file so jq reads from stdin, not shell expansion
+          printf '%s' "$VERDICT" > "$RUNNER_TEMP/verdict.json"
+
+          # Extract risk_level — fail closed if JSON is malformed or field is absent
+          if ! RISK=$(jq -re '.risk_level // empty' < "$RUNNER_TEMP/verdict.json"); then
+            echo "::error::Structured output missing risk_level — failing closed"
+            exit 1
+          fi
+
+          # Allowlist expected values — anything else fails closed
+          case "$RISK" in
+            CLEAR|LOW|MEDIUM|HIGH|CRITICAL) ;;
+            *)
+              echo "::error::Unexpected risk_level value — failing closed"
+              exit 1
+              ;;
+          esac
+
+          # RISK is safe to interpolate (validated by case above)
+          echo "Risk: $RISK"
+
+          # Log summary via file to avoid shell metachar and workflow command injection
+          jq -r '.summary // "No summary"' < "$RUNNER_TEMP/verdict.json" \
+            | head -c 200 > "$RUNNER_TEMP/summary.txt"
+          printf 'Summary: '
+          cat "$RUNNER_TEMP/summary.txt"
+          echo
+
+          if [[ "$RISK" == "HIGH" || "$RISK" == "CRITICAL" ]]; then
+            # Only interpolate the validated RISK value, never the raw summary
+            echo "::error::Supply-chain review: risk is $RISK — blocking automerge"
+            exit 1
+          fi
+
+      - name: Notify via Pushover
+        if: always() && steps.gate.outcome != 'skipped'
+        env:
+          PUSHOVER_TOKEN: ${{ secrets.PUSHOVER_API_TOKEN }}
+          PUSHOVER_USER: ${{ secrets.PUSHOVER_USER_KEY }}
+          VERDICT: ${{ steps.review.outputs.structured_output }}
+          GATE_OUTCOME: ${{ steps.gate.outcome }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          if [[ "$GATE_OUTCOME" == "success" ]]; then
+            STATUS="passed"
+            PRIORITY="-1"  # silent notification for routine passes
+            SOUND="none"
+          else
+            STATUS="BLOCKED"
+            PRIORITY="1"   # high priority — requires acknowledgment
+            SOUND="intermission"
+          fi
+
+          # Extract validated risk level from structured output
+          RISK="UNKNOWN"
+          if [[ -n "$VERDICT" ]]; then
+            printf '%s' "$VERDICT" > "$RUNNER_TEMP/verdict_notify.json"
+            PARSED=$(jq -re '.risk_level // empty' < "$RUNNER_TEMP/verdict_notify.json" 2>/dev/null) || true
+            case "$PARSED" in
+              CLEAR|LOW|MEDIUM|HIGH|CRITICAL) RISK="$PARSED" ;;
+            esac
+          fi
+
+          # Build message body in a file — PR_TITLE is untrusted (Renovate-generated
+          # from upstream package names). Writing to a file and reading with
+          # --form message=<file avoids any shell re-evaluation.
+          printf '#%s: %.80s' "$PR_NUMBER" "$PR_TITLE" > "$RUNNER_TEMP/po_message.txt"
+
+          curl -s --fail --max-time 10 \
+            --form-string "token=$PUSHOVER_TOKEN" \
+            --form-string "user=$PUSHOVER_USER" \
+            --form-string "title=Supply-chain review $STATUS ($RISK)" \
+            --form "message=<$RUNNER_TEMP/po_message.txt" \
+            --form-string "url=$PR_URL" \
+            --form-string "url_title=View PR" \
+            --form-string "priority=$PRIORITY" \
+            --form-string "sound=$SOUND" \
+            https://api.pushover.net/1/messages.json
