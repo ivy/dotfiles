@@ -40,6 +40,10 @@ TMUX_POWERLINE_SEPARATOR_RIGHT_BOLD=""
 TMUX_POWERLINE_SEPARATOR_RIGHT_THIN=""
 TMUX_POWERLINE_SEPARATOR_THIN="|"
 
+# --- Alert helpers (color escalation for notification rail) ------------------
+# shellcheck source=../helpers/alert_helpers.sh
+source "${XDG_CONFIG_HOME:-$HOME/.config}/tmux-powerline/helpers/alert_helpers.sh"
+
 # --- Theme defaults -----------------------------------------------------------
 TMUX_POWERLINE_DEFAULT_BACKGROUND_COLOR=${TMUX_POWERLINE_DEFAULT_BACKGROUND_COLOR:-$mantle}
 TMUX_POWERLINE_DEFAULT_FOREGROUND_COLOR=${TMUX_POWERLINE_DEFAULT_FOREGROUND_COLOR:-$text}
@@ -86,10 +90,6 @@ fi
 if [ -z "$TMUX_POWERLINE_LEFT_STATUS_SEGMENTS" ]; then
 	TMUX_POWERLINE_LEFT_STATUS_SEGMENTS=(
 		"tmux_session_info $blue $base"
-		"hostname $mauve $base"
-		"lan_ip $sapphire $base ${TMUX_POWERLINE_SEPARATOR_RIGHT_THIN}"
-		"wan_ip $sapphire $base"
-		"vcs_branch $green $base"
 	)
 fi
 
@@ -98,12 +98,11 @@ fi
 # shellcheck disable=SC1143,SC2128
 if [ -z "$TMUX_POWERLINE_RIGHT_STATUS_SEGMENTS" ]; then
 	TMUX_POWERLINE_RIGHT_STATUS_SEGMENTS=(
-		"pwd $lavender $base"
-		"load $overlay2 $base"
-		"battery $peach $base"
-		"weather $teal $base"
-		"date_day $sky $base"
-		"date $sky $base ${TMUX_POWERLINE_SEPARATOR_LEFT_THIN}"
-		"time $sky $base ${TMUX_POWERLINE_SEPARATOR_LEFT_THIN}"
+		"mode_indicator $surface1 $text"
+		"alert_hostname $mauve $base"
+		"github_notifications $lavender $base"
+		"alert_load $(tp_alert_color_load) $base"
+		"alert_mem $(tp_alert_color_mem) $base"
+		"alert_disk $(tp_alert_color_disk) $base"
 	)
 fi
