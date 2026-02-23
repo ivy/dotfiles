@@ -94,6 +94,7 @@ bats test/<file>.bats   # Run one test file
 | Renovate & version pinning | [docs/renovate.md](docs/renovate.md) |
 | Neovim / LazyVim | [docs/neovim.md](docs/neovim.md) |
 | tmux | [docs/tmux.md](docs/tmux.md) |
+| tmux-powerline (notification rail) | [docs/tmux-powerline.md](docs/tmux-powerline.md) |
 | Zsh | [docs/zsh.md](docs/zsh.md) |
 | Claude Code integration | [docs/claude-code.md](docs/claude-code.md) |
 | Core principles | [docs/core-principles.md](docs/core-principles.md) |

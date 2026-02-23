@@ -57,14 +57,16 @@ tmux-sensible loads first so explicit settings can override its defaults.
 
 ## Appearance
 
-The status bar uses [tmux-powerline](https://github.com/erikw/tmux-powerline) with Catppuccin theming. The theme variant is auto-detected from macOS system appearance at shell startup:
+The status bar uses [tmux-powerline](https://github.com/erikw/tmux-powerline) with a **notification rail** design — silent by default, showing only session identity and current mode. Alert segments for hostname (SSH/container), GitHub notifications, load, memory, and disk appear only when thresholds are crossed.
+
+Theme variant is auto-detected from macOS system appearance:
 
 - **Dark mode** → `catppuccin-mocha`
 - **Light mode** → `catppuccin-latte`
 
-Detection uses the shared `appearance` utility (see [docs/catppuccin.md](catppuccin.md#appearance-detection)).
+Detection uses the shared `appearance` utility (see [docs/catppuccin.md](catppuccin.md#appearance-detection)). To switch after changing system appearance: `prefix + r`.
 
-To switch after changing system appearance: `prefix + r` (reload config). The theme re-evaluates on reload because `config.sh` runs the detection each time tmux-powerline sources it.
+See [docs/tmux-powerline.md](tmux-powerline.md) for segment reference, alert thresholds, and how to add new segments.
 
 ## Keybindings
 
