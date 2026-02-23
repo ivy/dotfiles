@@ -1,5 +1,5 @@
 ---
-status: "proposed"
+status: "accepted"
 date: 2026-02-20
 decision-makers: [Ivy Evans]
 consulted: []
@@ -43,6 +43,13 @@ Chosen option: **Chezmoi externals**, because they satisfy all decision drivers
 using infrastructure the dotfiles repo already has. The pattern is proven — zsh
 plugins are already managed this way.
 
+### Implementation
+
+Plugins are defined in a YAML lockfile (`home/.chezmoidata/tmux-plugins.yaml`)
+and installed to `~/.config/tmux/plugins/` via a chezmoi template loop in
+`.chezmoiexternal.toml.tmpl`. Renovate's JSONata manager reads the YAML and
+updates commit SHAs automatically.
+
 ### Consequences
 
 * **Good**: Exact SHA pinning via commit hash in archive URL
@@ -51,12 +58,13 @@ plugins are already managed this way.
 * **Good**: Tarballs contain only source files — no `.git` metadata in Docker images
 * **Good**: No plugin manager binary to install, version, or understand — chezmoi is
   already a dependency
-* **Good**: `git bisect` works on the `.chezmoiexternal.toml` file to isolate which
-  plugin update caused a regression
+* **Good**: `git bisect` works on the lockfile to isolate which plugin update caused
+  a regression
+* **Good**: Data-driven — adding a plugin is a YAML entry, no template or Renovate
+  config changes needed
 * **Bad**: No TUI for browsing or discovering new plugins — discovery is manual via
   GitHub
-* **Bad**: Adding a new plugin requires manually constructing the TOML stanza and
-  finding the current commit SHA
+* **Bad**: Adding a new plugin requires finding the current commit SHA manually
 * **Neutral**: `chezmoi apply` handles installation — no `prefix+I` keybinding, but
   also no extra process to understand
 
@@ -126,19 +134,31 @@ GitHub archive URLs. Already used in this repo for zsh plugins and Ghostty theme
 
 ### Implementation Pattern
 
-Each tmux plugin gets a stanza in `.chezmoiexternal.toml`:
+Plugins are defined in `home/.chezmoidata/tmux-plugins.yaml`:
 
-```toml
-[".tmux/plugins/tmux-sensible"]
-    type = "archive"
-    url = "https://github.com/tmux-plugins/tmux-sensible/archive/<sha>.tar.gz"
-    exact = true
-    stripComponents = 1
+```yaml
+tmuxPlugins:
+  - name: tmux-sensible
+    repo: tmux-plugins/tmux-sensible
+    ref: master
+    commit: 25cb91f42d020f675bb0a2ce3fbd3a5d96119efa
 ```
 
-Renovate detects the SHA in the URL, checks for newer commits on the upstream
-default branch, and opens a PR updating the SHA. The PR diff shows exactly which
-plugin changed and to which commit.
+The chezmoi template in `.chezmoiexternal.toml.tmpl` iterates over this data:
+
+```toml
+{{ range .tmuxPlugins }}
+[".config/tmux/plugins/{{ .name }}"]
+    type = "archive"
+    url = "https://github.com/{{ .repo }}/archive/{{ .commit }}.tar.gz"
+    exact = true
+    stripComponents = 1
+    refreshPeriod = "365d"
+{{ end }}
+```
+
+Renovate's JSONata manager reads the YAML and updates commit SHAs automatically.
+Adding a new plugin = add a YAML entry. No template or Renovate config changes.
 
 ### Plugin Loading Without a Plugin Manager
 
@@ -146,7 +166,7 @@ Plugins following TPM conventions expose a `*.tmux` entry point. These can be
 sourced directly in `tmux.conf` without TPM:
 
 ```bash
-run-shell ~/.tmux/plugins/tmux-sensible/sensible.tmux
+run-shell ~/.config/tmux/plugins/tmux-sensible/sensible.tmux
 ```
 
 This is more explicit than TPM's glob-based sourcing and aligns with the
@@ -154,11 +174,10 @@ This is more explicit than TPM's glob-based sourcing and aligns with the
 
 ### Research Context
 
-Three plugin managers were evaluated as part of a research spike
-([docs/plugin-management.md](../../2026-02-20-tmux-overhaul/docs/plugin-management.md)).
-All three share the same `git clone -b` architecture that prevents commit SHA
-pinning and lacks lockfile support. The existing chezmoi externals pattern emerged
-as a better fit after reviewing how zsh plugins are already managed in this repo.
+Three plugin managers were evaluated as part of a research spike. All three share
+the same `git clone -b` architecture that prevents commit SHA pinning and lacks
+lockfile support. The existing chezmoi externals pattern emerged as a better fit
+after reviewing how zsh plugins are already managed in this repo.
 
 ### Revisit When
 

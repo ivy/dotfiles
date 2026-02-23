@@ -64,7 +64,10 @@ These files purposely centralize versions so Renovate can update them automatica
 
 - `home/.chezmoiexternal.toml.tmpl`
   - All externals pinned to commit SHAs for reproducibility.
-  - Tarball archives pinned in the URL with commit SHA; git repo pinned via `revision = "<sha>"`.
+  - Tarball archives pinned in the URL with commit SHA.
+
+- `home/.chezmoidata/tmux-plugins.yaml`
+  - Tmux plugins pinned to commit SHAs. Renovate's JSONata manager updates them automatically.
 
 ---
 
@@ -124,9 +127,15 @@ Current rules:
 - oh-my-zsh tarball: `ohmyzsh/ohmyzsh/archive/(?<currentDigest>[a-f0-9]{7,40})\.tar\.gz`
 - zsh‑autosuggestions tarball: `zsh-users/zsh-autosuggestions/archive/(?<currentDigest>[a-f0-9]{7,40})\.tar\.gz`
 - zsh‑syntax‑highlighting tarball: `zsh-users/zsh-syntax-highlighting/archive/(?<currentDigest>[a-f0-9]{7,40})\.tar\.gz`
-- gpakosz/.tmux repo revision: `^\s*revision\s*=\s*"(?<currentDigest>[a-f0-9]{7,40})"`
 
 Note: When adding new externals, add a matching regex rule so Renovate can keep their SHAs fresh automatically.
+
+8) Tmux plugins (JSONata + YAML)
+
+- File: `home/.chezmoidata/tmux-plugins.yaml`
+- Manager: `jsonata` with `fileFormat: "yaml"`
+- Query: `tmuxPlugins.{ "depName": repo, "currentValue": ref, "currentDigest": commit }`
+- Datasource: `git-refs` — one manager handles all tmux plugins. Adding a plugin to the YAML file is enough; no Renovate config change needed.
 
 ---
 
@@ -226,7 +235,7 @@ gh api repos/sigstore/cosign/releases/latest --jq .tag_name
 gh api repos/ohmyzsh/ohmyzsh/commits/master --jq .sha
 gh api repos/zsh-users/zsh-autosuggestions/commits/master --jq .sha
 gh api repos/zsh-users/zsh-syntax-highlighting/commits/master --jq .sha
-gh api repos/gpakosz/.tmux/commits/master --jq .sha
+gh api repos/tmux-plugins/tmux-sensible/commits/master --jq .sha
 ```
 
 ---

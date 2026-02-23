@@ -9,7 +9,7 @@ Personal dotfiles managed by coding agents via [Chezmoi](https://www.chezmoi.io/
 | Layer | Component | Config source |
 |-------|-----------|---------------|
 | Terminal | Ghostty | `home/dot_config/ghostty/config` |
-| Multiplexer | tmux | `home/dot_tmux.conf.local` |
+| Multiplexer | tmux | `home/dot_config/tmux/tmux.conf` |
 | Shell | zsh + Oh-My-Zsh | `home/dot_zshrc.tmpl` |
 | Editor | Neovim / LazyVim | `home/dot_config/nvim/` |
 | Tools | mise (aqua backend) | `home/dot_config/mise/config.toml` |
