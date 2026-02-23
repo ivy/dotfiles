@@ -55,10 +55,11 @@ TMUX_POWERLINE_DEFAULT_RIGHTSIDE_SEPARATOR=${TMUX_POWERLINE_DEFAULT_RIGHTSIDE_SE
 # shellcheck disable=SC2128
 if [ -z "$TMUX_POWERLINE_WINDOW_STATUS_CURRENT" ]; then
 	TMUX_POWERLINE_WINDOW_STATUS_CURRENT=(
-		"#[$(tp_format inverse)]"
+		"#[fg=$mantle,bg=$lavender,nobold,noitalics,nounderscore]"
 		"$TMUX_POWERLINE_DEFAULT_LEFTSIDE_SEPARATOR"
+		"#[fg=$crust,bg=$lavender]"
 		$' #I #W#{?window_zoomed_flag, \xef\x8b\x90,} '
-		"#[$(tp_format regular)]"
+		"#[fg=$lavender,bg=$mantle,nobold,noitalics,nounderscore]"
 		"$TMUX_POWERLINE_DEFAULT_LEFTSIDE_SEPARATOR"
 	)
 fi
