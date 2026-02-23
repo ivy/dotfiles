@@ -25,19 +25,22 @@ tmux 3.1+ automatically loads `~/.config/tmux/tmux.conf` — no symlinks needed.
 
 ### Plugin Management
 
-Plugins are defined in `home/.chezmoidata/tmux-plugins.yaml`:
-
-```yaml
-tmuxPlugins:
-  - name: tmux-sensible
-    repo: tmux-plugins/tmux-sensible
-    ref: master
-    commit: 25cb91f42d020f675bb0a2ce3fbd3a5d96119efa
-```
-
-The chezmoi template in `.chezmoiexternal.toml.tmpl` generates archive externals from this data. Adding a new plugin = add a YAML entry. No template or Renovate config changes needed.
+Plugins are defined in `home/.chezmoidata/tmux-plugins.yaml` and installed as chezmoi archive externals to `~/.config/tmux/plugins/`. Adding a new plugin = add a YAML entry. No template or Renovate config changes needed.
 
 See [ADR 003](adrs/003-use-chezmoi-externals-for-tmux-plugin-management.md) for the decision rationale.
+
+### `tmux-plugins.yaml` Schema
+
+Each entry in `tmuxPlugins` maps to one chezmoi external and one `run-shell` line in `tmux.conf`:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `name` | string | Install directory name under `~/.config/tmux/plugins/` |
+| `repo` | string | GitHub slug (`owner/repo`) |
+| `ref` | string | Tracking ref (branch or tag) — used by Renovate to find new commits |
+| `commit` | string | Pinned commit SHA — used in the archive tarball URL |
+
+Renovate's JSONata manager reads `ref` as `currentValue` and `commit` as `currentDigest`, then updates `commit` when the branch advances.
 
 ### Load Order
 

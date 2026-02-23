@@ -22,7 +22,8 @@ Templates use Go's `text/template` syntax. Key variables:
 
 - `.chezmoi.os` — `"darwin"` or `"linux"`
 - `.chezmoi.workingTree` — Repository path
-- `.packages.darwin.brews`, `.packages.darwin.casks`, `.packages.darwin.mas` — Package definitions
+- `.packages.darwin.brews`, `.packages.darwin.casks`, `.packages.darwin.mas` — Package definitions (from `.chezmoidata/packages.yaml`)
+- `.tmuxPlugins` — List of tmux plugin entries (from `.chezmoidata/tmux-plugins.yaml`); see [docs/tmux.md](../tmux.md) for schema
 
 Common patterns:
 

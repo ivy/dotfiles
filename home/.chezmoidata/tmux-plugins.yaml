@@ -1,5 +1,6 @@
 # Tmux plugins managed by chezmoi externals
 # Renovate's JSONata manager updates commit SHAs automatically
+# See docs/tmux.md for schema reference and how to add a plugin
 
 tmuxPlugins:
   - name: tmux-sensible
