@@ -64,7 +64,7 @@ Theme variant is auto-detected from macOS system appearance:
 - **Dark mode** → `catppuccin-mocha`
 - **Light mode** → `catppuccin-latte`
 
-Detection uses the shared `appearance` utility (see [docs/catppuccin.md](catppuccin.md#appearance-detection)). To switch after changing system appearance: `prefix + r`.
+Detection uses the shared `appearance` utility (see [docs/catppuccin.md](catppuccin.md#appearance-detection)). Theme switches automatically — the status bar re-detects every 5 seconds via powerline refresh, and pane styling updates on terminal focus or the next status interval.
 
 See [docs/tmux-powerline.md](tmux-powerline.md) for segment reference, alert thresholds, and how to add new segments.
 

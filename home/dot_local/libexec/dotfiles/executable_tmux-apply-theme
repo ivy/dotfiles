@@ -1,0 +1,21 @@
+#!/bin/sh
+# Apply Catppuccin pane styling to the running tmux server.
+# Called from tmux.conf via run-shell so colors apply synchronously.
+#
+# Active border: Lavender | Inactive border: Overlay 0
+# Active pane bg: Base    | Inactive pane bg: Mantle
+
+case "$("$HOME/.local/libexec/dotfiles/appearance")" in
+  dark)
+    tmux set -g pane-border-style "fg=#6c7086,bg=#181825" \; \
+         set -g pane-active-border-style "fg=#b4befe,bg=#181825" \; \
+         set -g window-style "bg=#181825" \; \
+         set -g window-active-style "bg=#1e1e2e"
+    ;;
+  *)
+    tmux set -g pane-border-style "fg=#9ca0b0,bg=#e6e9ef" \; \
+         set -g pane-active-border-style "fg=#7287fd,bg=#e6e9ef" \; \
+         set -g window-style "bg=#e6e9ef" \; \
+         set -g window-active-style "bg=#eff1f5"
+    ;;
+esac

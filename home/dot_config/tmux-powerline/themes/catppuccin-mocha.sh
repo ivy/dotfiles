@@ -94,6 +94,7 @@ fi
 # shellcheck disable=SC1143,SC2128
 if [ -z "$TMUX_POWERLINE_RIGHT_STATUS_SEGMENTS" ]; then
 	TMUX_POWERLINE_RIGHT_STATUS_SEGMENTS=(
+		"theme_refresh $mantle $mantle"
 		"mode_indicator $mantle $text"
 		"alert_hostname $mauve $crust"
 		"github_notifications $lavender $crust"
