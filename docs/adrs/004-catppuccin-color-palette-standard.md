@@ -101,7 +101,7 @@ duplication. This will likely be solved alongside the remote detection gap.
 | Neovim | `catppuccin/nvim` plugin | Plugin handles it | — |
 | Claude Powerline | Custom JSON themes | `defaults read` | — |
 | Zsh | ANSI names via terminal | Inherits from terminal | — |
-| tmux status bar | Custom theme | Hardcoded to Mocha | No light mode switching |
+| tmux status bar | Custom theme | `defaults read` | — |
 | Mise | Supports `catppuccin` | Not configured | Not set to catppuccin |
 
 ## More Information

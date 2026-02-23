@@ -55,6 +55,17 @@ Renovate's JSONata manager reads `ref` as `currentValue` and `commit` as `curren
 
 tmux-sensible loads first so explicit settings can override its defaults.
 
+## Appearance
+
+The status bar uses [tmux-powerline](https://github.com/erikw/tmux-powerline) with Catppuccin theming. The theme variant is auto-detected from macOS system appearance at shell startup:
+
+- **Dark mode** → `catppuccin-mocha`
+- **Light mode** → `catppuccin-latte`
+
+Detection uses the same `defaults read -g AppleInterfaceStyle` pattern as Ghostty, Neovim, and Claude Code powerline (see [docs/catppuccin.md](catppuccin.md#appearance-detection-pattern)).
+
+To switch after changing system appearance: `prefix + r` (reload config). The theme re-evaluates on reload because `config.sh` runs the detection each time tmux-powerline sources it.
+
 ## Keybindings
 
 ### Prefix
