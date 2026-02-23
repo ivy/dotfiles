@@ -99,7 +99,7 @@ fi
 if [ -z "$TMUX_POWERLINE_RIGHT_STATUS_SEGMENTS" ]; then
 	TMUX_POWERLINE_RIGHT_STATUS_SEGMENTS=(
 		"pwd $lavender $base"
-		"load $surface1 $subtext1"
+		"load $overlay2 $base"
 		"battery $peach $base"
 		"weather $teal $base"
 		"date_day $sky $base"

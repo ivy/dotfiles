@@ -85,11 +85,11 @@ fi
 # shellcheck disable=SC1143,SC2128
 if [ -z "$TMUX_POWERLINE_LEFT_STATUS_SEGMENTS" ]; then
 	TMUX_POWERLINE_LEFT_STATUS_SEGMENTS=(
-		"tmux_session_info $blue $base"
-		"hostname $mauve $base"
-		"lan_ip $sapphire $base ${TMUX_POWERLINE_SEPARATOR_RIGHT_THIN}"
-		"wan_ip $sapphire $base"
-		"vcs_branch $green $base"
+		"tmux_session_info $blue $crust"
+		"hostname $mauve $crust"
+		"lan_ip $sapphire $crust ${TMUX_POWERLINE_SEPARATOR_RIGHT_THIN}"
+		"wan_ip $sapphire $crust"
+		"vcs_branch $green $crust"
 	)
 fi
 
@@ -98,12 +98,12 @@ fi
 # shellcheck disable=SC1143,SC2128
 if [ -z "$TMUX_POWERLINE_RIGHT_STATUS_SEGMENTS" ]; then
 	TMUX_POWERLINE_RIGHT_STATUS_SEGMENTS=(
-		"pwd $lavender $base"
-		"load $surface1 $subtext1"
-		"battery $peach $base"
-		"weather $teal $base"
-		"date_day $sky $base"
-		"date $sky $base ${TMUX_POWERLINE_SEPARATOR_LEFT_THIN}"
-		"time $sky $base ${TMUX_POWERLINE_SEPARATOR_LEFT_THIN}"
+		"pwd $lavender $crust"
+		"load $overlay2 $crust"
+		"battery $peach $crust"
+		"weather $teal $crust"
+		"date_day $sky $crust"
+		"date $sky $crust ${TMUX_POWERLINE_SEPARATOR_LEFT_THIN}"
+		"time $sky $crust ${TMUX_POWERLINE_SEPARATOR_LEFT_THIN}"
 	)
 fi
