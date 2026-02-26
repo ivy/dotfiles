@@ -57,6 +57,8 @@ tmux-sensible loads first so explicit settings can override its defaults.
 
 ## Appearance
 
+Pane titles show the running command (e.g., `zsh`, `nvim`) in the top border of each pane, themed to match the active/inactive border colors.
+
 The status bar uses [tmux-powerline](https://github.com/erikw/tmux-powerline) with a **notification rail** design — silent by default, showing only session identity and current mode. Alert segments for hostname (SSH/container), GitHub notifications, load, memory, and disk appear only when thresholds are crossed.
 
 Theme variant is auto-detected from macOS system appearance:
