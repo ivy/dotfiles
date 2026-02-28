@@ -77,7 +77,10 @@ merge_model_env_vars() {
     local models haiku sonnet opus
 
     printf 'resolving Bedrock model IDs...\n'
-    models=$("${SCRIPT_DIR}/resolve-bedrock-models")
+    if ! models=$("${SCRIPT_DIR}/resolve-bedrock-models"); then
+        printf 'warning: resolve-bedrock-models failed — skipping Bedrock model env vars\n' >&2
+        return 1
+    fi
 
     haiku=$(printf '%s' "${models}" | jq -r '.haiku')
     sonnet=$(printf '%s' "${models}" | jq -r '.sonnet')
@@ -148,7 +151,9 @@ main() {
     fi
 
     printf 'use_bedrock=true — resolving and merging Bedrock models\n'
-    merge_model_env_vars
+    if ! merge_model_env_vars; then
+        return 0
+    fi
 
     validate_settings
 }
