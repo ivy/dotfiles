@@ -27,9 +27,10 @@ require_command() {
   local hint="${2:-}"
 
   if ! command -v "${cmd}" >/dev/null 2>&1; then
-    printf 'error: required command "%s" not found in PATH\n' "${cmd}" >&2
+    printf 'warning: required command "%s" not found in PATH\n' "${cmd}" >&2
     [[ -n "${hint}" ]] && printf '  hint: %s\n' "${hint}" >&2
-    exit 1
+    echo '{}'
+    exit 0
   fi
 }
 
@@ -74,7 +75,8 @@ main() {
 
   fetch_inference_profiles |
     filter_active_claude_profiles |
-    resolve_latest_per_tier
+    resolve_latest_per_tier \
+    || { echo '{}'; exit 0; }
 }
 
 main "$@"
