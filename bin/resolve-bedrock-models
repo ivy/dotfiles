@@ -76,7 +76,7 @@ main() {
   fetch_inference_profiles |
     filter_active_claude_profiles |
     resolve_latest_per_tier \
-    || { echo '{}'; exit 0; }
+    || true
 }
 
 main "$@"
