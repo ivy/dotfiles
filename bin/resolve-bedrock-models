@@ -2,8 +2,12 @@
 #
 # resolve-bedrock-models -- Resolve latest AWS Bedrock Claude model per tier
 #
-# Queries AWS Bedrock for active Anthropic Claude inference profiles and
-# outputs the latest model ID for each tier (opus, sonnet, haiku) as JSON.
+# Queries AWS Bedrock for active Anthropic Claude foundation models and
+# outputs the latest cross-region inference profile ID for each tier
+# (opus, sonnet, haiku) as JSON.
+#
+# Results are cached in $XDG_DATA_HOME/dotfiles/ and refreshed every 24 hours.
+# A stale cache is preferred over returning nothing on refresh failure.
 #
 # Usage:
 #   bin/resolve-bedrock-models
@@ -22,6 +26,10 @@ set -o pipefail
 
 export AWS_PROFILE=default
 
+CACHE_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/dotfiles"
+CACHE_FILE="${CACHE_DIR}/bedrock-models.json"
+CACHE_MAX_AGE=86400 # 24 hours
+
 require_command() {
   local cmd="$1"
   local hint="${2:-}"
@@ -34,49 +42,66 @@ require_command() {
   fi
 }
 
-fetch_inference_profiles() {
-  aws bedrock list-inference-profiles \
-    --output json \
-    --type-equals SYSTEM_DEFINED
+cache_mtime() {
+  stat -f %m "$1" 2>/dev/null || stat -c %Y "$1" 2>/dev/null || echo 0
 }
 
-filter_active_claude_profiles() {
-  jq --raw-output '
-        .inferenceProfileSummaries[]
-        | select(
-            .inferenceProfileId
-            | startswith("us.anthropic.claude-")
-        )
-        | select(.status == "ACTIVE")
-        | .inferenceProfileId
-    '
+cache_is_fresh() {
+  [[ -f "${CACHE_FILE}" ]] || return 1
+  local now mtime age
+  now=$(date +%s)
+  mtime=$(cache_mtime "${CACHE_FILE}")
+  age=$(( now - mtime ))
+  (( age < CACHE_MAX_AGE ))
+}
+
+fetch_foundation_models() {
+  aws bedrock list-foundation-models \
+    --output json \
+    --by-provider anthropic
 }
 
 resolve_latest_per_tier() {
-  jq --raw-input --slurp '
-        # Split input into lines, remove blanks
-        split("\n") | map(select(length > 0))
-
-        # Group into tiers by keyword presence
-        | {
-            opus:   map(select(contains("opus")))   | sort | last,
-            sonnet: map(select(contains("sonnet"))) | sort | last,
-            haiku:  map(select(contains("haiku")))  | sort | last
-          }
-
-        # Remove tiers with no matches (null values)
-        | with_entries(select(.value != null))
-    '
+  jq '
+    .modelSummaries
+    | map(select(
+        .modelLifecycle.status == "ACTIVE"
+        and (.modelId | startswith("anthropic.claude-"))
+        and (.modelId | test(":\\d+k$") | not)
+    ))
+    | map(.modelId)
+    | {
+        opus:   map(select(contains("opus")))   | sort | last,
+        sonnet: map(select(contains("sonnet"))) | sort | last,
+        haiku:  map(select(contains("haiku")))  | sort | last
+      }
+    | with_entries(select(.value != null))
+    | with_entries(.value = "us." + .value)
+  '
 }
 
 main() {
   require_command aws "install the AWS CLI: https://aws.amazon.com/cli/"
   require_command jq "install jq: https://jqlang.github.io/jq/"
 
-  fetch_inference_profiles |
-    filter_active_claude_profiles |
-    resolve_latest_per_tier \
-    || true
+  if cache_is_fresh; then
+    cat "${CACHE_FILE}"
+    return
+  fi
+
+  mkdir -p "${CACHE_DIR}"
+
+  local result
+  result=$(fetch_foundation_models | resolve_latest_per_tier) || true
+
+  if [[ -n "${result}" && "${result}" != "{}" ]]; then
+    printf '%s\n' "${result}" > "${CACHE_FILE}"
+    printf '%s\n' "${result}"
+  elif [[ -f "${CACHE_FILE}" ]]; then
+    cat "${CACHE_FILE}"
+  else
+    echo '{}'
+  fi
 }
 
 main "$@"
