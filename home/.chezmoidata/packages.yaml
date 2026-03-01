@@ -98,6 +98,7 @@ packages:
       - zsh
     apt:
       # Core system tools (Ubuntu equivalents of the dnf list)
+      - build-essential
       - ca-certificates
       - git
       - git-lfs
