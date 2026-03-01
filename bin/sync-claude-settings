@@ -2,7 +2,7 @@
 #
 # sync-claude-settings -- Sync managed settings into Claude Code settings.json
 #
-# Always sets: statusLine (powerline prompt)
+# Always sets: statusLine (powerline prompt), feature flags (agent teams)
 # Conditionally sets: Bedrock model env vars (when use_bedrock=true)
 #
 # Reads chezmoi data to detect Bedrock mode, resolves the latest model IDs
@@ -55,6 +55,14 @@ set_status_line() {
     printf 'setting statusLine in %s\n' "${SETTINGS}"
     jq '.statusLine = {"type": "command", "command": "$HOME/.local/libexec/claude-powerline-theme"}' \
         "${SETTINGS}" > "${SETTINGS}.tmp" && mv "${SETTINGS}.tmp" "${SETTINGS}"
+}
+
+# Set feature flags that should always be present
+set_feature_flags() {
+    printf 'setting feature flags in %s\n' "${SETTINGS}"
+    jq '.env = ((.env // {}) + {
+        "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+    })' "${SETTINGS}" > "${SETTINGS}.tmp" && mv "${SETTINGS}.tmp" "${SETTINGS}"
 }
 
 # Remove Bedrock model env vars (use_bedrock=false path)
@@ -146,6 +154,7 @@ main() {
     ensure_settings
     backup_settings
     set_status_line
+    set_feature_flags
 
     local use_bedrock
     use_bedrock=$(chezmoi data --format json | jq -r '.claude.use_bedrock')
