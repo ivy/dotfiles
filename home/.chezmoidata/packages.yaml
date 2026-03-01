@@ -43,7 +43,6 @@ packages:
       - flac
 
       # Git
-      - gh
       - git
       - git-lfs
 
@@ -92,7 +91,6 @@ packages:
       - ca-certificates
       - git
       - git-lfs
-      - gh
       - htop
       - neovim
       - tmux
