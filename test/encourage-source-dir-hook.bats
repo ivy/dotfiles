@@ -1,13 +1,13 @@
 #!/usr/bin/env bats
 
-# Tests for .claude/hooks/enforce-source-dir.sh
+# Tests for .claude/hooks/encourage-source-dir.sh
 # Uses controlled HOME and CLAUDE_PROJECT_DIR with temp directories.
 
 setup() {
 	TEST_TMPDIR=$(mktemp -d)
 	export HOME="$TEST_TMPDIR/fakehome"
 	export CLAUDE_PROJECT_DIR="$TEST_TMPDIR/fakehome/src/dotfiles"
-	HOOK_SCRIPT="$BATS_TEST_DIRNAME/../.claude/hooks/enforce-source-dir.sh"
+	HOOK_SCRIPT="$BATS_TEST_DIRNAME/../.claude/hooks/encourage-source-dir.sh"
 	mkdir -p "$HOME/.config/ghostty"
 	mkdir -p "$CLAUDE_PROJECT_DIR/home"
 	touch "$HOME/.zshrc"
@@ -23,25 +23,28 @@ run_hook() {
 	run "$HOOK_SCRIPT" <<<"$1"
 }
 
-# --- Write/Edit/MultiEdit: deny when targeting ~/ ---
+# --- Write/Edit/MultiEdit: warn when targeting ~/ ---
 
-@test "Edit to ~/file is denied" {
+@test "Edit to ~/file warns with additionalContext" {
 	run_hook "{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"$HOME/.zshrc\"}}"
 	[ "$status" -eq 0 ]
-	echo "$output" | jq -e '.hookSpecificOutput.permissionDecision == "deny"'
-	echo "$output" | jq -e '.hookSpecificOutput.permissionDecisionReason | contains("chezmoi source-path")'
+	echo "$output" | jq -e '.additionalContext | contains("chezmoi source-path")'
+	# Should NOT contain a deny decision
+	! echo "$output" | jq -e '.hookSpecificOutput' 2>/dev/null
 }
 
-@test "Write to ~/.config/ is denied" {
+@test "Write to ~/.config/ warns with additionalContext" {
 	run_hook "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$HOME/.config/ghostty/config\"}}"
 	[ "$status" -eq 0 ]
-	echo "$output" | jq -e '.hookSpecificOutput.permissionDecision == "deny"'
+	echo "$output" | jq -e '.additionalContext | contains("chezmoi source-path")'
+	! echo "$output" | jq -e '.hookSpecificOutput' 2>/dev/null
 }
 
-@test "MultiEdit to ~/file is denied" {
+@test "MultiEdit to ~/file warns with additionalContext" {
 	run_hook "{\"tool_name\":\"MultiEdit\",\"tool_input\":{\"file_path\":\"$HOME/.zshrc\"}}"
 	[ "$status" -eq 0 ]
-	echo "$output" | jq -e '.hookSpecificOutput.permissionDecision == "deny"'
+	echo "$output" | jq -e '.additionalContext | contains("chezmoi source-path")'
+	! echo "$output" | jq -e '.hookSpecificOutput' 2>/dev/null
 }
 
 # --- Write/Edit: allow when targeting project dir ---
@@ -66,7 +69,6 @@ run_hook() {
 	run_hook "{\"tool_name\":\"Read\",\"tool_input\":{\"file_path\":\"$HOME/.zshrc\"}}"
 	[ "$status" -eq 0 ]
 	echo "$output" | jq -e '.additionalContext | contains("chezmoi source-path")'
-	# Should NOT contain a deny decision
 	! echo "$output" | jq -e '.hookSpecificOutput' 2>/dev/null
 }
 
@@ -138,10 +140,10 @@ run_hook() {
 	[ -z "$output" ]
 }
 
-# --- Deny message includes target path ---
+# --- Warning message includes target path ---
 
-@test "Deny message includes the target path" {
+@test "Warning message includes the target path" {
 	run_hook "{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$HOME/.zshrc\"}}"
 	[ "$status" -eq 0 ]
-	echo "$output" | jq -r '.hookSpecificOutput.permissionDecisionReason' | grep -q '.zshrc'
+	echo "$output" | jq -r '.additionalContext' | grep -q '.zshrc'
 }

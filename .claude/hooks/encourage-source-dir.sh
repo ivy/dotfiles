@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2154,SC2016
-# enforce-source-dir.sh — PreToolUse hook for Claude Code
+# encourage-source-dir.sh — PreToolUse hook for Claude Code
 #
-# Prevents agents from writing to chezmoi-managed destination files in ~/
+# Warns agents when writing to chezmoi-managed destination files in ~/
 # instead of editing source files in the project's home/ directory.
 #
 # Behavior:
-#   Write/Edit/MultiEdit targeting ~/ (outside project) → hard deny
+#   Write/Edit/MultiEdit targeting ~/ (outside project) → soft warning
 #   Read targeting ~/ (outside project)                  → soft warning
 #   Bash referencing ~/ (non-chezmoi command)            → soft warning
 #   Everything else                                      → allow (no output)
@@ -58,17 +58,13 @@ Write | Edit | MultiEdit)
 	[[ -z "$file_path" ]] && exit 0
 	resolved=$(resolve_path "$file_path")
 	if is_home_not_project "$resolved"; then
-		jq -n --arg reason "$(
+		jq -n --arg ctx "$(
 			cat <<MSG
-BLOCKED: Do not edit files in ~/ directly. This is a chezmoi-managed dotfiles repo.
-
-To find the correct source file, run:
+Warning: You are editing a file outside the chezmoi source tree. If this is a
+chezmoi-managed destination file, edit the source instead:
   chezmoi source-path $resolved
-
-Then edit that source file (under home/ in the project tree), and deploy with:
-  chezmoi apply $resolved
 MSG
-		)" '{hookSpecificOutput: {hookEventName: "PreToolUse", permissionDecision: "deny", permissionDecisionReason: $reason}}'
+		)" '{additionalContext: $ctx}'
 	fi
 	;;
 
