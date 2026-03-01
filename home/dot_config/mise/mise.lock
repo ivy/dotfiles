@@ -33,6 +33,15 @@ backend = "aqua:charmbracelet/glow"
 "platforms.macos-x64" = { checksum = "sha256:91334ebc659b44193327a6e2d198aa4e6c2953b1e003be00c983870685e9161b", url = "https://github.com/charmbracelet/glow/releases/download/v2.1.1/glow_2.1.1_Darwin_x86_64.tar.gz"}
 "platforms.windows-x64" = { checksum = "sha256:b552952daa03afdfffa80be3f79ba8aec43426f8e78c026eb8502c7e6b604ed0", url = "https://github.com/charmbracelet/glow/releases/download/v2.1.1/glow_2.1.1_Windows_x86_64.zip"}
 
+[[tools."aqua:cli/cli"]]
+version = "2.87.3"
+backend = "aqua:cli/cli"
+"platforms.linux-arm64" = { checksum = "sha256:5f5d89563bf26751e2173b37e594065504e85b6b781c1f1832d24bf2c2b4554f", url = "https://github.com/cli/cli/releases/download/v2.87.3/gh_2.87.3_linux_arm64.tar.gz"}
+"platforms.linux-x64" = { checksum = "sha256:c6e5537631fca45f277ef405ce8751d139b491e9402cc20891a003525a8773b2", url = "https://github.com/cli/cli/releases/download/v2.87.3/gh_2.87.3_linux_amd64.tar.gz"}
+"platforms.macos-arm64" = { checksum = "sha256:dedfc6f569e9dbc5b92d47dce44acadbdf5b6b7a861510db0c748dfac55002f6", url = "https://github.com/cli/cli/releases/download/v2.87.3/gh_2.87.3_macOS_arm64.zip"}
+"platforms.macos-x64" = { checksum = "sha256:7b8d5495fe9689494b1c69559c0d28209bc057bb028008e903ec4b3e19bd8c75", url = "https://github.com/cli/cli/releases/download/v2.87.3/gh_2.87.3_macOS_amd64.zip"}
+"platforms.windows-x64" = { checksum = "sha256:c590bcb488f80a85c8febd5cde27edd68fdd481bd004aaf9adc50dcf1b21c09c", url = "https://github.com/cli/cli/releases/download/v2.87.3/gh_2.87.3_windows_amd64.zip"}
+
 [[tools."aqua:dandavison/delta"]]
 version = "0.18.2"
 backend = "aqua:dandavison/delta"
@@ -114,20 +123,9 @@ backend = "aqua:starship/starship"
 "platforms.macos-x64" = { checksum = "sha256:237beb10cc970c4361536e9f9f434dfed755f8282c5cd951b6a7e3fcbda8e779", url = "https://github.com/starship/starship/releases/download/v1.24.2/starship-x86_64-apple-darwin.tar.gz"}
 "platforms.windows-x64" = { checksum = "sha256:d38424c595320e9639a276666347d5e44cb004de3972f40b9a5a1a6b88537f29", url = "https://github.com/starship/starship/releases/download/v1.24.2/starship-x86_64-pc-windows-msvc.zip"}
 
-[[tools."aqua:technicalpickles/envsense"]]
-version = "0.6.0"
-backend = "aqua:technicalpickles/envsense"
-"platforms.linux-x64" = { checksum = "sha256:4b07fd40bf245dd77529ce408d4f74a9d00146400a3a8c87eae0d65398e3d67d", url = "https://github.com/technicalpickles/envsense/releases/download/0.6.0/envsense-0.6.0-x86_64-unknown-linux-gnu"}
-"platforms.macos-arm64" = { checksum = "sha256:55395bc8fc2db5745b10f38f9ee0f2213fdaea57fdb012a4522f172ed5e9c0ca", url = "https://github.com/technicalpickles/envsense/releases/download/0.6.0/envsense-0.6.0-universal-apple-darwin"}
-"platforms.macos-x64" = { checksum = "sha256:55395bc8fc2db5745b10f38f9ee0f2213fdaea57fdb012a4522f172ed5e9c0ca", url = "https://github.com/technicalpickles/envsense/releases/download/0.6.0/envsense-0.6.0-universal-apple-darwin"}
-
-[[tools."cargo:https://github.com/davidbeesley/claude-chill"]]
-version = "ref:b821abdd2aaa4bdb86fd9dce83c92dca980d70ad"
-backend = "cargo:https://github.com/davidbeesley/claude-chill"
-
-[[tools."cargo:https://github.com/davidbeesley/claude-chill"]]
-version = "rev:b821abdd2aaa4bdb86fd9dce83c92dca980d70ad"
-backend = "cargo:https://github.com/davidbeesley/claude-chill"
+[[tools."cargo:https://github.com/technicalpickles/envsense"]]
+version = "HEAD"
+backend = "cargo:https://github.com/technicalpickles/envsense"
 
 [[tools.eza]]
 version = "0.23.4"
