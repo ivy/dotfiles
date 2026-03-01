@@ -43,7 +43,11 @@ require_command() {
 }
 
 cache_mtime() {
-  stat -f %m "$1" 2>/dev/null || stat -c %Y "$1" 2>/dev/null || echo 0
+  local mtime
+  mtime=$(stat -c %Y "$1" 2>/dev/null) ||
+    mtime=$(stat -f %m "$1" 2>/dev/null) ||
+    mtime=0
+  printf '%s\n' "${mtime}"
 }
 
 cache_is_fresh() {
