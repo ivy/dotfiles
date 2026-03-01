@@ -82,9 +82,15 @@ merge_model_env_vars() {
         return 1
     fi
 
-    haiku=$(printf '%s' "${models}" | jq -r '.haiku')
-    sonnet=$(printf '%s' "${models}" | jq -r '.sonnet')
-    opus=$(printf '%s' "${models}" | jq -r '.opus')
+    haiku=$(printf '%s' "${models}" | jq -r '.haiku // empty')
+    sonnet=$(printf '%s' "${models}" | jq -r '.sonnet // empty')
+    opus=$(printf '%s' "${models}" | jq -r '.opus // empty')
+
+    if [[ -z "${haiku}" || -z "${sonnet}" || -z "${opus}" ]]; then
+        printf 'warning: incomplete model resolution (haiku=%s sonnet=%s opus=%s) — skipping\n' \
+            "${haiku:-<missing>}" "${sonnet:-<missing>}" "${opus:-<missing>}" >&2
+        return 1
+    fi
 
     printf 'haiku  = %s\n' "${haiku}"
     printf 'sonnet = %s\n' "${sonnet}"
