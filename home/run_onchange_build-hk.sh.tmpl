@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# hk source hash: {{ output "git" "-C" (joinPath .chezmoi.homeDir ".local/src/hk") "rev-parse" "HEAD" | trim }}
+# Rebuilds hk from fork source when the checkout changes.
+# Temporary: remove once fix/hkrc-config-format is merged upstream.
+
+{{ if not (lookPath "cargo") -}}
+echo "cargo not found, skipping hk build"
+exit 0
+{{ end -}}
+
+[ -n "${DEBUG:-}" ] && set -o xtrace
+set -o errexit
+set -o nounset
+
+HK_SRC="{{ .chezmoi.homeDir }}/.local/src/hk"
+
+if [ ! -d "$HK_SRC" ]; then
+    echo "hk source not found at $HK_SRC, skipping build"
+    exit 0
+fi
+
+echo "Building hk from source..."
+cargo build --release --locked --manifest-path "$HK_SRC/Cargo.toml"
+
+mkdir -p "{{ .chezmoi.homeDir }}/.local/bin"
+cp "$HK_SRC/target/release/hk" "{{ .chezmoi.homeDir }}/.local/bin/hk"
+
+echo "hk installed to ~/.local/bin/hk"

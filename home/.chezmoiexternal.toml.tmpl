@@ -56,6 +56,19 @@
     stripComponents = 1
     refreshPeriod = "168h"
 
+# hk (git hooks manager) — fork with global config support
+# Temporary: building from fork branch until fix is merged upstream
+{{ if lookPath "cargo" }}
+[".local/src/hk"]
+    type = "git-repo"
+    url = "https://github.com/ivy/hk.git"
+    refreshPeriod = "24h"
+    [".local/src/hk".clone]
+        args = ["--recurse-submodules", "--branch", "fix/hkrc-config-format"]
+    [".local/src/hk".pull]
+        args = ["--recurse-submodules"]
+{{ end }}
+
 # =============================================================================
 # Tmux plugins (managed via .chezmoidata/tmux-plugins.yaml, updated by Renovate)
 # =============================================================================
