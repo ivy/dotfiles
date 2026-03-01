@@ -103,7 +103,9 @@ packages:
       - git
       - git-lfs
       - htop
+      - libssl-dev
       - neovim
       - passwd
+      - pkg-config
       - tmux
       - zsh
