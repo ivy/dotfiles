@@ -3,9 +3,11 @@
 # Automated updates are managed by custom Renovate managers in renovate.json5 using
 # the git-refs datasource to track upstream master branches and propose SHA updates.
 
+# =============================================================================
+# Zsh (only installed if zsh is available)
+# =============================================================================
 {{ if lookPath "zsh" }}
-# Oh-My-Zsh external configuration
-# Only install if zsh is available in the system PATH
+# Oh-My-Zsh framework
 [".oh-my-zsh"]
     type = "archive"
     url = "https://github.com/ohmyzsh/ohmyzsh/archive/2525dae6613652ec9cb572bdc2fdf80ef837a967.tar.gz"
@@ -13,24 +15,28 @@
     stripComponents = 1
     refreshPeriod = "24h"
 
-# Zsh Autosuggestions plugin - speed-optimized (tarball is fastest)
+# Zsh Autosuggestions plugin
 [".config/zsh/plugins/zsh-autosuggestions"]
     type = "archive"
     url = "https://github.com/zsh-users/zsh-autosuggestions/archive/85919cd1ffa7d2d5412f6d3fe437ebdbeeec4fc5.tar.gz"
     exact = true
     stripComponents = 1
-    refreshPeriod = "168h"  # Weekly updates for stability
+    refreshPeriod = "168h"
 
-# Zsh Syntax Highlighting plugin - speed-optimized (tarball is fastest)
+# Zsh Syntax Highlighting plugin
 [".config/zsh/plugins/zsh-syntax-highlighting"]
     type = "archive"
     url = "https://github.com/zsh-users/zsh-syntax-highlighting/archive/5eb677bb0fa9a3e60f0eff031dc13926e093df92.tar.gz"
     exact = true
     stripComponents = 1
-    refreshPeriod = "168h"  # Weekly updates for stability
+    refreshPeriod = "168h"
 {{ end }}
 
-# Catppuccin Ghostty themes - custom palette variants
+# =============================================================================
+# Terminal themes
+# =============================================================================
+
+# Catppuccin Ghostty themes
 [".config/ghostty/themes"]
     type = "archive"
     url = "https://github.com/catppuccin/ghostty/archive/5a58926563ddacbde4a12b4a347464c2c6945393.tar.gz"
@@ -38,7 +44,21 @@
     include = ["*/themes/**"]
     refreshPeriod = "168h"
 
+# =============================================================================
+# CLI tools (source installs for cross-platform support)
+# =============================================================================
+
+# turbocommit - auto-commit after every Claude Code turn
+[".local/share/turbocommit"]
+    type = "archive"
+    url = "https://github.com/searlsco/turbocommit/archive/ef5148cf66688a3a92ee90ced9c15f589629c750.tar.gz"
+    exact = true
+    stripComponents = 1
+    refreshPeriod = "168h"
+
+# =============================================================================
 # Tmux plugins (managed via .chezmoidata/tmux-plugins.yaml, updated by Renovate)
+# =============================================================================
 {{ range .tmuxPlugins }}
 [".config/tmux/plugins/{{ .name }}"]
     type = "archive"
