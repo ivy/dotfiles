@@ -14,7 +14,6 @@ packages:
       - coreutils
       - curl
       - mise
-      - neovim
       - pkl-lsp
       - tree
 
@@ -92,7 +91,6 @@ packages:
       - git
       - git-lfs
       - htop
-      - neovim
       - tmux
       - util-linux-user
       - zsh
@@ -104,7 +102,6 @@ packages:
       - git-lfs
       - htop
       - libssl-dev
-      - neovim
       - passwd
       - pkg-config
       - tmux

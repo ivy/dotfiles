@@ -1,7 +1,7 @@
 [[tools."aqua:bats-core/bats-core"]]
 version = "1.13.0"
 backend = "aqua:bats-core/bats-core"
-"platforms.linux-arm64" = { url = "https://github.com/bats-core/bats-core/archive/refs/tags/v1.13.0.tar.gz"}
+"platforms.linux-arm64" = { checksum = "blake3:d34af9fd0f9101d5309b2de31f3d1699e56a574d7d4b5e6380580a9e758a9744", url = "https://github.com/bats-core/bats-core/archive/refs/tags/v1.13.0.tar.gz"}
 "platforms.linux-x64" = { url = "https://github.com/bats-core/bats-core/archive/refs/tags/v1.13.0.tar.gz"}
 "platforms.macos-arm64" = { checksum = "blake3:d34af9fd0f9101d5309b2de31f3d1699e56a574d7d4b5e6380580a9e758a9744", url = "https://github.com/bats-core/bats-core/archive/refs/tags/v1.13.0.tar.gz"}
 "platforms.macos-x64" = { url = "https://github.com/bats-core/bats-core/archive/refs/tags/v1.13.0.tar.gz"}
