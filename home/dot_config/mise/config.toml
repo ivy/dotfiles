@@ -3,8 +3,8 @@
 #
 # Backend priority (prefer earlier options):
 #   1. Native mise tools (runtimes like python, node)
-#   2. aqua: - best security/features, no plugins
-#   3. github: - tools not in aqua registry
+#   2. github: - direct from GitHub Releases (see ADR-005)
+#   3. cargo: - Rust tools built from source
 #   4. pipx: - Python CLI tools (requires python)
 #   5. npm: - Node CLI tools (requires node)
 
@@ -18,28 +18,28 @@ python = "latest"
 pkl = "latest"
 rust = "latest"
 
-# Aqua registry (preferred for CLI tools)
-"aqua:dandavison/delta" = "latest"
-"aqua:jqlang/jq" = "latest"
+# Cargo (Rust tools built from source)
 "cargo:https://github.com/technicalpickles/envsense" = "latest"
 
-# CLI tools (cross-platform via aqua - moved from Homebrew)
-"aqua:atuinsh/atuin" = "latest"
-"aqua:sharkdp/bat" = "0.26.1"
-"aqua:muesli/duf" = "latest"
-"aqua:bootandy/dust" = "latest"
-eza = "latest"
-"aqua:sharkdp/fd" = "latest"
-"aqua:junegunn/fzf" = "0.68.0"
+# CLI tools (GitHub Releases - see ADR-005)
+# Avoid aqua: backend — registry lag and attestation mismatches break installs.
+# See docs/adrs/005-replace-aqua-backend-with-github-releases.md
+"github:atuinsh/atuin" = "18.12.1"
+"github:sharkdp/bat" = "0.26.1"
 "github:cli/cli" = "2.87.3"
-"aqua:charmbracelet/glow" = "2.1.1"
-"aqua:jesseduffield/lazygit" = "latest"
-"aqua:BurntSushi/ripgrep" = "latest"
-"aqua:starship/starship" = "latest"
-"aqua:mikefarah/yq" = "latest"
-
-# GitHub releases (tools not in aqua)
+"github:dandavison/delta" = "0.18.2"
+"github:bootandy/dust" = "1.2.4"
+"github:muesli/duf" = "0.9.1"
+eza = "latest"
+"github:sharkdp/fd" = "10.3.0"
+"github:junegunn/fzf" = "0.68.0"
+"github:charmbracelet/glow" = "2.1.1"
+"github:jqlang/jq" = "jq-1.8.1"
+"github:jesseduffield/lazygit" = "0.59.0"
 "github:sst/opencode" = "latest"
+"github:BurntSushi/ripgrep" = "15.1.0"
+"github:starship/starship" = "1.24.2"
+"github:mikefarah/yq" = "4.52.4"
 
 # pipx itself (must be installed before any pipx: packages below)
 pipx = "latest"
