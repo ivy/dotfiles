@@ -21,7 +21,8 @@ if [ ! -d "$HK_SRC" ]; then
 fi
 
 echo "Building hk from source..."
-cargo build --release --locked --manifest-path "$HK_SRC/Cargo.toml"
+cd "$HK_SRC"
+cargo build --release --locked
 
 mkdir -p "{{ .chezmoi.homeDir }}/.local/bin"
 cp "$HK_SRC/target/release/hk" "{{ .chezmoi.homeDir }}/.local/bin/hk"
