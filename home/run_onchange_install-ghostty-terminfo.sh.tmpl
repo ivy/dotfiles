@@ -1,9 +1,8 @@
-{{ if ne .chezmoi.os "darwin" -}}
 #!/bin/bash
 
-# Install Ghostty terminfo on non-macOS systems (macOS gets it from the app).
-# Needed when SSHing from Ghostty — without it, TERM=xterm-ghostty is unknown
-# and terminal handling breaks (double keystrokes, missing capabilities).
+# Install Ghostty terminfo on all systems so TERM=xterm-ghostty works everywhere.
+# Needed when SSHing from Ghostty — without it, the remote host doesn't recognize
+# the terminal and handling breaks (double keystrokes, missing capabilities).
 #
 # terminfo-source hash: {{ include "dot_config/ghostty/xterm-ghostty.terminfo" | sha256sum }}
 
@@ -18,4 +17,3 @@ fi
 
 tic -x "${XDG_CONFIG_HOME:-$HOME/.config}/ghostty/xterm-ghostty.terminfo"
 echo "Ghostty terminfo installed to ~/.terminfo"
-{{ end -}}
