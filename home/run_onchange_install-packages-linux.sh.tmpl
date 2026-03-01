@@ -5,18 +5,27 @@
 set -o errexit
 set -o nounset
 
-# Only run if dnf is available
-if ! command -v dnf >/dev/null 2>&1; then
-    echo "dnf not found, skipping package installation"
+if command -v dnf >/dev/null 2>&1; then
+    echo "Installing packages via dnf..."
+
+    sudo dnf install -y \
+{{ range .packages.linux.dnf -}}
+        {{ . }} \
+{{ end }}
+
+elif command -v apt-get >/dev/null 2>&1; then
+    echo "Installing packages via apt..."
+
+    sudo apt-get update -qq
+    sudo apt-get install -y \
+{{ range .packages.linux.apt -}}
+        {{ . }} \
+{{ end }}
+
+else
+    echo "No supported package manager found (dnf or apt-get), skipping"
     exit 0
 fi
-
-echo "Installing packages via dnf..."
-
-sudo dnf install -y \
-{{ range .packages.linux.dnf -}}
-    {{ . }} \
-{{ end }}
 
 echo "Package installation complete"
 {{ end -}}

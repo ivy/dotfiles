@@ -98,3 +98,13 @@ packages:
       - tmux
       - util-linux-user
       - zsh
+    apt:
+      # Core system tools (Ubuntu equivalents of the dnf list)
+      - ca-certificates
+      - git
+      - git-lfs
+      - htop
+      - neovim
+      - passwd
+      - tmux
+      - zsh
