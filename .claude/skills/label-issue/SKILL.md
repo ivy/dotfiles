@@ -1,29 +1,28 @@
 ---
-name: label-ticket
+name: label-issue
 description: Use when labeling GitHub issues or triaging the backlog. Applies the project's label taxonomy from docs/labels.md.
 argument-hint: "[#123 | #123 #456 | all | unlabeled]"
-model: haiku
+model: sonnet
 allowed-tools:
   - Read
   - Bash(gh issue list:*)
   - Bash(gh issue view:*)
-  - Bash(gh issue edit:*)
   - Bash(gh label list:*)
 ---
 
-# Label Ticket
+# Label Issue
 
 Apply labels to GitHub issues per the taxonomy in [docs/labels.md](docs/labels.md).
 
 ## Arguments
 
 ```
-local /label-ticket
+local /label-issue
 ```
 
 ## Label Reference
 
-Read `docs/labels.md` for the full taxonomy. Quick summary:
+Read @docs/labels.md for the full taxonomy. Quick summary:
 
 | Group | Labels |
 |-------|--------|
@@ -96,9 +95,9 @@ Report what was labeled:
 ## Examples
 
 ```
-/label-ticket #203                → label one issue
-/label-ticket #199 #200 #201     → label specific issues
-/label-ticket unlabeled           → find and triage unlabeled issues
-/label-ticket all                 → review and label all open issues
-/label-ticket                     → same as unlabeled
+/label-issue #203                → label one issue
+/label-issue #199 #200 #201     → label specific issues
+/label-issue unlabeled           → find and triage unlabeled issues
+/label-issue all                 → review and label all open issues
+/label-issue                     → same as unlabeled
 ```
