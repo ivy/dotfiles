@@ -16,4 +16,4 @@ These tools were built for humans. Agents need to own them now. The question isn
 
 ## What This Is Not
 
-This is a personal developer environment. It exists for one person. It will never be supported, never accept issues, never accept PRs. Others are welcome to learn from it, but it is not a product.
+This is a personal developer environment, not a product. It exists for one person, but others are welcome to learn from it and contribute.

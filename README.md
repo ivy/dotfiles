@@ -18,6 +18,8 @@ Built on [Chezmoi](https://www.chezmoi.io/) for dotfile management, [Renovate](h
 | CI | [GitHub Actions](.github/workflows/) | ShellCheck + BATS on push, Claude Code review on PRs |
 | Agents | [Claude Code](.claude/) | Skills, hooks, specialized subagents — agents manage the environment end-to-end |
 
+Supported platforms: **macOS**, **Fedora**, and **Debian/Ubuntu**.
+
 Every dependency is version-pinned. Every update flows through automation.
 
 For the thinking behind this setup, see [docs/vision.md](docs/vision.md) and [docs/core-principles.md](docs/core-principles.md).
@@ -50,7 +52,7 @@ Run `./install.sh --help` for all options, or see [CLAUDE.md](CLAUDE.md) for the
 
 ## Not a Product
 
-This is a personal setup. There's no support, no issues, no PRs. You're welcome to read, learn from, and steal from it — but it's built for one person and maintained by their agents.
+This is a personal setup — built for one person and maintained by their agents. You're welcome to read, learn from, and steal from it. Issues and PRs are open if you want to contribute.
 
 ## License
 
