@@ -1,3 +1,7 @@
+[[tools."cargo:du-dust"]]
+version = "1.2.4"
+backend = "cargo:du-dust"
+
 [[tools."cargo:https://github.com/technicalpickles/envsense"]]
 version = "HEAD"
 backend = "cargo:https://github.com/technicalpickles/envsense"
