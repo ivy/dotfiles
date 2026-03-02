@@ -2,4 +2,8 @@
 # Global pre-commit hook — runs hk with gitleaks to guard against credential leaks.
 # Hardcoded path: ~/.local/bin/hk is our fork with global config support;
 # mise's stock hk doesn't load ~/.config/hk/config.pkl.
+#
+# HACK(ivy): On macOS, dirs::config_dir() returns ~/Library/Application Support, not ~/.config,
+# so we explicitly set HK_CONFIG_DIR to ensure the global config is found.
+export HK_CONFIG_DIR="$HOME/.config/hk"
 exec "$HOME/.local/bin/hk" run pre-commit "$@"
