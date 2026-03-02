@@ -27,7 +27,7 @@
   "minimumReleaseAge": "3 days",
 
   // Labels applied to every Renovate PR
-  "labels": ["deps", "automated"],
+  "labels": ["type:chore"],
 
   // Only these managers are active — everything else (npm, pip, etc.) is ignored
   "enabledManagers": [

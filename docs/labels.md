@@ -74,15 +74,6 @@ Which part of the stack an issue touches. An issue gets one area label. If it sp
 
 These map to the stack layers in CLAUDE.md. Resist adding more — if an area has fewer than 3 issues historically, it doesn't need a label.
 
-### Automation
-
-Applied by bots, not humans.
-
-| Label | Applied by |
-|-------|------------|
-| `automated` | Renovate / Dependabot PRs |
-| `deps` | Renovate / Dependabot PRs |
-
 ## What's Not Here
 
 **Effort/size labels** — Solo repo. You know how big something is when you read it. Agents don't need T-shirt sizing to pick up `for:agent` work.
@@ -111,4 +102,4 @@ gh issue list --label "for:agent" --label "p1:soon" --state open
 gh issue list --label "for:agent" --label "area:claude" --state open
 ```
 
-Fallback to `p2:later` + `agent-ready` when `p1` is empty.
+Fallback to `p2:later` + `for:agent` when `p1` is empty.
