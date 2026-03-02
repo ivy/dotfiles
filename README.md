@@ -15,6 +15,7 @@ Built on [Chezmoi](https://www.chezmoi.io/) for dotfile management, [Mise](https
 | Tools | [mise](home/dot_config/mise/config.toml) | 30+ CLIs pulled from GitHub Releases, cargo, npm, and pipx — bleeding edge 🤘 |
 | Dotfiles | [Chezmoi](home/) | Templated configs, run-on-change scripts, pinned externals |
 | Deps | [Renovate](renovate.json5) | Automated updates for mise, Actions, Docker, Neovim plugins, and Chezmoi externals |
+| Hooks | [hk](home/dot_config/hk/config.pkl) | Global pre-commit hooks — gitleaks catches secrets before agents can leak them |
 | CI | [GitHub Actions](.github/workflows/) | ShellCheck + BATS on push, Claude Code review on PRs |
 | Agents | [Claude Code](.claude/) | Skills, hooks, specialized subagents — agents manage the environment end-to-end |
 
