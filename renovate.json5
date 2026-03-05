@@ -23,9 +23,6 @@
   "automerge": true,
   "automergeStrategy": "squash",
 
-  // Delay release updates to reduce likelihood of impact from supply-chain attacks
-  "minimumReleaseAge": "3 days",
-
   // Labels applied to every Renovate PR
   "labels": ["type:chore"],
 
