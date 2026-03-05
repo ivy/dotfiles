@@ -2,16 +2,16 @@
 # Development tools for shell scripting and testing
 
 [tools]
-"aqua:bats-core/bats-core" = "latest"
-"aqua:koalaman/shellcheck" = "latest"
-"aqua:mikefarah/yq" = "latest"
-"aqua:suzuki-shunsuke/ghalint" = "latest"
-hk = "latest"
-jq = "latest"
-"npm:markdownlint-cli" = "latest"
-pkl = "latest"
-shfmt = "latest"
-stylua = "latest"
+"aqua:bats-core/bats-core" = "1.13.0"
+"aqua:koalaman/shellcheck" = "0.11.0"
+"aqua:mikefarah/yq" = "4.52.4"
+"aqua:suzuki-shunsuke/ghalint" = "1.5.5"
+hk = "1.36.0"
+jq = "1.8.1"
+"npm:markdownlint-cli" = "0.47.0"
+pkl = "0.30.2"
+shfmt = "3.12.0"
+stylua = "2.3.1"
 
 [tasks.lint]
 description = "Lint and auto-fix"

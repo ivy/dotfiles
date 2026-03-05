@@ -13,13 +13,13 @@ lockfile = true
 
 [tools]
 # Runtimes (install first - required by pipx/npm/cargo backends)
-node = "latest"
-python = "latest"
-pkl = "latest"
-rust = "latest"
+node = "24.13.1"
+python = "3.14.3"
+pkl = "0.30.2"
+rust = "1.93.1"
 
 # Cargo (Rust tools built from source)
-"cargo:https://github.com/technicalpickles/envsense" = "latest"
+"cargo:https://github.com/technicalpickles/envsense" = "tag:0.6.0"
 
 # CLI tools (GitHub Releases - see ADR-005)
 # Avoid aqua: backend — registry lag and attestation mismatches break installs.
@@ -30,27 +30,27 @@ rust = "latest"
 "github:dandavison/delta" = "0.18.2"
 "cargo:du-dust" = "1.2.4"
 "github:muesli/duf" = "0.9.1"
-eza = "latest"
+eza = "0.23.4"
 "github:sharkdp/fd" = "10.3.0"
 "github:junegunn/fzf" = "0.70.0"
-"github:gitleaks/gitleaks" = "latest"
+"github:gitleaks/gitleaks" = "8.30.0"
 "github:charmbracelet/glow" = "2.1.1"
 "github:jqlang/jq" = "jq-1.8.1"
 "github:jesseduffield/lazygit" = "0.59.0"
 "github:neovim/neovim" = "0.11.6"
-"github:sst/opencode" = "latest"
+"github:sst/opencode" = "1.2.10"
 "github:BurntSushi/ripgrep" = "15.1.0"
 "github:starship/starship" = "1.24.2"
 "github:mikefarah/yq" = "4.52.4"
 
 # pipx itself (must be installed before any pipx: packages below)
-pipx = "latest"
+pipx = "1.8.0"
 
 # Python tools via pipx
-"pipx:claude-conversation-extractor" = "latest"
-"pipx:gitingest" = "latest"
+"pipx:claude-conversation-extractor" = "1.1.2"
+"pipx:gitingest" = "0.3.1"
 
 # Node tools via npm
-"npm:@openai/codex" = "latest"
-"npm:@owloops/claude-powerline" = "latest"
-"npm:git-mob" = "latest"
+"npm:@openai/codex" = "0.104.0"
+"npm:@owloops/claude-powerline" = "1.17.2"
+"npm:git-mob" = "4.0.1"

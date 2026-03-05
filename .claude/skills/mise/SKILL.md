@@ -139,7 +139,7 @@ mise --cd home/dot_config/mise lock
 ## Rules
 
 - Edit `home/dot_config/mise/config.toml`, never `~/.config/mise/config.toml`
-- Pin exact versions for `github:` tools — Renovate handles updates
-- Runtimes (`node`, `python`, `rust`, `pkl`) may use `latest`
+- Pin exact versions for all tools — Renovate handles updates
+- Never use `latest` — always pin to a specific version
 - Always regenerate lockfile after config changes
 - Always verify the tool runs after installing
