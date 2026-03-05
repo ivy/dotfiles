@@ -23,6 +23,9 @@
   "automerge": true,
   "automergeStrategy": "squash",
 
+  // Default from config:recommended is 5; raise to avoid throttling with many pinned tools
+  "prHourlyLimit": 10,
+
   // Labels applied to every Renovate PR
   "labels": ["type:chore"],
 
@@ -34,8 +37,7 @@
     "jsonata"
   ],
 
-  // Lock file maintenance: regenerate mise.lock to pick up new versions.
-  // Tool configs declare "latest"; lockfiles pin exact versions with checksums.
+  // Lock file maintenance: regenerate mise.lock to pick up new checksums.
   "lockFileMaintenance": {
     "enabled": true,
     "schedule": ["at any time"]
