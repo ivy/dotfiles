@@ -31,14 +31,6 @@ backend = "github:atuinsh/atuin"
 "platforms.macos-x64" = { checksum = "sha256:94b38e6031bad2409c176beae63580da35a1c3a1c129cc7c4c8f74f1e2965638", url = "https://github.com/atuinsh/atuin/releases/download/v18.12.1/source.tar.gz", url_api = "https://api.github.com/repos/atuinsh/atuin/releases/assets/354457812"}
 "platforms.windows-x64" = { checksum = "sha256:140cdbf9d4caac64ef6d2c17b6e0d0a4bdc26b64ea007333c809070f41e44b82", url = "https://github.com/atuinsh/atuin/releases/download/v18.12.1/atuin-server-x86_64-pc-windows-msvc.zip", url_api = "https://api.github.com/repos/atuinsh/atuin/releases/assets/354457750"}
 
-[[tools."github:bootandy/dust"]]
-version = "1.2.4"
-backend = "github:bootandy/dust"
-"platforms.linux-arm64" = { checksum = "sha256:1903296e662a80a504b132525c9360b503de3b900970e1245268605fc65e366d", url = "https://github.com/bootandy/dust/releases/download/v1.2.4/dust-v1.2.4-aarch64-unknown-linux-gnu.tar.gz", url_api = "https://api.github.com/repos/bootandy/dust/releases/assets/338100648"}
-"platforms.linux-x64" = { checksum = "sha256:707cfdbfb9d2dc536f8c3853815bbe98a01012f2772463835edae06816551160", url = "https://github.com/bootandy/dust/releases/download/v1.2.4/dust-v1.2.4-x86_64-unknown-linux-gnu.tar.gz", url_api = "https://api.github.com/repos/bootandy/dust/releases/assets/338099299"}
-"platforms.macos-x64" = { checksum = "sha256:bf84d3ff7f58e325d3eb5bb7696df6b22ef1e01fec80c2d8f7c9d3e611be66f4", url = "https://github.com/bootandy/dust/releases/download/v1.2.4/dust-v1.2.4-x86_64-apple-darwin.tar.gz", url_api = "https://api.github.com/repos/bootandy/dust/releases/assets/338099240"}
-"platforms.windows-x64" = { checksum = "sha256:eb08d642f016787bb9fc918a4dc5f34665463657fddf83a40f2441cbf020fb4c", url = "https://github.com/bootandy/dust/releases/download/v1.2.4/dust-v1.2.4-x86_64-pc-windows-msvc.zip", url_api = "https://api.github.com/repos/bootandy/dust/releases/assets/338102043"}
-
 [[tools."github:charmbracelet/glow"]]
 version = "2.1.1"
 backend = "github:charmbracelet/glow"
@@ -148,13 +140,13 @@ backend = "github:sharkdp/fd"
 "platforms.windows-x64" = { checksum = "sha256:318aa2a6fa664325933e81fda60d523fff29444129e91ebf0726b5b3bcd8b059", url = "https://github.com/sharkdp/fd/releases/download/v10.3.0/fd-v10.3.0-x86_64-pc-windows-msvc.zip", url_api = "https://api.github.com/repos/sharkdp/fd/releases/assets/286314811"}
 
 [[tools."github:sst/opencode"]]
-version = "1.2.10"
+version = "1.2.17"
 backend = "github:sst/opencode"
-"platforms.linux-arm64" = { checksum = "sha256:d9a9d4f0bc1ed246258c0e8846e80593755a72bf4afd3940c4071d6f0b7b7775", url = "https://github.com/anomalyco/opencode/releases/download/v1.2.10/opencode-linux-arm64.tar.gz", url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/359128831"}
-"platforms.linux-x64" = { checksum = "sha256:6c546ca5b95a80f65dbae696bf5bf8c263cab1c919869ea1f579861b12c7321c", url = "https://github.com/anomalyco/opencode/releases/download/v1.2.10/opencode-linux-x64-baseline.tar.gz", url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/359128822"}
-"platforms.macos-arm64" = { checksum = "sha256:1c6ea1451f09166ab614f08451e0e075023fd4239ba7795914d4088b0e36de96", url = "https://github.com/anomalyco/opencode/releases/download/v1.2.10/opencode-desktop-darwin-aarch64.app.tar.gz", url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/359131239"}
-"platforms.macos-x64" = { checksum = "sha256:a06453ba9e4ea09c4733b00d257fa654617568425cb50d68c448afff1d46d158", url = "https://github.com/anomalyco/opencode/releases/download/v1.2.10/opencode-desktop-darwin-x64.app.tar.gz", url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/359132163"}
-"platforms.windows-x64" = { checksum = "sha256:563a78108dc7002eb9c7bf67faa22a5c783178ecb225b597b398a32419d2c6b1", url = "https://github.com/anomalyco/opencode/releases/download/v1.2.10/opencode-windows-x64-baseline.zip", url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/359128783"}
+"platforms.linux-arm64" = { checksum = "sha256:a8c8958274c9b6d9939253b7779a8628c03ec34abbf874cfd5021dd1add12f83", url = "https://github.com/anomalyco/opencode/releases/download/v1.2.17/opencode-linux-arm64.tar.gz", url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/366820790"}
+"platforms.linux-x64" = { checksum = "sha256:eaf7bd6c435e3511d010f8c1aa3f6740037886eb3fc8c024d5e55d82f8d8758b", url = "https://github.com/anomalyco/opencode/releases/download/v1.2.17/opencode-linux-x64-baseline.tar.gz", url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/366820758"}
+"platforms.macos-arm64" = { checksum = "sha256:0b58378c9af05e1f2ddccca845701a00291e6baaaa2c860488878df306afd05f", url = "https://github.com/anomalyco/opencode/releases/download/v1.2.17/opencode-desktop-darwin-aarch64.app.tar.gz", url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/366825349"}
+"platforms.macos-x64" = { checksum = "sha256:d40d76c2e2a14ed36b303d0af1b3476d7886b328a21868552730ea7853186860", url = "https://github.com/anomalyco/opencode/releases/download/v1.2.17/opencode-desktop-darwin-x64.app.tar.gz", url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/366825666"}
+"platforms.windows-x64" = { checksum = "sha256:28e95ece93b846aa27f99357a99b2bd19ddd202b4f27edc5f38a00631cef7855", url = "https://github.com/anomalyco/opencode/releases/download/v1.2.17/opencode-windows-x64-baseline.zip", url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/366820691"}
 
 [[tools."github:starship/starship"]]
 version = "1.24.2"
@@ -166,20 +158,20 @@ backend = "github:starship/starship"
 "platforms.windows-x64" = { checksum = "sha256:d38424c595320e9639a276666347d5e44cb004de3972f40b9a5a1a6b88537f29", url = "https://github.com/starship/starship/releases/download/v1.24.2/starship-x86_64-pc-windows-msvc.zip", url_api = "https://api.github.com/repos/starship/starship/releases/assets/334568406"}
 
 [[tools.node]]
-version = "25.6.1"
+version = "25.8.0"
 backend = "core:node"
-"platforms.linux-arm64" = { checksum = "sha256:90fea701897ecb424aafa2824539476598437ad9f21e649732a85cc2d955d845", url = "https://nodejs.org/dist/v25.6.1/node-v25.6.1-linux-arm64.tar.gz"}
-"platforms.linux-x64" = { checksum = "sha256:3809fdbfd54829bad363b9db8e96ca3600509e2ff20ede74181cfc1ca8451ce3", url = "https://nodejs.org/dist/v25.6.1/node-v25.6.1-linux-x64.tar.gz"}
-"platforms.macos-arm64" = { checksum = "sha256:a80cb252d170a4730f78f5950cf19a46106f156e5886e5c1cc8c5602aea60243", url = "https://nodejs.org/dist/v25.6.1/node-v25.6.1-darwin-arm64.tar.gz"}
-"platforms.macos-x64" = { checksum = "sha256:3b68f847d9d8861c7c8bfef32c540d14f6ca18bfcbf5f6495a595b9529063a9b", url = "https://nodejs.org/dist/v25.6.1/node-v25.6.1-darwin-x64.tar.gz"}
-"platforms.windows-x64" = { checksum = "sha256:0ae2300cdf44c399b5b351edbefb3534d1342a6fabd64302ca8c8e2fb86b0445", url = "https://nodejs.org/dist/v25.6.1/node-v25.6.1-win-x64.zip"}
+"platforms.linux-arm64" = { checksum = "sha256:54c128f5286a4392a1fd1c765729b074a6873abff8a4f9bb3d63d571c2855e41", url = "https://nodejs.org/dist/v25.8.0/node-v25.8.0-linux-arm64.tar.gz"}
+"platforms.linux-x64" = { checksum = "sha256:2ae6f70d74a459c0a96456e486dc60f3e7e65d7752ad302771834e58b27500af", url = "https://nodejs.org/dist/v25.8.0/node-v25.8.0-linux-x64.tar.gz"}
+"platforms.macos-arm64" = { checksum = "sha256:75ff6fd07e0a85fb4d2529f6189c996014b1d3d83180c31e65feb2b3eaeec5d9", url = "https://nodejs.org/dist/v25.8.0/node-v25.8.0-darwin-arm64.tar.gz"}
+"platforms.macos-x64" = { checksum = "sha256:03fb559600c3ede0228d8b588ac6ad8b7b2cd0bac9422b56e7e2ef7f5c11b67c", url = "https://nodejs.org/dist/v25.8.0/node-v25.8.0-darwin-x64.tar.gz"}
+"platforms.windows-x64" = { checksum = "sha256:5744746371a417179a701044739b5fa2b3164e943aa57f86059fb312f8032e86", url = "https://nodejs.org/dist/v25.8.0/node-v25.8.0-win-x64.zip"}
 
 [[tools."npm:@openai/codex"]]
-version = "0.104.0"
+version = "0.110.0"
 backend = "npm:@openai/codex"
 
 [[tools."npm:@owloops/claude-powerline"]]
-version = "1.17.2"
+version = "1.19.0"
 backend = "npm:@owloops/claude-powerline"
 
 [[tools."npm:git-mob"]]
@@ -203,22 +195,22 @@ version = "0.3.1"
 backend = "pipx:gitingest"
 
 [[tools.pkl]]
-version = "0.30.2"
+version = "0.31.0"
 backend = "aqua:apple/pkl"
-"platforms.linux-arm64" = { checksum = "sha256:8da3ae65104eb7058e35dc4a9fe46bd8ece2b6faf4b65d0b1054cadb2ede0246", url = "https://github.com/apple/pkl/releases/download/0.30.2/pkl-linux-aarch64"}
-"platforms.linux-x64" = { checksum = "sha256:474e5137d60a9e2320fde19a526f42c36d8e9d3b245139d59a9b8dff85283c76", url = "https://github.com/apple/pkl/releases/download/0.30.2/pkl-linux-amd64"}
-"platforms.macos-arm64" = { checksum = "sha256:f1db44c0f6f859aee88c9d7d272f2371ae40ac95ec9957ae78eff51665158e04", url = "https://github.com/apple/pkl/releases/download/0.30.2/pkl-macos-aarch64"}
-"platforms.macos-x64" = { checksum = "sha256:5f62ae7a7a34c15b3a83af17bda8e6b98516953f383a492340d4aa090caaa6d9", url = "https://github.com/apple/pkl/releases/download/0.30.2/pkl-macos-amd64"}
-"platforms.windows-x64" = { checksum = "sha256:19e92aa59bcf4e54963b6e3b419af7e1b939f5793b44f4a08d60bab1217106f4", url = "https://github.com/apple/pkl/releases/download/0.30.2/pkl-windows-amd64.exe"}
+"platforms.linux-arm64" = { checksum = "sha256:471460cdd11e1cb9ac0a5401fdb05277ae3adb3a4573cc0a9c63ee087c1f93c8", url = "https://github.com/apple/pkl/releases/download/0.31.0/pkl-linux-aarch64"}
+"platforms.linux-x64" = { checksum = "sha256:5a5c2a889b68ca92ff4258f9d277f92412b98dfef5057daef7564202a20870b6", url = "https://github.com/apple/pkl/releases/download/0.31.0/pkl-linux-amd64"}
+"platforms.macos-arm64" = { checksum = "sha256:349402ae32c35382c034b0c0af744ffb0d53a213888c44deec94a7810e144889", url = "https://github.com/apple/pkl/releases/download/0.31.0/pkl-macos-aarch64"}
+"platforms.macos-x64" = { checksum = "sha256:9f1cc8e3ac2327bc483b90d0c220da20eb785c3ba3fe92e021f47d3d56768282", url = "https://github.com/apple/pkl/releases/download/0.31.0/pkl-macos-amd64"}
+"platforms.windows-x64" = { checksum = "sha256:37d35ce8a165766502fb13799071d4cefa84d39fb455c75c471b47b9b5d12b04", url = "https://github.com/apple/pkl/releases/download/0.31.0/pkl-windows-amd64.exe"}
 
 [[tools.python]]
 version = "3.14.3"
 backend = "core:python"
-"platforms.linux-arm64" = { checksum = "sha256:e9b0aef9baafb6b9e7a4d47b82d6d9778eeafb2c95d23fb5247d3a5f8e52c5a5", url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260211/cpython-3.14.3+20260211-aarch64-unknown-linux-gnu-install_only_stripped.tar.gz"}
-"platforms.linux-x64" = { checksum = "sha256:759457004082459a402f369225b82565d88ca8257d9fd11c642a1c76ab0cb1cc", url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260211/cpython-3.14.3+20260211-x86_64-unknown-linux-gnu-install_only_stripped.tar.gz"}
-"platforms.macos-arm64" = { checksum = "sha256:348647e4c13b662f7b0d218ccf472688038679815fb1a429ca664b7dce324237", url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260211/cpython-3.14.3+20260211-aarch64-apple-darwin-install_only_stripped.tar.gz"}
-"platforms.macos-x64" = { checksum = "sha256:107c71b272b5eeecd7b7b607c4fac0796b0f221bc3391e6155a349789cc7eb17", url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260211/cpython-3.14.3+20260211-x86_64-apple-darwin-install_only_stripped.tar.gz"}
-"platforms.windows-x64" = { checksum = "sha256:dc5feea0e16807e7c7b2d20af3f2c18c7153f9cbd4b54063172553fda60c5a1f", url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260211/cpython-3.14.3+20260211-x86_64-pc-windows-msvc-install_only_stripped.tar.gz"}
+"platforms.linux-arm64" = { checksum = "sha256:be0f4dc2932f762292b27d46ea7d3e8e66ddf3969a5eb0254a229015ed402625", url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260303/cpython-3.14.3+20260303-aarch64-unknown-linux-gnu-install_only_stripped.tar.gz"}
+"platforms.linux-x64" = { checksum = "sha256:0a73413f89efd417871876c9accaab28a9d1e3cd6358fbfff171a38ec99302f0", url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260303/cpython-3.14.3+20260303-x86_64-unknown-linux-gnu-install_only_stripped.tar.gz"}
+"platforms.macos-arm64" = { checksum = "sha256:4703cdf18b26798fde7b49b6b66149674c25f97127be6a10dbcf29309bdcdcdb", url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260303/cpython-3.14.3+20260303-aarch64-apple-darwin-install_only_stripped.tar.gz"}
+"platforms.macos-x64" = { checksum = "sha256:76f1cc26e3d262eae8ca546a93e8bded10cf0323613f7e246fea2e10a8115eb7", url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260303/cpython-3.14.3+20260303-x86_64-apple-darwin-install_only_stripped.tar.gz"}
+"platforms.windows-x64" = { checksum = "sha256:950c5f21a015c1bdd1337f233456df2470fab71e4d794407d27a84cb8b9909a0", url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260303/cpython-3.14.3+20260303-x86_64-pc-windows-msvc-install_only_stripped.tar.gz"}
 
 [[tools.rust]]
 version = "1.93.1"
