@@ -208,6 +208,10 @@ backend = "npm:@owloops/claude-powerline"
 version = "1.17.2"
 backend = "npm:@owloops/claude-powerline"
 
+[[tools."npm:ccusage"]]
+version = "18.0.8"
+backend = "npm:ccusage"
+
 [[tools."npm:git-mob"]]
 version = "4.0.1"
 backend = "npm:git-mob"

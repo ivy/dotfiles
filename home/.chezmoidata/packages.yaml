@@ -18,7 +18,6 @@ packages:
       - tree
 
       # System monitoring
-      - ccusage
       - htop
 
       # Terminal multiplexer
