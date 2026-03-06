@@ -149,13 +149,13 @@ backend = "github:sharkdp/fd"
 "platforms.windows-x64" = { checksum = "sha256:318aa2a6fa664325933e81fda60d523fff29444129e91ebf0726b5b3bcd8b059", url = "https://github.com/sharkdp/fd/releases/download/v10.3.0/fd-v10.3.0-x86_64-pc-windows-msvc.zip", url_api = "https://api.github.com/repos/sharkdp/fd/releases/assets/286314811"}
 
 [[tools."github:sst/opencode"]]
-version = "1.2.18"
+version = "1.2.19"
 backend = "github:sst/opencode"
-"platforms.linux-arm64" = { checksum = "sha256:cd8b3cd13bef12e29f32e0f32e5ca48e29159cf6cd32ddee8b3be97438a0242c", url = "https://github.com/anomalyco/opencode/releases/download/v1.2.18/opencode-linux-arm64.tar.gz", url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/367694368"}
-"platforms.linux-x64" = { checksum = "sha256:55fd8ed686d4b897f2ff0972fac1ffc5e6d0632aec6f443e114aa93e84b720da", url = "https://github.com/anomalyco/opencode/releases/download/v1.2.18/opencode-linux-x64-baseline.tar.gz", url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/367694326"}
-"platforms.macos-arm64" = { checksum = "sha256:dd725323c6a2841e48b40b899baf1097ed93369a9ee31e1afb72d7f7116f3fdc", url = "https://github.com/anomalyco/opencode/releases/download/v1.2.18/opencode-desktop-darwin-aarch64.app.tar.gz", url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/367698687"}
-"platforms.macos-x64" = { checksum = "sha256:2285c37baf8c9cc066632189022e56b9630999b2d5a62f4cb63920a211dd0128", url = "https://github.com/anomalyco/opencode/releases/download/v1.2.18/opencode-desktop-darwin-x64.app.tar.gz", url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/367699153"}
-"platforms.windows-x64" = { checksum = "sha256:fa6c3bcf13670fd7c404e875a026decc4df420d5fd0456bda08f7948a689de4e", url = "https://github.com/anomalyco/opencode/releases/download/v1.2.18/opencode-windows-x64-baseline.zip", url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/367694284"}
+"platforms.linux-arm64" = { checksum = "sha256:6eb0749227d199595cb30eac6b63a64af9d404493f03dd0022f42bfeb875dca4", url = "https://github.com/anomalyco/opencode/releases/download/v1.2.19/opencode-linux-arm64.tar.gz", url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/368000900"}
+"platforms.linux-x64" = { checksum = "sha256:5c828202a64813c42974b4e81a929899d6f975b9b4b9bf77b3f167998b8fa532", url = "https://github.com/anomalyco/opencode/releases/download/v1.2.19/opencode-linux-x64-baseline.tar.gz", url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/368000944"}
+"platforms.macos-arm64" = { checksum = "sha256:de27426d0a98e4350a36a0a38951d3b7988d631ea1836702dbc35134ce5f961b", url = "https://github.com/anomalyco/opencode/releases/download/v1.2.19/opencode-desktop-darwin-aarch64.app.tar.gz", url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/368007406"}
+"platforms.macos-x64" = { checksum = "sha256:f7174c0c9590c0e412084a193fc0950f7cd79a8207d61db860365fbf338f9687", url = "https://github.com/anomalyco/opencode/releases/download/v1.2.19/opencode-desktop-darwin-x64.app.tar.gz", url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/368007529"}
+"platforms.windows-x64" = { checksum = "sha256:84feba5124aba5e7abc5b117f74105117cd1c73313f41a2c2d483646ec2a75e2", url = "https://github.com/anomalyco/opencode/releases/download/v1.2.19/opencode-windows-x64-baseline.zip", url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/368000859"}
 
 [[tools."github:starship/starship"]]
 version = "1.24.2"
