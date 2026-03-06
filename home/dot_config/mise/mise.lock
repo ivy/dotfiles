@@ -3,10 +3,6 @@ version = "1.2.4"
 backend = "cargo:du-dust"
 
 [[tools."cargo:https://github.com/technicalpickles/envsense"]]
-version = "HEAD"
-backend = "cargo:https://github.com/technicalpickles/envsense"
-
-[[tools."cargo:https://github.com/technicalpickles/envsense"]]
 version = "ref:0.6.0"
 backend = "cargo:https://github.com/technicalpickles/envsense"
 
@@ -148,22 +144,13 @@ backend = "github:sharkdp/fd"
 "platforms.windows-x64" = { checksum = "sha256:318aa2a6fa664325933e81fda60d523fff29444129e91ebf0726b5b3bcd8b059", url = "https://github.com/sharkdp/fd/releases/download/v10.3.0/fd-v10.3.0-x86_64-pc-windows-msvc.zip", url_api = "https://api.github.com/repos/sharkdp/fd/releases/assets/286314811"}
 
 [[tools."github:sst/opencode"]]
-version = "1.2.17"
+version = "1.2.18"
 backend = "github:sst/opencode"
-"platforms.linux-arm64" = { checksum = "sha256:a8c8958274c9b6d9939253b7779a8628c03ec34abbf874cfd5021dd1add12f83", url = "https://github.com/anomalyco/opencode/releases/download/v1.2.17/opencode-linux-arm64.tar.gz", url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/366820790"}
-"platforms.linux-x64" = { checksum = "sha256:eaf7bd6c435e3511d010f8c1aa3f6740037886eb3fc8c024d5e55d82f8d8758b", url = "https://github.com/anomalyco/opencode/releases/download/v1.2.17/opencode-linux-x64-baseline.tar.gz", url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/366820758"}
-"platforms.macos-arm64" = { checksum = "sha256:0b58378c9af05e1f2ddccca845701a00291e6baaaa2c860488878df306afd05f", url = "https://github.com/anomalyco/opencode/releases/download/v1.2.17/opencode-desktop-darwin-aarch64.app.tar.gz", url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/366825349"}
-"platforms.macos-x64" = { checksum = "sha256:d40d76c2e2a14ed36b303d0af1b3476d7886b328a21868552730ea7853186860", url = "https://github.com/anomalyco/opencode/releases/download/v1.2.17/opencode-desktop-darwin-x64.app.tar.gz", url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/366825666"}
-"platforms.windows-x64" = { checksum = "sha256:28e95ece93b846aa27f99357a99b2bd19ddd202b4f27edc5f38a00631cef7855", url = "https://github.com/anomalyco/opencode/releases/download/v1.2.17/opencode-windows-x64-baseline.zip", url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/366820691"}
-
-[[tools."github:sst/opencode"]]
-version = "1.2.10"
-backend = "github:sst/opencode"
-"platforms.linux-arm64" = { checksum = "sha256:d9a9d4f0bc1ed246258c0e8846e80593755a72bf4afd3940c4071d6f0b7b7775", url = "https://github.com/anomalyco/opencode/releases/download/v1.2.10/opencode-linux-arm64.tar.gz", url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/359128831"}
-"platforms.linux-x64" = { checksum = "sha256:6c546ca5b95a80f65dbae696bf5bf8c263cab1c919869ea1f579861b12c7321c", url = "https://github.com/anomalyco/opencode/releases/download/v1.2.10/opencode-linux-x64-baseline.tar.gz", url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/359128822"}
-"platforms.macos-arm64" = { checksum = "sha256:1c6ea1451f09166ab614f08451e0e075023fd4239ba7795914d4088b0e36de96", url = "https://github.com/anomalyco/opencode/releases/download/v1.2.10/opencode-desktop-darwin-aarch64.app.tar.gz", url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/359131239"}
-"platforms.macos-x64" = { checksum = "sha256:a06453ba9e4ea09c4733b00d257fa654617568425cb50d68c448afff1d46d158", url = "https://github.com/anomalyco/opencode/releases/download/v1.2.10/opencode-desktop-darwin-x64.app.tar.gz", url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/359132163"}
-"platforms.windows-x64" = { checksum = "sha256:563a78108dc7002eb9c7bf67faa22a5c783178ecb225b597b398a32419d2c6b1", url = "https://github.com/anomalyco/opencode/releases/download/v1.2.10/opencode-windows-x64-baseline.zip", url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/359128783"}
+"platforms.linux-arm64" = { checksum = "sha256:cd8b3cd13bef12e29f32e0f32e5ca48e29159cf6cd32ddee8b3be97438a0242c", url = "https://github.com/anomalyco/opencode/releases/download/v1.2.18/opencode-linux-arm64.tar.gz", url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/367694368"}
+"platforms.linux-x64" = { checksum = "sha256:55fd8ed686d4b897f2ff0972fac1ffc5e6d0632aec6f443e114aa93e84b720da", url = "https://github.com/anomalyco/opencode/releases/download/v1.2.18/opencode-linux-x64-baseline.tar.gz", url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/367694326"}
+"platforms.macos-arm64" = { checksum = "sha256:dd725323c6a2841e48b40b899baf1097ed93369a9ee31e1afb72d7f7116f3fdc", url = "https://github.com/anomalyco/opencode/releases/download/v1.2.18/opencode-desktop-darwin-aarch64.app.tar.gz", url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/367698687"}
+"platforms.macos-x64" = { checksum = "sha256:2285c37baf8c9cc066632189022e56b9630999b2d5a62f4cb63920a211dd0128", url = "https://github.com/anomalyco/opencode/releases/download/v1.2.18/opencode-desktop-darwin-x64.app.tar.gz", url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/367699153"}
+"platforms.windows-x64" = { checksum = "sha256:fa6c3bcf13670fd7c404e875a026decc4df420d5fd0456bda08f7948a689de4e", url = "https://github.com/anomalyco/opencode/releases/download/v1.2.18/opencode-windows-x64-baseline.zip", url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/367694284"}
 
 [[tools."github:starship/starship"]]
 version = "1.24.2"
@@ -175,15 +162,6 @@ backend = "github:starship/starship"
 "platforms.windows-x64" = { checksum = "sha256:d38424c595320e9639a276666347d5e44cb004de3972f40b9a5a1a6b88537f29", url = "https://github.com/starship/starship/releases/download/v1.24.2/starship-x86_64-pc-windows-msvc.zip", url_api = "https://api.github.com/repos/starship/starship/releases/assets/334568406"}
 
 [[tools.node]]
-version = "25.8.0"
-backend = "core:node"
-"platforms.linux-arm64" = { checksum = "sha256:54c128f5286a4392a1fd1c765729b074a6873abff8a4f9bb3d63d571c2855e41", url = "https://nodejs.org/dist/v25.8.0/node-v25.8.0-linux-arm64.tar.gz"}
-"platforms.linux-x64" = { checksum = "sha256:2ae6f70d74a459c0a96456e486dc60f3e7e65d7752ad302771834e58b27500af", url = "https://nodejs.org/dist/v25.8.0/node-v25.8.0-linux-x64.tar.gz"}
-"platforms.macos-arm64" = { checksum = "sha256:75ff6fd07e0a85fb4d2529f6189c996014b1d3d83180c31e65feb2b3eaeec5d9", url = "https://nodejs.org/dist/v25.8.0/node-v25.8.0-darwin-arm64.tar.gz"}
-"platforms.macos-x64" = { checksum = "sha256:03fb559600c3ede0228d8b588ac6ad8b7b2cd0bac9422b56e7e2ef7f5c11b67c", url = "https://nodejs.org/dist/v25.8.0/node-v25.8.0-darwin-x64.tar.gz"}
-"platforms.windows-x64" = { checksum = "sha256:5744746371a417179a701044739b5fa2b3164e943aa57f86059fb312f8032e86", url = "https://nodejs.org/dist/v25.8.0/node-v25.8.0-win-x64.zip"}
-
-[[tools.node]]
 version = "24.13.1"
 backend = "core:node"
 "platforms.linux-arm64" = { checksum = "sha256:4873459d7c9b28feaa1f0fade9bb9c81cb702670991ff80a51d805325c5e3456", url = "https://nodejs.org/dist/v24.13.1/node-v24.13.1-linux-arm64.tar.gz"}
@@ -193,16 +171,8 @@ backend = "core:node"
 "platforms.windows-x64" = { checksum = "sha256:fba577c4bb87df04d54dd87bbdaa5a2272f1f99a2acbf9152e1a91b8b5f0b279", url = "https://nodejs.org/dist/v24.13.1/node-v24.13.1-win-x64.zip"}
 
 [[tools."npm:@openai/codex"]]
-version = "0.110.0"
-backend = "npm:@openai/codex"
-
-[[tools."npm:@openai/codex"]]
 version = "0.104.0"
 backend = "npm:@openai/codex"
-
-[[tools."npm:@owloops/claude-powerline"]]
-version = "1.19.0"
-backend = "npm:@owloops/claude-powerline"
 
 [[tools."npm:@owloops/claude-powerline"]]
 version = "1.17.2"
@@ -231,15 +201,6 @@ backend = "pipx:claude-conversation-extractor"
 [[tools."pipx:gitingest"]]
 version = "0.3.1"
 backend = "pipx:gitingest"
-
-[[tools.pkl]]
-version = "0.31.0"
-backend = "aqua:apple/pkl"
-"platforms.linux-arm64" = { checksum = "sha256:471460cdd11e1cb9ac0a5401fdb05277ae3adb3a4573cc0a9c63ee087c1f93c8", url = "https://github.com/apple/pkl/releases/download/0.31.0/pkl-linux-aarch64"}
-"platforms.linux-x64" = { checksum = "sha256:5a5c2a889b68ca92ff4258f9d277f92412b98dfef5057daef7564202a20870b6", url = "https://github.com/apple/pkl/releases/download/0.31.0/pkl-linux-amd64"}
-"platforms.macos-arm64" = { checksum = "sha256:349402ae32c35382c034b0c0af744ffb0d53a213888c44deec94a7810e144889", url = "https://github.com/apple/pkl/releases/download/0.31.0/pkl-macos-aarch64"}
-"platforms.macos-x64" = { checksum = "sha256:9f1cc8e3ac2327bc483b90d0c220da20eb785c3ba3fe92e021f47d3d56768282", url = "https://github.com/apple/pkl/releases/download/0.31.0/pkl-macos-amd64"}
-"platforms.windows-x64" = { checksum = "sha256:37d35ce8a165766502fb13799071d4cefa84d39fb455c75c471b47b9b5d12b04", url = "https://github.com/apple/pkl/releases/download/0.31.0/pkl-windows-amd64.exe"}
 
 [[tools.pkl]]
 version = "0.30.2"
