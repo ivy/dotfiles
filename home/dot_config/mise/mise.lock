@@ -8,11 +8,11 @@ backend = "aqua:bootandy/dust"
 "platforms.windows-x64" = { checksum = "sha256:eb08d642f016787bb9fc918a4dc5f34665463657fddf83a40f2441cbf020fb4c", url = "https://github.com/bootandy/dust/releases/download/v1.2.4/dust-v1.2.4-x86_64-pc-windows-msvc.zip"}
 
 [[tools."cargo:https://github.com/technicalpickles/envsense"]]
-version = "tag:0.6.0"
+version = "ref:0.6.0"
 backend = "cargo:https://github.com/technicalpickles/envsense"
 
 [[tools."cargo:https://github.com/technicalpickles/envsense"]]
-version = "ref:0.6.0"
+version = "tag:0.6.0"
 backend = "cargo:https://github.com/technicalpickles/envsense"
 
 [[tools.eza]]
@@ -25,11 +25,6 @@ backend = "aqua:eza-community/eza"
 [[tools."github:BurntSushi/ripgrep"]]
 version = "15.1.0"
 backend = "github:BurntSushi/ripgrep"
-"platforms.linux-arm64" = { checksum = "sha256:2b661c6ef508e902f388e9098d9c4c5aca72c87b55922d94abdba830b4dc885e", url = "https://github.com/BurntSushi/ripgrep/releases/download/15.1.0/ripgrep-15.1.0-aarch64-unknown-linux-gnu.tar.gz", url_api = "https://api.github.com/repos/BurntSushi/ripgrep/releases/assets/307306472"}
-"platforms.linux-x64" = { checksum = "sha256:1c9297be4a084eea7ecaedf93eb03d058d6faae29bbc57ecdaf5063921491599", url = "https://github.com/BurntSushi/ripgrep/releases/download/15.1.0/ripgrep-15.1.0-x86_64-unknown-linux-musl.tar.gz", url_api = "https://api.github.com/repos/BurntSushi/ripgrep/releases/assets/307306614"}
-"platforms.macos-arm64" = { checksum = "sha256:378e973289176ca0c6054054ee7f631a065874a352bf43f0fa60ef079b6ba715", url = "https://github.com/BurntSushi/ripgrep/releases/download/15.1.0/ripgrep-15.1.0-aarch64-apple-darwin.tar.gz", url_api = "https://api.github.com/repos/BurntSushi/ripgrep/releases/assets/307305438"}
-"platforms.macos-x64" = { checksum = "sha256:64811cb24e77cac3057d6c40b63ac9becf9082eedd54ca411b475b755d334882", url = "https://github.com/BurntSushi/ripgrep/releases/download/15.1.0/ripgrep-15.1.0-x86_64-apple-darwin.tar.gz", url_api = "https://api.github.com/repos/BurntSushi/ripgrep/releases/assets/307305422"}
-"platforms.windows-x64" = { checksum = "sha256:124510b94b6baa3380d051fdf4650eaa80a302c876d611e9dba0b2e18d87493a", url = "https://github.com/BurntSushi/ripgrep/releases/download/15.1.0/ripgrep-15.1.0-x86_64-pc-windows-msvc.zip", url_api = "https://api.github.com/repos/BurntSushi/ripgrep/releases/assets/307305871"}
 
 [[tools."github:atuinsh/atuin"]]
 version = "18.12.1"
@@ -141,20 +136,10 @@ backend = "github:sharkdp/fd"
 [[tools."github:sst/opencode"]]
 version = "1.2.19"
 backend = "github:sst/opencode"
-"platforms.linux-arm64" = { checksum = "sha256:6eb0749227d199595cb30eac6b63a64af9d404493f03dd0022f42bfeb875dca4", url = "https://github.com/anomalyco/opencode/releases/download/v1.2.19/opencode-linux-arm64.tar.gz", url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/368000900"}
-"platforms.linux-x64" = { checksum = "sha256:5c828202a64813c42974b4e81a929899d6f975b9b4b9bf77b3f167998b8fa532", url = "https://github.com/anomalyco/opencode/releases/download/v1.2.19/opencode-linux-x64-baseline.tar.gz", url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/368000944"}
-"platforms.macos-arm64" = { checksum = "sha256:de27426d0a98e4350a36a0a38951d3b7988d631ea1836702dbc35134ce5f961b", url = "https://github.com/anomalyco/opencode/releases/download/v1.2.19/opencode-desktop-darwin-aarch64.app.tar.gz", url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/368007406"}
-"platforms.macos-x64" = { checksum = "sha256:f7174c0c9590c0e412084a193fc0950f7cd79a8207d61db860365fbf338f9687", url = "https://github.com/anomalyco/opencode/releases/download/v1.2.19/opencode-desktop-darwin-x64.app.tar.gz", url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/368007529"}
-"platforms.windows-x64" = { checksum = "sha256:84feba5124aba5e7abc5b117f74105117cd1c73313f41a2c2d483646ec2a75e2", url = "https://github.com/anomalyco/opencode/releases/download/v1.2.19/opencode-windows-x64-baseline.zip", url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/368000859"}
 
 [[tools."github:starship/starship"]]
 version = "1.24.2"
 backend = "github:starship/starship"
-"platforms.linux-arm64" = { checksum = "sha256:56b9ff412bbf374d29b99e5ac09a849124cb37a0a13121e8470df32de53c1ea6", url = "https://github.com/starship/starship/releases/download/v1.24.2/starship-aarch64-unknown-linux-musl.tar.gz", url_api = "https://api.github.com/repos/starship/starship/releases/assets/334568404"}
-"platforms.linux-x64" = { checksum = "sha256:3f12f61883ff324c1dbe7b885fa125d5490960e5cad6a12eeaa34695ec1b5744", url = "https://github.com/starship/starship/releases/download/v1.24.2/starship-x86_64-unknown-linux-gnu.tar.gz", url_api = "https://api.github.com/repos/starship/starship/releases/assets/334568392"}
-"platforms.macos-arm64" = { checksum = "sha256:d3a0da21374962625a2ee992110979bc1fa33424d7b6aea58a70405e26544fd9", url = "https://github.com/starship/starship/releases/download/v1.24.2/starship-aarch64-apple-darwin.tar.gz", url_api = "https://api.github.com/repos/starship/starship/releases/assets/334568411"}
-"platforms.macos-x64" = { checksum = "sha256:237beb10cc970c4361536e9f9f434dfed755f8282c5cd951b6a7e3fcbda8e779", url = "https://github.com/starship/starship/releases/download/v1.24.2/starship-x86_64-apple-darwin.tar.gz", url_api = "https://api.github.com/repos/starship/starship/releases/assets/334568409"}
-"platforms.windows-x64" = { checksum = "sha256:d38424c595320e9639a276666347d5e44cb004de3972f40b9a5a1a6b88537f29", url = "https://github.com/starship/starship/releases/download/v1.24.2/starship-x86_64-pc-windows-msvc.zip", url_api = "https://api.github.com/repos/starship/starship/releases/assets/334568406"}
 
 [[tools.node]]
 version = "24.14.0"
@@ -184,10 +169,6 @@ backend = "npm:git-mob"
 [[tools.pipx]]
 version = "1.8.0"
 backend = "aqua:pypa/pipx"
-"platforms.linux-arm64" = { checksum = "sha256:b9eabd835dffe0677e36bd99416fc9837c592bd8c079235379bed3dfe043c601", url = "https://github.com/pypa/pipx/releases/download/1.8.0/pipx.pyz"}
-"platforms.linux-x64" = { checksum = "sha256:b9eabd835dffe0677e36bd99416fc9837c592bd8c079235379bed3dfe043c601", url = "https://github.com/pypa/pipx/releases/download/1.8.0/pipx.pyz"}
-"platforms.macos-arm64" = { checksum = "sha256:b9eabd835dffe0677e36bd99416fc9837c592bd8c079235379bed3dfe043c601", url = "https://github.com/pypa/pipx/releases/download/1.8.0/pipx.pyz"}
-"platforms.macos-x64" = { checksum = "sha256:b9eabd835dffe0677e36bd99416fc9837c592bd8c079235379bed3dfe043c601", url = "https://github.com/pypa/pipx/releases/download/1.8.0/pipx.pyz"}
 
 [[tools."pipx:claude-conversation-extractor"]]
 version = "1.1.2"
@@ -198,13 +179,8 @@ version = "0.3.1"
 backend = "pipx:gitingest"
 
 [[tools.pkl]]
-version = "0.30.2"
+version = "0.31.0"
 backend = "aqua:apple/pkl"
-"platforms.linux-arm64" = { checksum = "sha256:8da3ae65104eb7058e35dc4a9fe46bd8ece2b6faf4b65d0b1054cadb2ede0246", url = "https://github.com/apple/pkl/releases/download/0.30.2/pkl-linux-aarch64"}
-"platforms.linux-x64" = { checksum = "sha256:474e5137d60a9e2320fde19a526f42c36d8e9d3b245139d59a9b8dff85283c76", url = "https://github.com/apple/pkl/releases/download/0.30.2/pkl-linux-amd64"}
-"platforms.macos-arm64" = { checksum = "sha256:f1db44c0f6f859aee88c9d7d272f2371ae40ac95ec9957ae78eff51665158e04", url = "https://github.com/apple/pkl/releases/download/0.30.2/pkl-macos-aarch64"}
-"platforms.macos-x64" = { checksum = "sha256:5f62ae7a7a34c15b3a83af17bda8e6b98516953f383a492340d4aa090caaa6d9", url = "https://github.com/apple/pkl/releases/download/0.30.2/pkl-macos-amd64"}
-"platforms.windows-x64" = { checksum = "sha256:19e92aa59bcf4e54963b6e3b419af7e1b939f5793b44f4a08d60bab1217106f4", url = "https://github.com/apple/pkl/releases/download/0.30.2/pkl-windows-amd64.exe"}
 
 [[tools.python]]
 version = "3.14.3"
