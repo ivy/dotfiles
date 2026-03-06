@@ -34,15 +34,6 @@ backend = "aqua:suzuki-shunsuke/ghalint"
 "platforms.windows-x64" = { checksum = "sha256:58c2589e7455fc05d83a28051f9098984db3fe6294f0f88aedc9691ae25eaff9", url = "https://github.com/suzuki-shunsuke/ghalint/releases/download/v1.5.5/ghalint_1.5.5_windows_amd64.zip"}
 
 [[tools."github:buildkite/cli"]]
-version = "3.31.1"
-backend = "github:buildkite/cli"
-"platforms.linux-arm64" = { checksum = "sha256:aabcd3fcb49cb6d777a99ada82e9391c299bd8fff6a8049ba8085f41bffdff8c", url = "https://github.com/buildkite/cli/releases/download/v3.31.1/bk_3.31.1_linux_arm64.tar.gz", url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/366498066"}
-"platforms.linux-x64" = { checksum = "sha256:4a9f04d379fac25158e6d0fb248876cd8f58a845d19a31115f3aa38c41d5f1e0", url = "https://github.com/buildkite/cli/releases/download/v3.31.1/bk_3.31.1_linux_amd64.tar.gz", url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/366498070"}
-"platforms.macos-arm64" = { checksum = "sha256:59602d101790e006b53e586e576fe605daf01acfd87aaf67c19d85b0ba5f285a", url = "https://github.com/buildkite/cli/releases/download/v3.31.1/bk_3.31.1_macOS_arm64.zip", url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/366498056"}
-"platforms.macos-x64" = { checksum = "sha256:758beed694b4e0448dd01d459b6a7d2f738590d6c1e2c1bac63df2dceb738811", url = "https://github.com/buildkite/cli/releases/download/v3.31.1/bk_3.31.1_macOS_amd64.zip", url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/366498055"}
-"platforms.windows-x64" = { checksum = "sha256:75baf97d833e09043d62181762dfaffaea622b8729363581fd9ca3f49c79287d", url = "https://github.com/buildkite/cli/releases/download/v3.31.1/bk_3.31.1_windows_amd64.zip", url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/366498112"}
-
-[[tools."github:buildkite/cli"]]
 version = "3.32.0"
 backend = "github:buildkite/cli"
 "platforms.linux-arm64" = { checksum = "sha256:4eb3894f049223d3ebcd0491e01cb28a759bfb2849513467cb01923c9470bff1", url = "https://github.com/buildkite/cli/releases/download/v3.32.0/bk_3.32.0_linux_arm64.tar.gz", url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/367815206"}

@@ -1,6 +1,11 @@
-[[tools."cargo:du-dust"]]
+[[tools."aqua:bootandy/dust"]]
 version = "1.2.4"
-backend = "cargo:du-dust"
+backend = "aqua:bootandy/dust"
+"platforms.linux-arm64" = { checksum = "sha256:e09b0d24b5da0fa06aecf1561849c13ae41ef055c1ce7077e35e9a46744b16af", url = "https://github.com/bootandy/dust/releases/download/v1.2.4/dust-v1.2.4-aarch64-unknown-linux-musl.tar.gz"}
+"platforms.linux-x64" = { checksum = "sha256:4e313f9f854017e58a2ada4c0d1774677b8cf53d63ab55a991d5871d5f504452", url = "https://github.com/bootandy/dust/releases/download/v1.2.4/dust-v1.2.4-x86_64-unknown-linux-musl.tar.gz"}
+"platforms.macos-arm64" = { checksum = "sha256:bf84d3ff7f58e325d3eb5bb7696df6b22ef1e01fec80c2d8f7c9d3e611be66f4", url = "https://github.com/bootandy/dust/releases/download/v1.2.4/dust-v1.2.4-x86_64-apple-darwin.tar.gz"}
+"platforms.macos-x64" = { checksum = "sha256:bf84d3ff7f58e325d3eb5bb7696df6b22ef1e01fec80c2d8f7c9d3e611be66f4", url = "https://github.com/bootandy/dust/releases/download/v1.2.4/dust-v1.2.4-x86_64-apple-darwin.tar.gz"}
+"platforms.windows-x64" = { checksum = "sha256:eb08d642f016787bb9fc918a4dc5f34665463657fddf83a40f2441cbf020fb4c", url = "https://github.com/bootandy/dust/releases/download/v1.2.4/dust-v1.2.4-x86_64-pc-windows-msvc.zip"}
 
 [[tools."cargo:https://github.com/technicalpickles/envsense"]]
 version = "ref:0.6.0"

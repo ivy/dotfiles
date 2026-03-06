@@ -28,7 +28,9 @@ rust = "1.93.1"
 "github:sharkdp/bat" = "0.26.1"
 "github:cli/cli" = "2.87.3"
 "github:dandavison/delta" = "0.18.2"
-"cargo:du-dust" = "1.2.4"
+# aqua: until github: backend works (github.com/bootandy/dust/issues/560)
+"aqua:bootandy/dust" = "1.2.4"
+
 "github:muesli/duf" = "0.9.1"
 eza = "0.23.4"
 "github:sharkdp/fd" = "10.3.0"
