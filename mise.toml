@@ -6,7 +6,7 @@
 "aqua:koalaman/shellcheck" = "0.11.0"
 "aqua:mikefarah/yq" = "4.52.4"
 "aqua:suzuki-shunsuke/ghalint" = "1.5.5"
-hk = "1.36.0"
+hk = "1.37.0"
 jq = "1.8.1"
 "npm:markdownlint-cli" = "0.47.0"
 pkl = "0.30.2"
