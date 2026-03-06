@@ -8,11 +8,11 @@ backend = "aqua:bootandy/dust"
 "platforms.windows-x64" = { checksum = "sha256:eb08d642f016787bb9fc918a4dc5f34665463657fddf83a40f2441cbf020fb4c", url = "https://github.com/bootandy/dust/releases/download/v1.2.4/dust-v1.2.4-x86_64-pc-windows-msvc.zip"}
 
 [[tools."cargo:https://github.com/technicalpickles/envsense"]]
-version = "ref:0.6.0"
+version = "tag:0.6.0"
 backend = "cargo:https://github.com/technicalpickles/envsense"
 
 [[tools."cargo:https://github.com/technicalpickles/envsense"]]
-version = "tag:0.6.0"
+version = "ref:0.6.0"
 backend = "cargo:https://github.com/technicalpickles/envsense"
 
 [[tools.eza]]
@@ -170,7 +170,7 @@ version = "0.104.0"
 backend = "npm:@openai/codex"
 
 [[tools."npm:@owloops/claude-powerline"]]
-version = "1.17.2"
+version = "1.19.0"
 backend = "npm:@owloops/claude-powerline"
 
 [[tools."npm:ccusage"]]
