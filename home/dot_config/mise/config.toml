@@ -16,7 +16,7 @@ lockfile = true
 node = "24.13.1"
 python = "3.14.3"
 pkl = "0.30.2"
-rust = "1.93.1"
+rust = "1.94.0"
 
 # Cargo (Rust tools built from source)
 "cargo:https://github.com/technicalpickles/envsense" = "tag:0.6.0"
