@@ -179,7 +179,7 @@ version = "0.3.1"
 backend = "pipx:gitingest"
 
 [[tools.pkl]]
-version = "0.30.2"
+version = "0.31.0"
 backend = "aqua:apple/pkl"
 
 [[tools.python]]
