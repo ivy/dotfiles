@@ -33,7 +33,7 @@ rust = "1.94.0"
 
 "github:muesli/duf" = "0.9.1"
 eza = "0.23.4"
-"github:sharkdp/fd" = "10.3.0"
+"github:sharkdp/fd" = "10.4.0"
 "github:junegunn/fzf" = "0.70.0"
 "github:gitleaks/gitleaks" = "8.30.0"
 "github:charmbracelet/glow" = "2.1.1"
