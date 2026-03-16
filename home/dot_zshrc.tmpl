@@ -36,6 +36,11 @@ source "$ZSH"/oh-my-zsh.sh
 eval "$(atuin init zsh)"
 {{- end }}
 
+# Initialize zoxide for fast directory jumping
+{{- if lookPath "zoxide" }}
+eval "$(zoxide init zsh)"
+{{- end }}
+
 {{- $zshAutoSuggestPath := joinPath .chezmoi.homeDir ".config/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh" }}
 {{- if stat $zshAutoSuggestPath }}
 
