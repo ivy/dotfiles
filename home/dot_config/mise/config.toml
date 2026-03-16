@@ -9,6 +9,7 @@
 #   5. npm: - Node CLI tools (requires node)
 
 [settings]
+color_theme = "catppuccin"
 lockfile = true
 
 [tools]
