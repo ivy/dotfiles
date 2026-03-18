@@ -46,6 +46,7 @@ eza = "0.23.4"
 "github:atuinsh/atuin" = "18.16.1"
 # plannotator: binary the plannotator Claude Code plugin's hooks invoke on PATH
 "github:backnotprop/plannotator" = "0.22.0"
+"github:boyter/scc" = "3.7.0"
 "github:buildkite/cli" = "3.51.0"
 "github:carapace-sh/carapace-bin" = "1.7.3"
 "github:charmbracelet/glow" = "2.1.2"
