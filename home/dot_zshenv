@@ -31,3 +31,8 @@ export LESS="-FRX"
 export NPM_CONFIG_IGNORE_SCRIPTS=1
 export NPM_CONFIG_AUDIT=false
 export NPM_CONFIG_FUND=false
+
+# Source system-specific overrides and additions *last*
+if [[ -r "$HOME/.zshenv.local" ]]; then
+  source "$HOME/.zshenv.local"
+fi
