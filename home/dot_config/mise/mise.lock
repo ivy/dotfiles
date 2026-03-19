@@ -40,7 +40,7 @@ backend = "github:BurntSushi/ripgrep"
 [[tools."github:ajeetdsouza/zoxide"]]
 version = "0.9.9"
 backend = "github:ajeetdsouza/zoxide"
-"platforms.linux-arm64" = { checksum = "sha256:7d3687aa803212186d3207d152daec4bd46112110f1ddef070e5369d8e193a8c", url = "https://github.com/ajeetdsouza/zoxide/releases/download/v0.9.9/zoxide-0.9.9-aarch64-linux-android.tar.gz", url_api = "https://api.github.com/repos/ajeetdsouza/zoxide/releases/assets/348580845"}
+"platforms.linux-arm64" = { checksum = "sha256:96e6ea2e47a71db42cb7ad5a36e9209c8cb3708f8ae00f6945573d0d93315cb0", url = "https://github.com/ajeetdsouza/zoxide/releases/download/v0.9.9/zoxide-0.9.9-aarch64-unknown-linux-musl.tar.gz", url_api = "https://api.github.com/repos/ajeetdsouza/zoxide/releases/assets/348580828"}
 "platforms.linux-arm64-musl" = { checksum = "sha256:96e6ea2e47a71db42cb7ad5a36e9209c8cb3708f8ae00f6945573d0d93315cb0", url = "https://github.com/ajeetdsouza/zoxide/releases/download/v0.9.9/zoxide-0.9.9-aarch64-unknown-linux-musl.tar.gz", url_api = "https://api.github.com/repos/ajeetdsouza/zoxide/releases/assets/348580828"}
 "platforms.linux-x64" = { checksum = "sha256:4ff057d3c4d957946937274c2b8be7af2a9bbae7f90a1b5e9baaa7cb65a20caa", url = "https://github.com/ajeetdsouza/zoxide/releases/download/v0.9.9/zoxide-0.9.9-x86_64-unknown-linux-musl.tar.gz", url_api = "https://api.github.com/repos/ajeetdsouza/zoxide/releases/assets/348580823"}
 "platforms.linux-x64-musl" = { checksum = "sha256:4ff057d3c4d957946937274c2b8be7af2a9bbae7f90a1b5e9baaa7cb65a20caa", url = "https://github.com/ajeetdsouza/zoxide/releases/download/v0.9.9/zoxide-0.9.9-x86_64-unknown-linux-musl.tar.gz", url_api = "https://api.github.com/repos/ajeetdsouza/zoxide/releases/assets/348580823"}
