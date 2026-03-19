@@ -22,31 +22,32 @@ rust = "1.94.0"
 # Cargo (Rust tools built from source)
 "cargo:https://github.com/technicalpickles/envsense" = "tag:0.6.0"
 
+# aqua: until github: backend works (github.com/bootandy/dust/issues/560)
+"aqua:bootandy/dust" = "1.2.4"
+eza = "0.23.4"
+
 # CLI tools (GitHub Releases - see ADR-005)
 # Avoid aqua: backend — registry lag and attestation mismatches break installs.
 # See docs/adrs/005-replace-aqua-backend-with-github-releases.md
+"github:BurntSushi/ripgrep" = "15.1.0"
+"github:ajeetdsouza/zoxide" = "0.9.9"
 "github:atuinsh/atuin" = "18.12.1"
-"github:sharkdp/bat" = "0.26.1"
+"github:buildkite/cli" = "3.32.2"
+"github:charmbracelet/glow" = "2.1.1"
 "github:cli/cli" = "2.87.3"
 "github:dandavison/delta" = "0.18.2"
-# aqua: until github: backend works (github.com/bootandy/dust/issues/560)
-"aqua:bootandy/dust" = "1.2.4"
-
-"github:muesli/duf" = "0.9.1"
-eza = "0.23.4"
-"github:sharkdp/fd" = "10.3.0"
-"github:junegunn/fzf" = "0.70.0"
-"github:gitleaks/gitleaks" = "8.30.0"
 "github:dlvhdr/gh-dash" = "4.23.1"
-"github:charmbracelet/glow" = "2.1.1"
-"github:jqlang/jq" = "jq-1.8.1"
+"github:gitleaks/gitleaks" = "8.30.0"
 "github:jesseduffield/lazygit" = "0.59.0"
-"github:neovim/neovim" = "0.11.6"
-"github:sst/opencode" = "1.2.24"
-"github:BurntSushi/ripgrep" = "15.1.0"
-"github:starship/starship" = "1.24.2"
+"github:jqlang/jq" = "jq-1.8.1"
+"github:junegunn/fzf" = "0.70.0"
 "github:mikefarah/yq" = "4.52.4"
-"github:ajeetdsouza/zoxide" = "0.9.9"
+"github:muesli/duf" = "0.9.1"
+"github:neovim/neovim" = "0.11.6"
+"github:sharkdp/bat" = "0.26.1"
+"github:sharkdp/fd" = "10.3.0"
+"github:sst/opencode" = "1.2.24"
+"github:starship/starship" = "1.24.2"
 
 # pipx itself (must be installed before any pipx: packages below)
 pipx = "1.8.0"
