@@ -100,6 +100,11 @@ merge_model_env_vars() {
         return 1
     fi
 
+    # Append [1m] suffix to Opus and Sonnet for 1M token context window
+    # (Haiku does not support extended context)
+    opus="${opus}[1m]"
+    sonnet="${sonnet}[1m]"
+
     printf 'haiku  = %s\n' "${haiku}"
     printf 'sonnet = %s\n' "${sonnet}"
     printf 'opus   = %s\n' "${opus}"
