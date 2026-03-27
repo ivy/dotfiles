@@ -2,19 +2,6 @@
 #
 # sync-claude-settings -- Sync managed settings into Claude Code settings.json
 #
-# Always sets: statusLine (powerline prompt), feature flags (agent teams)
-# Conditionally sets: Bedrock model env vars (when use_bedrock=true)
-#
-# Reads chezmoi data to detect Bedrock mode, resolves the latest model IDs
-# via resolve-bedrock-models, and merges them into ~/.claude/settings.json
-# without disturbing keys that Claude Code manages itself.
-#
-# Usage:
-#   bin/sync-claude-settings          # auto-detect from chezmoi data
-#
-# Requires: chezmoi, jq
-# When use_bedrock=true also requires: aws CLI (via resolve-bedrock-models)
-#
 
 [[ -n "${DEBUG:-}" ]] && set -o xtrace
 set -o errexit
@@ -62,7 +49,9 @@ set_feature_flags() {
   printf 'setting feature flags in %s\n' "${SETTINGS}"
   jq '.env = ((.env // {}) + {
         "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
-    })' "${SETTINGS}" >"${SETTINGS}.tmp" && mv "${SETTINGS}.tmp" "${SETTINGS}"
+    })
+    | .skipDangerousModePermissionPrompt = true
+    | .autoDreamEnabled = true' "${SETTINGS}" >"${SETTINGS}.tmp" && mv "${SETTINGS}.tmp" "${SETTINGS}"
 }
 
 # Set global tool permissions so we don't re-approve common tools per-project
