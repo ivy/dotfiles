@@ -126,8 +126,43 @@ url = "https://github.com/suzuki-shunsuke/ghalint/releases/download/v1.5.5/ghali
 provenance = "slsa"
 
 [[tools."github:buildkite/cli"]]
-version = "3.32.0"
+version = "3.32.2"
 backend = "github:buildkite/cli"
+
+[tools."github:buildkite/cli"."platforms.linux-arm64"]
+checksum = "sha256:e772505979736ffcad7c5b4a19c576ef3757482b27a5aec590dda213c36dd452"
+url = "https://github.com/buildkite/cli/releases/download/v3.32.2/bk_3.32.2_linux_arm64.tar.gz"
+url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/371555768"
+
+[tools."github:buildkite/cli"."platforms.linux-arm64-musl"]
+checksum = "sha256:e772505979736ffcad7c5b4a19c576ef3757482b27a5aec590dda213c36dd452"
+url = "https://github.com/buildkite/cli/releases/download/v3.32.2/bk_3.32.2_linux_arm64.tar.gz"
+url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/371555768"
+
+[tools."github:buildkite/cli"."platforms.linux-x64"]
+checksum = "sha256:220ad81144a51564ddfd4b5f4ed9f191f178884973c71c824c7dbe8bc2b72b08"
+url = "https://github.com/buildkite/cli/releases/download/v3.32.2/bk_3.32.2_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/371555769"
+
+[tools."github:buildkite/cli"."platforms.linux-x64-musl"]
+checksum = "sha256:220ad81144a51564ddfd4b5f4ed9f191f178884973c71c824c7dbe8bc2b72b08"
+url = "https://github.com/buildkite/cli/releases/download/v3.32.2/bk_3.32.2_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/371555769"
+
+[tools."github:buildkite/cli"."platforms.macos-arm64"]
+checksum = "sha256:0ed1d0479ff84ffee9a8e402a79a71bba93ea2eae8f6b0c609650b428d89f2cb"
+url = "https://github.com/buildkite/cli/releases/download/v3.32.2/bk_3.32.2_macOS_arm64.zip"
+url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/371555763"
+
+[tools."github:buildkite/cli"."platforms.macos-x64"]
+checksum = "sha256:eb6cfd56b4a90268d1d2775766b3de92ae07b3842a23aefb7ff3d87c0602013d"
+url = "https://github.com/buildkite/cli/releases/download/v3.32.2/bk_3.32.2_macOS_amd64.zip"
+url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/371555764"
+
+[tools."github:buildkite/cli"."platforms.windows-x64"]
+checksum = "sha256:3309422d817e060e914a825fbc7265907fca006f30795b3061a4db1ebf4fda2b"
+url = "https://github.com/buildkite/cli/releases/download/v3.32.2/bk_3.32.2_windows_amd64.zip"
+url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/371555792"
 
 [[tools.hk]]
 version = "1.38.0"
@@ -228,6 +263,34 @@ url = "https://github.com/apple/pkl/releases/download/0.31.0/pkl-windows-amd64.e
 [[tools.shfmt]]
 version = "3.13.0"
 backend = "aqua:mvdan/sh"
+
+[tools.shfmt."platforms.linux-arm64"]
+checksum = "sha256:5f3fe3fa6a9f766e6a182ba79a94bef8afedafc57db0b1ad32b0f67fae971ba4"
+url = "https://github.com/mvdan/sh/releases/download/v3.12.0/shfmt_v3.12.0_linux_arm64"
+
+[tools.shfmt."platforms.linux-arm64-musl"]
+checksum = "sha256:5f3fe3fa6a9f766e6a182ba79a94bef8afedafc57db0b1ad32b0f67fae971ba4"
+url = "https://github.com/mvdan/sh/releases/download/v3.12.0/shfmt_v3.12.0_linux_arm64"
+
+[tools.shfmt."platforms.linux-x64"]
+checksum = "sha256:d9fbb2a9c33d13f47e7618cf362a914d029d02a6df124064fff04fd688a745ea"
+url = "https://github.com/mvdan/sh/releases/download/v3.12.0/shfmt_v3.12.0_linux_amd64"
+
+[tools.shfmt."platforms.linux-x64-musl"]
+checksum = "sha256:d9fbb2a9c33d13f47e7618cf362a914d029d02a6df124064fff04fd688a745ea"
+url = "https://github.com/mvdan/sh/releases/download/v3.12.0/shfmt_v3.12.0_linux_amd64"
+
+[tools.shfmt."platforms.macos-arm64"]
+checksum = "sha256:d903802e0ce3ecbc82b98512f55ba370b0d37a93f3f78de394f5b657052b33dd"
+url = "https://github.com/mvdan/sh/releases/download/v3.12.0/shfmt_v3.12.0_darwin_arm64"
+
+[tools.shfmt."platforms.macos-x64"]
+checksum = "sha256:c31548693de6584e6164b7ed5fbb7b4a083f2d937ca94b4e0ddf59aa461a85e4"
+url = "https://github.com/mvdan/sh/releases/download/v3.12.0/shfmt_v3.12.0_darwin_amd64"
+
+[tools.shfmt."platforms.windows-x64"]
+checksum = "sha256:c8bda517ba1c640ce4a715c0fa665439ddbe4357ba5e9b77b0e51e70e2b9c94b"
+url = "https://github.com/mvdan/sh/releases/download/v3.12.0/shfmt_v3.12.0_windows_amd64.exe"
 
 [[tools.stylua]]
 version = "2.3.1"
