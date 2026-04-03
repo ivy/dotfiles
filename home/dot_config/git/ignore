@@ -79,6 +79,10 @@ tags
 **/.claude/settings.local.json
 .claude/settings.local.json
 
+# Claude Code / agent local overrides
+CLAUDE.local.md
+AGENTS.local.md
+
 # Docker Compose local overrides
 **/compose.local.yml
 compose.local.yml
