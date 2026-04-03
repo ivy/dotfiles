@@ -11,6 +11,11 @@
 {{-   $useBedrock = promptBool "Use AWS Bedrock for Claude Code" -}}
 {{- end -}}
 
+{{- /* 1Password credential references — override per machine via chezmoi init */ -}}
+{{- $credCodex := promptStringOnce . "credentials.codex" "1Password ref for OpenAI Codex" -}}
+{{- $credClaudeApi := promptStringOnce . "credentials.claude_api" "1Password ref for Claude API" -}}
+{{- $credBuildkite := promptStringOnce . "credentials.buildkite" "1Password ref for Buildkite" -}}
+
 # Source Directory Configuration
 # Allows us to maintain Chezmoi outside of the default `~/.local/share/chezmoi/`.
 # This enables storing the dotfiles repository in a custom location while still
@@ -28,6 +33,13 @@ email = {{ $gitEmail | quote }}
 
 [data.claude]
 use_bedrock = {{ $useBedrock }}
+
+[data.credentials]
+# 1Password references for credential-injecting shell aliases
+# Override these per machine to point at different vaults/items
+codex = {{ $credCodex | quote }}
+claude_api = {{ $credClaudeApi | quote }}
+buildkite = {{ $credBuildkite | quote }}
 
 [onepassword]
 cache = true

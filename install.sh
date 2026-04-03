@@ -125,6 +125,9 @@ ENVIRONMENT VARIABLES:
     VERIFY_SIGNATURES       Disable signature verification (default: true)
     SKIP_PACKAGE_MANAGER    Force binary download (default: false)
     USE_BEDROCK             Use AWS Bedrock for Claude Code (true/false)
+    CODEX_OP_REF            1Password ref for OpenAI Codex API key
+    CLAUDE_API_OP_REF       1Password ref for Anthropic API key
+    BUILDKITE_OP_REF        1Password ref for Buildkite API token
     DEBUG                   Enable debug output
 
 EXAMPLES:
@@ -804,6 +807,15 @@ main() {
 	fi
 	if [ -n "${USE_BEDROCK:-}" ]; then
 		set -- "$@" --promptBool "Use AWS Bedrock for Claude Code=$USE_BEDROCK"
+	fi
+	if [ -n "${CODEX_OP_REF:-}" ]; then
+		set -- "$@" --promptString "1Password ref for OpenAI Codex=$CODEX_OP_REF"
+	fi
+	if [ -n "${CLAUDE_API_OP_REF:-}" ]; then
+		set -- "$@" --promptString "1Password ref for Claude API=$CLAUDE_API_OP_REF"
+	fi
+	if [ -n "${BUILDKITE_OP_REF:-}" ]; then
+		set -- "$@" --promptString "1Password ref for Buildkite=$BUILDKITE_OP_REF"
 	fi
 
 	# Add any additional passthrough arguments

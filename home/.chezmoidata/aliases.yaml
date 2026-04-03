@@ -17,6 +17,15 @@ aliases:
     - { tool: eza, replaces: la, command: "eza --icons=always --long --all --group-directories-first" }
     - { tool: eza, replaces: tree, command: "eza --icons=always --tree" }
 
+  # Credential-injecting aliases: fetch secret from 1Password, export as env var
+  # Requires `op` on PATH. Each entry needs `tool` on PATH too.
+  # `alias` overrides the alias name (defaults to tool name).
+  # `op_ref_key` references a key under [data.credentials] in .chezmoi.toml
+  credentials:
+    - { tool: codex, env: OPENAI_API_KEY, op_ref_key: codex }
+    - { tool: claude, alias: claude-api, env: ANTHROPIC_API_KEY, op_ref_key: claude_api }
+    - { tool: bktide, env: BUILDKITE_API_TOKEN, op_ref_key: buildkite }
+
   # Fallback chains: try tools in order, first match wins
   fallbacks:
     - replaces: ls

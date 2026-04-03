@@ -218,14 +218,11 @@ fpath=(
 )
 autoload -Uz c
 
-# Shadow codex command to auto-authenticate with 1Password
-{{- if and (lookPath "op") (lookPath "codex") }}
-alias codex='OPENAI_API_KEY=$(op read "op://Personal/openai-codex/credential") command codex'
+# Credential-injecting aliases: fetch secret from 1Password on each invocation
+{{- range .aliases.credentials }}
+{{- if and (lookPath "op") (lookPath .tool) }}
+alias {{ if hasKey . "alias" }}{{ .alias }}{{ else }}{{ .tool }}{{ end }}='{{ .env }}=$(op read "{{ index $.credentials .op_ref_key }}") command {{ .tool }}'
 {{- end }}
-
-# Shortcut to use claude with API credentials from 1Password instead of normal login
-{{- if and (lookPath "op") (lookPath "claude") }}
-alias claude-api='ANTHROPIC_API_KEY=$(op read "op://Personal/claude-code/credential") command claude'
 {{- end }}
 
 {{- if and (lookPath "gh") (lookPath "mise") }}
