@@ -65,6 +65,24 @@ set_feature_flags() {
     })' "${SETTINGS}" > "${SETTINGS}.tmp" && mv "${SETTINGS}.tmp" "${SETTINGS}"
 }
 
+# Register third-party plugin marketplaces and enable plugins
+set_plugins() {
+    printf 'setting plugin marketplaces and enabled plugins in %s\n' "${SETTINGS}"
+    jq '
+        .extraKnownMarketplaces = ((.extraKnownMarketplaces // {}) + {
+            "pickled-claude-plugins": {
+                "source": {
+                    "source": "github",
+                    "repo": "technicalpickles/pickled-claude-plugins"
+                }
+            }
+        })
+        | .enabledPlugins = ((.enabledPlugins // {}) + {
+            "ci-cd-tools@pickled-claude-plugins": true
+        })
+    ' "${SETTINGS}" > "${SETTINGS}.tmp" && mv "${SETTINGS}.tmp" "${SETTINGS}"
+}
+
 # Remove Bedrock model env vars (use_bedrock=false path)
 cleanup_model_env_vars() {
     if jq -e '.env.ANTHROPIC_MODEL // .env.ANTHROPIC_DEFAULT_HAIKU_MODEL // .env.ANTHROPIC_DEFAULT_OPUS_MODEL // .env.ANTHROPIC_DEFAULT_SONNET_MODEL' "${SETTINGS}" >/dev/null 2>&1; then
@@ -160,6 +178,7 @@ main() {
     backup_settings
     set_status_line
     set_feature_flags
+    set_plugins
 
     local use_bedrock
     use_bedrock=$(chezmoi data --format json | jq -r '.claude.use_bedrock')
