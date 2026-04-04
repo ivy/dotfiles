@@ -144,7 +144,6 @@ set_permissions() {
             "Bash(limactl:*)",
             "Bash(ls:*)",
             "Bash(make:*)",
-            "Bash(make:*)",
             "Bash(mise:*)",
             "Bash(npm run:*)",
             "Bash(npm test:*)",
