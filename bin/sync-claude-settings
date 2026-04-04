@@ -101,6 +101,7 @@ set_permissions() {
             "Bash(fmt:*)",
             "Bash(fold:*)",
             "Bash(getconf:*)",
+            "Bash(ginkgo:*)",
             "Bash(gh cache list:*)",
             "Bash(gh gist list:*)",
             "Bash(gh gist view:*)",
