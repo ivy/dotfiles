@@ -49,28 +49,34 @@ Heuristics:
 - Already wrapped in `Bash(...)`, `Skill(...)`, `WebFetch(...)`, `Read(...)` → pass through
 - Everything else → `Bash(<input>:*)`
 
-### 2. Safety check
+### 2. Decision framework
 
-Apply the safety check to the **resolved pattern from step 1**, not the raw input.
+A command belongs on the allow list based on its side-effect profile:
 
-**Warn and require explicit confirmation** for patterns that can publish, destroy, or leak:
-- `git push` — publishes to remote
-- `git config` — can write to global `~/.gitconfig`
-- `rm`, `rm -rf`, `rm -r` — destructive
-- `curl * | bash`, `wget * | sh` — remote code execution
-- `sudo` — privilege escalation
-- `sh`, `bash`, `zsh`, `python`, `ruby`, `perl`, `node` (bare interpreter) — arbitrary code execution
-- `ssh`, `scp`, `rsync` — remote access
-- `gpg`, `security`, `keychain` — secrets access
-- `aws`, `gcloud`, `az` — cloud CLI (can mutate infra or leak creds)
-- `chmod`, `chown` — permission manipulation
+**Allow (no confirmation needed):**
+- **Pure reads** — queries state, never mutates it (`ps`, `stat`, `file`, `which`, `uname`, `dig`)
+- **Pure transforms** — reads stdin/files, writes only to stdout (`sort`, `uniq`, `cut`, `jq`, `base64`, `shasum`)
+- **Bounded benign writes** — side effects are trivial and easily reversed (`mkdir`, `touch`, `mktemp`, `rmdir` empty dirs only)
+
+**Reject (warn, require explicit confirmation):**
+A command does NOT belong if it can:
+- **Write to arbitrary files** — `tee`, `cp`, `mv`, output redirection
+- **Execute arbitrary subcommands** — `xargs`, `sh`, `bash`, `eval`, `python`, `ruby`, `perl`, `node`
+- **Publish or transmit data** — `curl`, `wget`, `ssh`, `scp`, `rsync`, `git push`
+- **Destroy state** — `rm`, `kill`, `killall`
+- **Escalate privileges** — `sudo`, `doas`
+- **Mutate permissions or identity** — `chmod`, `chown`
+- **Access or leak secrets** — `gpg`, `security`, `keychain`, `op`, `env`, `printenv`, `history`
+- **Mutate cloud infra** — `aws`, `gcloud`, `az`
+- **Mutate global config** — `git config` (can write `~/.gitconfig` via `--global`)
 
 **Warn and suggest narrowing** for overly broad patterns:
 - `Bash(*)` — universal wildcard
-- Single-segment tool wildcards: `Bash(git:*)`, `Bash(npm:*)`, `Bash(gh:*)`, `Bash(docker:*)`, `Bash(cargo:*)`, `Bash(bundle:*)`
+- Multi-subcommand tools where we already scope by subcommand: `Bash(git:*)`, `Bash(npm:*)`, `Bash(gh:*)`
 - `WebFetch(domain:*)` — wildcard domain
+- `Read(...)` / `Edit(...)` with broad paths — can expose or modify sensitive files
 
-For both cases: explain the risk, suggest a safer alternative if possible, and ask the user to confirm. If they confirm, proceed.
+For reject and narrowing cases: explain which property is violated, suggest a safer alternative if possible, and ask the user to confirm. If they confirm, proceed.
 
 ### 3. Check for duplicates
 
@@ -102,6 +108,7 @@ Then use `/commit` to commit `bin/sync-claude-settings`.
 /allow limactl             → adds "Bash(limactl:*)", applies, commits
 /allow /think              → adds "Skill(think:*)", applies, commits
 /allow docs.rs             → adds "WebFetch(domain:docs.rs)", applies, commits
-/allow git push            → WARNS: publishes to remote. Proceeds only if user confirms.
-/allow npm                 → WARNS: too broad. Suggests npm run, npm test, etc. Proceeds only if user confirms.
+/allow git push            → REJECTS: publishes to remote. Proceeds only if user confirms.
+/allow printenv            → REJECTS: can leak secrets from environment. Proceeds only if user confirms.
+/allow npm                 → NARROWS: too broad, suggests npm run, npm test, etc. Proceeds only if user confirms.
 ```
