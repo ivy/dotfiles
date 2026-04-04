@@ -187,6 +187,7 @@ set_permissions() {
             "Bash(mise:*)",
             "Bash(mkdir:*)",
             "Bash(mktemp:*)",
+            "Bash(molecule:*)",
             "Bash(mount:*)",
             "Bash(networkctl:*)",
             "Bash(nl:*)",
