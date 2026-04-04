@@ -143,6 +143,7 @@ set_permissions() {
             "Bash(git commit:*)",
             "Bash(git diff:*)",
             "Bash(git fetch:*)",
+            "Bash(git init:*)",
             "Bash(git log:*)",
             "Bash(git ls-tree:*)",
             "Bash(git merge:*)",
