@@ -59,7 +59,7 @@ pipx = "1.8.0"
 
 # Node tools via npm
 "npm:@openai/codex" = "0.118.0"
-"npm:@owloops/claude-powerline" = "1.19.0"
+"npm:@owloops/claude-powerline" = "1.23.5"
 "npm:bktide" = "1.0.1773059016"
 "npm:ccusage" = "18.0.9"
 "npm:git-mob" = "4.0.1"
