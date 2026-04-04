@@ -272,43 +272,8 @@ url = "https://github.com/junegunn/fzf/releases/download/v0.70.0/fzf-0.70.0-wind
 url_api = "https://api.github.com/repos/junegunn/fzf/releases/assets/365142647"
 
 [[tools."github:mikefarah/yq"]]
-version = "4.52.4"
+version = "4.52.5"
 backend = "github:mikefarah/yq"
-
-[tools."github:mikefarah/yq"."platforms.linux-arm64"]
-checksum = "sha256:10a4a2093090363a00b55ad52e132a082f9652970cb8f1ad35a1ae048b917e6e"
-url = "https://github.com/mikefarah/yq/releases/download/v4.52.4/yq_linux_arm64.tar.gz"
-url_api = "https://api.github.com/repos/mikefarah/yq/releases/assets/355776796"
-
-[tools."github:mikefarah/yq"."platforms.linux-arm64-musl"]
-checksum = "sha256:10a4a2093090363a00b55ad52e132a082f9652970cb8f1ad35a1ae048b917e6e"
-url = "https://github.com/mikefarah/yq/releases/download/v4.52.4/yq_linux_arm64.tar.gz"
-url_api = "https://api.github.com/repos/mikefarah/yq/releases/assets/355776796"
-
-[tools."github:mikefarah/yq"."platforms.linux-x64"]
-checksum = "sha256:3fa3c1c32d94520102ea4d853d03c3ab907867d964540e896410ad8a7fc6c8f7"
-url = "https://github.com/mikefarah/yq/releases/download/v4.52.4/yq_linux_amd64.tar.gz"
-url_api = "https://api.github.com/repos/mikefarah/yq/releases/assets/355776799"
-
-[tools."github:mikefarah/yq"."platforms.linux-x64-musl"]
-checksum = "sha256:3fa3c1c32d94520102ea4d853d03c3ab907867d964540e896410ad8a7fc6c8f7"
-url = "https://github.com/mikefarah/yq/releases/download/v4.52.4/yq_linux_amd64.tar.gz"
-url_api = "https://api.github.com/repos/mikefarah/yq/releases/assets/355776799"
-
-[tools."github:mikefarah/yq"."platforms.macos-arm64"]
-checksum = "sha256:99778ab9ac307b89889607a8f84b4c16e668077ccb8665617547b9059a219ecc"
-url = "https://github.com/mikefarah/yq/releases/download/v4.52.4/yq_darwin_arm64.tar.gz"
-url_api = "https://api.github.com/repos/mikefarah/yq/releases/assets/355776789"
-
-[tools."github:mikefarah/yq"."platforms.macos-x64"]
-checksum = "sha256:b05d49a6e4dd1897bf3a16e080b249f16ac7c87b7e6ce85253d52f130b671b6a"
-url = "https://github.com/mikefarah/yq/releases/download/v4.52.4/yq_darwin_amd64.tar.gz"
-url_api = "https://api.github.com/repos/mikefarah/yq/releases/assets/355776764"
-
-[tools."github:mikefarah/yq"."platforms.windows-x64"]
-checksum = "sha256:aa6a26dff7cdff53161873e9aebb768460a5d42088ceca0864d44e214a669c0d"
-url = "https://github.com/mikefarah/yq/releases/download/v4.52.4/yq_windows_amd64.zip"
-url_api = "https://api.github.com/repos/mikefarah/yq/releases/assets/355776803"
 
 [[tools."github:muesli/duf"]]
 version = "0.9.1"
