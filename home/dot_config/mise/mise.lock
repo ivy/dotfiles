@@ -371,7 +371,7 @@ version = "0.118.0"
 backend = "npm:@openai/codex"
 
 [[tools."npm:@owloops/claude-powerline"]]
-version = "1.19.0"
+version = "1.23.5"
 backend = "npm:@owloops/claude-powerline"
 
 [[tools."npm:bktide"]]
