@@ -266,11 +266,6 @@ set_permissions() {
             "WebFetch(domain:docs.rs)",
             "WebFetch(domain:github.com)",
             "WebFetch(domain:raw.githubusercontent.com)"
-        ],
-        "deny": [
-            "Bash(rm -rf /*)",
-            "Bash(curl * | bash)",
-            "Bash(wget * | sh)"
         ]
     }' "${SETTINGS}" >"${SETTINGS}.tmp" && mv "${SETTINGS}.tmp" "${SETTINGS}"
 }
