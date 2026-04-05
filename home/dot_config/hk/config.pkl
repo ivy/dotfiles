@@ -8,4 +8,18 @@ hooks {
       }
     }
   }
+  ["pre-push"] {
+    steps {
+      ["gitleaks"] {
+        check = "gitleaks protect --staged"
+      }
+    }
+  }
+  ["check"] {
+    steps {
+      ["gitleaks"] {
+        check = "gitleaks git --no-banner --verbose"
+      }
+    }
+  }
 }
