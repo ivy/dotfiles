@@ -14,7 +14,7 @@ lockfile = true
 
 [tools]
 # Runtimes (install first - required by pipx/npm/cargo backends)
-node = "24.14.0"
+node = "24.14.1"
 python = "3.14.3"
 pkl = "0.31.0"
 rust = "1.94.0"
