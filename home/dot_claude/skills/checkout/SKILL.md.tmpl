@@ -1,0 +1,85 @@
+---
+name: checkout
+description: Create a feature branch from the up-to-date default branch. Use when starting work on a new issue or feature.
+argument-hint: "[#issue | branch-name]"
+{{- template "bedrock-model" (dict "tier" "haiku" "root" .) }}
+allowed-tools:
+  - Bash(echo:*)
+  - Bash(gh issue view:*)
+  - Bash(git branch --show-current:*)
+  - Bash(git fetch:*)
+  - Bash(git remote get-url:*)
+  - Bash(git status:*)
+  - Bash(git symbolic-ref:*)
+  - Bash(head:*)
+  - Bash(sed:*)
+  - Skill(EnterWorktree:*)
+---
+
+# Checkout: Create a Feature Branch
+
+## Arguments
+```
+$ARGUMENTS
+```
+
+## Pre-computed Context
+
+```
+Current branch: !`git branch --show-current 2>/dev/null`
+Default branch: !`git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@refs/remotes/origin/@@' || echo "unknown"`
+Dirty worktree: !`git status --porcelain 2>/dev/null | head -5`
+Remote: !`git remote get-url origin 2>/dev/null || echo "no remote"`
+```
+
+## Constraints
+
+- **Never use `git -C <path>`** — it rewrites the command prefix, breaking `allowed-tools` pattern matching.
+- Do not force-delete branches or discard uncommitted work without user confirmation.
+
+## Instructions
+
+### 1. Parse Arguments
+
+Determine what `$ARGUMENTS` contains:
+
+| Pattern | Action |
+|---------|--------|
+| `#123` or issue URL | Fetch issue title, derive branch name |
+| Branch name (e.g., `feat/dark-mode`) | Use directly |
+| Empty | Ask what to work on |
+
+### 2. Derive Branch Name (from issue)
+
+If `$ARGUMENTS` is an issue reference:
+
+1. Fetch: `gh issue view <number> --json number,title,labels`
+2. Derive branch name from issue metadata:
+   - Check labels for conventional commit type hints (bug/fix labels → `fix/`, feature labels → `feat/`, chore/maintenance labels → `chore/`, default → `feat/`)
+   - Format: `<prefix><number>-<kebab-case-title>` (e.g., `feat/123-add-dark-mode`)
+   - Truncate to 60 characters max
+
+### 3. Handle Dirty Worktree
+
+Check pre-computed context for dirty worktree. If dirty:
+
+| Situation | Action |
+|-----------|--------|
+| Changes are staged/unstaged for current work | Suggest `/commit` first or `git stash` |
+| Unrelated leftover changes | Suggest `git stash` with descriptive message |
+| Conflicts or complex state | Inform user and wait for guidance |
+
+Do not silently discard changes.
+
+### 4. Create the Branch
+
+1. `git fetch origin` — ensure we have latest
+2. Decide approach:
+
+| Context | Approach |
+|---------|----------|
+| On default branch, clean state | `git checkout -b <branch> origin/<default>` |
+| On another feature branch | Consider `EnterWorktree` for isolation, or `git checkout -b` if user prefers simplicity |
+| User explicitly requested worktree | Use `EnterWorktree` |
+
+3. Confirm branch creation with the branch name and base commit.
