@@ -1,0 +1,192 @@
+---
+name: work-on
+description: End-to-end workflow for shipping a GitHub issue. Assesses complexity, builds a tailored workflow, and orchestrates skills from research through PR.
+argument-hint: "[#issue | issue URL | issue number]"
+{{- template "bedrock-model" (dict "tier" "opus" "root" .) }}
+effort: max
+disable-model-invocation: true
+allowed-tools:
+  - Bash(gh issue view:*)
+  - Bash(git branch --show-current:*)
+  - Bash(git status:*)
+  - Bash(head:*)
+  - Bash(ls:*)
+  - Bash(sort:*)
+  - Skill(checkout)
+  - Skill(commit)
+  - Skill(gather-context)
+  - Skill(plan)
+  - Skill(pr)
+  - Skill(reflect)
+  - Skill(review-plan)
+  - Skill(share-plan)
+  - Skill(simplify)
+  - Skill(think)
+---
+
+# Work On: Ship an Issue End-to-End
+
+Orchestrate the full lifecycle of a GitHub issue — from understanding through PR — by composing skills, agents, and tasks into a tailored workflow based on issue complexity.
+
+## Arguments
+```
+$ARGUMENTS
+```
+
+## Pre-computed Context
+
+```
+Current branch: !`git branch --show-current 2>/dev/null`
+Dirty worktree: !`git status --porcelain 2>/dev/null | head -5`
+
+Available skills: !`{ ls ~/.claude/skills/ 2>/dev/null; ls .claude/skills/ 2>/dev/null; } | sort -u`
+Available agents: !`{ ls ~/.claude/agents/ 2>/dev/null; ls .claude/agents/ 2>/dev/null; } | sort -u`
+```
+
+## Supporting Files
+
+- For decision matrix details and tier examples, see [TIERS.md](TIERS.md)
+- For epic decomposition guidance, see [EPIC-WORKFLOW.md](EPIC-WORKFLOW.md)
+
+## Constraints
+
+- **Never skip the tier assessment.** Every issue gets classified before work begins.
+- **Only use skills that exist.** Check "Available skills" in pre-computed context. If a skill isn't listed, do the equivalent work inline or skip that step.
+- **Front-load human involvement.** The user collaborates through research and planning phases. After `/think` converges, the agent executes autonomously.
+- **Commit incrementally.** Use `/commit` (if available) for each logical change. Don't batch everything into one commit at the end.
+
+## Instructions
+
+### Step 0: Fetch & Assess
+
+Fetch the issue:
+```bash
+gh issue view [id or url] --json number,title,body,labels,comments,assignees,milestone
+```
+
+Read the [TIERS.md](TIERS.md) decision matrix. Assess the issue's complexity tier based on signals: labels, body content, comment count, linked issues, design decisions.
+
+**Tiers**: Quick fix · Small · Medium · Large · Epic
+
+### Step 1: Propose Workflow
+
+Based on the assessed tier and available skills, propose a workflow to the user. Use only skills that appear in the pre-computed context. When a skill isn't available, either skip the step or do the equivalent work inline.
+
+#### Quick Fix
+```
+1. /checkout [arguments] (or git checkout -b)
+2. Make the fix
+3. /commit
+4. /pr
+```
+
+#### Small
+```
+1. /checkout [arguments]
+2. /gather-context [arguments] (light scope)
+3. Execute the fix
+4. /commit
+5. /pr
+```
+
+#### Medium
+```
+1. /checkout [arguments]
+2. /gather-context [arguments] (full scope)
+3. /think [framing of key decisions from context]  ← HUMAN CHECKPOINT
+4. /plan [context summary]
+5. /review-plan (if available)
+6. /share-plan [arguments] (if available)
+7. Execute (with TaskCreate for tracking)
+8. /simplify (built-in)
+9. /commit → /pr
+```
+
+#### Large
+```
+1-6. Same as Medium
+7. TeamCreate for parallel execution
+   - Spawn agents with appropriate types and isolation
+   - Assign tasks via TaskUpdate
+   - Coordinate via SendMessage
+8. Multiple /commit cycles as workstreams complete
+9. /simplify → /pr
+10. /reflect (if available)
+```
+
+#### Epic
+```
+1. /gather-context [arguments] (full scope)
+2. /think [epic decomposition strategy]  ← HUMAN CHECKPOINT
+3. Decompose into sub-units (see EPIC-WORKFLOW.md)
+4. For each sub-unit: run appropriate tier workflow
+5. Coordinate across units (rebase, verify assumptions)
+6. /reflect across full epic (if available)
+```
+
+Present the proposed workflow with:
+- The assessed tier and reasoning
+- The specific steps (naming which skills will be invoked)
+- Where human checkpoints occur
+
+**Wait for user confirmation before proceeding.**
+
+### Step 2: Build Task List
+
+After user confirms the workflow, create tasks via `TaskCreate` with dependencies.
+
+Each task should include:
+- Clear subject (what to do)
+- Description with enough context for the step
+- `addBlockedBy` for tasks that must complete first
+
+Example for a Medium tier:
+```
+Task 1: Create feature branch for #123
+Task 2: Gather context for #123           (blockedBy: [1])
+Task 3: Discuss approach with user        (blockedBy: [2])
+Task 4: Create implementation plan        (blockedBy: [3])
+Task 5: Review plan                       (blockedBy: [4])
+Task 6: Implement changes                 (blockedBy: [5])
+Task 7: Run /simplify                     (blockedBy: [6])
+Task 8: Commit and open PR                (blockedBy: [7])
+```
+
+### Step 3: Execute the Workflow
+
+Work through the task list in order. For each task:
+1. Mark as `in_progress` via `TaskUpdate`
+2. Execute (invoke skill, spawn agent, or do work directly)
+3. Mark as `completed`
+4. Check `TaskList` for newly unblocked tasks
+
+**Autonomy boundary**:
+
+| Phase | Mode | Behavior |
+|-------|------|----------|
+| Research (`/checkout`, `/gather-context`) | Semi-autonomous | Agent works, surfaces findings to user |
+| Discussion (`/think`) | **Interactive** | Agent and user converge on approach together. Pass specific framing via args: the key decisions, tradeoffs, and open questions from `/gather-context`. |
+| Planning (`/plan`, `/review-plan`) | Semi-autonomous | Agent drafts, user approves via `ExitPlanMode` |
+| Execution | **Autonomous** | Agent implements, commits incrementally |
+| Review (`/simplify`, `/pr`) | Autonomous | Agent reviews and opens PR |
+| Retrospective (`/reflect`) | Interactive | Agent and user reflect on what worked |
+
+**Escape hatch**: If the agent encounters a blocking issue it can't resolve during autonomous phases (unexpected test failures, missing dependencies, ambiguous requirements), it should flag the user and wait for guidance rather than guessing.
+
+### Step 4: Adapt During Execution
+
+Plans don't survive contact with reality. During execution:
+
+- If a task reveals the plan is wrong, update remaining tasks via `TaskUpdate`
+- If new work is discovered, create new tasks with appropriate dependencies
+- If a task turns out to be unnecessary, delete it
+- If the tier assessment was wrong (e.g., "Small" issue turns out to be "Medium"), adjust the workflow — add `/think` and `/plan` steps if needed
+
+The task list is a living document, not a contract.
+
+### Step 5: Close Out
+
+After the PR is open:
+1. Verify all tasks are marked completed (or deleted if unnecessary)
+2. If `/reflect` is available and the tier is Large or Epic, invoke it
+3. If the issue should be closed by the PR, confirm the PR description includes "Closes #N" or "Fixes #N"
