@@ -223,6 +223,7 @@ set_permissions() {
             "Bash(shuf:*)",
             "Bash(sleep:*)",
             "Bash(sort:*)",
+            "Bash(sqlc:*)",
             "Bash(ss:*)",
             "Bash(stat:*)",
             "Bash(strings:*)",
