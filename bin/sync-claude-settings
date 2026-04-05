@@ -260,6 +260,7 @@ set_permissions() {
             "Bash(whoami:*)",
             "Bash(xxd:*)",
             "Bash(zsh -n:*)",
+            "Read('"${HOME}"'/go/pkg/mod/**)",
             "Read(//tmp/bktide/**)",
             "Skill(commit:*)",
             "Skill(think:*)",
