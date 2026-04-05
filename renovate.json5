@@ -65,7 +65,10 @@
 
   // Pin Docker images to digests for byte-for-byte reproducibility
   "packageRules": [
-    {"matchCategories": ["docker"], "pinDigests": true}
+    {"matchCategories": ["docker"], "pinDigests": true},
+    // mise's github: backend strips the "v" prefix from tags automatically,
+    // but Renovate writes back the raw tag. Strip it so versions stay clean.
+    {"matchManagers": ["mise"], "extractVersion": "^v?(?<version>.+)$"}
   ],
 
   // ---------------------------------------------------------------------------
