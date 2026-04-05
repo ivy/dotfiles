@@ -1,0 +1,107 @@
+---
+name: reflect
+description: Use when the user asks to reflect, do a retrospective, or review what went wrong/right. Also use when the user says "what did we learn" or "let's not make that mistake again".
+argument-hint: "[topic or leave blank for full session retro]"
+{{- template "bedrock-model" (dict "tier" "opus" "root" .) }}
+allowed-tools:
+  - Read
+  - Glob
+  - Grep
+---
+
+# Reflect: Session Retrospective
+
+Review the current session to extract lessons, then persist them so future sessions benefit.
+
+## Arguments
+
+```
+$ARGUMENTS
+```
+
+If arguments specify a topic, focus the retrospective there. Otherwise, review the full session.
+
+## Instructions
+
+### 1. Identify What Happened
+
+Scan the conversation for:
+- **Mistakes repeated** — the same class of error hit more than once
+- **Surprises** — assumptions that turned out wrong
+- **Friction** — where progress stalled and why
+- **Wins** — approaches that worked well, especially non-obvious ones
+- **Corrections from the user** — any time the user redirected you
+
+Be specific. "Debugging was hard" is not useful. "The cgroup regex didn't match UUIDs because `\w` excludes hyphens" is useful.
+
+### 2. Classify Each Lesson
+
+For each finding, decide where it should live:
+
+| Signal | Destination | Example |
+|--------|-------------|---------|
+| How the user wants you to behave | **Feedback memory** | "Don't apply manual fixes — use playbooks" |
+| Project-specific context others need | **AGENTS.md** | Deploy sequence, privilege model |
+| A bug pattern to watch for | **Feedback memory** | "make install doesn't build — always `make build` first" |
+| An approach the user validated | **Feedback memory** | "Bundled PR was the right call" |
+| Something about the user's role/preferences | **User memory** | "User is strict about reproducibility" |
+| A reference to an external system | **Reference memory** | "Staging env is at staging.example.com" |
+
+**Do NOT save:**
+- Things already in the code or git history
+- Ephemeral debugging details (the fix is committed)
+- Anything already documented in AGENTS.md or CLAUDE.md
+
+### 3. Present Findings
+
+Show the user a concise retrospective:
+
+**What went wrong:**
+- Bullet per issue, with root cause
+
+**What went well:**
+- Bullet per win
+
+**Proposed actions:**
+- Each action tagged with its destination: `[memory]`, `[AGENTS.md]`, `[code]`, `[skip]`
+- For `[memory]`: show the memory type and a one-line summary
+- For `[AGENTS.md]`: show the section and what to add/change
+- For `[code]`: describe the fix (Makefile target, test, etc.)
+- For `[skip]`: explain why it doesn't need persisting
+
+### 4. Execute After Approval
+
+Wait for the user to confirm or adjust. Then:
+
+1. **Write memories** — one file per lesson, update MEMORY.md index
+2. **Update AGENTS.md** — if there are changes to make
+3. **Note code changes** — describe but don't implement (the user may want a separate task)
+
+### 5. Quality Check
+
+Before finishing, verify:
+- Every feedback memory has a **Why** and **How to apply** line
+- No duplicate memories (check MEMORY.md first)
+- AGENTS.md changes are concise and universally applicable
+- You haven't saved debugging details that belong in git history
+
+## Anti-patterns
+
+- Saving every mistake as a memory (only save patterns, not incidents)
+- Vague lessons ("be more careful") — be specific about the trigger and fix
+- Updating AGENTS.md with one-off project details
+- Skipping the user approval step
+- Saving things the user already knows and doesn't need reminded of
+
+## Examples
+
+```
+/reflect
+→ Full session retrospective, extracts 3 feedback memories and 1 AGENTS.md update
+
+/reflect privilege model
+→ Focused retro on privilege boundary issues, saves a feedback memory about tracing user contexts
+
+/reflect what went well
+→ Highlights validated approaches from the session, saves positive feedback memories
+```
