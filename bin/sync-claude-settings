@@ -264,6 +264,7 @@ set_permissions() {
             "Read(//tmp/bktide/**)",
             "Skill(commit:*)",
             "Skill(think:*)",
+            "WebFetch(domain:docs.github.com)",
             "WebFetch(domain:docs.rs)",
             "WebFetch(domain:github.com)",
             "WebFetch(domain:mise.jdx.dev)",
