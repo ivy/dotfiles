@@ -20,7 +20,7 @@ allowed-tools:
   - Bash(mise uninstall:*)
   - Bash(mise where:*)
   - Bash(mise which:*)
-  - Bash(mise --cd:*)
+  - Bash(mise --cd*lock:*)
   - Bash(npm view:*)
   - Bash(pip index:*)
   - Glob
