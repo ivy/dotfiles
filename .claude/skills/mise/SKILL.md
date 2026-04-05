@@ -3,16 +3,29 @@ name: mise
 description: Use when adding, updating, troubleshooting, or managing mise tool dependencies. Supplements /install with mise-specific context about backends, lockfiles, and the github-first policy.
 argument-hint: [tool...]
 allowed-tools:
-  - Read
-  - Grep
-  - Glob
+  - Bash(chezmoi diff:*)
+  - Bash(gh release view:*)
+  - Bash(mise doctor:*)
+  - Bash(mise fmt:*)
+  - Bash(mise install:*)
+  - Bash(mise latest:*)
+  - Bash(mise lock:*)
   - Bash(mise ls:*)
   - Bash(mise ls-remote:*)
+  - Bash(mise outdated:*)
+  - Bash(mise prune:*)
   - Bash(mise registry:*)
-  - Bash(gh release view:*)
+  - Bash(mise search:*)
+  - Bash(mise tool:*)
+  - Bash(mise uninstall:*)
+  - Bash(mise where:*)
+  - Bash(mise which:*)
+  - Bash(mise --cd:*)
   - Bash(npm view:*)
   - Bash(pip index:*)
-  - Bash(chezmoi diff:*)
+  - Glob
+  - Grep
+  - Read
 ---
 
 # Mise Tool Management
@@ -31,8 +44,10 @@ $ARGUMENTS
 
 | File | Purpose |
 |------|---------|
-| `home/dot_config/mise/config.toml` | Tool manifest — edit here, never `~/.config/mise/config.toml` |
-| `home/dot_config/mise/mise.lock` | Cross-platform lockfile (auto-generated) |
+| `home/dot_config/mise/config.toml` | User tool manifest — edit here, never `~/.config/mise/config.toml` |
+| `home/dot_config/mise/mise.lock` | User lockfile (auto-generated) |
+| `mise.toml` | Project dev tool manifest (bats, shellcheck, hk, etc.) |
+| `mise.lock` | Project lockfile (auto-generated) |
 | `home/run_onchange_00-install-mise-tools.sh.tmpl` | Install trigger — runs on config/lock hash change |
 
 ## Backend Priority
@@ -97,13 +112,15 @@ checksum, attestation, and SLSA verification.
    mise --cd home/dot_config/mise lock
    ```
 
-### Regenerating the lockfile
+### Regenerating lockfiles
 
-The lockfile pins checksums across 5 platforms (linux-arm64, linux-x64,
-macos-arm64, macos-x64, windows-x64). Regenerate after any config change:
+There are two lockfiles pinning checksums across 7 platforms (linux-arm64,
+linux-arm64-musl, linux-x64, linux-x64-musl, macos-arm64, macos-x64,
+windows-x64). Regenerate **both** after any config change:
 
 ```bash
-mise --cd home/dot_config/mise lock
+mise lock                            # project-level (mise.toml)
+mise --cd home/dot_config/mise lock  # user-level (config.toml)
 ```
 
 ### Troubleshooting install failures
@@ -131,9 +148,10 @@ gh release view --repo owner/repo --json tagName --jq '.tagName'
 ```
 Use the full tag string as the version (e.g., `jq-1.8.1` not `1.8.1`).
 
-**Lockfile conflicts** — Delete and regenerate:
+**Lockfile conflicts** — Delete and regenerate both:
 ```bash
-mise --cd home/dot_config/mise lock
+mise lock                            # project-level
+mise --cd home/dot_config/mise lock  # user-level
 ```
 
 ## Rules
