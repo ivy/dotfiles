@@ -137,7 +137,6 @@ If assets exist but use unusual naming, the `github:` backend may not auto-detec
 them. Options:
 - Install via `cargo:` backend if it's a Rust tool
 - Pull source via `chezmoiexternal` with a wrapper script in `~/.local/bin`
-  (see turbocommit pattern in `.chezmoiexternal.toml.tmpl`)
 
 **"No GitHub attestations found"** — This was the aqua failure mode. The
 `github:` backend handles missing attestations gracefully — it verifies when

@@ -48,14 +48,6 @@
 # CLI tools (source installs for cross-platform support)
 # =============================================================================
 
-# turbocommit - auto-commit after every Claude Code turn
-[".local/share/turbocommit"]
-    type = "archive"
-    url = "https://github.com/searlsco/turbocommit/archive/ef5148cf66688a3a92ee90ced9c15f589629c750.tar.gz"
-    exact = true
-    stripComponents = 1
-    refreshPeriod = "168h"
-
 # hk (git hooks manager) — fork with global config support
 # Temporary: building from fork branch until fix is merged upstream
 {{ if lookPath "cargo" }}

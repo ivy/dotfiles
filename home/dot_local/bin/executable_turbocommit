@@ -1,2 +1,0 @@
-#!/bin/sh
-exec node "$HOME/.local/share/turbocommit/cli.js" "$@"
