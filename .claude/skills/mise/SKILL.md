@@ -5,6 +5,7 @@ argument-hint: [tool...]
 allowed-tools:
   - Bash(chezmoi diff:*)
   - Bash(gh release view:*)
+  - Bash(mise --cd*lock:*)
   - Bash(mise doctor:*)
   - Bash(mise fmt:*)
   - Bash(mise install:*)
@@ -15,12 +16,13 @@ allowed-tools:
   - Bash(mise outdated:*)
   - Bash(mise prune:*)
   - Bash(mise registry:*)
+  - Bash(mise run:*)
   - Bash(mise search:*)
   - Bash(mise tool:*)
   - Bash(mise uninstall:*)
+  - Bash(mise watch:*)
   - Bash(mise where:*)
   - Bash(mise which:*)
-  - Bash(mise --cd*lock:*)
   - Bash(npm view:*)
   - Bash(pip index:*)
   - Glob
