@@ -11,7 +11,7 @@ allowed-tools:
   - Bash(git status:*)
   - Bash(head:*)
   - Bash(ls:*)
-  - Bash(sort:*)
+  - Read
   - Skill(checkout)
   - Skill(commit)
   - Skill(gather-context)
@@ -38,9 +38,6 @@ $ARGUMENTS
 ```
 Current branch: !`git branch --show-current 2>/dev/null`
 Dirty worktree: !`git status --porcelain 2>/dev/null | head -5`
-
-Available skills: !`{ ls ~/.claude/skills/ 2>/dev/null; ls .claude/skills/ 2>/dev/null; } | sort -u`
-Available agents: !`{ ls ~/.claude/agents/ 2>/dev/null; ls .claude/agents/ 2>/dev/null; } | sort -u`
 ```
 
 ## Supporting Files
@@ -52,7 +49,7 @@ Available agents: !`{ ls ~/.claude/agents/ 2>/dev/null; ls .claude/agents/ 2>/de
 
 - **Never skip the tier assessment.** Every issue gets classified before work begins.
 - **Only use skills that exist.** Check "Available skills" in pre-computed context. If a skill isn't listed, do the equivalent work inline or skip that step.
-- **Front-load human involvement.** The user collaborates through research and planning phases. After `/think` converges, the agent executes autonomously.
+- **Drive autonomously.** Assess, plan, and execute without pausing for confirmation. Only interrupt the user for genuine blockers (ambiguous requirements, failing tests with no clear fix).
 - **Commit incrementally.** Use `/commit` (if available) for each logical change. Don't batch everything into one commit at the end.
 
 ## Instructions
@@ -93,7 +90,7 @@ Based on the assessed tier and available skills, propose a workflow to the user.
 ```
 1. /checkout [arguments]
 2. /gather-context [arguments] (full scope)
-3. /think [framing of key decisions from context]  ← HUMAN CHECKPOINT
+3. /think [framing of key decisions from context]
 4. /plan [context summary]
 5. /review-plan (if available)
 6. /share-plan [arguments] (if available)
@@ -117,7 +114,7 @@ Based on the assessed tier and available skills, propose a workflow to the user.
 #### Epic
 ```
 1. /gather-context [arguments] (full scope)
-2. /think [epic decomposition strategy]  ← HUMAN CHECKPOINT
+2. /think [epic decomposition strategy]
 3. Decompose into sub-units (see EPIC-WORKFLOW.md)
 4. For each sub-unit: run appropriate tier workflow
 5. Coordinate across units (rebase, verify assumptions)
@@ -129,11 +126,11 @@ Present the proposed workflow with:
 - The specific steps (naming which skills will be invoked)
 - Where human checkpoints occur
 
-**Wait for user confirmation before proceeding.**
+Then proceed immediately to building the task list.
 
 ### Step 2: Build Task List
 
-After user confirms the workflow, create tasks via `TaskCreate` with dependencies.
+Create tasks via `TaskCreate` with dependencies.
 
 Each task should include:
 - Clear subject (what to do)

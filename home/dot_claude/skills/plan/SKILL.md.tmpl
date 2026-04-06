@@ -12,7 +12,6 @@ allowed-tools:
   - Bash(git status:*)
   - Bash(head:*)
   - Bash(ls:*)
-  - Bash(sort:*)
   - Bash(test:*)
   - Glob
   - Grep
@@ -32,8 +31,7 @@ $ARGUMENTS
 
 ```
 Git root: !`git rev-parse --show-toplevel 2>/dev/null || echo "NOT A GIT REPO"`
-Available agents: !`{ ls ~/.claude/agents/ 2>/dev/null; ls .claude/agents/ 2>/dev/null; } | sort -u`
-Test suite: !`test -d test/ && echo "yes: $(ls test/ | head -5)" || echo "no"`
+Test suite: !`test -d test/ && echo "yes" || echo "no"`
 CLAUDE.md exists: !`test -f CLAUDE.md && echo "yes" || echo "no"`
 ```
 
