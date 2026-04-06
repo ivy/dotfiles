@@ -76,27 +76,28 @@ RUN --mount=type=secret,id=github_token \
 # =============================================================================
 # Non-root user
 # =============================================================================
-ARG USERNAME=ivy
-ARG USER_UID=1000
-ARG USER_GID=1000
+ARG USERNAME=agent
+ARG USER_UID=10000
+ARG USER_GID=10000
 RUN groupadd -g "${USER_GID}" "${USERNAME}" \
     && useradd -m -u "${USER_UID}" -g "${USER_GID}" -s /usr/bin/zsh "${USERNAME}"
 
 ENV CONTAINER=podman \
-    HOME=/home/ivy \
-    XDG_CACHE_HOME=/home/ivy/.cache \
-    XDG_CONFIG_HOME=/home/ivy/.config \
-    XDG_DATA_HOME=/home/ivy/.local/share \
-    XDG_STATE_HOME=/home/ivy/.local/state \
-    PATH="/home/ivy/.local/bin:${PATH}"
+    TERM=xterm-256color \
+    HOME=/home/agent \
+    XDG_CACHE_HOME=/home/agent/.cache \
+    XDG_CONFIG_HOME=/home/agent/.config \
+    XDG_DATA_HOME=/home/agent/.local/share \
+    XDG_STATE_HOME=/home/agent/.local/state \
+    PATH="/home/agent/.local/share/mise/shims:/home/agent/.local/bin:${PATH}"
 
 # =============================================================================
 # Dotfiles source
 # =============================================================================
-COPY --chown=ivy:ivy . /home/ivy/.dotfiles
+COPY --chown=agent:agent . /home/agent/.dotfiles
 
-USER ivy
-WORKDIR /home/ivy
+USER agent
+WORKDIR /home/agent
 
 # =============================================================================
 # Layer: chezmoi apply + mise tools
@@ -110,24 +111,24 @@ ARG GIT_USER_NAME="Ivy Evans"
 ARG GIT_USER_EMAIL="ivy@ivyevans.net"
 ARG USE_BEDROCK=false
 
-RUN --mount=type=cache,target=/tmp/mise-data,uid=1000,gid=1000 \
-    --mount=type=cache,target=/tmp/mise-cache,uid=1000,gid=1000 \
-    --mount=type=cache,target=/tmp/mise-state,uid=1000,gid=1000 \
+RUN --mount=type=cache,target=/tmp/mise-data,uid=10000,gid=10000 \
+    --mount=type=cache,target=/tmp/mise-cache,uid=10000,gid=10000 \
+    --mount=type=cache,target=/tmp/mise-state,uid=10000,gid=10000 \
     --mount=type=secret,id=github_token,mode=0444 \
     export GITHUB_TOKEN="$(cat /run/secrets/github_token 2>/dev/null || true)" \
     && export MISE_DATA_DIR=/tmp/mise-data \
     && export MISE_CACHE_DIR=/tmp/mise-cache \
     && export MISE_STATE_DIR=/tmp/mise-state \
     && chezmoi init --apply \
-        --source="/home/ivy/.dotfiles" \
-        --working-tree="/home/ivy/.dotfiles" \
+        --source="/home/agent/.dotfiles" \
+        --working-tree="/home/agent/.dotfiles" \
         --promptString "Git user.name=${GIT_USER_NAME}" \
         --promptString "Git user.email=${GIT_USER_EMAIL}" \
         --promptBool "Use AWS Bedrock for Claude Code=${USE_BEDROCK}" \
         --promptString "1Password ref for OpenAI Codex=" \
         --promptString "1Password ref for Claude API=" \
         --promptString "1Password ref for Buildkite=" \
-    && mkdir -p /home/ivy/.local/share/mise \
-    && cp -a /tmp/mise-data/. /home/ivy/.local/share/mise/
+    && mkdir -p /home/agent/.local/share/mise \
+    && cp -a /tmp/mise-data/. /home/agent/.local/share/mise/
 
 CMD ["zsh", "-l"]
