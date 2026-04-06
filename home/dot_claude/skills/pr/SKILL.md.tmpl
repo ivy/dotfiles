@@ -96,17 +96,21 @@ Draft the content but don't show it to the user for approval - proceed directly 
 git push -u origin <branch-name>
 ```
 
-**Then create PR using the shim:**
-
+**Write the body to a temp file** (avoids shell escaping issues with backticks and code fences):
 ```bash
-~/.claude/skills/pr/gh-pr-create-web --title "..." --body "..."
+cat > /tmp/pr-body.md << 'PRBODY'
+...formatted body...
+PRBODY
 ```
 
-The shim automatically adds `--web`, ensuring PRs open in browser for human review. Do NOT add `--web` yourself—the shim handles it.
+**Then create the PR:**
+```bash
+gh pr create --title "..." --body-file /tmp/pr-body.md
+```
 
 ### 5. Report Result
 
-Simply note that the PR creation command was executed. The browser will open automatically for final review.
+Report the PR URL returned by `gh pr create`.
 
 ## Examples
 
