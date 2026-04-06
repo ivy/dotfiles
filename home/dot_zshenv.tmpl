@@ -32,6 +32,11 @@ export NPM_CONFIG_IGNORE_SCRIPTS=1
 export NPM_CONFIG_AUDIT=false
 export NPM_CONFIG_FUND=false
 
+{{- if and (eq .chezmoi.os "darwin") (glob (joinPath .chezmoi.homeDir "Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock")) }}
+# 1Password SSH agent
+export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+{{- end }}
+
 # Source system-specific overrides and additions *last*
 if [[ -r "$HOME/.zshenv.local" ]]; then
   source "$HOME/.zshenv.local"
