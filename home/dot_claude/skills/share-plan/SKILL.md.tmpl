@@ -100,22 +100,23 @@ key design decisions. This is the only section most readers will read.]
 
 ### 5. Publish
 
-Commands will prompt for approval since they're not in `allowed-tools`.
+Write the formatted body to a temp file to avoid shell escaping issues with backticks and code fences. Commands will prompt for approval since they're not in `allowed-tools`.
+
+```bash
+# Write the formatted body (no shell escaping concerns)
+cat > /tmp/plan-body.md << 'PLAN'
+...formatted body...
+PLAN
+```
 
 **Update existing issue:**
 ```bash
-gh issue edit NNN --body "$(cat <<'EOF'
-...formatted body...
-EOF
-)"
+gh issue edit NNN --body-file /tmp/plan-body.md
 ```
 
 **Create new issue:**
 ```bash
-gh issue create --title "TITLE" --body "$(cat <<'EOF'
-...formatted body...
-EOF
-)"
+gh issue create --title "TITLE" --body-file /tmp/plan-body.md
 ```
 
 ## Examples
