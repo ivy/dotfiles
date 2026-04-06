@@ -7,6 +7,10 @@
 #   2. macOS `defaults read` (local desktop)
 #   3. Fallback: "light"
 
+if [ -z "$BG" ] && [ -n "$TMUX" ]; then
+  BG="$(tmux show-environment BG 2>/dev/null | sed 's/^BG=//')"
+fi
+
 if [ -n "$BG" ]; then
   case "$BG" in
     dark) echo "dark" ;;
