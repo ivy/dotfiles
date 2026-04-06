@@ -282,6 +282,7 @@ set_permissions() {
             "Skill(commit:*)",
             "Skill(think:*)",
             "WebFetch(domain:developer.1password.com)",
+            "WebFetch(domain:docs.anthropic.com)",
             "WebFetch(domain:docs.github.com)",
             "WebFetch(domain:docs.rs)",
             "WebFetch(domain:duckduckgo.com)",
