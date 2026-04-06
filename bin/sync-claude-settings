@@ -283,9 +283,12 @@ set_permissions() {
             "Skill(think:*)",
             "WebFetch(domain:docs.github.com)",
             "WebFetch(domain:docs.rs)",
+            "WebFetch(domain:duckduckgo.com)",
             "WebFetch(domain:github.com)",
             "WebFetch(domain:mise.jdx.dev)",
-            "WebFetch(domain:raw.githubusercontent.com)"
+            "WebFetch(domain:raw.githubusercontent.com)",
+            "WebFetch(domain:stackoverflow.com)",
+            "WebFetch(domain:www.google.com)"
         ]
     }' "${SETTINGS}" >"${SETTINGS}.tmp" && mv "${SETTINGS}.tmp" "${SETTINGS}"
 }
