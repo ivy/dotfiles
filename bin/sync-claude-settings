@@ -307,8 +307,10 @@ set_permissions() {
             "WebFetch(domain:github.com)",
             "WebFetch(domain:mise.jdx.dev)",
             "WebFetch(domain:raw.githubusercontent.com)",
+            "WebFetch(domain:rubygems.org)",
             "WebFetch(domain:stackoverflow.com)",
-            "WebFetch(domain:www.google.com)"
+            "WebFetch(domain:www.google.com)",
+            "WebFetch(domain:www.rubydoc.info)"
         ]
     }' "${SETTINGS}" >"${SETTINGS}.tmp" && mv "${SETTINGS}.tmp" "${SETTINGS}"
 }
