@@ -1,13 +1,16 @@
 [user]
 	name = {{ .git.name }}
 	email = {{ .git.email }}
-	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPl4kdn9XQ9cokjTbiYsPpVOGrk67ej17RrDeaipe5X1
+	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOpi4G3yVuXBNHDDEsoBH5juSOVFsWcP3iulru1llnAB
 
 [commit]
 	gpgsign = true
 
 [gpg]
 	format = ssh
+
+[gpg "ssh"]
+	allowedSignersFile = ~/.config/git/allowed_signers
 
 [init]
 	defaultBranch = main
