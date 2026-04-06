@@ -1,0 +1,163 @@
+#!/bin/sh
+# install-mise — Download and verify mise using GitHub artifact attestations.
+#
+# Verification chain:
+#   1. Download binary from GitHub Releases (pinned version, no curl|bash)
+#   2. Verify SHA-256 checksum against SHASUMS256.txt
+#   3. Fetch Sigstore attestation bundle via GitHub API
+#   4. Verify attestation with cosign (proves GitHub signed this release)
+#
+# Requirements: curl, sha256sum (or shasum), cosign, gh, jq
+#
+# Usage:
+#   install-mise v2026.4.4
+#   MISE_VERSION=v2026.4.4 MISE_INSTALL_PATH=/usr/local/bin/mise install-mise
+
+set -eu
+
+VERSION="${1:-${MISE_VERSION:-}}"
+INSTALL_PATH="${MISE_INSTALL_PATH:-/usr/local/bin/mise}"
+
+# GitHub attestation verification parameters (from investigation of mise's
+# Sigstore bundle: GitHub's internal Fulcio instance, no OIDC issuer claim,
+# SAN is dotcom.releases.github.com, timestamps instead of transparency log)
+CERT_IDENTITY="https://dotcom.releases.github.com"
+GITHUB_REPO="jdx/mise"
+
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
+
+die() { printf 'error: %s\n' "$1" >&2; exit 1; }
+step() { printf '==> %s\n' "$1"; }
+
+check_deps() {
+  for cmd in curl cosign gh jq; do
+    command -v "$cmd" >/dev/null 2>&1 || die "$cmd is required but not found"
+  done
+
+  # sha256sum on Linux, shasum on macOS
+  if command -v sha256sum >/dev/null 2>&1; then
+    SHA256_CMD="sha256sum"
+  elif command -v shasum >/dev/null 2>&1; then
+    SHA256_CMD="shasum -a 256"
+  else
+    die "sha256sum or shasum is required but not found"
+  fi
+}
+
+detect_platform() {
+  OS=$(uname -s)
+  ARCH=$(uname -m)
+
+  case "$OS" in
+    Linux)  OS="linux" ;;
+    Darwin) OS="macos" ;;
+    *)      die "unsupported OS: $OS" ;;
+  esac
+
+  case "$ARCH" in
+    x86_64)  ARCH="x64" ;;
+    aarch64|arm64) ARCH="arm64" ;;
+    armv7*)  ARCH="armv7" ;;
+    *)       die "unsupported architecture: $ARCH" ;;
+  esac
+}
+
+# ---------------------------------------------------------------------------
+# Verification
+# ---------------------------------------------------------------------------
+
+verify_checksum() {
+  step "Verifying SHA-256 checksum"
+  # SHASUMS256.txt references files as ./mise-v...; compute and compare directly
+  local expected actual
+  expected=$(grep "  \\./${BINARY_NAME}$" "$WORK_DIR/SHASUMS256.txt" | cut -d' ' -f1)
+  [ -n "$expected" ] || die "binary ${BINARY_NAME} not found in SHASUMS256.txt"
+  actual=$($SHA256_CMD "$WORK_DIR/$BINARY_NAME" | cut -d' ' -f1)
+  [ "$expected" = "$actual" ] || die "checksum mismatch: expected ${expected}, got ${actual}"
+  printf '    checksum OK\n'
+}
+
+verify_attestation() {
+  step "Verifying GitHub artifact attestation"
+
+  local artifact_sha256
+  artifact_sha256=$($SHA256_CMD "$WORK_DIR/$BINARY_NAME" | cut -d' ' -f1)
+
+  # Fetch the Sigstore bundle from GitHub's attestation API
+  step "  Fetching attestation bundle (sha256:${artifact_sha256})"
+  gh api "repos/${GITHUB_REPO}/attestations/sha256:${artifact_sha256}" \
+    --jq '.attestations[0].bundle' > "$WORK_DIR/attestation.json" 2>/dev/null \
+    || die "no attestation found for this artifact"
+
+  # Export GitHub's Sigstore trusted root (line 2 = GitHub's instance)
+  step "  Fetching GitHub Sigstore trusted root"
+  gh attestation trusted-root 2>/dev/null \
+    | sed -n '2p' > "$WORK_DIR/trusted-root.json"
+
+  # Verify with cosign
+  # - --insecure-ignore-tlog: GitHub attestations use signed timestamps, not Rekor
+  # - --insecure-ignore-sct: GitHub's Fulcio doesn't embed SCTs
+  # - --use-signed-timestamps: verify via RFC 3161 timestamp authority
+  # - --certificate-oidc-issuer-regexp=".*": GitHub's internal Fulcio has no OIDC issuer
+  step "  Verifying Sigstore bundle with cosign"
+  cosign verify-blob-attestation \
+    --bundle "$WORK_DIR/attestation.json" \
+    --new-bundle-format \
+    --trusted-root "$WORK_DIR/trusted-root.json" \
+    --certificate-oidc-issuer-regexp=".*" \
+    --certificate-identity="$CERT_IDENTITY" \
+    --insecure-ignore-tlog \
+    --insecure-ignore-sct \
+    --use-signed-timestamps \
+    "$WORK_DIR/$BINARY_NAME" >/dev/null 2>&1 \
+    || die "attestation verification failed — binary may be tampered"
+
+  printf '    attestation OK\n'
+}
+
+# ---------------------------------------------------------------------------
+# Main
+# ---------------------------------------------------------------------------
+
+main() {
+  [ -n "$VERSION" ] || die "usage: install-mise <version>  (e.g., install-mise v2026.4.4)"
+
+  # Normalize: ensure version starts with v
+  case "$VERSION" in
+    v*) ;; # already has prefix
+    *)  VERSION="v$VERSION" ;;
+  esac
+
+  check_deps
+  detect_platform
+
+  BINARY_NAME="mise-${VERSION}-${OS}-${ARCH}"
+  DOWNLOAD_URL="https://github.com/${GITHUB_REPO}/releases/download/${VERSION}/${BINARY_NAME}"
+  CHECKSUMS_URL="https://github.com/${GITHUB_REPO}/releases/download/${VERSION}/SHASUMS256.txt"
+
+  WORK_DIR=$(mktemp -d)
+  trap 'rm -rf "$WORK_DIR"' EXIT
+
+  step "Installing mise ${VERSION} (${OS}/${ARCH})"
+
+  # Download binary and checksums in parallel (background the first)
+  step "Downloading ${BINARY_NAME}"
+  curl -fsSL "$DOWNLOAD_URL" -o "$WORK_DIR/$BINARY_NAME" &
+  curl -fsSL "$CHECKSUMS_URL" -o "$WORK_DIR/SHASUMS256.txt"
+  wait
+
+  [ -f "$WORK_DIR/$BINARY_NAME" ] || die "download failed: $DOWNLOAD_URL"
+
+  verify_checksum
+  verify_attestation
+
+  step "Installing to ${INSTALL_PATH}"
+  install -m 755 "$WORK_DIR/$BINARY_NAME" "$INSTALL_PATH"
+
+  step "Done — mise ${VERSION} installed to ${INSTALL_PATH}"
+  "$INSTALL_PATH" --version
+}
+
+main

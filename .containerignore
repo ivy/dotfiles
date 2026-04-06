@@ -1,0 +1,5 @@
+*.md
+!home/**/*.md
+docs/
+test/
+LICENSE
