@@ -5,6 +5,12 @@
 set -o errexit
 set -o nounset
 
+# Skip in containers — system packages are baked into the image.
+if [ -n "${CONTAINER:-}" ] || [ -f /.dockerenv ]; then
+    echo "Running in container, skipping system package installation"
+    exit 0
+fi
+
 if command -v dnf >/dev/null 2>&1; then
     echo "Installing packages via dnf..."
 

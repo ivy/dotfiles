@@ -115,8 +115,7 @@ RUN --mount=type=cache,target=/tmp/mise-data,uid=10000,gid=10000 \
     --mount=type=cache,target=/tmp/mise-cache,uid=10000,gid=10000 \
     --mount=type=cache,target=/tmp/mise-state,uid=10000,gid=10000 \
     --mount=type=secret,id=github_token,mode=0444 \
-    export CONTAINER=podman \
-    && export GITHUB_TOKEN="$(cat /run/secrets/github_token 2>/dev/null || true)" \
+    export GITHUB_TOKEN="$(cat /run/secrets/github_token 2>/dev/null || true)" \
     && export MISE_DATA_DIR=/tmp/mise-data \
     && export MISE_CACHE_DIR=/tmp/mise-cache \
     && export MISE_STATE_DIR=/tmp/mise-state \
