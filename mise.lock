@@ -166,45 +166,6 @@ checksum = "sha256:3309422d817e060e914a825fbc7265907fca006f30795b3061a4db1ebf4fd
 url = "https://github.com/buildkite/cli/releases/download/v3.32.2/bk_3.32.2_windows_amd64.zip"
 url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/371555792"
 
-[[tools."github:jdx/hk"]]
-version = "1.41.0"
-backend = "github:jdx/hk"
-
-[tools."github:jdx/hk"."platforms.linux-arm64"]
-checksum = "sha256:d67d3f870d37355fbb66011780113c70e9a70c505a4f0fe7d9b44639442b4fc7"
-url = "https://github.com/jdx/hk/releases/download/v1.41.0/hk-aarch64-unknown-linux-gnu.tar.gz"
-url_api = "https://api.github.com/repos/jdx/hk/releases/assets/389454826"
-
-[tools."github:jdx/hk"."platforms.linux-arm64-musl"]
-checksum = "sha256:d67d3f870d37355fbb66011780113c70e9a70c505a4f0fe7d9b44639442b4fc7"
-url = "https://github.com/jdx/hk/releases/download/v1.41.0/hk-aarch64-unknown-linux-gnu.tar.gz"
-url_api = "https://api.github.com/repos/jdx/hk/releases/assets/389454826"
-
-[tools."github:jdx/hk"."platforms.linux-x64"]
-checksum = "sha256:b49eebf571c3aa68bc02940114082b0bdf9e9828c8f224d478001fb7b865898b"
-url = "https://github.com/jdx/hk/releases/download/v1.41.0/hk-x86_64-unknown-linux-gnu.tar.gz"
-url_api = "https://api.github.com/repos/jdx/hk/releases/assets/389454825"
-
-[tools."github:jdx/hk"."platforms.linux-x64-musl"]
-checksum = "sha256:b49eebf571c3aa68bc02940114082b0bdf9e9828c8f224d478001fb7b865898b"
-url = "https://github.com/jdx/hk/releases/download/v1.41.0/hk-x86_64-unknown-linux-gnu.tar.gz"
-url_api = "https://api.github.com/repos/jdx/hk/releases/assets/389454825"
-
-[tools."github:jdx/hk"."platforms.macos-arm64"]
-checksum = "sha256:25c9e973993c1607247e97ec558d747483ab4c48380485d69ea617161939544c"
-url = "https://github.com/jdx/hk/releases/download/v1.41.0/hk-aarch64-apple-darwin.tar.gz"
-url_api = "https://api.github.com/repos/jdx/hk/releases/assets/389454823"
-
-[tools."github:jdx/hk"."platforms.macos-x64"]
-checksum = "sha256:db4d3e0229d1632caa2f31c28a47fc1923e436354f1920939c333b229feae410"
-url = "https://github.com/jdx/hk/releases/download/v1.41.0/hk%401.41.0.zip"
-url_api = "https://api.github.com/repos/jdx/hk/releases/assets/389454831"
-
-[tools."github:jdx/hk"."platforms.windows-x64"]
-checksum = "sha256:b3851965af1c570ca670710a82e1cce85213dc0b182336c90d031cff8f2e0dd5"
-url = "https://github.com/jdx/hk/releases/download/v1.41.0/hk-x86_64-pc-windows-msvc.zip"
-url_api = "https://api.github.com/repos/jdx/hk/releases/assets/389454822"
-
 [[tools.jq]]
 version = "1.8.1"
 backend = "aqua:jqlang/jq"
