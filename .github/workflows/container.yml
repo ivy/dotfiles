@@ -8,6 +8,10 @@ on:
       - .github/workflows/container.yml
   workflow_dispatch:
 
+concurrency:
+  group: container-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
