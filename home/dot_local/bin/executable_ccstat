@@ -1,0 +1,524 @@
+#!/usr/bin/env python3
+"""ccstat — Claude Code session metrics.
+
+Parses JSONL session logs and reports token usage, cost, tool calls,
+subagent activity, and autonomy metrics.
+"""
+
+import argparse
+import json
+import os
+import sys
+import urllib.error
+import urllib.request
+from collections import Counter, defaultdict
+from datetime import datetime
+from pathlib import Path
+
+PRICING_URL = (
+    "https://raw.githubusercontent.com/BerriAI/litellm"
+    "/refs/heads/main/model_prices_and_context_window.json"
+)
+DEFAULT_CACHE = Path.home() / ".cache" / "ccstat" / "pricing.json"
+CLAUDE_PROJECTS_DIR = Path.home() / ".claude" / "projects"
+
+# --- Session resolution ---
+
+
+def _session_names(path):
+    """Extract the slug and all git branches from a session log."""
+    slug = None
+    branches = set()
+    try:
+        with open(path) as f:
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    rec = json.loads(line)
+                except json.JSONDecodeError:
+                    continue
+                if not slug:
+                    slug = rec.get("slug")
+                branch = rec.get("gitBranch")
+                if branch:
+                    branches.add(branch)
+    except OSError:
+        pass
+    return slug, branches
+
+
+def _find_by_name(name):
+    """Find a session whose slug or git branch matches name (exact then substring)."""
+    exact = []
+    partial = []
+    for project_dir in CLAUDE_PROJECTS_DIR.iterdir():
+        if not project_dir.is_dir():
+            continue
+        for f in project_dir.glob("*.jsonl"):
+            slug, branches = _session_names(f)
+            all_names = branches
+            if slug:
+                all_names.add(slug)
+            if not all_names:
+                continue
+            if name in all_names:
+                exact.append((f, slug))
+            elif any(name in n for n in all_names):
+                partial.append((f, slug))
+    if exact:
+        return max(exact, key=lambda t: t[0].stat().st_mtime)[0]
+    if partial:
+        if len(partial) == 1:
+            return partial[0][0]
+        # Multiple matches — pick most recent, but warn.
+        partial.sort(key=lambda t: t[0].stat().st_mtime, reverse=True)
+        print(
+            f"warning: '{name}' matched {len(partial)} sessions, using most recent",
+            file=sys.stderr,
+        )
+        for f, s in partial[:5]:
+            print(f"  {f.stem[:8]}  {s or '(no slug)'}", file=sys.stderr)
+        return partial[0][0]
+    return None
+
+
+def resolve_session_path(arg):
+    """Resolve a JSONL path from an explicit path, UUID prefix, slug, or most-recent heuristic."""
+    if arg:
+        p = Path(arg)
+        if p.is_file():
+            return p
+        # Treat as session UUID prefix — search all project dirs.
+        for project_dir in CLAUDE_PROJECTS_DIR.iterdir():
+            if not project_dir.is_dir():
+                continue
+            for f in project_dir.glob(f"{arg}*.jsonl"):
+                return f
+        # Try slug or branch name match.
+        by_name = _find_by_name(arg)
+        if by_name:
+            return by_name
+        print(f"error: no session found matching '{arg}'", file=sys.stderr)
+        sys.exit(1)
+
+    # No argument: most-recent session for the current working directory.
+    project_slug = os.getcwd().replace("/", "-")
+    project_dir = CLAUDE_PROJECTS_DIR / project_slug
+    if not project_dir.is_dir():
+        print(f"error: no sessions found for {os.getcwd()}", file=sys.stderr)
+        sys.exit(1)
+    sessions = sorted(
+        project_dir.glob("*.jsonl"),
+        key=lambda f: f.stat().st_mtime,
+        reverse=True,
+    )
+    if not sessions:
+        print(f"error: no session logs in {project_dir}", file=sys.stderr)
+        sys.exit(1)
+    return sessions[0]
+
+
+# --- Pricing ---
+
+
+def fetch_pricing(cache_path):
+    """Fetch LiteLLM pricing JSON, with 24-hour local cache."""
+    cache_path = Path(cache_path)
+    if cache_path.exists():
+        age = datetime.now().timestamp() - cache_path.stat().st_mtime
+        if age < 86400:
+            with open(cache_path) as f:
+                return json.load(f)
+    try:
+        req = urllib.request.Request(PRICING_URL, headers={"User-Agent": "ccstat/1.0"})
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            data = json.loads(resp.read().decode())
+        cache_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(cache_path, "w") as f:
+            json.dump(data, f)
+        return data
+    except (urllib.error.URLError, OSError) as e:
+        if cache_path.exists():
+            # Stale cache is better than nothing.
+            with open(cache_path) as f:
+                return json.load(f)
+        print(f"warning: could not fetch pricing: {e}", file=sys.stderr)
+        return None
+
+
+def _model_pricing(pricing_data, model):
+    if not pricing_data or model not in pricing_data:
+        return None
+    p = pricing_data[model]
+    return {
+        "input": p.get("input_cost_per_token", 0),
+        "output": p.get("output_cost_per_token", 0),
+        "cache_read": p.get("cache_read_input_token_cost", 0),
+        "cache_create": p.get("cache_creation_input_token_cost", 0),
+    }
+
+
+def _cost(usage, pricing):
+    if not pricing:
+        return 0.0
+    return (
+        usage.get("input_tokens", 0) * pricing["input"]
+        + usage.get("output_tokens", 0) * pricing["output"]
+        + usage.get("cache_read_input_tokens", 0) * pricing["cache_read"]
+        + usage.get("cache_creation_input_tokens", 0) * pricing["cache_create"]
+    )
+
+
+# --- Analysis ---
+
+
+def analyze(records, pricing_data=None):
+    """Extract all metrics from parsed JSONL records."""
+    models = defaultdict(
+        lambda: {
+            "turns": 0,
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "cache_read_tokens": 0,
+            "cache_create_tokens": 0,
+        }
+    )
+    subagents = []
+    subagent_failures = 0
+    subagent_by_type = defaultdict(lambda: {"count": 0, "tokens": 0})
+    tool_counts = Counter()
+    main_tool_count = 0
+    subagent_tool_count = 0
+    skills = []
+    stop_reasons = Counter()
+    timestamps = []
+    user_timestamps = []
+    user_messages = 0
+    interruptions = 0
+    commits = 0
+
+    for rec in records:
+        ts = rec.get("timestamp")
+        if ts:
+            timestamps.append(ts)
+
+        rtype = rec.get("type")
+
+        if rtype == "assistant":
+            _process_assistant(
+                rec, models, tool_counts, skills, stop_reasons,
+            )
+            main_tool_count += sum(
+                1
+                for b in rec.get("message", {}).get("content", [])
+                if isinstance(b, dict) and b.get("type") == "tool_use"
+            )
+            # Commit heuristic.
+            for b in rec.get("message", {}).get("content", []):
+                if (
+                    isinstance(b, dict)
+                    and b.get("type") == "tool_use"
+                    and b.get("name") == "Bash"
+                ):
+                    cmd = b.get("input", {}).get("command", "")
+                    if "git commit" in cmd and "-m" in cmd:
+                        commits += 1
+
+        elif rtype == "user":
+            if ts:
+                user_timestamps.append(ts)
+            tr = rec.get("toolUseResult")
+            if isinstance(tr, dict) and tr.get("agentId"):
+                _process_subagent(tr, subagents, subagent_by_type)
+                subagent_tool_count += tr.get("totalToolUseCount", 0)
+                if tr.get("totalTokens", 0) == 0:
+                    subagent_failures += 1
+            elif not isinstance(tr, dict):
+                msg = rec.get("message", {})
+                content = msg.get("content", []) if isinstance(msg.get("content"), list) else []
+                for block in content:
+                    text = block.get("text", "") if isinstance(block, dict) else str(block)
+                    if "[Request interrupted by user" in text:
+                        interruptions += 1
+                if any(
+                    (isinstance(b, dict) and b.get("type") == "text") or isinstance(b, str)
+                    for b in content
+                ):
+                    user_messages += 1
+
+    # Runtime.
+    runtime_seconds = 0
+    if len(timestamps) >= 2:
+        first = datetime.fromisoformat(timestamps[0].replace("Z", "+00:00"))
+        last = datetime.fromisoformat(timestamps[-1].replace("Z", "+00:00"))
+        runtime_seconds = int((last - first).total_seconds())
+
+    # Autonomy.
+    autonomy = _autonomy(user_timestamps)
+
+    # Per-model costs.
+    models_out = {}
+    total_cost = 0.0
+    for model_name, m in models.items():
+        pricing = _model_pricing(pricing_data, model_name) if pricing_data else None
+        cost = _cost(
+            {
+                "input_tokens": m["input_tokens"],
+                "output_tokens": m["output_tokens"],
+                "cache_read_input_tokens": m["cache_read_tokens"],
+                "cache_creation_input_tokens": m["cache_create_tokens"],
+            },
+            pricing,
+        )
+        total_cost += cost
+        models_out[model_name] = {**m, "cost_usd": round(cost, 2)}
+
+    return {
+        "session_id": "",  # Set by caller from filename.
+        "runtime_seconds": runtime_seconds,
+        "total_cost_usd": round(total_cost, 2),
+        "models": models_out,
+        "subagents": {
+            "count": len(subagents),
+            "total_tokens": sum(s["total_tokens"] for s in subagents),
+            "total_duration_ms": sum(s["duration_ms"] for s in subagents),
+            "total_tool_uses": subagent_tool_count,
+            "failures": subagent_failures,
+            "by_type": dict(subagent_by_type),
+        },
+        "tool_calls": {
+            "total": main_tool_count + subagent_tool_count,
+            "main_context": main_tool_count,
+            "subagents": subagent_tool_count,
+            "by_tool": dict(tool_counts.most_common()),
+        },
+        "autonomy": autonomy,
+        "user": {"messages": user_messages, "interruptions": interruptions},
+        "skills_invoked": skills,
+        "stop_reasons": dict(stop_reasons),
+        "commits": commits,
+    }
+
+
+def _process_assistant(rec, models, tool_counts, skills, stop_reasons):
+    msg = rec.get("message", {})
+    model = msg.get("model", "unknown")
+    usage = msg.get("usage", {})
+    if model == "<synthetic>":
+        return
+
+    m = models[model]
+    m["turns"] += 1
+    m["input_tokens"] += usage.get("input_tokens", 0)
+    m["output_tokens"] += usage.get("output_tokens", 0)
+    m["cache_read_tokens"] += usage.get("cache_read_input_tokens", 0)
+    m["cache_create_tokens"] += usage.get("cache_creation_input_tokens", 0)
+
+    sr = msg.get("stop_reason")
+    if sr:
+        stop_reasons[sr] += 1
+
+    for block in msg.get("content", []):
+        if not isinstance(block, dict) or block.get("type") != "tool_use":
+            continue
+        tool_name = block.get("name", "unknown")
+        tool_counts[tool_name] += 1
+        if tool_name == "Skill":
+            skill = block.get("input", {}).get("skill")
+            if skill:
+                skills.append(skill)
+
+
+def _process_subagent(tr, subagents, subagent_by_type):
+    agent_type = tr.get("agentType", "unknown")
+    total_tokens = tr.get("totalTokens", 0)
+
+    subagents.append(
+        {
+            "agent_id": tr.get("agentId"),
+            "agent_type": agent_type,
+            "total_tokens": total_tokens,
+            "duration_ms": tr.get("totalDurationMs", 0),
+            "tool_uses": tr.get("totalToolUseCount", 0),
+        }
+    )
+    bt = subagent_by_type[agent_type]
+    bt["count"] += 1
+    bt["tokens"] += total_tokens
+
+
+def _autonomy(user_timestamps):
+    result = {
+        "longest_stretch_seconds": 0,
+        "median_gap_seconds": 0,
+        "stretches_over_2min": 0,
+        "stretches_over_5min": 0,
+    }
+    if len(user_timestamps) < 2:
+        return result
+    gaps = []
+    for i in range(1, len(user_timestamps)):
+        if user_timestamps[i] and user_timestamps[i - 1]:
+            t1 = datetime.fromisoformat(user_timestamps[i - 1].replace("Z", "+00:00"))
+            t2 = datetime.fromisoformat(user_timestamps[i].replace("Z", "+00:00"))
+            gaps.append((t2 - t1).total_seconds())
+    if not gaps:
+        return result
+    gaps.sort()
+    result["longest_stretch_seconds"] = int(max(gaps))
+    result["median_gap_seconds"] = int(gaps[len(gaps) // 2])
+    result["stretches_over_2min"] = sum(1 for g in gaps if g > 120)
+    result["stretches_over_5min"] = sum(1 for g in gaps if g > 300)
+    return result
+
+
+# --- Output ---
+
+
+def _fmt_tokens(n):
+    if n >= 1_000_000:
+        return f"{n / 1_000_000:.1f}M"
+    if n >= 1_000:
+        return f"{n / 1_000:.1f}K"
+    return str(n)
+
+
+def _fmt_duration(seconds):
+    hours, remainder = divmod(seconds, 3600)
+    minutes, secs = divmod(remainder, 60)
+    if hours:
+        return f"{hours}h {minutes}m"
+    if minutes:
+        return f"{minutes}m {secs}s"
+    return f"{secs}s"
+
+
+def format_human(data):
+    """Render metrics as a compact terminal summary."""
+    lines = []
+    sid = data["session_id"][:8] if len(data["session_id"]) > 8 else data["session_id"]
+    lines.append(
+        f"Session {sid}  |  {_fmt_duration(data['runtime_seconds'])}"
+        f"  |  ${data['total_cost_usd']:.2f}"
+    )
+    lines.append("")
+
+    # Models.
+    lines.append("Models:")
+    for model, m in data["models"].items():
+        lines.append(f"  {model}: {m['turns']} turns, ${m['cost_usd']:.2f}")
+        lines.append(
+            f"    in={_fmt_tokens(m['input_tokens'])}"
+            f"  out={_fmt_tokens(m['output_tokens'])}"
+            f"  cache_read={_fmt_tokens(m['cache_read_tokens'])}"
+            f"  cache_write={_fmt_tokens(m['cache_create_tokens'])}"
+        )
+    lines.append("")
+
+    # Subagents.
+    sa = data["subagents"]
+    if sa["count"]:
+        lines.append(
+            f"Subagents: {sa['count']} spawned"
+            f", {sa['failures']} failed"
+        )
+        for atype, info in sa["by_type"].items():
+            lines.append(
+                f"  {atype}: {info['count']}x"
+                f", {_fmt_tokens(info['tokens'])}"
+            )
+        lines.append("")
+
+    # Tool calls.
+    tc = data["tool_calls"]
+    lines.append(
+        f"Tool calls: {tc['total']}"
+        f" ({tc['main_context']} main, {tc['subagents']} subagent)"
+    )
+    top_tools = list(data["tool_calls"]["by_tool"].items())[:8]
+    if top_tools:
+        lines.append("  " + "  ".join(f"{n}={c}" for n, c in top_tools))
+    lines.append("")
+
+    # Autonomy.
+    au = data["autonomy"]
+    lines.append(
+        f"Autonomy: longest={au['longest_stretch_seconds']}s"
+        f"  >2m={au['stretches_over_2min']}"
+        f"  >5m={au['stretches_over_5min']}"
+    )
+
+    # User.
+    u = data["user"]
+    lines.append(f"User: {u['messages']} messages, {u['interruptions']} interruptions")
+
+    if data["skills_invoked"]:
+        lines.append(f"Skills: {', '.join(data['skills_invoked'])}")
+
+    if data["commits"]:
+        lines.append(f"Commits: {data['commits']}")
+
+    lines.append("")
+    sr = data["stop_reasons"]
+    if sr:
+        lines.append("Stop reasons: " + ", ".join(f"{k}={v}" for k, v in sr.items()))
+
+    return "\n".join(lines)
+
+
+# --- CLI ---
+
+
+def parse_jsonl(path):
+    records = []
+    with open(path) as f:
+        for line in f:
+            line = line.strip()
+            if line:
+                try:
+                    records.append(json.loads(line))
+                except json.JSONDecodeError:
+                    continue
+    return records
+
+
+def main():
+    parser = argparse.ArgumentParser(prog="ccstat", description="Claude Code session metrics")
+    parser.add_argument(
+        "session",
+        nargs="?",
+        default=None,
+        help="Path to JSONL file or session UUID (default: most recent)",
+    )
+    parser.add_argument(
+        "--format", choices=["json", "human"], default="json", dest="fmt"
+    )
+    parser.add_argument("--no-cost", action="store_true", help="Skip pricing lookup")
+    parser.add_argument(
+        "--pricing-cache", type=str, default=str(DEFAULT_CACHE)
+    )
+    args = parser.parse_args()
+
+    path = resolve_session_path(args.session)
+    records = parse_jsonl(path)
+    if not records:
+        print(f"error: no records in {path}", file=sys.stderr)
+        sys.exit(1)
+
+    pricing_data = None
+    if not args.no_cost:
+        pricing_data = fetch_pricing(args.pricing_cache)
+
+    result = analyze(records, pricing_data)
+    result["session_id"] = path.stem
+
+    if args.fmt == "json":
+        print(json.dumps(result, indent=2))
+    else:
+        print(format_human(result))
+
+
+if __name__ == "__main__":
+    main()
