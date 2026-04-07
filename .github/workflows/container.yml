@@ -123,7 +123,7 @@ jobs:
             $(printf '${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@sha256:%s ' *)
           # Grab the digest of the manifest list for attestation
           tag=$(jq -r '.tags[0]' <<< "$DOCKER_METADATA_OUTPUT_JSON")
-          digest=$(docker buildx imagetools inspect "$tag" --format '{{.Manifest.Digest}}')
+          digest=$(docker buildx imagetools inspect "$tag" | awk '/^Digest:/{print $2}')
           echo "digest=${digest}" >> "$GITHUB_OUTPUT"
 
       - name: Attest build provenance
