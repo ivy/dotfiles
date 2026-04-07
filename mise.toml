@@ -7,7 +7,7 @@
 "aqua:mikefarah/yq" = "4.52.5"
 "aqua:suzuki-shunsuke/ghalint" = "1.5.5"
 "github:buildkite/cli" = "3.32.2"
-hk = "1.38.0"
+"github:jdx/hk" = "1.41.0"
 jq = "1.8.1"
 "npm:markdownlint-cli" = "0.48.0"
 pkl = "0.31.0"

@@ -27,8 +27,8 @@ teardown() {
 	[[ "$output" == "#!/bin/sh" ]]
 }
 
-@test "pre-commit hook invokes hk via hardcoded path" {
-	run grep -c '.local/bin/hk.*run pre-commit' home/dot_config/git/hooks/executable_pre-commit
+@test "pre-commit hook invokes hk via mise shim" {
+	run grep -c '.local/share/mise/shims/hk.*run pre-commit' home/dot_config/git/hooks/executable_pre-commit
 	[ "$status" -eq 0 ]
 }
 

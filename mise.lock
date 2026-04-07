@@ -55,38 +55,6 @@ checksum = "sha256:8a4e35ab0b331c85d73567b12f2a444df187f483e5079ceffa6bda1faa2e7
 url = "https://github.com/koalaman/shellcheck/releases/download/v0.11.0/shellcheck-v0.11.0.zip"
 
 [[tools."aqua:mikefarah/yq"]]
-version = "4.52.4"
-backend = "aqua:mikefarah/yq"
-
-[tools."aqua:mikefarah/yq"."platforms.linux-arm64"]
-checksum = "sha256:4c2cc022a129be5cc1187959bb4b09bebc7fb543c5837b93001c68f97ce39a5d"
-url = "https://github.com/mikefarah/yq/releases/download/v4.52.4/yq_linux_arm64"
-
-[tools."aqua:mikefarah/yq"."platforms.linux-arm64-musl"]
-checksum = "sha256:4c2cc022a129be5cc1187959bb4b09bebc7fb543c5837b93001c68f97ce39a5d"
-url = "https://github.com/mikefarah/yq/releases/download/v4.52.4/yq_linux_arm64"
-
-[tools."aqua:mikefarah/yq"."platforms.linux-x64"]
-checksum = "sha256:0c4d965ea944b64b8fddaf7f27779ee3034e5693263786506ccd1c120f184e8c"
-url = "https://github.com/mikefarah/yq/releases/download/v4.52.4/yq_linux_amd64"
-
-[tools."aqua:mikefarah/yq"."platforms.linux-x64-musl"]
-checksum = "sha256:0c4d965ea944b64b8fddaf7f27779ee3034e5693263786506ccd1c120f184e8c"
-url = "https://github.com/mikefarah/yq/releases/download/v4.52.4/yq_linux_amd64"
-
-[tools."aqua:mikefarah/yq"."platforms.macos-arm64"]
-checksum = "sha256:6bfa43a439936644d63c70308832390c8838290d064970eaada216219c218a13"
-url = "https://github.com/mikefarah/yq/releases/download/v4.52.4/yq_darwin_arm64"
-
-[tools."aqua:mikefarah/yq"."platforms.macos-x64"]
-checksum = "sha256:d72a75fe9953c707d395f653d90095b133675ddd61aa738e1ac9a73c6c05e8be"
-url = "https://github.com/mikefarah/yq/releases/download/v4.52.4/yq_darwin_amd64"
-
-[tools."aqua:mikefarah/yq"."platforms.windows-x64"]
-checksum = "sha256:b7c4186f8a3e32879ddf99389bf59a4b2861f0f1b41ef58647d903b0a11e8151"
-url = "https://github.com/mikefarah/yq/releases/download/v4.52.4/yq_windows_amd64.exe"
-
-[[tools."aqua:mikefarah/yq"]]
 version = "4.52.5"
 backend = "aqua:mikefarah/yq"
 
@@ -125,7 +93,9 @@ backend = "aqua:suzuki-shunsuke/ghalint"
 [tools."aqua:suzuki-shunsuke/ghalint"."platforms.linux-arm64"]
 checksum = "sha256:c3ab464130015d733bfc75a2851f4fc5b3cb966aca2ed8bc0fa2a029bc0ee6af"
 url = "https://github.com/suzuki-shunsuke/ghalint/releases/download/v1.5.5/ghalint_1.5.5_linux_arm64.tar.gz"
-provenance = "slsa"
+
+[tools."aqua:suzuki-shunsuke/ghalint"."platforms.linux-arm64".provenance.slsa]
+url = "https://github.com/suzuki-shunsuke/ghalint/releases/download/v1.5.5/multiple.intoto.jsonl"
 
 [tools."aqua:suzuki-shunsuke/ghalint"."platforms.linux-arm64-musl"]
 checksum = "sha256:c3ab464130015d733bfc75a2851f4fc5b3cb966aca2ed8bc0fa2a029bc0ee6af"
@@ -196,33 +166,44 @@ checksum = "sha256:3309422d817e060e914a825fbc7265907fca006f30795b3061a4db1ebf4fd
 url = "https://github.com/buildkite/cli/releases/download/v3.32.2/bk_3.32.2_windows_amd64.zip"
 url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/371555792"
 
-[[tools.hk]]
-version = "1.38.0"
-backend = "aqua:jdx/hk"
+[[tools."github:jdx/hk"]]
+version = "1.41.0"
+backend = "github:jdx/hk"
 
-[tools.hk."platforms.linux-arm64"]
-checksum = "sha256:c012fea4a0cd9659088c10601c3ae085c5ac4407eeeaa442ced1913a5f26f8a7"
-url = "https://github.com/jdx/hk/releases/download/v1.38.0/hk-aarch64-unknown-linux-gnu.tar.gz"
+[tools."github:jdx/hk"."platforms.linux-arm64"]
+checksum = "sha256:d67d3f870d37355fbb66011780113c70e9a70c505a4f0fe7d9b44639442b4fc7"
+url = "https://github.com/jdx/hk/releases/download/v1.41.0/hk-aarch64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/389454826"
 
-[tools.hk."platforms.linux-arm64-musl"]
-checksum = "sha256:c012fea4a0cd9659088c10601c3ae085c5ac4407eeeaa442ced1913a5f26f8a7"
-url = "https://github.com/jdx/hk/releases/download/v1.38.0/hk-aarch64-unknown-linux-gnu.tar.gz"
+[tools."github:jdx/hk"."platforms.linux-arm64-musl"]
+checksum = "sha256:d67d3f870d37355fbb66011780113c70e9a70c505a4f0fe7d9b44639442b4fc7"
+url = "https://github.com/jdx/hk/releases/download/v1.41.0/hk-aarch64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/389454826"
 
-[tools.hk."platforms.linux-x64"]
-checksum = "sha256:cb34efc1829a1d59c0cd526be494a9f01b36d1c9965087cff09a09f32d129431"
-url = "https://github.com/jdx/hk/releases/download/v1.38.0/hk-x86_64-unknown-linux-gnu.tar.gz"
+[tools."github:jdx/hk"."platforms.linux-x64"]
+checksum = "sha256:b49eebf571c3aa68bc02940114082b0bdf9e9828c8f224d478001fb7b865898b"
+url = "https://github.com/jdx/hk/releases/download/v1.41.0/hk-x86_64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/389454825"
 
-[tools.hk."platforms.linux-x64-musl"]
-checksum = "sha256:cb34efc1829a1d59c0cd526be494a9f01b36d1c9965087cff09a09f32d129431"
-url = "https://github.com/jdx/hk/releases/download/v1.38.0/hk-x86_64-unknown-linux-gnu.tar.gz"
+[tools."github:jdx/hk"."platforms.linux-x64-musl"]
+checksum = "sha256:b49eebf571c3aa68bc02940114082b0bdf9e9828c8f224d478001fb7b865898b"
+url = "https://github.com/jdx/hk/releases/download/v1.41.0/hk-x86_64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/389454825"
 
-[tools.hk."platforms.macos-arm64"]
-checksum = "sha256:02421d12f8a706d5753eec1652f966c8df90bf810e4153b3a560f4038c784529"
-url = "https://github.com/jdx/hk/releases/download/v1.38.0/hk-aarch64-apple-darwin.tar.gz"
+[tools."github:jdx/hk"."platforms.macos-arm64"]
+checksum = "sha256:25c9e973993c1607247e97ec558d747483ab4c48380485d69ea617161939544c"
+url = "https://github.com/jdx/hk/releases/download/v1.41.0/hk-aarch64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/389454823"
 
-[tools.hk."platforms.windows-x64"]
-checksum = "sha256:3850e253ebe3b13b6932e951606eafe56801031c663437d656a49dc0ab9fdbf4"
-url = "https://github.com/jdx/hk/releases/download/v1.38.0/hk-x86_64-pc-windows-msvc.zip"
+[tools."github:jdx/hk"."platforms.macos-x64"]
+checksum = "sha256:db4d3e0229d1632caa2f31c28a47fc1923e436354f1920939c333b229feae410"
+url = "https://github.com/jdx/hk/releases/download/v1.41.0/hk%401.41.0.zip"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/389454831"
+
+[tools."github:jdx/hk"."platforms.windows-x64"]
+checksum = "sha256:b3851965af1c570ca670710a82e1cce85213dc0b182336c90d031cff8f2e0dd5"
+url = "https://github.com/jdx/hk/releases/download/v1.41.0/hk-x86_64-pc-windows-msvc.zip"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/389454822"
 
 [[tools.jq]]
 version = "1.8.1"
@@ -231,30 +212,37 @@ backend = "aqua:jqlang/jq"
 [tools.jq."platforms.linux-arm64"]
 checksum = "sha256:6bc62f25981328edd3cfcfe6fe51b073f2d7e7710d7ef7fcdac28d4e384fc3d4"
 url = "https://github.com/jqlang/jq/releases/download/jq-1.8.1/jq-linux-arm64"
+provenance = "github-attestations"
 
 [tools.jq."platforms.linux-arm64-musl"]
 checksum = "sha256:6bc62f25981328edd3cfcfe6fe51b073f2d7e7710d7ef7fcdac28d4e384fc3d4"
 url = "https://github.com/jqlang/jq/releases/download/jq-1.8.1/jq-linux-arm64"
+provenance = "github-attestations"
 
 [tools.jq."platforms.linux-x64"]
 checksum = "sha256:020468de7539ce70ef1bceaf7cde2e8c4f2ca6c3afb84642aabc5c97d9fc2a0d"
 url = "https://github.com/jqlang/jq/releases/download/jq-1.8.1/jq-linux-amd64"
+provenance = "github-attestations"
 
 [tools.jq."platforms.linux-x64-musl"]
 checksum = "sha256:020468de7539ce70ef1bceaf7cde2e8c4f2ca6c3afb84642aabc5c97d9fc2a0d"
 url = "https://github.com/jqlang/jq/releases/download/jq-1.8.1/jq-linux-amd64"
+provenance = "github-attestations"
 
 [tools.jq."platforms.macos-arm64"]
 checksum = "sha256:a9fe3ea2f86dfc72f6728417521ec9067b343277152b114f4e98d8cb0e263603"
 url = "https://github.com/jqlang/jq/releases/download/jq-1.8.1/jq-macos-arm64"
+provenance = "github-attestations"
 
 [tools.jq."platforms.macos-x64"]
 checksum = "sha256:e80dbe0d2a2597e3c11c404f03337b981d74b4a8504b70586c354b7697a7c27f"
 url = "https://github.com/jqlang/jq/releases/download/jq-1.8.1/jq-macos-amd64"
+provenance = "github-attestations"
 
 [tools.jq."platforms.windows-x64"]
 checksum = "sha256:23cb60a1354eed6bcc8d9b9735e8c7b388cd1fdcb75726b93bc299ef22dd9334"
 url = "https://github.com/jqlang/jq/releases/download/jq-1.8.1/jq-windows-amd64.exe"
+provenance = "github-attestations"
 
 [[tools."npm:markdownlint-cli"]]
 version = "0.48.0"
@@ -291,38 +279,6 @@ url = "https://github.com/apple/pkl/releases/download/0.31.0/pkl-macos-amd64"
 [tools.pkl."platforms.windows-x64"]
 checksum = "sha256:37d35ce8a165766502fb13799071d4cefa84d39fb455c75c471b47b9b5d12b04"
 url = "https://github.com/apple/pkl/releases/download/0.31.0/pkl-windows-amd64.exe"
-
-[[tools.shfmt]]
-version = "3.12.0"
-backend = "aqua:mvdan/sh"
-
-[tools.shfmt."platforms.linux-arm64"]
-checksum = "sha256:5f3fe3fa6a9f766e6a182ba79a94bef8afedafc57db0b1ad32b0f67fae971ba4"
-url = "https://github.com/mvdan/sh/releases/download/v3.12.0/shfmt_v3.12.0_linux_arm64"
-
-[tools.shfmt."platforms.linux-arm64-musl"]
-checksum = "sha256:5f3fe3fa6a9f766e6a182ba79a94bef8afedafc57db0b1ad32b0f67fae971ba4"
-url = "https://github.com/mvdan/sh/releases/download/v3.12.0/shfmt_v3.12.0_linux_arm64"
-
-[tools.shfmt."platforms.linux-x64"]
-checksum = "sha256:d9fbb2a9c33d13f47e7618cf362a914d029d02a6df124064fff04fd688a745ea"
-url = "https://github.com/mvdan/sh/releases/download/v3.12.0/shfmt_v3.12.0_linux_amd64"
-
-[tools.shfmt."platforms.linux-x64-musl"]
-checksum = "sha256:d9fbb2a9c33d13f47e7618cf362a914d029d02a6df124064fff04fd688a745ea"
-url = "https://github.com/mvdan/sh/releases/download/v3.12.0/shfmt_v3.12.0_linux_amd64"
-
-[tools.shfmt."platforms.macos-arm64"]
-checksum = "sha256:d903802e0ce3ecbc82b98512f55ba370b0d37a93f3f78de394f5b657052b33dd"
-url = "https://github.com/mvdan/sh/releases/download/v3.12.0/shfmt_v3.12.0_darwin_arm64"
-
-[tools.shfmt."platforms.macos-x64"]
-checksum = "sha256:c31548693de6584e6164b7ed5fbb7b4a083f2d937ca94b4e0ddf59aa461a85e4"
-url = "https://github.com/mvdan/sh/releases/download/v3.12.0/shfmt_v3.12.0_darwin_amd64"
-
-[tools.shfmt."platforms.windows-x64"]
-checksum = "sha256:c8bda517ba1c640ce4a715c0fa665439ddbe4357ba5e9b77b0e51e70e2b9c94b"
-url = "https://github.com/mvdan/sh/releases/download/v3.12.0/shfmt_v3.12.0_windows_amd64.exe"
 
 [[tools.shfmt]]
 version = "3.13.0"
