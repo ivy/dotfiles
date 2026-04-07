@@ -32,6 +32,7 @@
   // Only these managers are active — everything else (npm, pip, etc.) is ignored
   "enabledManagers": [
     "mise",
+    "dockerfile",
     "docker-compose",
     "github-actions",
     "jsonata"
@@ -51,6 +52,10 @@
 
   "mise": {
     "managerFilePatterns": ["/^home/dot_config/mise/config\\.toml$/"]
+  },
+
+  "dockerfile": {
+    "managerFilePatterns": ["/^Containerfile$/"]
   },
 
   "docker-compose": {
