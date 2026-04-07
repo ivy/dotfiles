@@ -70,6 +70,7 @@ Which part of the stack an issue touches. An issue gets one area label. If it sp
 | `area:git` | Git config, delta, branch protection, workflow |
 | `area:mise` | mise config, tool versions, lockfiles, aqua backend |
 | `area:renovate` | Renovate config, dependency automation, version pinning |
+| `area:container` | Container image builds, supply chain security, SBOM, signing |
 | `area:os` | macOS/Linux platform config, security hardening, install scripts |
 
 These map to the stack layers in CLAUDE.md. Resist adding more — if an area has fewer than 3 issues historically, it doesn't need a label.

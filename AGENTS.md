@@ -101,6 +101,7 @@ bats test/<file>.bats   # Run one test file
 | Vision | [docs/vision.md](docs/vision.md) |
 | Chezmoi operations | [docs/agents/chezmoi.md](docs/agents/chezmoi.md) |
 | Shell architecture ADR | [docs/adrs/002-agent-optimized-shell-with-envsense.md](docs/adrs/002-agent-optimized-shell-with-envsense.md) |
+| Supply chain security | [docs/supply-chain-security.md](docs/supply-chain-security.md) |
 | GitHub labels & triage | [docs/labels.md](docs/labels.md) |
 
 ## Where to Look First
