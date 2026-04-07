@@ -26,9 +26,9 @@ CLAUDE_PROJECTS_DIR = Path.home() / ".claude" / "projects"
 
 
 def _session_names(path):
-    """Extract the slug and all git branches from a session log."""
+    """Extract searchable names from a session log (slug, branches, custom title, agent name)."""
     slug = None
-    branches = set()
+    names = set()
     try:
         with open(path) as f:
             for line in f:
@@ -41,24 +41,25 @@ def _session_names(path):
                     continue
                 if not slug:
                     slug = rec.get("slug")
-                branch = rec.get("gitBranch")
-                if branch:
-                    branches.add(branch)
+                for key in ("gitBranch", "customTitle", "agentName"):
+                    val = rec.get(key)
+                    if val:
+                        names.add(val)
     except OSError:
         pass
-    return slug, branches
+    return slug, names
 
 
 def _find_by_name(name):
-    """Find a session whose slug or git branch matches name (exact then substring)."""
+    """Find a session whose slug, git branch, custom title, or agent name matches (exact then substring)."""
     exact = []
     partial = []
     for project_dir in CLAUDE_PROJECTS_DIR.iterdir():
         if not project_dir.is_dir():
             continue
         for f in project_dir.glob("*.jsonl"):
-            slug, branches = _session_names(f)
-            all_names = branches
+            slug, names = _session_names(f)
+            all_names = names
             if slug:
                 all_names.add(slug)
             if not all_names:
@@ -67,20 +68,22 @@ def _find_by_name(name):
                 exact.append((f, slug))
             elif any(name in n for n in all_names):
                 partial.append((f, slug))
+
+    def _pick(candidates):
+        return max(candidates, key=lambda t: t[0].stat().st_mtime)[0]
+
     if exact:
-        return max(exact, key=lambda t: t[0].stat().st_mtime)[0]
+        return _pick(exact)
     if partial:
-        if len(partial) == 1:
-            return partial[0][0]
-        # Multiple matches — pick most recent, but warn.
-        partial.sort(key=lambda t: t[0].stat().st_mtime, reverse=True)
-        print(
-            f"warning: '{name}' matched {len(partial)} sessions, using most recent",
-            file=sys.stderr,
-        )
-        for f, s in partial[:5]:
-            print(f"  {f.stem[:8]}  {s or '(no slug)'}", file=sys.stderr)
-        return partial[0][0]
+        if len(partial) > 1:
+            partial.sort(key=lambda t: t[0].stat().st_mtime, reverse=True)
+            print(
+                f"warning: '{name}' matched {len(partial)} sessions, using most recent",
+                file=sys.stderr,
+            )
+            for f, s in partial[:5]:
+                print(f"  {f.stem[:8]}  {s or '(no slug)'}", file=sys.stderr)
+        return _pick(partial)
     return None
 
 
@@ -398,9 +401,8 @@ def _fmt_duration(seconds):
 def format_human(data):
     """Render metrics as a compact terminal summary."""
     lines = []
-    sid = data["session_id"][:8] if len(data["session_id"]) > 8 else data["session_id"]
     lines.append(
-        f"Session {sid}  |  {_fmt_duration(data['runtime_seconds'])}"
+        f"Session {data['session_id']}  |  {_fmt_duration(data['runtime_seconds'])}"
         f"  |  ${data['total_cost_usd']:.2f}"
     )
     lines.append("")
