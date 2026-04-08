@@ -16,6 +16,9 @@ allowed-tools:
   - Glob
   - Grep
   - Read
+  - TaskCreate
+  - TaskList
+  - TaskUpdate
 ---
 
 # Plan: Parallelized Implementation Design
@@ -133,4 +136,12 @@ Write the plan file with:
 
 ### 8. Exit Plan Mode
 
-Call `ExitPlanMode` and await approval. After approval, the executing agent (or `/work-on` orchestrator) will use `TaskCreate` to instantiate the task graph with proper `addBlockedBy`/`addBlocks` relationships.
+Call `ExitPlanMode`. The user will approve or request changes before you proceed.
+
+### 9. Create Tasks (append, never replace)
+
+Once the plan is approved, instantiate the task graph as tasks. **If tasks already exist** (e.g., workflow tasks from `/work-on`), append implementation tasks — never clear or replace the existing list.
+
+1. Call `TaskList` to discover existing tasks
+2. Create each implementation task via `TaskCreate` with proper `addBlockedBy`/`addBlocks` relationships
+3. If an existing task is a placeholder for plan work (e.g., "Implement per plan"), call `TaskUpdate` to mark it `completed` and wire your first implementation task with `addBlockedBy` pointing to that placeholder's upstream dependencies
