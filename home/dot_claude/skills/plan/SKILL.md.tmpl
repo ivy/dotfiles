@@ -44,6 +44,19 @@ CLAUDE.md exists: !`test -f CLAUDE.md && echo "yes" || echo "no"`
 - Never use `git -C <path>` — it rewrites the command prefix, breaking `allowed-tools` pattern matching.
 - Focus on **parallelization and dependencies** — this is the skill's core value. Claude Code doesn't naturally optimize for these.
 
+## Parallelization Mandate
+
+**Linear plans are a failure mode.** This skill exists because sequential A → B → C wastes time when B and C are independent.
+
+Before presenting any plan, verify each of these holds:
+
+1. Does every independent task have **no** `blockedBy`? It should be ready to run immediately.
+2. Does every `blockedBy` reflect a **real data dependency** — task B genuinely needs task A's output, not just ordering preference?
+3. Does at least one phase contain **multiple parallel tasks**? If not, state the specific reason all work is serialized — do not silently omit this.
+4. Are parallel phases **explicitly labeled** as `(parallel)` in the plan output?
+
+A plan where every task blocks the next is wrong. Find the parallelism before presenting.
+
 ## Instructions
 
 ### 1. Enter Plan Mode
@@ -68,6 +81,12 @@ Break the work into discrete, well-defined tasks. For each task, determine:
 | **Agent type** | What kind of agent is best suited? (Explore, general-purpose, reviewer, project-specific) |
 | **Isolation** | Does this task benefit from worktree isolation? (yes if it touches files another task also touches) |
 | **Checkpoint** | Should human review the output before downstream tasks proceed? |
+
+After listing all tasks, do an explicit **parallelization pass**. Start from the assumption that all tasks are independent — add `blockedBy` only when the test below fails:
+
+1. Group tasks by the files they touch. Tasks in different file groups are candidates for parallel execution.
+2. For each pair, ask: does task B need task A's *output* to start, or just task A to *exist*? Only the former is a real dependency.
+3. Tasks that survive this test keep no `blockedBy`. Tasks that fail get `blockedBy` with a one-line reason why.
 
 ### 4. Design the Task Graph
 
@@ -124,21 +143,36 @@ Plan the commit sequence:
 
 ### 7. Present the Plan
 
-Write the plan file with:
+Write the plan with:
 
 1. **Overview** — one paragraph summary of what the plan achieves
 2. **Task graph** — tasks with dependencies, agents, and phases (as in step 4)
-3. **Parallelization strategy** — what runs concurrently, why, and expected speedup
+3. **Parallelization summary** — a concise table listing each parallel group, the tasks in it, and why they are independent:
+   ```
+   | Phase | Tasks | Why parallel |
+   |-------|-------|-------------|
+   | 1     | A, B  | Touch different files (src/foo.ts, src/bar.ts) |
+   | 3     | D, E  | Review and test are independent of each other |
+   ```
 4. **Team topology** — agents, roles, isolation (if applicable)
 5. **Checkpoints** — where human review is needed before proceeding
 6. **Commit strategy** — what gets committed when
 7. **Risk flags** — assumptions that might be wrong, areas that might need adjustment
 
-### 8. Exit Plan Mode
+### 8. Verify Before Presenting
 
-Call `ExitPlanMode`. The user will approve or request changes before you proceed.
+Before calling `ExitPlanMode`, run through the [Parallelization Mandate](#parallelization-mandate) checklist. If any item fails:
+- Find the independent work and move it out of the serial chain
+- Remove `blockedBy` from tasks that don't have real data dependencies
+- Re-label phases to reflect the corrected structure
 
-### 9. Create Tasks (append, never replace)
+A plan that fails the mandate should not be presented.
+
+### 9. Exit Plan Mode
+
+Call `ExitPlanMode` and await approval. The user's approval of the plan is the execution signal. Your next action after approval is Step 10 — not a summary, not "shall I proceed?", not a pause.
+
+### 10. Create Tasks (append, never replace)
 
 Once the plan is approved, instantiate the task graph as tasks. **If tasks already exist** (e.g., workflow tasks from `/work-on`), append implementation tasks — never clear or replace the existing list.
 
