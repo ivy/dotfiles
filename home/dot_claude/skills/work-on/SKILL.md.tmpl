@@ -69,56 +69,57 @@ Read the [TIERS.md](TIERS.md) decision matrix. Assess the issue's complexity tie
 
 Based on the assessed tier and available skills, propose a workflow to the user. Use only skills that appear in the pre-computed context. When a skill isn't available, either skip the step or do the equivalent work inline.
 
+Each tier below shows the skill sequence. When proposing the workflow, use exact skill names with arguments — these become the task subjects in Step 2.
+
 #### Quick Fix
 ```
-1. /checkout [arguments] (or git checkout -b)
-2. Make the fix
+1. /checkout <branch-name>
+2. Edit the file(s) directly
 3. /commit
 4. /pr
 ```
 
 #### Small
 ```
-1. /checkout [arguments]
-2. /gather-context [arguments] (light scope)
-3. Execute the fix
+1. /checkout <branch-name>
+2. /gather-context <issue-ref> (light scope)
+3. Edit file(s) per findings
 4. /commit
 5. /pr
 ```
 
 #### Medium
 ```
-1. /checkout [arguments]
-2. /gather-context [arguments] (full scope)
-3. /think [framing of key decisions from context]
-4. /plan [context summary]
-5. /review-plan (if available)
-6. /share-plan [arguments] (if available)
-7. Execute (with TaskCreate for tracking)
-8. /simplify (built-in)
-9. /commit → /pr
+1. /checkout <branch-name>
+2. /gather-context <issue-ref> (full scope)
+3. /think — <key decisions from context>
+4. /plan — <context summary>
+5. /review-plan
+6. /share-plan <issue-ref>
+7. Implement per plan (one task per distinct change)
+8. /simplify
+9. /commit
+10. /pr
 ```
 
 #### Large
 ```
 1-6. Same as Medium
 7. TeamCreate for parallel execution
-   - Spawn agents with appropriate types and isolation
-   - Assign tasks via TaskUpdate
-   - Coordinate via SendMessage
 8. Multiple /commit cycles as workstreams complete
-9. /simplify → /pr
-10. /reflect (if available)
+9. /simplify
+10. /pr
+11. /reflect
 ```
 
 #### Epic
 ```
-1. /gather-context [arguments] (full scope)
-2. /think [epic decomposition strategy]
+1. /gather-context <issue-ref> (full scope)
+2. /think — epic decomposition strategy
 3. Decompose into sub-units (see EPIC-WORKFLOW.md)
 4. For each sub-unit: run appropriate tier workflow
 5. Coordinate across units (rebase, verify assumptions)
-6. /reflect across full epic (if available)
+6. /reflect
 ```
 
 Present the proposed workflow with:
@@ -126,30 +127,42 @@ Present the proposed workflow with:
 - The specific steps (naming which skills will be invoked)
 - Where human checkpoints occur
 
-Then proceed immediately to building the task list.
+Then proceed immediately to building the task list — do not wait for user confirmation.
 
 ### Step 2: Build Task List
 
 Create tasks via `TaskCreate` with dependencies.
 
+**Task naming rule**: Each task's subject MUST be the exact skill or command it will invoke — including arguments. This makes the task list a readable, executable runbook.
+
+- **Skill tasks**: Use the exact invocation as the subject (e.g., `/checkout feat/123-add-dark-mode`)
+- **Implementation tasks**: Use a scoped imperative verb phrase naming the specific file or module (e.g., "Add dark-mode toggle to `theme.ts`"). Never use catch-all subjects like "Implement the feature" or "Make the changes."
+
 Each task should include:
-- Clear subject (what to do)
+- Subject: exact skill invocation or scoped action
 - Description with enough context for the step
 - `addBlockedBy` for tasks that must complete first
 
 Example for a Medium tier:
 ```
-Task 1: Create feature branch for #123
-Task 2: Gather context for #123           (blockedBy: [1])
-Task 3: Discuss approach with user        (blockedBy: [2])
-Task 4: Create implementation plan        (blockedBy: [3])
-Task 5: Review plan                       (blockedBy: [4])
-Task 6: Implement changes                 (blockedBy: [5])
-Task 7: Run /simplify                     (blockedBy: [6])
-Task 8: Commit and open PR                (blockedBy: [7])
+Task 1: /checkout feat/123-add-dark-mode
+Task 2: /gather-context #123                          (blockedBy: [1])
+Task 3: /think — key decisions from gather-context     (blockedBy: [2])
+Task 4: /plan — implement dark mode                    (blockedBy: [3])
+Task 5: /review-plan                                   (blockedBy: [4])
+Task 6: /share-plan #123                               (blockedBy: [5])
+Task 7: Add dark-mode toggle to theme.ts               (blockedBy: [6])
+Task 8: Update CSS variables in globals.css             (blockedBy: [6])
+Task 9: /simplify                                      (blockedBy: [7, 8])
+Task 10: /commit                                       (blockedBy: [9])
+Task 11: /pr                                           (blockedBy: [10])
 ```
 
 ### Step 3: Execute the Workflow
+
+**Preserve the task list across skill invocations.** Sub-skills (e.g., `/gather-context`, `/plan`) may create their own tasks — that is fine. But they must never delete or overwrite the `/work-on` tasks created in Step 2. After each skill invocation, call `TaskList` and verify the workflow tasks still exist. If any were removed, re-create them with the same subjects and dependencies.
+
+(You, the `/work-on` orchestrator, may still update, add, or delete tasks as part of Step 4 adaptation — the rule above applies only to sub-skill side effects.)
 
 Work through the task list in order. For each task:
 1. Mark as `in_progress` via `TaskUpdate`
