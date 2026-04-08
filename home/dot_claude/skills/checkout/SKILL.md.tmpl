@@ -7,6 +7,7 @@ allowed-tools:
   - Bash(echo:*)
   - Bash(gh issue view:*)
   - Bash(git branch --show-current:*)
+  - Bash(git checkout:*)
   - Bash(git fetch:*)
   - Bash(git remote get-url:*)
   - Bash(git status:*)
@@ -67,7 +68,7 @@ Check pre-computed context for dirty worktree. If dirty:
 |-----------|--------|
 | Changes are staged/unstaged for current work | Suggest `/commit` first or `git stash` |
 | Unrelated leftover changes | Suggest `git stash` with descriptive message |
-| Conflicts or complex state | Inform user and wait for guidance |
+| Merge conflicts (git status shows `UU`/`AA`/`DD` entries) | Inform user and wait for guidance |
 
 Do not silently discard changes.
 
@@ -82,4 +83,6 @@ Do not silently discard changes.
 | On another feature branch | Consider `EnterWorktree` for isolation, or `git checkout -b` if user prefers simplicity |
 | User explicitly requested worktree | Use `EnterWorktree` |
 
-3. Confirm branch creation with the branch name and base commit.
+### 5. Report and Continue
+
+Report the branch name and abbreviated base commit SHA (e.g., `Created feat/123-add-dark-mode from origin/main (abc1234)`), then immediately mark this task complete and execute the next task in the workflow.
