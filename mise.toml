@@ -9,7 +9,7 @@
 "github:buildkite/cli" = "3.32.2"
 jq = "1.8.1"
 "npm:markdownlint-cli" = "0.48.0"
-pkl = "0.31.0"
+pkl = "0.31.1"
 shfmt = "3.13.0"
 stylua = "2.3.1"
 
