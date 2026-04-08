@@ -31,7 +31,7 @@ The agent reads the context from the conversation and builds the task graph.
 ## What a plan contains
 
 - **Task graph** — discrete tasks with explicit `blockedBy` / `blocks` relationships
-- **Parallelization strategy** — which tasks run concurrently and why
+- **Parallelization summary** — table of parallel groups with justification for why they are independent
 - **Agent assignments** — which agent type handles each task (`Explore`, `general-purpose`, `reviewer`, or project-specific agents)
 - **Isolation decisions** — which tasks need worktree isolation (two agents touching the same file)
 - **Checkpoints** — where human review is needed before downstream tasks can proceed
@@ -41,7 +41,7 @@ The plan requires your approval before execution begins. This is the last checkp
 
 ## The EnterPlanMode contract
 
-[`/plan`](../plan/README.md) uses `EnterPlanMode`, which means it presents the plan and waits for explicit sign-off. The approved plan then drives `TaskCreate` calls with proper `addBlockedBy` relationships — the task list becomes the execution contract.
+[`/plan`](../plan/README.md) uses `EnterPlanMode`, which means it presents the plan and waits for explicit sign-off. Approval is the execution signal — the agent proceeds immediately to `TaskCreate` calls with proper `addBlockedBy` relationships. No pause, no "shall I proceed?".
 
 Changing your mind after approval is fine: the task list is a living document. Tasks can be updated, deleted, or added as the implementation reveals new information.
 
