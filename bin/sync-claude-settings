@@ -279,6 +279,7 @@ set_permissions() {
             "Bash(uname:*)",
             "Bash(uniq:*)",
             "Bash(uptime:*)",
+            "Bash(uv sync:*)",
             "Bash(wc:*)",
             "Bash(which:*)",
             "Bash(whoami:*)",
