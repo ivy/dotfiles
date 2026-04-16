@@ -160,6 +160,7 @@ set_permissions() {
             "Bash(goimports:*)",
             "Bash(golangci-lint:*)",
             "Bash(grep:*)",
+            "Bash(hadolint:*)",
             "Bash(head:*)",
             "Bash(hk:*)",
             "Bash(host:*)",
