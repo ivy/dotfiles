@@ -31,7 +31,7 @@ eza = "0.23.4"
 # See docs/adrs/005-replace-aqua-backend-with-github-releases.md
 "github:BurntSushi/ripgrep" = "15.1.0"
 "github:ajeetdsouza/zoxide" = { version = "0.9.9", platforms.linux-arm64 = { asset_pattern = "zoxide-*-aarch64-unknown-linux-musl.tar.gz" } }
-"github:atuinsh/atuin" = "18.12.1"
+"github:atuinsh/atuin" = "18.15.2"
 "github:buildkite/cli" = "3.32.2"
 "github:carapace-sh/carapace-bin" = "1.6.4"
 "github:charmbracelet/glow" = "2.1.1"
