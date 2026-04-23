@@ -51,7 +51,12 @@ set_feature_flags() {
         "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
     })
     | .skipDangerousModePermissionPrompt = true
-    | .autoDreamEnabled = true' "${SETTINGS}" >"${SETTINGS}.tmp" && mv "${SETTINGS}.tmp" "${SETTINGS}"
+    | .skipAutoPermissionPrompt = true
+    | .autoDreamEnabled = true
+    | .alwaysThinkingEnabled = true
+    | .includeCoAuthoredBy = false
+    | .effortLevel = "xhigh"
+    | .autoUpdatesChannel = "latest"' "${SETTINGS}" >"${SETTINGS}.tmp" && mv "${SETTINGS}.tmp" "${SETTINGS}"
 }
 
 # Set global tool permissions so we don't re-approve common tools per-project
@@ -341,6 +346,12 @@ cleanup_model_env_vars() {
   fi
 }
 
+# Set default model for the Anthropic Enterprise / direct path (non-Bedrock)
+set_default_model() {
+  printf 'setting default model in %s\n' "${SETTINGS}"
+  jq '.model = "opus[1m]"' "${SETTINGS}" >"${SETTINGS}.tmp" && mv "${SETTINGS}.tmp" "${SETTINGS}"
+}
+
 # Merge Bedrock model env vars into settings (use_bedrock=true path)
 merge_model_env_vars() {
   local models haiku sonnet opus
@@ -429,8 +440,9 @@ main() {
   use_bedrock=$(chezmoi data --format json | jq -r '.claude.use_bedrock')
 
   if [[ "${use_bedrock}" != "true" ]]; then
-    printf 'use_bedrock=%s — cleaning up model env vars\n' "${use_bedrock}"
+    printf 'use_bedrock=%s — cleaning up model env vars and setting default model\n' "${use_bedrock}"
     cleanup_model_env_vars
+    set_default_model
     return 0
   fi
 
