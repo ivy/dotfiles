@@ -100,71 +100,83 @@ url = "https://github.com/suzuki-shunsuke/ghalint/releases/download/v1.5.5/multi
 [tools."aqua:suzuki-shunsuke/ghalint"."platforms.linux-arm64-musl"]
 checksum = "sha256:c3ab464130015d733bfc75a2851f4fc5b3cb966aca2ed8bc0fa2a029bc0ee6af"
 url = "https://github.com/suzuki-shunsuke/ghalint/releases/download/v1.5.5/ghalint_1.5.5_linux_arm64.tar.gz"
-provenance = "slsa"
+
+[tools."aqua:suzuki-shunsuke/ghalint"."platforms.linux-arm64-musl".provenance.slsa]
+url = "https://github.com/suzuki-shunsuke/ghalint/releases/download/v1.5.5/multiple.intoto.jsonl"
 
 [tools."aqua:suzuki-shunsuke/ghalint"."platforms.linux-x64"]
 checksum = "sha256:579cbf9024f86a8255ce8acdd56c7792f0f9a7e76063d64cfb7b66ff65c396e4"
 url = "https://github.com/suzuki-shunsuke/ghalint/releases/download/v1.5.5/ghalint_1.5.5_linux_amd64.tar.gz"
-provenance = "slsa"
+
+[tools."aqua:suzuki-shunsuke/ghalint"."platforms.linux-x64".provenance.slsa]
+url = "https://github.com/suzuki-shunsuke/ghalint/releases/download/v1.5.5/multiple.intoto.jsonl"
 
 [tools."aqua:suzuki-shunsuke/ghalint"."platforms.linux-x64-musl"]
 checksum = "sha256:579cbf9024f86a8255ce8acdd56c7792f0f9a7e76063d64cfb7b66ff65c396e4"
 url = "https://github.com/suzuki-shunsuke/ghalint/releases/download/v1.5.5/ghalint_1.5.5_linux_amd64.tar.gz"
-provenance = "slsa"
+
+[tools."aqua:suzuki-shunsuke/ghalint"."platforms.linux-x64-musl".provenance.slsa]
+url = "https://github.com/suzuki-shunsuke/ghalint/releases/download/v1.5.5/multiple.intoto.jsonl"
 
 [tools."aqua:suzuki-shunsuke/ghalint"."platforms.macos-arm64"]
 checksum = "sha256:db969e288fc788348aa7c1323096d69df28b457c70b4194fb76f14ad058c0be7"
 url = "https://github.com/suzuki-shunsuke/ghalint/releases/download/v1.5.5/ghalint_1.5.5_darwin_arm64.tar.gz"
-provenance = "slsa"
+
+[tools."aqua:suzuki-shunsuke/ghalint"."platforms.macos-arm64".provenance.slsa]
+url = "https://github.com/suzuki-shunsuke/ghalint/releases/download/v1.5.5/multiple.intoto.jsonl"
 
 [tools."aqua:suzuki-shunsuke/ghalint"."platforms.macos-x64"]
 checksum = "sha256:ce76aeb46f051d19a618c4e89ae5ca1d37c5a06f1bac3afb261ff619fd33045f"
 url = "https://github.com/suzuki-shunsuke/ghalint/releases/download/v1.5.5/ghalint_1.5.5_darwin_amd64.tar.gz"
-provenance = "slsa"
+
+[tools."aqua:suzuki-shunsuke/ghalint"."platforms.macos-x64".provenance.slsa]
+url = "https://github.com/suzuki-shunsuke/ghalint/releases/download/v1.5.5/multiple.intoto.jsonl"
 
 [tools."aqua:suzuki-shunsuke/ghalint"."platforms.windows-x64"]
 checksum = "sha256:58c2589e7455fc05d83a28051f9098984db3fe6294f0f88aedc9691ae25eaff9"
 url = "https://github.com/suzuki-shunsuke/ghalint/releases/download/v1.5.5/ghalint_1.5.5_windows_amd64.zip"
-provenance = "slsa"
+
+[tools."aqua:suzuki-shunsuke/ghalint"."platforms.windows-x64".provenance.slsa]
+url = "https://github.com/suzuki-shunsuke/ghalint/releases/download/v1.5.5/multiple.intoto.jsonl"
 
 [[tools."github:buildkite/cli"]]
-version = "3.32.2"
+version = "3.38.1"
 backend = "github:buildkite/cli"
 
 [tools."github:buildkite/cli"."platforms.linux-arm64"]
-checksum = "sha256:e772505979736ffcad7c5b4a19c576ef3757482b27a5aec590dda213c36dd452"
-url = "https://github.com/buildkite/cli/releases/download/v3.32.2/bk_3.32.2_linux_arm64.tar.gz"
-url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/371555768"
+checksum = "sha256:9349b9338b102354a84d7ade4f4e95d37d3eaba65e61b4799cd47acb9953b518"
+url = "https://github.com/buildkite/cli/releases/download/v3.38.1/bk_3.38.1_linux_arm64.tar.gz"
+url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/404061389"
 
 [tools."github:buildkite/cli"."platforms.linux-arm64-musl"]
-checksum = "sha256:e772505979736ffcad7c5b4a19c576ef3757482b27a5aec590dda213c36dd452"
-url = "https://github.com/buildkite/cli/releases/download/v3.32.2/bk_3.32.2_linux_arm64.tar.gz"
-url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/371555768"
+checksum = "sha256:9349b9338b102354a84d7ade4f4e95d37d3eaba65e61b4799cd47acb9953b518"
+url = "https://github.com/buildkite/cli/releases/download/v3.38.1/bk_3.38.1_linux_arm64.tar.gz"
+url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/404061389"
 
 [tools."github:buildkite/cli"."platforms.linux-x64"]
-checksum = "sha256:220ad81144a51564ddfd4b5f4ed9f191f178884973c71c824c7dbe8bc2b72b08"
-url = "https://github.com/buildkite/cli/releases/download/v3.32.2/bk_3.32.2_linux_amd64.tar.gz"
-url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/371555769"
+checksum = "sha256:4883d277b2d69452c55879b148418c9619a13da1d407fd7fc2ba6397b93f218a"
+url = "https://github.com/buildkite/cli/releases/download/v3.38.1/bk_3.38.1_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/404061391"
 
 [tools."github:buildkite/cli"."platforms.linux-x64-musl"]
-checksum = "sha256:220ad81144a51564ddfd4b5f4ed9f191f178884973c71c824c7dbe8bc2b72b08"
-url = "https://github.com/buildkite/cli/releases/download/v3.32.2/bk_3.32.2_linux_amd64.tar.gz"
-url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/371555769"
+checksum = "sha256:4883d277b2d69452c55879b148418c9619a13da1d407fd7fc2ba6397b93f218a"
+url = "https://github.com/buildkite/cli/releases/download/v3.38.1/bk_3.38.1_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/404061391"
 
 [tools."github:buildkite/cli"."platforms.macos-arm64"]
-checksum = "sha256:0ed1d0479ff84ffee9a8e402a79a71bba93ea2eae8f6b0c609650b428d89f2cb"
-url = "https://github.com/buildkite/cli/releases/download/v3.32.2/bk_3.32.2_macOS_arm64.zip"
-url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/371555763"
+checksum = "sha256:029cc30f2efe4b7be55a909f847b4137f1d70d8bc84ba84ee159b0122cd8bcb2"
+url = "https://github.com/buildkite/cli/releases/download/v3.38.1/bk_3.38.1_macOS_arm64.zip"
+url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/404061374"
 
 [tools."github:buildkite/cli"."platforms.macos-x64"]
-checksum = "sha256:eb6cfd56b4a90268d1d2775766b3de92ae07b3842a23aefb7ff3d87c0602013d"
-url = "https://github.com/buildkite/cli/releases/download/v3.32.2/bk_3.32.2_macOS_amd64.zip"
-url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/371555764"
+checksum = "sha256:93854edb2c064cff738d4b7f8490ef5758f3f84d81993946ba148469aef15ada"
+url = "https://github.com/buildkite/cli/releases/download/v3.38.1/bk_3.38.1_macOS_amd64.zip"
+url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/404061373"
 
 [tools."github:buildkite/cli"."platforms.windows-x64"]
-checksum = "sha256:3309422d817e060e914a825fbc7265907fca006f30795b3061a4db1ebf4fda2b"
-url = "https://github.com/buildkite/cli/releases/download/v3.32.2/bk_3.32.2_windows_amd64.zip"
-url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/371555792"
+checksum = "sha256:7539e0f8aacba7137d16ae494351541e6ad5e9edaa049b15d92b05d51ba016ac"
+url = "https://github.com/buildkite/cli/releases/download/v3.38.1/bk_3.38.1_windows_amd64.zip"
+url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/404061441"
 
 [[tools.jq]]
 version = "1.8.1"
