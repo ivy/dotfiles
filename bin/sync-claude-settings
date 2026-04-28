@@ -63,6 +63,7 @@ set_feature_flags() {
 set_permissions() {
   printf 'setting global permissions in %s\n' "${SETTINGS}"
   jq '.permissions = {
+        "defaultMode": "auto",
         "allow": [
             "Bash(arch:*)",
             "Bash(base64:*)",
