@@ -75,6 +75,11 @@ Palette (use these or any GitHub emoji that fits):
 
 [Problem/motivation - 1-3 sentences]
 
+## How
+
+[How the work was built - skills/agents used, course-corrections.
+See "Writing the How section" below.]
+
 ## What
 
 [Approach - brief, not a code walkthrough]
@@ -88,6 +93,42 @@ Palette (use these or any GitHub emoji that fits):
 If user provided additional context in arguments, incorporate it appropriately into the PR body.
 
 Draft the content but don't show it to the user for approval - proceed directly to creation.
+
+#### Writing the How section
+
+The **How** section reconstructs the *process* used to build the work — the skill stack, agent usage, where reviews caught issues, how the plan adapted. It is most valuable when:
+
+- The work spanned multiple skills or agents (e.g., orchestrated with `/work-on`)
+- Course-corrections during the work shaped the final design
+- The reviewer would benefit from understanding *why* the commits look the way they do
+
+For a small bug fix or single-commit change, omit the section — there's nothing to say beyond the diff.
+
+Reconstruct the workflow from the conversation: which skills ran, in what order, what each one contributed, where things diverged from the plan. Keep it factual and tight — a tree diagram is plenty. Avoid editorializing about which patterns "mattered" or which decisions were "good"; let the reader judge.
+
+Example (from a Medium-tier feature orchestrated with `/work-on`):
+
+```markdown
+## How
+
+Orchestrated end-to-end with `/work-on`, which composed Claude Code skills based on issue tier:
+
+​```
+/work-on
+├── /checkout + /commit          ─ branch + ship unrelated fix separately
+├── /gather-context              ─ 2 parallel Explore agents: codebase + API docs
+├── /think                       ─ pressure-test design decisions, lock choices
+├── /plan + /review-plan         ─ phased task graph; reviewer agent caught 3 blockers
+├── /share-plan #N               ─ post design as collapsible comment on the issue
+├── implement + /commit (×N)     ─ logical commits, each scoped to one concern
+├── /simplify                    ─ 3 parallel reviewer agents (reuse / quality / efficiency)
+└── /pr                          ─ open PR
+​```
+
+Course-corrections during the work: `/review-plan` flagged the download-protocol framing as ambiguous; `/simplify` caught path traversal in one of two call sites and a parameter-sprawl issue in the REST client signature.
+```
+
+Replace the example specifics with the actual flow — don't paste the example literally. The shape (tree diagram + a short note on course-corrections) is the reusable part.
 
 ### 4. Push and Create PR
 
