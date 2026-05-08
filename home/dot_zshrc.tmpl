@@ -1,9 +1,8 @@
 # ============================================================================
-# Mise activation (always — agents need tool management)
+# Mise: shims handle tool resolution via PATH (set in .zshenv).
+# No `mise activate` — we trade per-cd env hooks for faster startup and
+# non-interactive shell support. See https://mise.jdx.dev/cli/activate.html#shims
 # ============================================================================
-{{- if lookPath "mise" }}
-eval "$(mise activate zsh)"
-{{- end }}
 
 # ============================================================================
 # Agent/CI detection via envsense
