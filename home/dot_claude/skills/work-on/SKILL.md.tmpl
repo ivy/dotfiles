@@ -12,6 +12,7 @@ allowed-tools:
   - Bash(head:*)
   - Bash(ls:*)
   - Read
+  - Skill(agents-md)
   - Skill(checkout)
   - Skill(commit)
   - Skill(gather-context)
@@ -99,7 +100,8 @@ Each tier below shows the skill sequence. When proposing the workflow, use exact
 7. Implement per plan (one task per distinct change)
 8. /simplify
 9. /commit
-10. /pr
+10. /agents-md (only if changes meet the "Doc Refresh" bar — see below)
+11. /pr
 ```
 
 #### Large
@@ -108,8 +110,9 @@ Each tier below shows the skill sequence. When proposing the workflow, use exact
 7. TeamCreate for parallel execution
 8. Multiple /commit cycles as workstreams complete
 9. /simplify
-10. /pr
-11. /reflect
+10. /agents-md (only if changes meet the "Doc Refresh" bar — see below)
+11. /pr
+12. /reflect
 ```
 
 #### Epic
@@ -121,6 +124,24 @@ Each tier below shows the skill sequence. When proposing the workflow, use exact
 5. Coordinate across units (rebase, verify assumptions)
 6. /reflect
 ```
+
+##### Doc Refresh: when to invoke `/agents-md`
+
+After `/simplify` and any resulting commits, judge whether the change leaves agent-facing documentation (`AGENTS.md` / `CLAUDE.md`, `docs/agents/`) materially stale. Invoke `/agents-md` only when the answer is yes — the goal is to keep onboarding accurate for the *next* fresh-context agent, not to log this PR's history.
+
+Invoke when the change:
+- Alters architecture, layout, or the canonical build/test/run commands
+- Introduces foundational scaffolding (new top-level dir, new framework, new core pattern)
+- Adds, removes, or renames a skill/agent/hook that future agents will rely on
+- Establishes a new convention that should apply repo-wide
+- Breaks an instruction already written in `AGENTS.md` / `CLAUDE.md`
+
+Skip when the change is:
+- A bug fix, refactor, or rename that doesn't shift how agents work in the repo
+- A single-file tweak, version bump, or doc/typo edit
+- Adding tests, fixtures, or config that follows existing patterns
+
+Rule of thumb: would this info help ~90% of fresh agent context windows in this repo? If not, skip — `/agents-md` is a no-op cost when nothing universal changed. When invoked, follow with another `/commit` for any resulting doc changes before `/pr`.
 
 Present the proposed workflow with:
 - The assessed tier and reasoning
@@ -155,8 +176,11 @@ Task 7: Add dark-mode toggle to theme.ts               (blockedBy: [6])
 Task 8: Update CSS variables in globals.css             (blockedBy: [6])
 Task 9: /simplify                                      (blockedBy: [7, 8])
 Task 10: /commit                                       (blockedBy: [9])
-Task 11: /pr                                           (blockedBy: [10])
+Task 11: Decide whether to run /agents-md              (blockedBy: [10])
+Task 12: /pr                                           (blockedBy: [11])
 ```
+
+Task 11 is a judgment gate, not a guaranteed skill call. If the change meets the Doc Refresh bar, invoke `/agents-md` and add a follow-up `/commit` task for any resulting doc edits before `/pr`. Otherwise mark it completed with a one-line rationale ("no agent-facing changes") and move on.
 
 ### Step 3: Execute the Workflow
 
