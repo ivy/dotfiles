@@ -14,10 +14,10 @@ lockfile = true
 
 [tools]
 # Runtimes (install first - required by pipx/npm/cargo backends)
-node = "24.14.0"
-python = "3.14.3"
-pkl = "0.31.0"
-rust = "1.94.0"
+node = "24.15.0"
+python = "3.14.5"
+pkl = "0.31.1"
+rust = "1.95.0"
 
 # Cargo (Rust tools built from source)
 "cargo:https://github.com/technicalpickles/envsense" = "tag:0.6.0"
@@ -31,37 +31,37 @@ eza = "0.23.4"
 # See docs/adrs/005-replace-aqua-backend-with-github-releases.md
 "github:BurntSushi/ripgrep" = "15.1.0"
 "github:ajeetdsouza/zoxide" = { version = "0.9.9", platforms.linux-arm64 = { asset_pattern = "zoxide-*-aarch64-unknown-linux-musl.tar.gz" } }
-"github:atuinsh/atuin" = "18.12.1"
-"github:buildkite/cli" = "3.32.2"
-"github:carapace-sh/carapace-bin" = "1.6.4"
-"github:charmbracelet/glow" = "2.1.1"
-"github:cli/cli" = "2.87.3"
-"github:dandavison/delta" = "0.18.2"
-"github:dlvhdr/gh-dash" = "4.23.1"
-"github:gitleaks/gitleaks" = "8.30.0"
-"github:jesseduffield/lazygit" = "0.60.0"
+"github:atuinsh/atuin" = "18.16.1"
+"github:buildkite/cli" = "3.42.0"
+"github:carapace-sh/carapace-bin" = "1.6.6"
+"github:charmbracelet/glow" = "2.1.2"
+"github:cli/cli" = "2.92.0"
+"github:dandavison/delta" = "0.19.2"
+"github:dlvhdr/gh-dash" = "4.24.1"
+"github:gitleaks/gitleaks" = "8.30.1"
+"github:jesseduffield/lazygit" = "0.61.1"
 "github:jqlang/jq" = "jq-1.8.1"
-"github:jdx/hk" = "1.41.0"
-"github:junegunn/fzf" = "0.70.0"
-"github:mikefarah/yq" = "4.52.5"
+"github:jdx/hk" = "1.45.0"
+"github:junegunn/fzf" = "0.72.0"
+"github:mikefarah/yq" = "4.53.2"
 "github:muesli/duf" = "0.9.1"
-"github:neovim/neovim" = "0.11.6"
+"github:neovim/neovim" = "0.12.2"
 "github:sharkdp/bat" = "0.26.1"
 "github:sharkdp/fd" = "10.4.2"
-"github:sst/opencode" = "1.2.24"
-"github:starship/starship" = "1.24.2"
+"github:sst/opencode" = "1.15.5"
+"github:starship/starship" = "1.25.1"
 
 # pipx itself (must be installed before any pipx: packages below)
-pipx = "1.8.0"
+pipx = "1.12.0"
 
 # Python tools via pipx
 "pipx:claude-conversation-extractor" = "1.1.2"
 "pipx:gitingest" = "0.3.1"
 
 # Node tools via npm
-"npm:@openai/codex" = "0.118.0"
-"npm:@playwright/mcp" = "0.0.68"
-"npm:@owloops/claude-powerline" = "1.23.5"
-"npm:bktide" = "1.0.1773059016"
-"npm:ccusage" = "18.0.10"
+"npm:@openai/codex" = "0.131.0"
+"npm:@playwright/mcp" = "0.0.75"
+"npm:@owloops/claude-powerline" = "1.26.0"
+"npm:bktide" = "1.0.1778003370"
+"npm:ccusage" = "19.0.3"
 "npm:git-mob" = "4.0.1"
