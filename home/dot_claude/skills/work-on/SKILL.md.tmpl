@@ -49,7 +49,8 @@ Dirty worktree: !`git status --porcelain 2>/dev/null | head -5`
 ## Constraints
 
 - **Never skip the tier assessment.** Every issue gets classified before work begins.
-- **Only use skills that exist.** Check "Available skills" in pre-computed context. If a skill isn't listed, do the equivalent work inline or skip that step.
+- **Listed workflow steps are mandatory when the skill is available.** Check "Available skills" in pre-computed context. Inline-substitute only when the skill is genuinely absent — never skip a step because the name sounds optional or because the implementation looks clean.
+- **`/simplify` is a quality gate, not polish.** The name is misleading: it scans changed code for duplication, missed reuse, and inefficiency, and reliably surfaces issues the implementer missed. Mandatory for Medium+ tiers. Never skip it, even if the diff looks clean.
 - **Drive autonomously.** Assess, plan, and execute without pausing for confirmation. Only interrupt the user for genuine blockers (ambiguous requirements, failing tests with no clear fix).
 - **Commit incrementally.** Use `/commit` (if available) for each logical change. Don't batch everything into one commit at the end.
 
@@ -68,7 +69,7 @@ Read the [TIERS.md](TIERS.md) decision matrix. Assess the issue's complexity tie
 
 ### Step 1: Propose Workflow
 
-Based on the assessed tier and available skills, propose a workflow to the user. Use only skills that appear in the pre-computed context. When a skill isn't available, either skip the step or do the equivalent work inline.
+Based on the assessed tier and available skills, propose a workflow to the user. Use only skills that appear in the pre-computed context. When a skill is genuinely absent, do the equivalent work inline — do not drop the step entirely.
 
 Each tier below shows the skill sequence. When proposing the workflow, use exact skill names with arguments — these become the task subjects in Step 2.
 
@@ -98,7 +99,7 @@ Each tier below shows the skill sequence. When proposing the workflow, use exact
 5. /review-plan
 6. /share-plan <issue-ref>
 7. Implement per plan (one task per distinct change)
-8. /simplify
+8. /simplify — quality gate (mandatory; catches duplication, missed reuse, inefficiency)
 9. /commit
 10. /agents-md (only if changes meet the "Doc Refresh" bar — see below)
 11. /pr
@@ -109,7 +110,7 @@ Each tier below shows the skill sequence. When proposing the workflow, use exact
 1-6. Same as Medium
 7. TeamCreate for parallel execution
 8. Multiple /commit cycles as workstreams complete
-9. /simplify
+9. /simplify — quality gate (mandatory; catches duplication, missed reuse, inefficiency)
 10. /agents-md (only if changes meet the "Doc Refresh" bar — see below)
 11. /pr
 12. /reflect
@@ -174,7 +175,7 @@ Task 5: /review-plan                                   (blockedBy: [4])
 Task 6: /share-plan #123                               (blockedBy: [5])
 Task 7: Add dark-mode toggle to theme.ts               (blockedBy: [6])
 Task 8: Update CSS variables in globals.css             (blockedBy: [6])
-Task 9: /simplify                                      (blockedBy: [7, 8])
+Task 9: /simplify (quality gate)                       (blockedBy: [7, 8])
 Task 10: /commit                                       (blockedBy: [9])
 Task 11: Decide whether to run /agents-md              (blockedBy: [10])
 Task 12: /pr                                           (blockedBy: [11])
@@ -202,7 +203,8 @@ Work through the task list in order. For each task:
 | Discussion (`/think`) | **Interactive** | Agent and user converge on approach together. Pass specific framing via args: the key decisions, tradeoffs, and open questions from `/gather-context`. |
 | Planning (`/plan`, `/review-plan`) | Semi-autonomous | Agent drafts, user approves via `ExitPlanMode` |
 | Execution | **Autonomous** | Agent implements, commits incrementally |
-| Review (`/simplify`, `/pr`) | Autonomous | Agent reviews and opens PR |
+| Quality gate (`/simplify`) | Autonomous | Scans changed code for duplication, missed reuse, and inefficiency; fixes issues found. **Mandatory for Medium+ — never skip, even if the diff looks clean.** |
+| PR (`/pr`) | Autonomous | Opens PR for review |
 | Retrospective (`/reflect`) | Interactive | Agent and user reflect on what worked |
 
 **Escape hatch**: If the agent encounters a blocking issue it can't resolve during autonomous phases (unexpected test failures, missing dependencies, ambiguous requirements), it should flag the user and wait for guidance rather than guessing.
@@ -213,8 +215,8 @@ Plans don't survive contact with reality. During execution:
 
 - If a task reveals the plan is wrong, update remaining tasks via `TaskUpdate`
 - If new work is discovered, create new tasks with appropriate dependencies
-- If a task turns out to be unnecessary, delete it
-- If the tier assessment was wrong (e.g., "Small" issue turns out to be "Medium"), adjust the workflow — add `/think` and `/plan` steps if needed
+- If a task turns out to be unnecessary, delete it — **except gate steps (`/review-plan`, `/simplify`, `/pr`), which stay in the task list. In particular, `/simplify` is non-negotiable: "the diff looks clean" is exactly the moment it catches duplication and missed reuse.**
+- If the tier assessment was wrong (e.g., "Small" issue turns out to be "Medium"), adjust the workflow — add `/think`, `/plan`, and `/simplify` steps if needed
 
 The task list is a living document, not a contract.
 
