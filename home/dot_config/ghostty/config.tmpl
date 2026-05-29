@@ -9,17 +9,22 @@ shell-integration = zsh
 shell-integration-features = cursor,sudo,title
 
 {{ if eq .chezmoi.os "darwin" -}}
+# Disable tabs entirely. On macOS, removing window decoration also removes the
+# native tab bar (enforced by the system) — there is no standalone tab-bar toggle.
+window-decoration = none
+
 # Keybindings (macOS)
 keybind = global:cmd+grave_accent=toggle_quick_terminal
 keybind = cmd+d=new_split:right
 keybind = cmd+shift+d=new_split:down
-keybind = cmd+t=new_tab
 keybind = cmd+w=close_tab
 {{ else -}}
+# Disable the tab bar entirely (GTK/Linux dedicated toggle)
+window-show-tab-bar = never
+
 # Keybindings (Linux)
 keybind = ctrl+shift+d=new_split:right
 keybind = ctrl+shift+e=new_split:down
-keybind = ctrl+shift+t=new_tab
 keybind = ctrl+shift+w=close_tab
 {{ end -}}
 
