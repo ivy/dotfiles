@@ -1,28 +1,30 @@
 {
-  "theme": "custom",
   "display": {
-    "padding": 1,
-    "style": "capsule",
-    "charset": "unicode",
-    "colorCompatibility": "auto",
     "autoWrap": true,
     "budget": {
-      "today": { "amount": 0 }
+      "today": {
+        "amount": 0
+      }
     },
+    "charset": "unicode",
+    "colorCompatibility": "auto",
     "lines": [
       {
         "segments": {
+          "context": {
+            "displayStyle": "text",
+            "enabled": true,
+            "showPercentageOnly": true
+          },
           "directory": {
             "enabled": true,
             "style": "basename"
           },
-          "model": {
+          "git": {
             "enabled": true
           },
-          "context": {
-            "enabled": true,
-            "showPercentageOnly": true,
-            "displayStyle": "text"
+          "model": {
+            "enabled": true
           },
           "today": {
             "enabled": true,
@@ -30,9 +32,12 @@
           }
         }
       }
-    ]
+    ],
+    "padding": 1,
+    "style": "capsule"
   },
   "modelContextLimits": {
     "sonnet": 200000
-  }
+  },
+  "theme": "custom"
 }

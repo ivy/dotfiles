@@ -6,14 +6,17 @@ Catppuccin themes for [claude-powerline](https://github.com/Owloops/claude-power
 
 **Show only what demands action.** The powerline is not a dashboard — it's a glanceable status indicator. If a segment doesn't change what you do next, it doesn't belong here.
 
-**Two segments, one line:**
+**One line:**
 
 | Segment | Why |
 |---------|-----|
+| **directory** | Which repo/dir the session is rooted in |
+| **git** | Current branch — confirm you're committing where you think you are |
 | **model** | Which Claude you're talking to (Opus vs Sonnet changes cost and capability) |
 | **context** | The only metric that demands immediate action — when context is full, start a new conversation |
+| **today** | Running cost for the day |
 
-**Everything else lives in tmux.** Directory, git branch, system info — these are general dev context, not Claude-specific. tmux owns that layer.
+The git segment shows the branch only; sha, stash count, working-tree, and upstream/ahead-behind are left off to keep it glanceable.
 
 ## Theme Selection
 
@@ -22,7 +25,7 @@ The shim at `~/.local/libexec/claude-powerline-theme` detects macOS appearance:
 - Light mode / default: `catppuccin-latte`
 - Dark mode: `catppuccin-mocha`
 
-Both themes use the full [Catppuccin](https://catppuccin.com/) palette. All 12 segment colors are defined even though only 2 segments are displayed — the schema requires them and they're ready if needs change.
+Both themes use the full [Catppuccin](https://catppuccin.com/) palette. All 12 segment colors are defined even though only a subset of segments are displayed — the schema requires them and they're ready if needs change.
 
 ## Files
 
