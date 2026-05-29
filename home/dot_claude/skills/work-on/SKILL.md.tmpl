@@ -37,8 +37,8 @@ $ARGUMENTS
 ## Pre-computed Context
 
 ```
-Current branch: !`git branch --show-current 2>/dev/null`
-Dirty worktree: !`git status --porcelain 2>/dev/null | head -5`
+Current branch: !`git branch --show-current 2>/dev/null || echo 'unknown'`
+Dirty worktree: !`git status --porcelain 2>/dev/null | head -5 || echo 'unknown'`
 ```
 
 ## Supporting Files
