@@ -1,7 +1,6 @@
 ---
 name: prompt-engineer
 description: Use when drafting, reviewing, or improving a prompt for an LLM or agent — especially when an unbiased, clean-context reviewer is needed. Operates in its own context window with the prompt-engineering skill preloaded, so it isn't anchored to the conversation that produced the prompt.
-tools: Read, Glob, Grep
 {{- template "bedrock-model" (dict "tier" "opus" "root" .) }}
 skills:
   - prompt-engineering
