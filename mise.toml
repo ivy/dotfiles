@@ -3,6 +3,7 @@
 
 [tools]
 "aqua:bats-core/bats-core" = "1.13.0"
+"aqua:boyter/scc" = "latest"
 "aqua:koalaman/shellcheck" = "0.11.0"
 "aqua:mikefarah/yq" = "4.53.2"
 "aqua:suzuki-shunsuke/ghalint" = "1.5.6"

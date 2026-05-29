@@ -22,6 +22,38 @@ url = "https://github.com/bats-core/bats-core/archive/refs/tags/v1.13.0.tar.gz"
 [tools."aqua:bats-core/bats-core"."platforms.macos-x64"]
 url = "https://github.com/bats-core/bats-core/archive/refs/tags/v1.13.0.tar.gz"
 
+[[tools."aqua:boyter/scc"]]
+version = "3.7.0"
+backend = "aqua:boyter/scc"
+
+[tools."aqua:boyter/scc"."platforms.linux-arm64"]
+checksum = "sha256:dcb05c6e993bb2d8d2da4765ff018f2e752325dd205a41698929c55e4123575d"
+url = "https://github.com/boyter/scc/releases/download/v3.7.0/scc_Linux_arm64.tar.gz"
+
+[tools."aqua:boyter/scc"."platforms.linux-arm64-musl"]
+checksum = "sha256:dcb05c6e993bb2d8d2da4765ff018f2e752325dd205a41698929c55e4123575d"
+url = "https://github.com/boyter/scc/releases/download/v3.7.0/scc_Linux_arm64.tar.gz"
+
+[tools."aqua:boyter/scc"."platforms.linux-x64"]
+checksum = "sha256:3d9d65b00ca874c2b29151abe7e1480736f5229edc3ce8e4b2791460cdfabf5a"
+url = "https://github.com/boyter/scc/releases/download/v3.7.0/scc_Linux_x86_64.tar.gz"
+
+[tools."aqua:boyter/scc"."platforms.linux-x64-musl"]
+checksum = "sha256:3d9d65b00ca874c2b29151abe7e1480736f5229edc3ce8e4b2791460cdfabf5a"
+url = "https://github.com/boyter/scc/releases/download/v3.7.0/scc_Linux_x86_64.tar.gz"
+
+[tools."aqua:boyter/scc"."platforms.macos-arm64"]
+checksum = "sha256:376cbae670be59ee64f398de20e0694ec434bf8a9b842642952b0ab0be5f3961"
+url = "https://github.com/boyter/scc/releases/download/v3.7.0/scc_Darwin_arm64.tar.gz"
+
+[tools."aqua:boyter/scc"."platforms.macos-x64"]
+checksum = "sha256:c3f7457856b9169ccb3c1dd14198e67f730bee065f24d9051bf52cdc2a719ecc"
+url = "https://github.com/boyter/scc/releases/download/v3.7.0/scc_Darwin_x86_64.tar.gz"
+
+[tools."aqua:boyter/scc"."platforms.windows-x64"]
+checksum = "sha256:97abf9d55d4b79d3310536d576ccbdf5017aeb425780e850336120b6e67622e1"
+url = "https://github.com/boyter/scc/releases/download/v3.7.0/scc_Windows_x86_64.zip"
+
 [[tools."aqua:koalaman/shellcheck"]]
 version = "0.11.0"
 backend = "aqua:koalaman/shellcheck"
