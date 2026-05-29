@@ -4,7 +4,9 @@
 	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOpi4G3yVuXBNHDDEsoBH5juSOVFsWcP3iulru1llnAB
 
 [commit]
-	gpgsign = true
+	# Disabled: 1Password Touch ID gate on the signing key blocks unattended
+	# agents mid-run. Tracking a better fix (keep provenance, drop friction).
+	gpgsign = false
 
 [gpg]
 	format = ssh
