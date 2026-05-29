@@ -15,6 +15,7 @@
 {{- $credCodex := promptStringOnce . "credentials.codex" "1Password ref for OpenAI Codex" -}}
 {{- $credClaudeApi := promptStringOnce . "credentials.claude_api" "1Password ref for Claude API" -}}
 {{- $credBuildkite := promptStringOnce . "credentials.buildkite" "1Password ref for Buildkite" -}}
+{{- $credNgrok := promptStringOnce . "credentials.ngrok" "1Password ref for ngrok" -}}
 
 # Source Directory Configuration
 # Allows us to maintain Chezmoi outside of the default `~/.local/share/chezmoi/`.
@@ -40,6 +41,7 @@ use_bedrock = {{ $useBedrock }}
 codex = {{ $credCodex | quote }}
 claude_api = {{ $credClaudeApi | quote }}
 buildkite = {{ $credBuildkite | quote }}
+ngrok = {{ $credNgrok | quote }}
 
 [onepassword]
 cache = true
