@@ -51,6 +51,7 @@ eza = "0.23.4"
 "github:neovim/neovim" = "0.12.2"
 "github:sharkdp/bat" = "0.26.1"
 "github:sharkdp/fd" = "10.4.2"
+"github:smtg-ai/claude-squad" = "1.0.18"
 "github:sst/opencode" = "1.15.5"
 "github:starship/starship" = "1.25.1"
 
