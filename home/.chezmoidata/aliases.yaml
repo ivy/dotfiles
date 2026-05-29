@@ -16,6 +16,7 @@ aliases:
     - { tool: eza, replaces: ll, command: "eza --icons=always --long --group-directories-first" }
     - { tool: eza, replaces: la, command: "eza --icons=always --long --all --group-directories-first" }
     - { tool: eza, replaces: tree, command: "eza --icons=always --tree" }
+    - { tool: claude-squad, replaces: cs, command: "claude-squad" }
 
   # Credential-injecting aliases: fetch secret from 1Password, export as env var
   # Requires `op` on PATH. Each entry needs `tool` on PATH too.
@@ -25,6 +26,7 @@ aliases:
     - { tool: codex, env: OPENAI_API_KEY, op_ref_key: codex }
     - { tool: claude, alias: claude-api, env: ANTHROPIC_API_KEY, op_ref_key: claude_api }
     - { tool: bktide, env: BUILDKITE_API_TOKEN, op_ref_key: buildkite }
+    - { tool: ngrok, env: NGROK_AUTHTOKEN, op_ref_key: ngrok }
 
   # Fallback chains: try tools in order, first match wins
   fallbacks:
