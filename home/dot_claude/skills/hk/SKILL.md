@@ -2,7 +2,6 @@
 name: hk
 description: "Use when bootstrapping hk pre-commit hooks for a project."
 argument-hint: "[stacks... | --check | --update]"
-disable-model-invocation: true
 allowed-tools:
   - Glob
   - Grep
