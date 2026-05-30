@@ -9,9 +9,10 @@ shell-integration = zsh
 shell-integration-features = cursor,sudo,title
 
 {{ if eq .chezmoi.os "darwin" -}}
-# Disable tabs entirely. On macOS, removing window decoration also removes the
-# native tab bar (enforced by the system) — there is no standalone tab-bar toggle.
-window-decoration = none
+# Hide the titlebar but KEEP the native window frame — rounded corners and the
+# window shadow survive. `window-decoration = none` would square the corners.
+# We live in tmux + splits and never open native tabs, so no tab bar appears.
+macos-titlebar-style = hidden
 
 # Keybindings (macOS)
 keybind = global:cmd+grave_accent=toggle_quick_terminal
