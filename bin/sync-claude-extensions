@@ -1,0 +1,218 @@
+#!/usr/bin/env bash
+#
+# sync-claude-extensions -- Reconcile declared Claude Code extensions
+# (plugin marketplaces, plugins, MCP servers) into the user-scope install.
+#
+# Declared state is read from chezmoi data:
+#   .claudeExtensions       committed, public  (home/.chezmoidata/claude-extensions.yaml)
+#   .claudeExtensionsExtra  machine-local      ([data.claudeExtensionsExtra] in chezmoi.toml)
+# and realized through the `claude` CLI, which is the single writer of the
+# extraKnownMarketplaces / enabledPlugins keys and ~/.claude.json mcpServers.
+#
+# Idempotent and additive: only missing items are added. Items installed but not
+# declared are reported, never removed, unless --prune is given. Plugins/marketplaces
+# at "managed" scope (admin-pushed) are left untouched. See docs/claude-code.md.
+#
+# Usage: sync-claude-extensions [--check] [--prune]
+#   --check   dry run: report what would change, mutate nothing
+#   --prune   remove user-scope items that are installed but not declared
+
+[[ -n "${DEBUG:-}" ]] && set -o xtrace
+set -o errexit
+set -o errtrace
+set -o nounset
+set -o pipefail
+
+CHECK=false
+PRUNE=false
+
+for arg in "$@"; do
+  case "${arg}" in
+  --check) CHECK=true ;;
+  --prune) PRUNE=true ;;
+  *)
+    printf 'error: unknown argument: %s\n' "${arg}" >&2
+    printf 'usage: sync-claude-extensions [--check] [--prune]\n' >&2
+    exit 2
+    ;;
+  esac
+done
+
+log() { printf '%s\n' "$*"; }
+warn() { printf '%s\n' "$*" >&2; }
+
+require_command() {
+  command -v "$1" >/dev/null 2>&1
+}
+
+# Run a mutating claude command unless --check; log failures and keep going so a
+# single bad item (network/auth) never aborts `chezmoi apply`.
+run_claude() {
+  if [[ "${CHECK}" == true ]]; then
+    log "  [check] would run: claude $*"
+    return 0
+  fi
+  if ! claude "$@"; then
+    warn "  warning: 'claude $*' failed — continuing"
+    return 1
+  fi
+}
+
+# Merge a declared list from base + machine-local extras under the given path
+# (e.g. ".marketplaces"). Emits one compact JSON value per line. The argument is
+# interpolated into the jq program, so call sites must pass a literal path suffix.
+declared() {
+  jq -c "((.claudeExtensions${1} // []) + (.claudeExtensionsExtra${1} // []))[]" <<<"${DATA}"
+}
+
+reconcile_marketplaces() {
+  log 'marketplaces:'
+  local existing declared_names name repo
+  existing="$(claude plugin marketplace list --json 2>/dev/null | jq -r '.[].name' || true)"
+
+  declared_names=''
+  while IFS=$'\t' read -r name repo; do
+    [[ -z "${name}" ]] && continue
+    declared_names+="${name}"$'\n'
+    if grep -qxF "${name}" <<<"${existing}"; then
+      log "  ok: ${name}"
+    else
+      log "  + add ${name} (${repo})"
+      run_claude plugin marketplace add "${repo}" || true
+    fi
+  done < <(declared '.marketplaces' | jq -r '[.name, .repo] | @tsv')
+
+  prune_extra 'marketplace' "${existing}" "${declared_names}"
+}
+
+reconcile_plugins() {
+  log 'plugins:'
+  local existing_json existing_ids declared_ids id
+  existing_json="$(claude plugin list --json 2>/dev/null || echo '[]')"
+  # User-scope ids only are eligible for prune; managed/project are left alone.
+  existing_ids="$(jq -r '.[].id' <<<"${existing_json}")"
+
+  declared_ids=''
+  while IFS= read -r id; do
+    [[ -z "${id}" ]] && continue
+    declared_ids+="${id}"$'\n'
+    if grep -qxF "${id}" <<<"${existing_ids}"; then
+      log "  ok: ${id}"
+    else
+      log "  + install ${id}"
+      run_claude plugin install "${id}" --scope user || true
+    fi
+  done < <(declared '.plugins' | jq -r '.') # plugins are strings; unquote the compact JSON
+
+  local user_ids
+  user_ids="$(jq -r '.[] | select(.scope == "user") | .id' <<<"${existing_json}")"
+  prune_extra 'plugin' "${user_ids}" "${declared_ids}"
+}
+
+reconcile_mcp() {
+  log 'mcp servers:'
+  local claude_json existing name server
+  claude_json="${HOME}/.claude.json"
+  existing="$(jq -r '.mcpServers // {} | keys[]' "${claude_json}" 2>/dev/null || true)"
+
+  local declared_names=''
+  while IFS= read -r server; do
+    [[ -z "${server}" ]] && continue
+    name="$(jq -r '.name' <<<"${server}")"
+    declared_names+="${name}"$'\n'
+    if grep -qxF "${name}" <<<"${existing}"; then
+      log "  ok: ${name}"
+    else
+      log "  + add ${name}"
+      mcp_add "${server}" || true
+    fi
+  done < <(declared '.mcpServers')
+
+  prune_extra 'mcp' "${existing}" "${declared_names}"
+}
+
+# Build and run `claude mcp add` from a server JSON object.
+# http/sse: claude mcp add -s user -t <t> [-H ...] <name> <url>
+# stdio:    claude mcp add -s user -t stdio [-e ...] <name> -- <command> [args...]
+mcp_add() {
+  local server="$1" name transport
+  name="$(jq -r '.name' <<<"${server}")"
+  transport="$(jq -r '.transport // "stdio"' <<<"${server}")"
+
+  local cmd=(mcp add --scope user --transport "${transport}")
+
+  local kv
+  while IFS= read -r kv; do
+    [[ -n "${kv}" ]] && cmd+=(--env "${kv}")
+  done < <(jq -r '(.env // {}) | to_entries[] | "\(.key)=\(.value)"' <<<"${server}")
+
+  while IFS= read -r kv; do
+    [[ -n "${kv}" ]] && cmd+=(--header "${kv}")
+  done < <(jq -r '(.headers // {}) | to_entries[] | "\(.key): \(.value)"' <<<"${server}")
+
+  if [[ "${transport}" == "stdio" ]]; then
+    local command_bin
+    command_bin="$(jq -r '.command' <<<"${server}")"
+    cmd+=("${name}" -- "${command_bin}")
+    local a
+    while IFS= read -r a; do
+      cmd+=("${a}")
+    done < <(jq -r '(.args // [])[]' <<<"${server}")
+  else
+    cmd+=("${name}" "$(jq -r '.url' <<<"${server}")")
+  fi
+
+  run_claude "${cmd[@]}"
+}
+
+# Report (and with --prune, remove) user-scope items installed but not declared.
+# kind is one of: marketplace | plugin | mcp
+prune_extra() {
+  local kind="$1" existing="$2" declared_names="$3" item
+  while IFS= read -r item; do
+    [[ -z "${item}" ]] && continue
+    grep -qxF "${item}" <<<"${declared_names}" && continue
+    if [[ "${PRUNE}" == true ]]; then
+      log "  - prune ${kind} ${item}"
+      case "${kind}" in
+      marketplace) run_claude plugin marketplace remove "${item}" || true ;;
+      plugin) run_claude plugin uninstall "${item}" || true ;;
+      mcp) run_claude mcp remove "${item}" || true ;;
+      esac
+    else
+      log "  drift: ${kind} ${item} is installed but not declared (use --prune to remove)"
+    fi
+  done <<<"${existing}"
+}
+
+main() {
+  if ! require_command claude; then
+    warn 'claude not found in PATH — skipping extension sync'
+    exit 0
+  fi
+  require_command jq || {
+    warn 'jq not found in PATH — cannot reconcile extensions'
+    exit 1
+  }
+
+  # Authenticate to GitHub for private marketplaces (machine-local extras may
+  # reference one). The reconciler issues many claude calls, so export rather
+  # than the inline form used for one-shot commands elsewhere.
+  if [[ -z "${GITHUB_TOKEN:-}" ]] && require_command gh; then
+    GITHUB_TOKEN="$(gh auth token 2>/dev/null)" || true
+    [[ -n "${GITHUB_TOKEN:-}" ]] && export GITHUB_TOKEN
+  fi
+
+  DATA="$(chezmoi data --format json)"
+
+  [[ "${CHECK}" == true ]] && log '(dry run — no changes will be made)'
+  # One reconciler per type — the claude CLI surface differs per type. To add a
+  # type: add a key in claude-extensions.yaml, a reconcile_* function, and a
+  # prune_extra case.
+  reconcile_marketplaces
+  reconcile_plugins
+  reconcile_mcp
+  log 'done'
+}
+
+main "$@"

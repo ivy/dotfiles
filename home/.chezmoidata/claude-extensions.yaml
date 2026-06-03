@@ -1,0 +1,29 @@
+# Claude Code extensions (plugin marketplaces, plugins, MCP servers) reconciled
+# into the user-scope install by bin/sync-claude-extensions on `chezmoi apply`.
+#
+# PUBLIC entries only — this repo is public. Employer-internal / private entries
+# (private marketplaces, internal MCP endpoints) belong in machine-local
+# [data.claudeExtensionsExtra] in ~/.config/chezmoi/chezmoi.toml, never here.
+#
+# Plugins float (no version pin) — see docs/adrs/006 and docs/claude-code.md.
+
+claudeExtensions:
+  # Marketplaces to register: claude plugin marketplace add <repo>
+  # claude-plugins-official is built in — do not declare it.
+  marketplaces:
+    - name: pickled-claude-plugins
+      repo: technicalpickles/pickled-claude-plugins
+    - name: plannotator
+      repo: backnotprop/plannotator
+
+  # Plugins to install at user scope: claude plugin install <name>@<marketplace>
+  plugins:
+    - playground@claude-plugins-official
+    - rust-analyzer-lsp@claude-plugins-official
+    - ruby-lsp@claude-plugins-official
+    - ralph-loop@claude-plugins-official
+    - ci-cd-tools@pickled-claude-plugins
+
+  # MCP servers to add at user scope: claude mcp add -s user [-t <transport>] <name> <url|command>
+  # None are public; private/internal servers live in machine-local claudeExtensionsExtra.
+  mcpServers: []
