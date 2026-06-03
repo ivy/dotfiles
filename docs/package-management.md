@@ -306,3 +306,4 @@ Always check `mise registry` first—prefer mise when available.
 - [ADR: Use Mise for Global Tool Management](ADRs/0001-use-mise-for-global-tool-management.md) - Rationale for mise-first approach
 - [Mise Backends Documentation](https://mise.jdx.dev/dev-tools/backends/) - All available backends
 - [Mise Registry](https://mise.jdx.dev/registry.html) - Searchable tool registry
+- [Claude Code integration](claude-code.md) - Managing Claude Code plugins and MCP servers (also via `/install`)
