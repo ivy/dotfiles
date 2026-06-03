@@ -1,0 +1,209 @@
+---
+name: install
+description: "Use when the user wants to make a tool, CLI, binary, package, GUI app, Claude Code plugin, or MCP server persistently available — in the dotfiles (user/global), the current project, or ephemerally. Triggers: install, add, set up, wire up, configure, pin a version of, make available. Routes by scope: user → chezmoi dotfiles; project → current repo. Prefers mise for dev tools."
+argument-hint: "<tool[@version]> | <plugin@marketplace> | <url> | <mcp-name> [--scope user|project|local]"
+{{- template "bedrock-model" (dict "tier" "sonnet" "root" .) }}
+allowed-tools:
+  - AskUserQuestion
+  - Read
+  - Glob
+  - Grep
+  - Bash(pwd:*)
+  - Bash(realpath:*)
+  - Bash(git rev-parse:*)
+  - Bash(chezmoi source-path:*)
+  - Bash(chezmoi diff:*)
+  - Bash(chezmoi data:*)
+  - Bash(mise search:*)
+  - Bash(mise registry:*)
+  - Bash(mise ls-remote:*)
+  - Bash(mise ls:*)
+  - Bash(mise use --dry-run:*)
+  - Bash(mise which:*)
+  - Bash(which:*)
+  - Bash(command -v:*)
+  - Bash(gh release view:*)
+  - Bash(npm view:*)
+  - Bash(pip index:*)
+  - Bash(claude plugin marketplace list:*)
+  - Bash(claude plugin list:*)
+  - Bash(claude mcp list:*)
+  - Bash(claude mcp get:*)
+  - Bash(mise use:*)
+  - Bash(claude plugin install:*)
+  - Bash(claude plugin marketplace add:*)
+  - Bash(claude mcp add:*)
+  - Bash(chezmoi apply:*)
+  - Bash(chezmoi status:*)
+  - Edit(home/dot_config/mise/config.toml)
+  - Edit(home/.chezmoidata/packages.yaml)
+  - Edit(home/.chezmoidata/claude-extensions.yaml)
+---
+
+# Install
+
+One door for adding anything to this environment. Figure out **what** is being
+installed and at **which scope**, then route to the right source of truth.
+
+## Arguments
+
+```
+$ARGUMENTS
+```
+
+## Scope is the source of truth
+
+Scope decides *which repo and file* the change lands in — not just a flag.
+
+| Scope | Source of truth | How it is realized | Reproducible via |
+|-------|-----------------|--------------------|------------------|
+| **user** (default for general-purpose tools) | the **dotfiles repo** (`chezmoi source-path`), editable from any cwd | edit source manifest → `chezmoi apply` | dotfiles |
+| **project** | the **current repo** (`.mise.toml`, `.mcp.json`, `.claude/settings.json`) | run the tool's CLI in-place | the project repo |
+| **local** | machine + project local | `--scope local` / untracked | nothing (ephemeral) |
+
+### The reach-in invariant (do not violate)
+
+For **user** scope, **edit the chezmoi source and `chezmoi apply`** — never run a
+tool's native `--global` / `--scope user` command from a foreign cwd. Those write
+the *live* file out-of-band from chezmoi, which chezmoi then fights on the next
+apply. Reaching in means: resolve `chezmoi source-path`, edit the source manifest
+there, then apply. This works from anywhere — you do not need to `cd` into dotfiles.
+
+## Step 1 — Classify type and scope
+
+**Type** (check in order):
+
+1. **Claude Code plugin** — argument looks like `name@marketplace`, or the user says
+   "plugin". → *Plugins* below.
+2. **MCP server** — the user says "MCP server" / "MCP", or gives a server URL or a
+   stdio command to wire up. → *MCP servers* below.
+3. **Tool / CLI** — a binary/dev tool. → *Tools* below (mise).
+4. **GUI app / system utility** — → *Homebrew* below.
+
+**Scope:**
+
+- Explicit `--scope user|project|local`, or `--global`/`-g` → user. Honor it.
+- Otherwise infer: inside a non-dotfiles project repo with (or wanting) a local
+  manifest → **project**; everything else → **user**.
+- When ambiguous and it matters, ask with `AskUserQuestion`.
+- **If cwd *is* the dotfiles repo,** `chezmoi source-path` returns it — editing there
+  is still correct, and you still run a full `chezmoi apply` afterward (the apply
+  installs the tool; the file edit alone does not).
+
+Resolve the dotfiles source once when acting at user scope:
+
+```bash
+src="$(chezmoi source-path)"   # e.g. ~/.local/share/chezmoi/home
+```
+
+## Step 2 — Route
+
+### Tools (mise — preferred for all dev tools)
+
+1. Identify & discover: `mise search <tool>`, `mise registry <tool>`,
+   `mise ls-remote <tool>` for versions. Pin an exact version (no `latest`).
+2. **user scope** → edit `${src}/dot_config/mise/config.toml` under `[tools]`
+   (correct backend prefix, exact version, existing comment grouping), then:
+   ```bash
+   chezmoi apply        # NO target arg — a targeted apply skips
+                        # run_onchange_00-install-mise-tools and the tool won't install
+   ```
+3. **project scope** → in the cwd repo: `mise use <tool>@<version>` (creates/updates
+   `.mise.toml`); `mise use --pin` for an exact pin.
+4. Verify: `mise which <tool>` and `<tool> --version`.
+
+If `mise search` and `mise registry` find nothing:
+1. Try the universal backends — `mise use ubi:<owner>/<repo>` or `aqua:<owner>/<repo>`.
+2. Else, if it's a GUI app or a system utility, route to Homebrew (below).
+3. Else ask with `AskUserQuestion` before acting.
+
+Never silently fall back to `brew`/`apt`/`npm`/`pipx` — the guard hook blocks those;
+tell the user what was tried and the options.
+
+### Homebrew (GUI apps, non-versioned system utilities) — user scope
+
+Edit `${src}/.chezmoidata/packages.yaml` (`packages.darwin.casks` for GUI apps,
+`packages.darwin.brews` for CLIs mise can't provide), alphabetical, then
+`chezmoi apply`.
+
+### Claude Code plugins
+
+First ensure the marketplace is known (`claude plugin marketplace list --json`).
+
+- **user scope** → edit `${src}/.chezmoidata/claude-extensions.yaml`: add the
+  marketplace under `marketplaces` (if not built-in) and the plugin to `plugins`
+  as `name@marketplace`. **Public OSS only** in the committed file — anything
+  employer-internal/private goes in machine-local `[data.claudeExtensionsExtra]`
+  in `~/.config/chezmoi/chezmoi.toml`. Then `chezmoi apply` (the
+  `sync-claude-extensions` reconciler installs it).
+- **project scope** → in the cwd repo:
+  ```bash
+  claude plugin marketplace add <owner/repo> --scope project   # if not already known
+  claude plugin install <name>@<marketplace> --scope project   # writes .claude/settings.json
+  ```
+
+### MCP servers
+
+**Secret check first** (before composing any command): if `$ARGUMENTS` or the
+conversation contains a literal token, key, or password, do NOT put it in a command
+or a committed file. Tell the user it will be referenced via 1Password or kept in
+machine-local `[data.claudeExtensionsExtra]`, then take the safe path below.
+
+The forms, so you never have to re-derive them:
+
+```bash
+# HTTP (most remote servers):
+claude mcp add --scope <scope> --transport http <name> <url>
+# HTTP with an auth header:
+claude mcp add --scope <scope> --transport http <name> <url> --header "Authorization: Bearer <token>"
+# stdio (local subprocess):
+claude mcp add --scope <scope> [--env KEY=val ...] <name> -- <command> [args...]
+```
+
+- **user scope** → add an entry to `mcpServers` in
+  `${src}/.chezmoidata/claude-extensions.yaml` (shape:
+  `{name, transport: http|sse|stdio, url|command, args?, env?, headers?}`), then
+  `chezmoi apply`. **Never commit secrets** — for a bearer token/API key, keep the
+  whole entry in machine-local `[data.claudeExtensionsExtra]`, or reference 1Password.
+- **project scope** → `claude mcp add --scope project ...`, which writes `.mcp.json`
+  in the cwd repo (committed, shared with the team). The `.mcp.json` shape:
+  ```json
+  { "mcpServers": { "<name>": { "type": "http", "url": "https://..." } } }
+  ```
+- **local scope** → `claude mcp add --scope local ...` (this repo, not shared).
+
+Verify with `claude mcp get <name>` / `claude mcp list`.
+
+## Step 3 — Verify & hand off
+
+- Show `chezmoi diff` (user scope) — only the intended manifest should change.
+- For tools/plugins at user scope, run a **full** `chezmoi apply`. If it is
+  interrupted, run it again before declaring success — a half-done apply leaves the
+  live files behind the source you just edited.
+- Verify the result (`mise which <tool>`, `claude plugin list`, `claude mcp get`).
+- Commit with `/commit` (one logical change). For a user-scope change made from a
+  foreign cwd, the edit landed in the dotfiles repo — `chezmoi cd` first (or commit
+  from the dotfiles root), since `/commit` acts on the current repo.
+
+## Examples
+
+```
+/install ripgrep                      → mise tool, user scope → dotfiles config.toml
+/install node@22 --scope project      → mise tool in this repo's .mise.toml
+/install ci-cd-tools@pickled-claude-plugins
+                                      → plugin, user scope → claude-extensions.yaml
+/install linear@claude-plugins-official --scope project
+                                      → plugin in this repo's .claude/settings.json
+/install --scope project an MCP server for the sentry API at https://mcp.sentry.dev/mcp
+                                      → claude mcp add -s project -t http sentry https://mcp.sentry.dev/mcp → .mcp.json
+/install --global jq                  → reach-in: edit $(chezmoi source-path)/dot_config/mise/config.toml → full chezmoi apply (works from any cwd)
+/install an MCP server with token sk-abc123
+                                      → secret detected → do NOT commit; use 1Password / machine-local extras
+```
+
+## Reference
+
+- Tools/packages & backends: `docs/package-management.md`, and `/mise` for deep
+  mise context (backends, lockfiles, github-first policy).
+- Plugins, MCP servers, scope routing, the reconciler, and the guard hook:
+  `docs/claude-code.md` and `docs/adrs/006-declarative-claude-code-extensions.md`.
