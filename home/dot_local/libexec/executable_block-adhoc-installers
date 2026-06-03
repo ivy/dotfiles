@@ -1,0 +1,113 @@
+#!/usr/bin/env bash
+#
+# block-adhoc-installers -- Claude Code PreToolUse/Bash guard.
+#
+# Denies ad-hoc package installers/runners (npx, pipx run, pip install, npm i -g,
+# gem install, brew install, cargo install, ...) and redirects to the /install
+# skill, so tools stay captured in mise / the dotfiles instead of drifting in.
+#
+# Reads the PreToolUse hook JSON on stdin; on a match it prints a deny decision
+# and exits 0. Anything else exits 0 with no output (defers to normal permission
+# handling). Set CLAUDE_ALLOW_ADHOC_INSTALL=1 in the environment to bypass — this
+# is a human escape hatch; an agent cannot set it for itself (an inline FOO=1
+# prefix does not reach this process, and per-Bash-call env does not persist).
+#
+# Docs: docs/claude-code.md, docs/adrs/006-declarative-claude-code-extensions.md
+
+# No `set -o errexit`: this guard uses `[[ cond ]] && action` lines, and a false
+# condition must fall through to the next check, not abort the hook.
+set -o nounset
+set -o pipefail
+
+# Human bypass: defer to the normal permission classifier.
+[[ -n "${CLAUDE_ALLOW_ADHOC_INSTALL:-}" ]] && exit 0
+
+# Read the hook payload straight from stdin (this runs on every Bash tool call,
+# so avoid an extra `cat` subprocess on the hot path).
+tool_command="$(jq -r '.tool_input.command // empty' 2>/dev/null || true)"
+[[ -z "${tool_command}" ]] && exit 0
+
+# Does a token list (after the command word) contain a global flag?
+has_global() {
+  local tokens=" $* "
+  [[ "${tokens}" == *" -g "* || "${tokens}" == *" --global "* ]]
+}
+
+# Inspect one command segment. Sets MATCHED and returns 0 if it is an ad-hoc
+# installer/runner; returns 1 otherwise.
+#
+# The blocklist below is an explicit, curated security boundary, not a general
+# "anything with `install`" rule (which would catch `mise install`, `brew
+# reinstall`, etc.). Keep it legible and auditable; revisit when a new runtime's
+# installer becomes common (e.g. `deno install`). The BATS suite pins the matrix.
+segment_blocked() {
+  local -a toks
+  read -ra toks <<<"$1"
+  ((${#toks[@]})) || return 1
+
+  # Strip leading env-assignments and command wrappers (FOO=bar, sudo, env, ...).
+  local i=0
+  while ((i < ${#toks[@]})); do
+    case "${toks[i]}" in
+    *=* | sudo | env | exec | command | builtin | nice | nohup | time) ((i += 1)) ;;
+    *) break ;;
+    esac
+  done
+
+  local c="${toks[i]:-}" s="${toks[i + 1]:-}" t="${toks[i + 2]:-}"
+  local rest=("${toks[@]:i+1}")
+
+  case "${c}" in
+  npx | bunx | uvx) MATCHED="${c}" && return 0 ;;
+  pnpm)
+    [[ "${s}" == dlx ]] && MATCHED="pnpm dlx" && return 0
+    [[ "${s}" =~ ^(add|install|i)$ ]] && has_global "${rest[@]}" && MATCHED="pnpm ${s} --global" && return 0
+    ;;
+  yarn)
+    [[ "${s}" == dlx ]] && MATCHED="yarn dlx" && return 0
+    [[ "${s}" == global ]] && MATCHED="yarn global" && return 0
+    ;;
+  npm)
+    [[ "${s}" =~ ^(install|i|add)$ ]] && has_global "${rest[@]}" && MATCHED="npm ${s} --global" && return 0
+    ;;
+  pipx)
+    [[ "${s}" =~ ^(run|install)$ ]] && MATCHED="pipx ${s}" && return 0
+    ;;
+  uv)
+    [[ "${s}" == tool && "${t}" =~ ^(run|install)$ ]] && MATCHED="uv tool ${t}" && return 0
+    [[ "${s}" == pip && "${t}" == install ]] && MATCHED="uv pip install" && return 0
+    ;;
+  pip | pip3)
+    [[ "${s}" == install ]] && MATCHED="${c} install" && return 0
+    ;;
+  python | python3)
+    [[ "${s}" == -m && "${t}" == pip && "${toks[i + 3]:-}" == install ]] && MATCHED="${c} -m pip install" && return 0
+    ;;
+  gem | brew | apt | apt-get | dnf | yum | cargo | go)
+    # These block only their `install` subcommand.
+    [[ "${s}" == install ]] && MATCHED="${c} install" && return 0
+    ;;
+  esac
+  return 1
+}
+
+# Split the command into segments on shell operators, then inspect each. Order
+# matters: collapse two-char operators before their single-char counterparts.
+norm="${tool_command//&&/$'\n'}"
+norm="${norm//||/$'\n'}"
+norm="${norm//;/$'\n'}"
+norm="${norm//|/$'\n'}"
+norm="${norm//&/$'\n'}"
+
+MATCHED=""
+while IFS= read -r segment; do
+  [[ -z "${segment// /}" ]] && continue
+  if segment_blocked "${segment}"; then
+    reason="Ad-hoc installer \"${MATCHED}\" is blocked so tools stay captured in mise and the dotfiles. Use the /install skill instead — it pins the version and routes to the right scope (user or project)."
+    jq -cn --arg r "${reason}" \
+      '{hookSpecificOutput: {hookEventName: "PreToolUse", permissionDecision: "deny", permissionDecisionReason: $r}}'
+    exit 0
+  fi
+done <<<"${norm}"
+
+exit 0
