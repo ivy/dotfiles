@@ -82,7 +82,7 @@ bats test/<file>.bats   # Run one test file
 ## Change Hygiene
 
 - **Pin versions** — every dependency gets an exact version; Renovate handles updates
-- **Prefer mise** — install CLI tools via `mise use` (aqua backend), not brew/dnf/npm
+- **Prefer mise / `/install`** — add tools, plugins, and MCP servers via `/install`; ad-hoc installers (`npx`/`pipx`/`pip install`/`npm -g`/…) are blocked by a guard hook, so don't reach for them. See [docs/claude-code.md](docs/claude-code.md)
 - **One change per commit** — small, conventional commits via `/commit`
 - **Package Manager subagent** — use for version conflicts, container images, bulk updates, or GitHub Actions digests (see [docs/renovate.md](docs/renovate.md))
 
