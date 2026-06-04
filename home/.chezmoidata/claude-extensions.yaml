@@ -23,6 +23,7 @@ claudeExtensions:
     - ruby-lsp@claude-plugins-official
     - ralph-loop@claude-plugins-official
     - ci-cd-tools@pickled-claude-plugins
+    - plannotator@plannotator
 
   # MCP servers to add at user scope: claude mcp add -s user [-t <transport>] <name> <url|command>
   # None are public; private/internal servers live in machine-local claudeExtensionsExtra.
