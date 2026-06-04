@@ -232,8 +232,19 @@ alias mise='GITHUB_TOKEN="$(gh auth token)" command mise'
 {{- end }}
 
 {{- if lookPath "claude" }}
-# Always give Claude Code access to source checkouts
-alias claude='claude --add-dir ~/src'
+# Give Claude Code access to source checkouts for interactive/prompt sessions,
+# but leave subcommands (mcp, update, doctor, …) untouched — they don't take
+# --add-dir and shouldn't have it injected. Can't be an alias: a bare prompt
+# (`claude "fix x"`) is a non-flag positional just like a subcommand, so the
+# only reliable way to tell them apart is to match the known subcommand names.
+claude() {
+  case "$1" in
+    agents|auth|auto-mode|doctor|install|mcp|plugin|plugins|project|setup-token|ultrareview|update|upgrade)
+      command claude "$@" ;;
+    *)
+      command claude --add-dir ~/src "$@" ;;
+  esac
+}
 {{- end }}
 
 # Reload shell function - re-execs the exact same zsh binary
