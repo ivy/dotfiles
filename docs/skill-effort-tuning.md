@@ -116,6 +116,5 @@ Each commit needs `chezmoi diff && chezmoi apply home/dot_claude/skills/...` to 
 ## References
 
 - [Reddit — Claude Code effort levels explained](https://www.reddit.com/r/ClaudeCode/comments/1soqwfl/claude_code_effort_levels_explained_what/)
-- Clipping: `~/Documents/Gusto/Clippings/Claude Code effort levels explained  - what LowMediumHighMax actually do (and which to use).md`
 - [docs/vision.md](vision.md), [docs/core-principles.md](core-principles.md)
 - `home/.chezmoitemplates/bedrock-model` — existing tier-resolution template

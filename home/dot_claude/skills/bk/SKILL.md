@@ -93,7 +93,7 @@ Provide a concise summary:
 
 ```
 /bk 91                                    → investigate build 91
-/bk https://buildkite.com/gusto/my-pipe/builds/42  → investigate from URL
+/bk https://buildkite.com/your-org/my-pipe/builds/42  → investigate from URL
 /bk latest                                → check latest build on current branch
 /bk why did this fail                     → latest build, find failures
 /bk list failed builds                    → recent failures for current pipeline

@@ -315,21 +315,25 @@ set_permissions() {
     }' "${SETTINGS}" >"${SETTINGS}.tmp" && mv "${SETTINGS}.tmp" "${SETTINGS}"
 }
 
-# Register third-party plugin marketplaces and enable plugins
-set_plugins() {
-  printf 'setting plugin marketplaces and enabled plugins in %s\n' "${SETTINGS}"
+# Register the global guard hook that blocks ad-hoc installers (npx/pipx/...) and
+# redirects to the /install skill. Plugin marketplaces, enabled plugins, and MCP
+# servers are NOT managed here — the claude CLI is their single writer, driven by
+# bin/sync-claude-extensions. See docs/claude-code.md and docs/adrs/006.
+#
+# Merge, don't overwrite: drop any PreToolUse group that already contains our guard
+# command, then re-append our canonical single-entry group, leaving other groups
+# intact. Idempotent. (If the guard ever shares a group with other hooks, revisit —
+# this replaces the whole containing group, not just the one entry.)
+set_hooks() {
+  printf 'setting guard hook in %s\n' "${SETTINGS}"
   jq '
-        .extraKnownMarketplaces = ((.extraKnownMarketplaces // {}) + {
-            "pickled-claude-plugins": {
-                "source": {
-                    "source": "github",
-                    "repo": "technicalpickles/pickled-claude-plugins"
-                }
-            }
-        })
-        | .enabledPlugins = ((.enabledPlugins // {}) + {
-            "ci-cd-tools@pickled-claude-plugins": true
-        })
+        "$HOME/.local/libexec/block-adhoc-installers" as $cmd
+        | .hooks = (.hooks // {})
+        | .hooks.PreToolUse = (
+            [ (.hooks.PreToolUse // [])[]
+              | select((any(.hooks[]?; .command == $cmd)) | not) ]
+            + [ { "matcher": "Bash", "hooks": [ { "type": "command", "command": $cmd } ] } ]
+          )
     ' "${SETTINGS}" >"${SETTINGS}.tmp" && mv "${SETTINGS}.tmp" "${SETTINGS}"
 }
 
@@ -436,7 +440,7 @@ main() {
   set_status_line
   set_feature_flags
   set_permissions
-  set_plugins
+  set_hooks
 
   local use_bedrock
   use_bedrock=$(chezmoi data --format json | jq -r '.claude.use_bedrock')
