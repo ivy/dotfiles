@@ -33,3 +33,5 @@ Whenever possible, use `/mise` for tool installation. Do not use brew, apt, npx,
 ## Commits
 
 Commit small, coherent changes using `/commit`.
+
+@RTK.md
