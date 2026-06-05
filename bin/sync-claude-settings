@@ -315,23 +315,29 @@ set_permissions() {
     }' "${SETTINGS}" >"${SETTINGS}.tmp" && mv "${SETTINGS}.tmp" "${SETTINGS}"
 }
 
-# Register the global guard hook that blocks ad-hoc installers (npx/pipx/...) and
-# redirects to the /install skill. Plugin marketplaces, enabled plugins, and MCP
-# servers are NOT managed here — the claude CLI is their single writer, driven by
-# bin/sync-claude-extensions. See docs/claude-code.md and docs/adrs/006.
+# Register the single global PreToolUse/Bash hook: claude-bash-pretooluse. It
+# composes two concerns in a deterministic order inside one hook — the ad-hoc
+# installer guard (deny, redirect to /install) first, then rtk's token-saving
+# command rewrite. They MUST share one hook: two PreToolUse/Bash hooks where one
+# denies and the other rewrites via updatedInput race unreliably (anthropics/
+# claude-code#15897). See the wrapper's header and docs/claude-code.md. Plugin
+# marketplaces, enabled plugins, and MCP servers are NOT managed here — the claude
+# CLI is their single writer, driven by bin/sync-claude-extensions. See ADR-006.
 #
-# Merge, don't overwrite: drop any PreToolUse group that already contains our guard
-# command, then re-append our canonical single-entry group, leaving other groups
-# intact. Idempotent. (If the guard ever shares a group with other hooks, revisit —
+# Merge, don't overwrite: drop any PreToolUse group that already contains either the
+# wrapper or the legacy bare-guard command (so machines on the old layout migrate
+# cleanly), then re-append our canonical single-entry group, leaving other groups
+# intact. Idempotent. (If the wrapper ever shares a group with other hooks, revisit —
 # this replaces the whole containing group, not just the one entry.)
 set_hooks() {
-  printf 'setting guard hook in %s\n' "${SETTINGS}"
+  printf 'setting Bash PreToolUse hook (installer guard + rtk rewrite) in %s\n' "${SETTINGS}"
   jq '
-        "$HOME/.local/libexec/block-adhoc-installers" as $cmd
+        "$HOME/.local/libexec/claude-bash-pretooluse" as $cmd
+        | "$HOME/.local/libexec/block-adhoc-installers" as $legacy
         | .hooks = (.hooks // {})
         | .hooks.PreToolUse = (
             [ (.hooks.PreToolUse // [])[]
-              | select((any(.hooks[]?; .command == $cmd)) | not) ]
+              | select((any(.hooks[]?; .command == $cmd or .command == $legacy)) | not) ]
             + [ { "matcher": "Bash", "hooks": [ { "type": "command", "command": $cmd } ] } ]
           )
     ' "${SETTINGS}" >"${SETTINGS}.tmp" && mv "${SETTINGS}.tmp" "${SETTINGS}"

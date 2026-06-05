@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+#
+# claude-bash-pretooluse -- the single PreToolUse/Bash hook for Claude Code.
+#
+# Why one hook and not two: when two PreToolUse hooks match the same Bash call and
+# one returns a `deny` decision while the other returns `updatedInput` (a command
+# rewrite), Claude Code's aggregation of the two is unreliable -- a known, closed-
+# as-not-planned bug (anthropics/claude-code#15897). We want BOTH the ad-hoc
+# installer guard (deny) AND rtk's token-saving rewrite (updatedInput), so instead
+# of registering two hooks and racing them, we compose them here in ONE hook with a
+# deterministic order:
+#
+#   1. Installer guard first. If it blocks (npx / pip install / ...), emit its deny
+#      and STOP -- the command is never rewritten and never runs.
+#   2. Otherwise hand the call to `rtk hook claude`, which rewrites it to `rtk <cmd>`
+#      for token savings, and forward rtk's output verbatim.
+#
+# Because exactly one of the two ever produces output, there is nothing to
+# aggregate and nothing to race.
+#
+# Fail OPEN: this runs on EVERY Bash call, so a missing or broken rtk must never
+# block the shell. If rtk is absent, disabled, or errors, we emit nothing and defer
+# to normal permission handling. Set CLAUDE_DISABLE_RTK=1 to skip the rewrite (the
+# guard still runs) -- a human escape hatch mirroring the guard's own bypass.
+#
+# Docs: docs/claude-code.md. Guard: block-adhoc-installers (installed alongside).
+
+# No `set -o errexit`: a non-matching guard / absent rtk must fall through, not abort.
+set -o nounset
+set -o pipefail
+
+# Find the sibling guard relative to ourselves (chezmoi installs both into the same
+# libexec dir). Plain dirname, no symlink canonicalization, so the BATS suite can
+# drive this from a temp dir.
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+GUARD="${SCRIPT_DIR}/block-adhoc-installers"
+
+# Read the hook payload once; both the guard and rtk consume it on stdin.
+input="$(cat)"
+
+# 1. Installer guard. On a match it prints a deny decision (JSON) and exits 0;
+#    otherwise it prints nothing. A deny is final: do not rewrite, do not run.
+if [[ -x "${GUARD}" ]]; then
+  guard_out="$(printf '%s' "${input}" | "${GUARD}" || true)"
+  if [[ -n "${guard_out}" ]]; then
+    printf '%s\n' "${guard_out}"
+    exit 0
+  fi
+fi
+
+# 2. Not blocked -- hand off to rtk for the token-saving rewrite, when available and
+#    not disabled. Forward its output only if non-empty; on any failure fall through
+#    and emit nothing (defer to normal handling) so Bash always works.
+if [[ -z "${CLAUDE_DISABLE_RTK:-}" ]] && rtk_bin="$(command -v rtk 2>/dev/null)"; then
+  rtk_out="$(printf '%s' "${input}" | "${rtk_bin}" hook claude 2>/dev/null || true)"
+  [[ -n "${rtk_out}" ]] && printf '%s\n' "${rtk_out}"
+fi
+
+exit 0
