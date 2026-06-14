@@ -23,7 +23,7 @@ jobs:
 
       - name: Supply-chain security review
         id: review
-        uses: anthropics/claude-code-action@1eddb334cfa79fdb21ecbe2180ca1a016e8e7d47 # beta
+        uses: anthropics/claude-code-action@3d9f0dc7dc27995e8d9ae6ec22f9fe72f3e5ab12 # beta
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           allowed_bots: ivy-s-renovate-bot[bot]
