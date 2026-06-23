@@ -1,0 +1,13 @@
+# ~/.zprofile — login shells, sourced AFTER /etc/zprofile.
+#
+# macOS /etc/zprofile runs path_helper, which rebuilds PATH with the system dirs
+# (/usr/bin, /opt/homebrew/bin, …) first and pushes whatever .zshenv prepended
+# (the mise shims) to the back. Re-assert mise in SHIM MODE here so `which <tool>`
+# resolves to ~/.local/share/mise/shims/<tool> — some tooling inspects tool
+# resolution and expects the shim path. `mise activate --shims`
+# emits a single `export PATH="<shims>:$PATH"`; `typeset -U path` (set in .zshenv)
+# collapses the duplicate, promoting shims to the front and dropping its stale
+# low-priority copy. No-op on Linux (no path_helper), but harmless and correct.
+{{- if lookPath "mise" }}
+eval "$(mise activate zsh --shims)"
+{{- end }}

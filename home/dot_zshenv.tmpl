@@ -9,13 +9,21 @@ export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 export XDG_DATA_DIRS="${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
 export XDG_CONFIG_DIRS="${XDG_CONFIG_DIRS:-/etc/xdg}"
 
+# Keep PATH entries unique — collapse duplicates created by macOS path_helper
+# and the shim re-prepends in .zprofile/.zshenv (first occurrence wins, so a
+# re-prepended dir is promoted to the front and its stale copy dropped).
+typeset -U path PATH
+
 # Add ~/.local/bin to front of PATH if not already present
 if [[ -d "$HOME/.local/bin" && ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
   export PATH="$HOME/.local/bin:$PATH"
 fi
 
-# Add mise shims to PATH early so tools are available during plugin loading
-# (mise activate in .zshrc adds hooks for dynamic version switching later)
+# Mise activation (SHIM MODE) for NON-LOGIN shells: prepend the shims dir so
+# `which <tool>` resolves to ~/.local/share/mise/shims/<tool>. Deliberately NOT
+# `mise activate zsh` (hook-env) — that strips this dir and points tools at the
+# install path, so `which <tool>` no longer reports the shim. LOGIN shells get
+# the same via .zprofile, which re-asserts it AFTER macOS path_helper reorders PATH.
 if [[ -d "$HOME/.local/share/mise/shims" && ":$PATH:" != *":$HOME/.local/share/mise/shims:"* ]]; then
   export PATH="$HOME/.local/share/mise/shims:$PATH"
 fi

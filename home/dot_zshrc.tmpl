@@ -1,9 +1,12 @@
 # ============================================================================
-# Mise activation (always — agents need tool management)
+# Mise activation — SHIM MODE (deliberately NOT hook-env)
 # ============================================================================
-{{- if lookPath "mise" }}
-eval "$(mise activate zsh)"
-{{- end }}
+# mise runs in SHIM mode, not via `mise activate zsh` (hook-env). Shim mode keeps
+# `which <tool>` pointing at ~/.local/share/mise/shims/<tool> (hook-env points
+# tools at the install path instead), which keeps tool resolution predictable for
+# external tooling and works in non-interactive/agent subprocesses. The shims dir
+# is prepended in .zshenv (non-login shells) and re-asserted in .zprofile (login
+# shells, after macOS path_helper reorders PATH). Nothing to do here.
 
 # ============================================================================
 # Agent/CI detection via envsense
