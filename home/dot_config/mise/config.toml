@@ -11,13 +11,17 @@
 [settings]
 color_theme = "catppuccin"
 lockfile = true
+# Use the node runtime's bundled npm for npm: tools. The default ("auto")
+# resolves to jdx/aube, whose shim breaks when aube isn't an active tool
+# version — deterministic npm avoids that failure mode entirely.
+npm.package_manager = "npm"
 
 [tools]
 # Runtimes (install first - required by pipx/npm/cargo backends)
-node = "24.15.0"
-python = "3.14.5"
+node = "26.4.0"
+python = "3.14.6"
 pkl = "0.31.1"
-rust = "1.95.0"
+rust = "1.96.1"
 bun = "1.3.14"
 
 # Cargo (Rust tools built from source)
@@ -33,43 +37,43 @@ eza = "0.23.4"
 # Avoid aqua: backend — registry lag and attestation mismatches break installs.
 # See docs/adrs/005-replace-aqua-backend-with-github-releases.md
 "github:BurntSushi/ripgrep" = "15.1.0"
-"github:ajeetdsouza/zoxide" = { version = "0.9.9", platforms.linux-arm64 = { asset_pattern = "zoxide-*-aarch64-unknown-linux-musl.tar.gz" } }
+"github:ajeetdsouza/zoxide" = { version = "0.10.0", platforms.linux-arm64 = { asset_pattern = "zoxide-*-aarch64-unknown-linux-musl.tar.gz" } }
 "github:atuinsh/atuin" = "18.16.1"
 # plannotator: binary the plannotator Claude Code plugin's hooks invoke on PATH
-"github:backnotprop/plannotator" = "0.19.27"
-"github:buildkite/cli" = "3.42.0"
-"github:carapace-sh/carapace-bin" = "1.6.6"
+"github:backnotprop/plannotator" = "0.22.0"
+"github:buildkite/cli" = "3.51.0"
+"github:carapace-sh/carapace-bin" = "1.7.3"
 "github:charmbracelet/glow" = "2.1.2"
-"github:cli/cli" = "2.92.0"
+"github:cli/cli" = "2.96.0"
 "github:dandavison/delta" = "0.19.2"
-"github:dlvhdr/gh-dash" = "4.24.1"
+"github:dlvhdr/gh-dash" = "4.25.0"
 "github:gitleaks/gitleaks" = "8.30.1"
-"github:jesseduffield/lazygit" = "0.61.1"
-"github:jqlang/jq" = "jq-1.8.1"
-"github:jdx/hk" = "1.45.0"
-"github:junegunn/fzf" = "0.72.0"
-"github:mikefarah/yq" = "4.53.2"
+"github:jesseduffield/lazygit" = "0.63.0"
+"github:jqlang/jq" = "jq-1.8.2"
+"github:jdx/hk" = "1.50.0"
+"github:junegunn/fzf" = "0.73.1"
+"github:mikefarah/yq" = "4.53.3"
 "github:muesli/duf" = "0.9.1"
-"github:neovim/neovim" = "0.12.2"
-"github:rtk-ai/rtk" = "0.42.3"
+"github:neovim/neovim" = "0.12.4"
+"github:rtk-ai/rtk" = "0.43.0"
 "github:sharkdp/bat" = "0.26.1"
 "github:sharkdp/fd" = "10.4.2"
-"github:smtg-ai/claude-squad" = "1.0.18"
-"github:sst/opencode" = "1.15.5"
-"github:starship/starship" = "1.25.1"
+"github:smtg-ai/claude-squad" = "1.0.19"
+"github:sst/opencode" = "1.17.13"
+"github:starship/starship" = "1.26.0"
 
 # pipx itself (must be installed before any pipx: packages below)
-pipx = "1.12.0"
+pipx = "1.15.0"
 
 # Python tools via pipx
 "pipx:claude-conversation-extractor" = "1.1.2"
 "pipx:gitingest" = "0.3.1"
 
 # Node tools via npm
-"npm:@openai/codex" = "0.131.0"
-"npm:@playwright/mcp" = "0.0.75"
-"npm:@owloops/claude-powerline" = "1.26.0"
-"npm:@tobilu/qmd" = "2.5.2"
-"npm:bktide" = "1.0.1778003370"
-"npm:ccusage" = "19.0.3"
+"npm:@openai/codex" = "0.142.5"
+"npm:@playwright/mcp" = "0.0.77"
+"npm:@owloops/claude-powerline" = "1.27.0"
+"npm:@tobilu/qmd" = "2.5.3"
+"npm:bktide" = "1.0.1782920867"
+"npm:ccusage" = "20.0.14"
 "npm:git-mob" = "4.0.1"
