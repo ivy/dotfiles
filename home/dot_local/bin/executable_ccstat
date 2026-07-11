@@ -155,22 +155,31 @@ def _model_pricing(pricing_data, model):
     if not pricing_data or model not in pricing_data:
         return None
     p = pricing_data[model]
+    cache_create = p.get("cache_creation_input_token_cost", 0)
     return {
         "input": p.get("input_cost_per_token", 0),
         "output": p.get("output_cost_per_token", 0),
         "cache_read": p.get("cache_read_input_token_cost", 0),
-        "cache_create": p.get("cache_creation_input_token_cost", 0),
+        "cache_create": cache_create,
+        # 1-hour cache TTL is priced higher than the default 5-minute TTL.
+        "cache_create_1h": p.get("cache_creation_input_token_cost_above_1hr", cache_create),
     }
 
 
 def _cost(usage, pricing):
     if not pricing:
         return 0.0
+    # Cache-creation tokens split by TTL: the 1-hour portion is priced at the
+    # above-1hr rate, the remainder at the default (5-minute) rate.
+    cache_create_total = usage.get("cache_creation_input_tokens", 0)
+    cache_create_1h = usage.get("cache_creation_1h_input_tokens", 0)
+    cache_create_5m = cache_create_total - cache_create_1h
     return (
         usage.get("input_tokens", 0) * pricing["input"]
         + usage.get("output_tokens", 0) * pricing["output"]
         + usage.get("cache_read_input_tokens", 0) * pricing["cache_read"]
-        + usage.get("cache_creation_input_tokens", 0) * pricing["cache_create"]
+        + cache_create_5m * pricing["cache_create"]
+        + cache_create_1h * pricing["cache_create_1h"]
     )
 
 
@@ -186,6 +195,7 @@ def analyze(records, pricing_data=None):
             "output_tokens": 0,
             "cache_read_tokens": 0,
             "cache_create_tokens": 0,
+            "cache_create_1h_tokens": 0,
         }
     )
     subagents = []
@@ -201,6 +211,11 @@ def analyze(records, pricing_data=None):
     user_messages = 0
     interruptions = 0
     commits = 0
+    # Claude Code splits one assistant message across several JSONL records
+    # (one content block each) and repeats the full usage/stop_reason on every
+    # one. Token, turn, and stop_reason accounting must count each message once,
+    # keyed by (message id, request id) — the same key ccusage dedupes on.
+    seen_usage = set()
 
     for rec in records:
         ts = rec.get("timestamp")
@@ -211,7 +226,7 @@ def analyze(records, pricing_data=None):
 
         if rtype == "assistant":
             _process_assistant(
-                rec, models, tool_counts, skills, stop_reasons,
+                rec, models, tool_counts, skills, stop_reasons, seen_usage,
             )
             main_tool_count += sum(
                 1
@@ -272,6 +287,7 @@ def analyze(records, pricing_data=None):
                 "output_tokens": m["output_tokens"],
                 "cache_read_input_tokens": m["cache_read_tokens"],
                 "cache_creation_input_tokens": m["cache_create_tokens"],
+                "cache_creation_1h_input_tokens": m["cache_create_1h_tokens"],
             },
             pricing,
         )
@@ -305,24 +321,16 @@ def analyze(records, pricing_data=None):
     }
 
 
-def _process_assistant(rec, models, tool_counts, skills, stop_reasons):
+def _process_assistant(rec, models, tool_counts, skills, stop_reasons, seen_usage):
     msg = rec.get("message", {})
     model = msg.get("model", "unknown")
     usage = msg.get("usage", {})
     if model == "<synthetic>":
         return
 
-    m = models[model]
-    m["turns"] += 1
-    m["input_tokens"] += usage.get("input_tokens", 0)
-    m["output_tokens"] += usage.get("output_tokens", 0)
-    m["cache_read_tokens"] += usage.get("cache_read_input_tokens", 0)
-    m["cache_create_tokens"] += usage.get("cache_creation_input_tokens", 0)
-
-    sr = msg.get("stop_reason")
-    if sr:
-        stop_reasons[sr] += 1
-
+    # Tool and skill counting is per content block: one assistant message is
+    # split across records with one block each, so each tool_use appears on its
+    # own record exactly once. Count these on every record.
     for block in msg.get("content", []):
         if not isinstance(block, dict) or block.get("type") != "tool_use":
             continue
@@ -332,6 +340,30 @@ def _process_assistant(rec, models, tool_counts, skills, stop_reasons):
             skill = block.get("input", {}).get("skill")
             if skill:
                 skills.append(skill)
+
+    # Token, turn, and stop_reason accounting is per message: the identical
+    # usage object and stop_reason are stamped on every split record, so count
+    # them once per (message id, request id). Missing id => can't dedupe, count.
+    msg_id = msg.get("id")
+    if msg_id is not None:
+        key = (msg_id, rec.get("requestId"))
+        if key in seen_usage:
+            return
+        seen_usage.add(key)
+
+    m = models[model]
+    m["turns"] += 1
+    m["input_tokens"] += usage.get("input_tokens", 0)
+    m["output_tokens"] += usage.get("output_tokens", 0)
+    m["cache_read_tokens"] += usage.get("cache_read_input_tokens", 0)
+    m["cache_create_tokens"] += usage.get("cache_creation_input_tokens", 0)
+    cache_create = usage.get("cache_creation")
+    if isinstance(cache_create, dict):
+        m["cache_create_1h_tokens"] += cache_create.get("ephemeral_1h_input_tokens", 0)
+
+    sr = msg.get("stop_reason")
+    if sr:
+        stop_reasons[sr] += 1
 
 
 def _process_subagent(tr, subagents, subagent_by_type):
