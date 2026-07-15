@@ -51,7 +51,7 @@ Renovate's JSONata manager reads `ref` as `currentValue` and `commit` as `curren
 5. Vi mode + copy mode bindings
 6. vim-tmux-navigator smart pane switching
 7. Prefix-based pane navigation and resize
-8. Utility bindings (clear, split, reload, window chooser, Claude)
+8. Utility bindings (clear, split, reload, window chooser, Claude in dotfiles/vault)
 
 tmux-sensible loads first so explicit settings can override its defaults.
 
@@ -114,6 +114,10 @@ Requires `christoomey/vim-tmux-navigator` Neovim plugin.
 | `prefix + r` | Reload config |
 | `prefix + w` | Window/session chooser |
 | `prefix + e` | Open Claude Code in dotfiles dir |
+| `prefix + v` | Open Claude Code in Obsidian vault (vertical split) |
+
+The `prefix + v` vault path is per-machine: it's prompted at `chezmoi init` and stored in
+the local (uncommitted) chezmoi config as `obsidian.vault_path`, never in git.
 
 ## Installation & Management
 

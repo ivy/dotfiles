@@ -17,6 +17,9 @@
 {{- $credBuildkite := promptStringOnce . "credentials.buildkite" "1Password ref for Buildkite" -}}
 {{- $credNgrok := promptStringOnce . "credentials.ngrok" "1Password ref for ngrok" -}}
 
+{{- /* Obsidian vault path — per-machine, kept out of git (lives in local chezmoi config) */ -}}
+{{- $obsidianVaultPath := promptStringOnce . "obsidian.vault_path" "Obsidian vault path (absolute)" (joinPath .chezmoi.homeDir "Documents") -}}
+
 # Source Directory Configuration
 # Allows us to maintain Chezmoi outside of the default `~/.local/share/chezmoi/`.
 # This enables storing the dotfiles repository in a custom location while still
@@ -42,6 +45,11 @@ codex = {{ $credCodex | quote }}
 claude_api = {{ $credClaudeApi | quote }}
 buildkite = {{ $credBuildkite | quote }}
 ngrok = {{ $credNgrok | quote }}
+
+[data.obsidian]
+# Absolute path to the Obsidian vault; used by the tmux `prefix + v` binding.
+# Per-machine value — stored only in the local chezmoi config, never committed.
+vault_path = {{ $obsidianVaultPath | replace "~" .chezmoi.homeDir | quote }}
 
 [onepassword]
 cache = true
