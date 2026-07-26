@@ -12,6 +12,12 @@ Before changing behavior that seems odd or unnecessary, understand why it exists
 
 Prefer root-cause fixes over workarounds. Temporary hacks may unblock progress, but they do not replace understanding the cause.
 
+## Writing
+
+Documents and comments state current facts, not their own history. Revision narration ("it was X, now it's Y") belongs in a git commit message, not in the document itself.
+
+Comments stay in scope of the code they annotate. Don't use a comment to explain an external API, library, or system — that documentation rots the moment upstream changes. Link to authoritative docs instead of restating them; if staying in-scope requires more context than a comment can hold, that's a signal to refactor the abstraction, not to narrate around it.
+
 ## Investigation
 
 Do not stop at the first plausible explanation. Trace the actual execution path until you can explain the behavior in terms of specific code, configuration, or data.
