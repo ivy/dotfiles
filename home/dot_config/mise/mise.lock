@@ -1668,6 +1668,45 @@ checksum = "sha256:690021e22f2bf2c57d5867dc0fababe5e55e714c26942bd909ffddb6c5df4
 url = "https://github.com/starship/starship/releases/download/v1.26.0/starship-x86_64-pc-windows-msvc.zip"
 url_api = "https://api.github.com/repos/starship/starship/releases/assets/460374615"
 
+[[tools."github:technicalpickles/cq"]]
+version = "0.2.1"
+backend = "github:technicalpickles/cq"
+
+[tools."github:technicalpickles/cq"."platforms.linux-arm64"]
+checksum = "sha256:e7e30a8950fcd264375a5d4d71f5cf3f22bce286f48bc54860b2a82e4d0f1534"
+url = "https://github.com/technicalpickles/cq/releases/download/v0.2.1/cq-0.2.1-aarch64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/technicalpickles/cq/releases/assets/469706014"
+
+[tools."github:technicalpickles/cq"."platforms.linux-arm64-musl"]
+checksum = "sha256:e7e30a8950fcd264375a5d4d71f5cf3f22bce286f48bc54860b2a82e4d0f1534"
+url = "https://github.com/technicalpickles/cq/releases/download/v0.2.1/cq-0.2.1-aarch64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/technicalpickles/cq/releases/assets/469706014"
+
+[tools."github:technicalpickles/cq"."platforms.linux-x64"]
+checksum = "sha256:418d40f362437cdd996cc30aee1a14e781cfe7144354cc2dcde7fa938b1ceb85"
+url = "https://github.com/technicalpickles/cq/releases/download/v0.2.1/cq-0.2.1-x86_64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/technicalpickles/cq/releases/assets/469708721"
+
+[tools."github:technicalpickles/cq"."platforms.linux-x64-baseline"]
+checksum = "sha256:418d40f362437cdd996cc30aee1a14e781cfe7144354cc2dcde7fa938b1ceb85"
+url = "https://github.com/technicalpickles/cq/releases/download/v0.2.1/cq-0.2.1-x86_64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/technicalpickles/cq/releases/assets/469708721"
+
+[tools."github:technicalpickles/cq"."platforms.linux-x64-musl"]
+checksum = "sha256:418d40f362437cdd996cc30aee1a14e781cfe7144354cc2dcde7fa938b1ceb85"
+url = "https://github.com/technicalpickles/cq/releases/download/v0.2.1/cq-0.2.1-x86_64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/technicalpickles/cq/releases/assets/469708721"
+
+[tools."github:technicalpickles/cq"."platforms.linux-x64-musl-baseline"]
+checksum = "sha256:418d40f362437cdd996cc30aee1a14e781cfe7144354cc2dcde7fa938b1ceb85"
+url = "https://github.com/technicalpickles/cq/releases/download/v0.2.1/cq-0.2.1-x86_64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/technicalpickles/cq/releases/assets/469708721"
+
+[tools."github:technicalpickles/cq"."platforms.macos-arm64"]
+checksum = "sha256:79089b2084db82ae767f890d09fddbcd3a42d938e28e12eba1f854a021da4021"
+url = "https://github.com/technicalpickles/cq/releases/download/v0.2.1/cq-0.2.1-aarch64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/technicalpickles/cq/releases/assets/469703989"
+
 [[tools.node]]
 version = "26.4.0"
 backend = "core:node"
