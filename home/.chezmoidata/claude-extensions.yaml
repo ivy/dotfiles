@@ -26,5 +26,12 @@ claudeExtensions:
     - plannotator@plannotator
 
   # MCP servers to add at user scope: claude mcp add -s user [-t <transport>] <name> <url|command>
-  # None are public; private/internal servers live in machine-local claudeExtensionsExtra.
-  mcpServers: []
+  # Private/internal servers live in machine-local claudeExtensionsExtra.
+  mcpServers:
+    # Local search over the Obsidian vault (collections in ~/.config/qmd/index.yml).
+    # Runs fully on-device — no API keys, no network. Resolves `qmd` from PATH so it
+    # follows the mise-active node, which is the ABI its native addon is built for.
+    - name: qmd
+      transport: stdio
+      command: qmd
+      args: [mcp]

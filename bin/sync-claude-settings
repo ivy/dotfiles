@@ -310,7 +310,11 @@ set_permissions() {
             "WebFetch(domain:slsa.dev)",
             "WebFetch(domain:stackoverflow.com)",
             "WebFetch(domain:www.google.com)",
-            "WebFetch(domain:www.rubydoc.info)"
+            "WebFetch(domain:www.rubydoc.info)",
+            "mcp__qmd__get",
+            "mcp__qmd__multi_get",
+            "mcp__qmd__query",
+            "mcp__qmd__status"
         ]
     }' "${SETTINGS}" >"${SETTINGS}.tmp" && mv "${SETTINGS}.tmp" "${SETTINGS}"
 }
