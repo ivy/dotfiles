@@ -18,6 +18,8 @@ claudeExtensions:
       repo: technicalpickles/pickled-claude-plugins
     - name: plannotator
       repo: backnotprop/plannotator
+    - name: qmd
+      repo: tobi/qmd
 
   # Plugins to install at user scope: claude plugin install <name>@<marketplace>
   plugins:
@@ -27,6 +29,7 @@ claudeExtensions:
     - ralph-loop@claude-plugins-official
     - ci-cd-tools@pickled-claude-plugins
     - plannotator@plannotator
+    - qmd@qmd
 
   # MCP servers to add at user scope: claude mcp add -s user [-t <transport>] <name> <url|command>
   # Private/internal servers live in machine-local claudeExtensionsExtra.
