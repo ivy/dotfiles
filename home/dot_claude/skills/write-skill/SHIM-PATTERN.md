@@ -16,7 +16,7 @@ The `/pr` skill uses a shim to enforce `--web`:
 
 ```bash
 #!/usr/bin/env bash
-# $SKILL_DIR/gh-pr-create-web
+# ${CLAUDE_SKILL_DIR}/gh-pr-create-web
 # Enforces --web flag so PRs always open in browser for human review
 
 set -euo pipefail
@@ -38,11 +38,11 @@ skills/
     └── executable_my-shim    # chezmoi prefix for executable
 ```
 
-Reference in `allowed-tools`:
+Reference in `allowed-tools` and skill instructions with `${CLAUDE_SKILL_DIR}` — the substitution resolves before Claude sees the skill, regardless of where it's installed (personal, project, or plugin):
 
 ```yaml
 allowed-tools:
-  - Bash($SKILL_DIR/my-shim:*)
+  - Bash(${CLAUDE_SKILL_DIR}/my-shim:*)
 ```
 
 ## Shim Template

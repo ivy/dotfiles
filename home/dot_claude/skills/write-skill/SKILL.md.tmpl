@@ -20,6 +20,8 @@ allowed-tools:
 
 **CRITICAL: Before deploying any skill, spawn a reviewer agent with REVIEW.md to audit `allowed-tools`. Overly permissive tool access (e.g., `Bash(git:*)`) can cause data loss or leak secrets.**
 
+**Note on substitutions (workaround):** This playbook is itself loaded as a skill, so Claude Code would substitute platform variables — ARGUMENTS, CLAUDE_SKILL_DIR, CLAUDE_SESSION_ID, etc. — *in this file* at load time if they appeared in their literal `$`-prefixed form. To teach the syntax without triggering premature substitution, the playbook below names variables **without** the leading `$` and describes the syntax in prose. In the new skill file you write, **always prefix with `$`** (or use the braced form for clarity). The body-structure example below uses `` !`echo` `` to inject one literal placeholder for copy/paste — dynamic-context output is not re-scanned for substitutions. The supporting files (LIFECYCLE.md, REVIEW.md, SHIM-PATTERN.md) are not loaded as skill bodies, so they show literal forms directly.
+
 Create skills as flexible playbooks, not rigid scripts.
 
 ## Arguments
@@ -98,14 +100,14 @@ allowed-tools: <minimal safe subset>
 ---
 ```
 
-Both follow the same body structure:
+Both follow the same body structure (the line inside the Arguments block uses `` !`echo` `` to print a literal ARGUMENTS placeholder, `$`-prefixed — copy that placeholder as-is into your skill):
 
 ```markdown
 # <Title>
 
 ## Arguments
 \`\`\`
-\$ARGUMENTS
+!`echo '$ARGUMENTS'`
 \`\`\`
 
 ## Instructions
@@ -126,20 +128,28 @@ Both follow the same body structure:
 
 **Frontmatter:**
 - `description`: "Use when..." for auto-invoke
+- `when_to_use`: trigger phrases — appended to `description`; combined cap is 1,536 chars, key use case first
+- `paths`: glob like `src/**/*.ts` to scope auto-activation to matching files
 - `context: fork`: noisy output that won't inform follow-up
-- `disable-model-invocation: true`: side-effect skills
+- `disable-model-invocation: true`: side-effect skills (user-only trigger)
+- `user-invocable: false`: hide from `/` menu — background knowledge Claude loads silently
+- `effort`: `low|medium|high|xhigh|max` override for the skill's turn
+- `hooks`: lifecycle hooks scoped to this skill
 - `allowed-tools`: tools that run WITHOUT user approval (omitted tools still work but prompt user)
 
-**Arguments:**
-- Free-form: `[package | url...]` not `<package>`
-- Show varied inputs in examples
-- Parse flexibly, not strictly
+**Arguments** *(prefix each name with `$` in your skill — see note at top):*
+- Free-form input pattern: `[package | url...]` not `<package>`
+- Positional substitutions: `ARGUMENTS` (full string), `ARGUMENTS[N]` or shorthand `N` (Nth positional, 0-indexed)
+- Named: declare `arguments: [issue, branch]` in frontmatter → reference each by its name (e.g. the placeholder for `issue`)
+- Show varied inputs in examples; parse flexibly, not strictly
 
 **Content:**
 - Decision trees, not linear scripts
-- <60 lines; externalize reference material
+- <60 lines; externalize reference material (skill body persists across turns — see LIFECYCLE.md)
 - Refer to "arguments" after the Arguments section
-- `\${CLAUDE_SESSION_ID}` for session-specific context
+- Dynamic values via braced `${...}` substitutions: `CLAUDE_SESSION_ID`, `CLAUDE_EFFORT`, `CLAUDE_SKILL_DIR` (full list in LIFECYCLE.md)
+- Multi-line shell injection: open a fenced code block with three backticks + `!` instead of the inline single-backtick `!` form
+- Include the keyword `ultrathink` in the body to request deep reasoning at runtime
 
 ### 5. Review (REQUIRED)
 
@@ -157,14 +167,20 @@ Also check verbosity, edge cases, and invocation clarity.
 |------|-------------|
 | User-only trigger | `disable-model-invocation: true` |
 | Auto-invoke | `description` with "Use when..." |
+| Extra trigger phrases | `when_to_use: ...` (counts toward 1,536-char cap) |
+| Scope by file path | `paths: "src/**/*.ts"` |
 | Hidden from `/` menu | `user-invocable: false` |
 | Isolate context | `context: fork` |
 | Specific agent | `context: fork` + `agent: Explore` |
 | Right-size capability | `model: haiku\|sonnet\|opus` |
+| Adapt to effort | `effort: low\|medium\|high\|xhigh\|max` |
+| Named arguments | `arguments: [foo, bar]` → reference each by its `$`-prefixed name |
+| Lifecycle hooks | `hooks: ...` |
 
 ## Supplementary Docs
 
 - **REVIEW.md** - **REQUIRED** checklist for auditing `allowed-tools` before deployment
+- **LIFECYCLE.md** - Skill content lifecycle, compaction budget, description cap, discovery rules
 - **MODEL-SELECTION.md** - When to use haiku vs sonnet vs opus
 - **SHIM-PATTERN.md** - Wrapper scripts for enforcing constraints (advanced)
 

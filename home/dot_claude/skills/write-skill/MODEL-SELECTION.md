@@ -92,3 +92,7 @@ The template reads `[data.claude] use_bedrock` from chezmoi config (set during `
 ## Cost Consideration
 
 Model selection affects every invocation. A skill used 100x/day at opus costs significantly more than at haiku. Match capability to need.
+
+## Pairing with `effort`
+
+The `effort:` frontmatter field (`low|medium|high|xhigh|max`) controls reasoning depth for the skill's turn, independent of `model`. Within a tier, `effort: high` buys deeper analysis without escalating to a larger model. Available levels depend on the model. Skills can also read `${CLAUDE_EFFORT}` to adapt instructions to the active level.

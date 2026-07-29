@@ -195,7 +195,7 @@ Any tool that ingests external content (WebFetch, WebSearch, curl) is a prompt i
 3. **Check for silent file modification**: Are Write/Edit auto-allowed? Users should see file contents before creation.
 4. **Verify dangerous operations are gated**: Instructions may use git push, gh create, Write, etc.—that's fine IF they're not in `allowed-tools`
 5. **Apply narrowing principle**: Is the most specific pattern used for auto-allowed tools?
-6. **Verify shims use hardcoded paths** (not `$SKILL_DIR`—that doesn't exist)
+6. **Verify shims reference `${CLAUDE_SKILL_DIR}`** (not the nonexistent `$SKILL_DIR`)
 7. **Check instruction clarity**: Are dangerous operations clearly documented so users know what they're approving?
 
 ## Good Examples
@@ -253,14 +253,17 @@ allowed-tools:
 
 ## Shim Pattern Note
 
-When skills use shims for guardrails, they must use hardcoded paths:
+When skills use shims for guardrails, reference them via `${CLAUDE_SKILL_DIR}` — the substitution resolves to the skill's directory regardless of install location (personal, project, plugin):
 
 ```yaml
-# CORRECT - hardcoded path
-~/.claude/skills/pr/gh-pr-create-web --title "..."
+# CORRECT - portable across install locations
+${CLAUDE_SKILL_DIR}/gh-pr-create-web --title "..."
 
 # WRONG - $SKILL_DIR doesn't exist as a substitution
 $SKILL_DIR/gh-pr-create-web --title "..."
+
+# DISCOURAGED - hardcoded path won't work if relocated
+~/.claude/skills/pr/gh-pr-create-web --title "..."
 ```
 
-Available substitutions: `$ARGUMENTS`, `$ARGUMENTS[N]`, `$N`, `${CLAUDE_SESSION_ID}`
+Available substitutions: `$ARGUMENTS`, `$ARGUMENTS[N]`, `$N`, `$name` (with `arguments:` frontmatter), `${CLAUDE_SESSION_ID}`, `${CLAUDE_EFFORT}`, `${CLAUDE_SKILL_DIR}`.
