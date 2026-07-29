@@ -9,9 +9,13 @@
 # and realized through the `claude` CLI, which is the single writer of the
 # extraKnownMarketplaces / enabledPlugins keys and ~/.claude.json mcpServers.
 #
-# Idempotent and additive: only missing items are added. Items installed but not
-# declared are reported, never removed, unless --prune is given. Plugins/marketplaces
-# at "managed" scope (admin-pushed) are left untouched. See docs/claude-code.md.
+# Idempotent. Marketplaces and plugins are additive: only missing items are added.
+# MCP servers are additive plus reconciled in place — a declared server whose
+# transport, command, args, url, or env/header keys differ from what is installed
+# is removed and re-added, since `claude mcp add` will not overwrite. Items
+# installed but not declared are reported, never removed, unless --prune is given.
+# Plugins/marketplaces at "managed" scope (admin-pushed) are left untouched.
+# See docs/claude-code.md.
 #
 # Usage: sync-claude-extensions [--check] [--prune]
 #   --check   dry run: report what would change, mutate nothing
@@ -123,6 +127,33 @@ reconcile_plugins() {
   prune_extra 'plugin' "${user_ids}" "${declared_ids}"
 }
 
+# Canonical shape of a declared server, for comparison against what is installed.
+# env/header *values* are deliberately excluded: they may embed ${op://...}
+# references that would have to be resolved from 1Password on every run just to
+# diff, and a mismatch would risk logging a resolved secret. Comparing key sets
+# still catches a variable being added or removed.
+declared_fingerprint() {
+  jq -Sc '
+    (.transport // "stdio") as $t
+    | if $t == "stdio"
+      then [$t, .command, (.args // []), ((.env // {}) | keys)]
+      else [$t, .url, ((.headers // {}) | keys)]
+      end
+  ' <<<"$1"
+}
+
+# The same shape, read back from the mcpServers entry the claude CLI wrote.
+installed_fingerprint() {
+  jq -Sc --arg name "$1" '
+    (.mcpServers[$name] // {}) as $s
+    | ($s.type // "stdio") as $t
+    | if $t == "stdio"
+      then [$t, $s.command, ($s.args // []), (($s.env // {}) | keys)]
+      else [$t, $s.url, (($s.headers // {}) | keys)]
+      end
+  ' "$2" 2>/dev/null
+}
+
 reconcile_mcp() {
   log 'mcp servers:'
   local claude_json existing name server
@@ -134,10 +165,16 @@ reconcile_mcp() {
     [[ -z "${server}" ]] && continue
     name="$(jq -r '.name' <<<"${server}")"
     declared_names+="${name}"$'\n'
-    if grep -qxF "${name}" <<<"${existing}"; then
+    if ! grep -qxF "${name}" <<<"${existing}"; then
+      log "  + add ${name}"
+      mcp_add "${server}" || true
+    elif [[ "$(declared_fingerprint "${server}")" == "$(installed_fingerprint "${name}" "${claude_json}")" ]]; then
       log "  ok: ${name}"
     else
-      log "  + add ${name}"
+      # `claude mcp add` refuses to overwrite an existing server, so changing a
+      # transport, command, or url means removing the old entry and re-adding it.
+      log "  ~ update ${name} (declared config differs from installed)"
+      run_claude mcp remove "${name}" || true
       mcp_add "${server}" || true
     fi
   done < <(declared '.mcpServers')

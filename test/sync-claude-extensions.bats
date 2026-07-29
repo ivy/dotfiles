@@ -120,6 +120,60 @@ run_reconciler() {
 	! grep -qF 'uninstall' "$CLAUDE_CALLS_LOG"
 }
 
+@test "re-adds an MCP server whose transport changed" {
+	make_stubs
+	printf '%s' '{"claudeExtensions":{"marketplaces":[],"plugins":[],"mcpServers":[{"name":"qmd","transport":"http","url":"http://localhost:8181/mcp"}]}}' >"$FAKE_DATA_JSON"
+	printf '%s' '{"mcpServers":{"qmd":{"type":"stdio","command":"qmd","args":["mcp"],"env":{}}}}' >"$TEST_HOME_DIR/.claude.json"
+
+	run_reconciler
+	[ "$status" -eq 0 ]
+
+	[[ "$output" == *"update qmd"* ]]
+	grep -qF 'mcp remove qmd' "$CLAUDE_CALLS_LOG"
+	grep -qF 'mcp add qmd http://localhost:8181/mcp --scope user --transport http' "$CLAUDE_CALLS_LOG"
+}
+
+@test "leaves an MCP server alone when the installed config already matches" {
+	make_stubs
+	printf '%s' '{"claudeExtensions":{"marketplaces":[],"plugins":[],"mcpServers":[{"name":"qmd","transport":"stdio","command":"qmd","args":["mcp"]}]}}' >"$FAKE_DATA_JSON"
+	printf '%s' '{"mcpServers":{"qmd":{"type":"stdio","command":"qmd","args":["mcp"],"env":{}}}}' >"$TEST_HOME_DIR/.claude.json"
+
+	run_reconciler
+	[ "$status" -eq 0 ]
+
+	[[ "$output" == *"ok: qmd"* ]]
+	! grep -qF 'mcp remove' "$CLAUDE_CALLS_LOG"
+	! grep -qF 'mcp add' "$CLAUDE_CALLS_LOG"
+}
+
+# Secret values are resolved at sync time, so the installed value never equals the
+# declared ${op://...} reference. Diffing values would re-add the server on every
+# run; only the key set is compared.
+@test "a differing env value alone does not trigger a re-add" {
+	make_stubs
+	printf '%s' '{"claudeExtensions":{"marketplaces":[],"plugins":[],"mcpServers":[{"name":"svc","transport":"stdio","command":"svc","args":[],"env":{"TOKEN":"${op://vault/item/field}"}}]}}' >"$FAKE_DATA_JSON"
+	printf '%s' '{"mcpServers":{"svc":{"type":"stdio","command":"svc","args":[],"env":{"TOKEN":"resolved-at-last-sync"}}}}' >"$TEST_HOME_DIR/.claude.json"
+
+	run_reconciler
+	[ "$status" -eq 0 ]
+
+	[[ "$output" == *"ok: svc"* ]]
+	! grep -qF 'mcp remove' "$CLAUDE_CALLS_LOG"
+}
+
+@test "--check reports an MCP config change but mutates nothing" {
+	make_stubs
+	printf '%s' '{"claudeExtensions":{"marketplaces":[],"plugins":[],"mcpServers":[{"name":"qmd","transport":"http","url":"http://localhost:8181/mcp"}]}}' >"$FAKE_DATA_JSON"
+	printf '%s' '{"mcpServers":{"qmd":{"type":"stdio","command":"qmd","args":["mcp"],"env":{}}}}' >"$TEST_HOME_DIR/.claude.json"
+
+	run_reconciler --check
+	[ "$status" -eq 0 ]
+
+	[[ "$output" == *"would run: claude mcp remove qmd"* ]]
+	! grep -qF 'mcp remove qmd' "$CLAUDE_CALLS_LOG"
+	! grep -qF 'mcp add qmd' "$CLAUDE_CALLS_LOG"
+}
+
 @test "skips cleanly when claude is not on PATH" {
 	make_stubs
 	# Build a PATH containing only the stubs plus the real tools the script needs,
