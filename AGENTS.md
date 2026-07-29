@@ -8,13 +8,13 @@ Personal dotfiles managed by coding agents via [Chezmoi](https://www.chezmoi.io/
 
 | Layer | Component | Config source |
 |-------|-----------|---------------|
-| Terminal | Ghostty | `home/dot_config/ghostty/config` |
+| Terminal | Ghostty | `home/dot_config/ghostty/config.tmpl` |
 | Multiplexer | tmux | `home/dot_config/tmux/tmux.conf` |
 | Shell | zsh + Oh-My-Zsh | `home/dot_zshrc.tmpl` |
 | Editor | Neovim / LazyVim | `home/dot_config/nvim/` |
 | Tools | mise (aqua backend) | `home/dot_config/mise/config.toml` |
 | Git | git + delta | `home/dot_config/git/config.tmpl` |
-| AI agents | Claude Code | `.claude/` (skills, hooks, agents) |
+| AI agents | Claude Code | `home/dot_claude/` (user) + `.claude/` (project) |
 | SSH | 1Password agent | `home/private_dot_ssh/` |
 | Services | Docker Compose | `home/dot_config/docker-compose/` |
 | Updates | Renovate | `renovate.json5` |
@@ -26,15 +26,19 @@ Personal dotfiles managed by coding agents via [Chezmoi](https://www.chezmoi.io/
 ```
 home/                  # All managed dotfiles (Chezmoi source)
   dot_config/          #   -> ~/.config/
+  dot_claude/          #   -> ~/.claude/ (user-scope skills, agents, settings)
   dot_local/bin/       #   -> ~/.local/bin/
   private_dot_ssh/     #   -> ~/.ssh/
   private_Library/     #   -> ~/Library/ (macOS only)
+bin/                   # Repo scripts: setup, test, sync-claude-*
 test/                  # BATS test suite
-docs/                  # Architecture docs and ADRs
-.claude/               # Agent infrastructure
-  skills/              #   Slash-command skills
+docs/                  # Architecture docs; decisions in docs/adrs/
+.claude/               # Project-scope agent config (this repo only)
+  skills/              #   Project slash-commands
   hooks/               #   Pre/post tool hooks
   agents/              #   Subagent definitions
+hk.pkl                 # Lint/format hooks (pre-commit, pre-push, CI)
+mise.toml              # Dev tool pins + `mise run` tasks
 ```
 
 ## How to Work Here
@@ -47,7 +51,7 @@ docs/                  # Architecture docs and ADRs
 |--------------|-----------|
 | `~/.zshrc` | `home/dot_zshrc.tmpl` |
 | `~/.config/mise/config.toml` | `home/dot_config/mise/config.toml` |
-| `~/.config/ghostty/config` | `home/dot_config/ghostty/config` |
+| `~/.config/ghostty/config` | `home/dot_config/ghostty/config.tmpl` |
 
 ### Change Workflow
 
@@ -63,14 +67,29 @@ sleep 2 && tmux capture-pane -t verify -p
 tmux kill-session -t verify
 ```
 
-### Testing
+### Commands
 
 ```bash
-bats test/              # Run all tests
+./bin/setup             # Bootstrap dev tools via mise
+./bin/test              # Run all tests (what CI runs)
 bats test/<file>.bats   # Run one test file
+mise run lint           # Lint + auto-fix (hk fix)
+hk check                # Lint without fixing (what CI runs)
 ```
 
+**Before opening a PR:** `hk check && ./bin/test`
+
+`hk` also runs automatically on pre-commit and pre-push — it stashes unstaged
+changes, auto-fixes, and enforces conventional commit messages. See `hk.pkl`.
+
 ## Skills
+
+Two scopes, two sources — edit the source, never `~/.claude/`:
+
+- **User** (available everywhere): `home/dot_claude/skills/` → `~/.claude/skills/` on apply
+- **Project** (this repo only): `.claude/skills/`
+
+Most-used:
 
 | Skill | Purpose |
 |-------|---------|
@@ -78,6 +97,8 @@ bats test/<file>.bats   # Run one test file
 | `/nvim` | Troubleshoot Neovim plugin errors or update after breaking changes |
 | `/update` | Morning routine — merge Renovate PRs, rebase, apply chezmoi |
 | `/commit` | Commit with conventional message and intentional file selection |
+
+Browse the two dirs above for the full set (~35 skills).
 
 ## Change Hygiene
 
@@ -100,7 +121,8 @@ bats test/<file>.bats   # Run one test file
 | Core principles | [docs/core-principles.md](docs/core-principles.md) |
 | Vision | [docs/vision.md](docs/vision.md) |
 | Chezmoi operations | [docs/agents/chezmoi.md](docs/agents/chezmoi.md) |
-| Shell architecture ADR | [docs/adrs/002-agent-optimized-shell-with-envsense.md](docs/adrs/002-agent-optimized-shell-with-envsense.md) |
+| Skill effort tuning | [docs/skill-effort-tuning.md](docs/skill-effort-tuning.md) |
+| Architecture decisions (ADR 001–006) | [docs/adrs/](docs/adrs/) |
 | Supply chain security | [docs/supply-chain-security.md](docs/supply-chain-security.md) |
 | GitHub labels & triage | [docs/labels.md](docs/labels.md) |
 
