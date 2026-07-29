@@ -118,6 +118,7 @@ Browse the two dirs above for the full set (~35 skills).
 | tmux-powerline (notification rail) | [docs/tmux-powerline.md](docs/tmux-powerline.md) |
 | Zsh | [docs/zsh.md](docs/zsh.md) |
 | Claude Code integration | [docs/claude-code.md](docs/claude-code.md) |
+| QMD vault search | [docs/qmd.md](docs/qmd.md) |
 | Core principles | [docs/core-principles.md](docs/core-principles.md) |
 | Vision | [docs/vision.md](docs/vision.md) |
 | Chezmoi operations | [docs/agents/chezmoi.md](docs/agents/chezmoi.md) |
