@@ -6,6 +6,9 @@
 # [data.claudeExtensionsExtra] in ~/.config/chezmoi/chezmoi.toml, never here.
 #
 # Plugins float (no version pin) — see docs/adrs/006 and docs/claude-code.md.
+#
+# MCP server `headers` and `env` values may embed ${op://vault/item/field}
+# references; they are read from 1Password at sync time so keys never land here.
 
 claudeExtensions:
   # Marketplaces to register: claude plugin marketplace add <repo>

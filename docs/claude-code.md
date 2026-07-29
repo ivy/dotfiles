@@ -56,6 +56,36 @@ Use the `/install` skill — it classifies type and scope and routes correctly,
 including the exact `claude mcp add` / `.mcp.json` forms. Don't run installers by
 hand (the guard hook blocks them).
 
+### MCP server fields
+
+Each `mcpServers` entry — in the committed base or in machine-local extras —
+accepts:
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `name` | yes | Server name; the reconciler's identity key |
+| `transport` | no | `stdio` (default), `http`, or `sse` |
+| `command` | `stdio` | Executable, resolved from `PATH` at launch |
+| `args` | no | Arguments passed after `command` |
+| `url` | `http`/`sse` | Endpoint URL |
+| `env` | no | Map of environment variables for the server process |
+| `headers` | no | Map of HTTP headers |
+
+```yaml
+mcpServers:
+  - name: qmd          # stdio
+    transport: stdio
+    command: qmd
+    args: [mcp]
+  - name: internal-wiki   # http
+    transport: http
+    url: https://mcp.internal.example/mcp
+```
+
+The reconciler emits
+`claude mcp add <name> [url] --scope user --transport <t> [--env K=V …] [--header "K: V" …] [-- <command> <args…>]`.
+Positionals precede the flags because `--env` and `--header` are variadic.
+
 ### Machine-local extras (private / employer-internal)
 
 Anything that must not be committed to this public repo — private marketplaces,
@@ -77,9 +107,52 @@ transport = "http"
 url = "https://mcp.internal.example/mcp"
 ```
 
-Never put a bearer token or API key in plaintext — reference 1Password instead.
-Private marketplaces authenticate via your git credential helper (`gh auth`); the
-reconciler exports `GITHUB_TOKEN` from `gh auth token` when `gh` is present.
+Never put a bearer token or API key in plaintext — use a 1Password reference
+(below). Private marketplaces authenticate via your git credential helper
+(`gh auth`); the reconciler exports `GITHUB_TOKEN` from `gh auth token` when `gh`
+is present.
+
+### Secrets: 1Password references
+
+Any `env` or `headers` value may embed one or more
+`${op://<vault>/<item>/<field>}` references. `bin/sync-claude-extensions` resolves
+them with `op read` at apply time and hands the literal value to `claude mcp add`;
+only the reference lives in chezmoi data.
+
+```toml
+[[data.claudeExtensionsExtra.mcpServers]]
+name = "internal-wiki"
+transport = "http"
+url = "https://mcp.internal.example/mcp"
+
+[data.claudeExtensionsExtra.mcpServers.headers]
+Authorization = "Bearer ${op://Private/Internal Wiki/credential}"
+```
+
+| Property | Behavior |
+|----------|----------|
+| Scope | `env` and `headers` values only — not `url`, `command`, or `args` |
+| Timing | Resolved on `chezmoi apply`, immediately before `claude mcp add` |
+| Requires | `op` on `PATH` and an authenticated 1Password session |
+| `--check` | References are left unresolved — a dry run never resolves or prints a secret |
+| Logging | `--env` / `--header` values are masked as `<redacted>` in reconciler output |
+| On failure | Missing `op`, unreadable reference, or empty value → warning, that one server is skipped, the run continues |
+| Limit | Multiple references per value are allowed; at most 16 substitutions per value |
+
+Resolved values land in `~/.claude.json` in plaintext. That file is not managed by
+chezmoi and must never be committed.
+
+**Rotation.** The reconciler only adds servers that are *missing*, so changing a
+value in 1Password does not update a server already present in `~/.claude.json`.
+Run `claude mcp remove <name>`, then `chezmoi apply`, to re-resolve.
+
+**`DEBUG=1`** enables `set -o xtrace`, which prints resolved secrets to stderr and
+bypasses the masking above. Do not use it in a shared terminal or a captured log.
+
+Sync-time resolution is deliberate: the alternative — leaving a `${VAR}` for Claude
+Code to expand at runtime — would place the secret in the environment of every
+subprocess an agent spawns. See
+[ADR-006](adrs/006-declarative-claude-code-extensions.md).
 
 ### Versioning: plugins float
 

@@ -49,13 +49,27 @@ require_command() {
 # single bad item (network/auth) never aborts `chezmoi apply`.
 run_claude() {
   if [[ "${CHECK}" == true ]]; then
-    log "  [check] would run: claude $*"
+    log "  [check] would run: claude $(redacted "$@")"
     return 0
   fi
   if ! claude "$@"; then
-    warn "  warning: 'claude $*' failed — continuing"
+    warn "  warning: 'claude $(redacted "$@")' failed — continuing"
     return 1
   fi
+}
+
+# Render a command for logging with --header/--env values masked, so a resolved
+# API key never reaches the terminal or a chezmoi apply log.
+redacted() {
+  local arg prev='' out=()
+  for arg in "$@"; do
+    case "${prev}" in
+    --header | --env) out+=('<redacted>') ;;
+    *) out+=("${arg}") ;;
+    esac
+    prev="${arg}"
+  done
+  printf '%s' "${out[*]}"
 }
 
 # Merge a declared list from base + machine-local extras under the given path
@@ -131,6 +145,40 @@ reconcile_mcp() {
   prune_extra 'mcp' "${existing}" "${declared_names}"
 }
 
+# Expand ${op://vault/item/field} references in a declared value by reading them
+# from 1Password at sync time. Keeps API keys in the vault rather than in chezmoi
+# data, while still handing `claude mcp add` a literal value — the alternative,
+# leaving a ${VAR} for Claude Code to expand at runtime, would put the secret in
+# the environment of every subprocess an agent spawns.
+resolve_secrets() {
+  local value="$1" ref token secret guard=0
+  # --check echoes the full command it would run; leave references unresolved so
+  # a dry run never prints a secret.
+  if [[ "${CHECK}" == true ]]; then
+    printf '%s' "${value}"
+    return 0
+  fi
+  while [[ "${value}" =~ \$\{(op://[^}]+)\} ]]; do
+    ref="${BASH_REMATCH[1]}"
+    token="\${${ref}}"
+    if ! require_command op; then
+      warn "  warning: op not in PATH — cannot resolve ${ref}"
+      return 1
+    fi
+    if ! secret="$(op read "${ref}" 2>/dev/null)" || [[ -z "${secret}" ]]; then
+      warn "  warning: could not read ${ref} from 1Password"
+      return 1
+    fi
+    value="${value%%"${token}"*}${secret}${value#*"${token}"}"
+    # A secret that itself looks like a reference would otherwise loop forever.
+    if ((++guard > 16)); then
+      warn '  warning: too many secret references'
+      return 1
+    fi
+  done
+  printf '%s' "${value}"
+}
+
 # Build and run `claude mcp add` from a server JSON object.
 # http/sse: claude mcp add -s user -t <t> [-H ...] <name> <url>
 # stdio:    claude mcp add -s user -t stdio [-e ...] <name> -- <command> [args...]
@@ -139,27 +187,32 @@ mcp_add() {
   name="$(jq -r '.name' <<<"${server}")"
   transport="$(jq -r '.transport // "stdio"' <<<"${server}")"
 
-  local cmd=(mcp add --scope user --transport "${transport}")
+  # Positionals must precede the flags: --header/--env are variadic, so a name or
+  # url placed after them is consumed as another value and `claude mcp add` fails
+  # with "missing required argument 'name'".
+  local cmd=(mcp add "${name}")
+  [[ "${transport}" != "stdio" ]] && cmd+=("$(jq -r '.url' <<<"${server}")")
+  cmd+=(--scope user --transport "${transport}")
 
-  local kv
-  while IFS= read -r kv; do
-    [[ -n "${kv}" ]] && cmd+=(--env "${kv}")
-  done < <(jq -r '(.env // {}) | to_entries[] | "\(.key)=\(.value)"' <<<"${server}")
+  local k v
+  while IFS=$'\t' read -r k v; do
+    [[ -z "${k}" ]] && continue
+    v="$(resolve_secrets "${v}")" || return 1
+    cmd+=(--env "${k}=${v}")
+  done < <(jq -r '(.env // {}) | to_entries[] | [.key, .value] | @tsv' <<<"${server}")
 
-  while IFS= read -r kv; do
-    [[ -n "${kv}" ]] && cmd+=(--header "${kv}")
-  done < <(jq -r '(.headers // {}) | to_entries[] | "\(.key): \(.value)"' <<<"${server}")
+  while IFS=$'\t' read -r k v; do
+    [[ -z "${k}" ]] && continue
+    v="$(resolve_secrets "${v}")" || return 1
+    cmd+=(--header "${k}: ${v}")
+  done < <(jq -r '(.headers // {}) | to_entries[] | [.key, .value] | @tsv' <<<"${server}")
 
   if [[ "${transport}" == "stdio" ]]; then
-    local command_bin
-    command_bin="$(jq -r '.command' <<<"${server}")"
-    cmd+=("${name}" -- "${command_bin}")
+    cmd+=(-- "$(jq -r '.command' <<<"${server}")")
     local a
     while IFS= read -r a; do
       cmd+=("${a}")
     done < <(jq -r '(.args // [])[]' <<<"${server}")
-  else
-    cmd+=("${name}" "$(jq -r '.url' <<<"${server}")")
   fi
 
   run_claude "${cmd[@]}"

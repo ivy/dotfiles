@@ -93,7 +93,7 @@ run_reconciler() {
 	run_reconciler
 	[ "$status" -eq 0 ]
 
-	grep -qF 'mcp add --scope user --transport http context7 https://mcp.context7.example/mcp' "$CLAUDE_CALLS_LOG"
+	grep -qF 'mcp add context7 https://mcp.context7.example/mcp --scope user --transport http' "$CLAUDE_CALLS_LOG"
 }
 
 @test "merges machine-local extras with the committed base" {
