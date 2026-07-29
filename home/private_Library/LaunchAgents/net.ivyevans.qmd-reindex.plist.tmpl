@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>net.ivyevans.qmd-reindex</string>
+
+	<key>ProgramArguments</key>
+	<array>
+		<string>{{ .chezmoi.homeDir }}/.local/bin/qmd-reindex</string>
+	</array>
+
+	<!-- Every 5 minutes. A cycle with no new notes costs ~2s and never loads the
+	     embedding model, and qmd-reindex stays silent unless it did work. -->
+	<key>StartInterval</key>
+	<integer>300</integer>
+
+	<!-- Nothing to catch up on at login that the next interval won't handle. -->
+	<key>RunAtLoad</key>
+	<false/>
+
+	<!-- Background earns throttled CPU and I/O from macOS, keeping indexing out
+	     of the way of foreground work. -->
+	<key>ProcessType</key>
+	<string>Background</string>
+	<key>LowPriorityIO</key>
+	<true/>
+
+	<key>StandardOutPath</key>
+	<string>{{ .chezmoi.homeDir }}/Library/Logs/qmd-reindex.log</string>
+	<key>StandardErrorPath</key>
+	<string>{{ .chezmoi.homeDir }}/Library/Logs/qmd-reindex.log</string>
+</dict>
+</plist>

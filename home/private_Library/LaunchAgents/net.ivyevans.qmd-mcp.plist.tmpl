@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>net.ivyevans.qmd-mcp</string>
+
+	<!-- Shared MCP server for every Claude Code session, declared as an http
+	     transport in .chezmoidata/claude-extensions.yaml. One resident process
+	     keeps the GGUF models warm instead of each session loading its own.
+
+	     `mcp --http` stays in the foreground. The `--daemon` flag must not be used
+	     here: it re-spawns itself detached and unrefs the child, which is the
+	     fork-and-exit behaviour launchd.plist(5) forbids of a managed job.
+
+	     launchd runs jobs with PATH=/usr/bin:/bin:/usr/sbin:/sbin, which has no
+	     mise shims — hence the absolute path. The shim is a standalone binary that
+	     resolves the mise-active node itself. -->
+	<key>ProgramArguments</key>
+	<array>
+		<string>{{ .chezmoi.homeDir }}/.local/share/mise/shims/qmd</string>
+		<string>mcp</string>
+		<string>--http</string>
+		<string>--port</string>
+		<string>8181</string>
+	</array>
+
+	<key>RunAtLoad</key>
+	<true/>
+	<key>KeepAlive</key>
+	<true/>
+
+	<!-- Well above launchd's 10s default so a qmd that cannot start — a native
+	     addon left unbuilt by NPM_CONFIG_IGNORE_SCRIPTS after an upgrade, say —
+	     retries slowly instead of filling the log. -->
+	<key>ThrottleInterval</key>
+	<integer>30</integer>
+
+	<!-- Deliberately no ProcessType: Background. That is right for the reindex
+	     agent, but here it would throttle CPU and I/O on interactive queries. -->
+
+	<!-- qmd's launcher sets GGML_METAL_NO_RESIDENCY=1 for a clean process exit
+	     (ggml-org/llama.cpp#22593). `qmd doctor` says to opt back into Metal
+	     residency sets for long-lived processes, which this is. -->
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>QMD_METAL_KEEP_RESIDENCY</key>
+		<string>1</string>
+	</dict>
+
+	<key>StandardOutPath</key>
+	<string>{{ .chezmoi.homeDir }}/Library/Logs/qmd-mcp.log</string>
+	<key>StandardErrorPath</key>
+	<string>{{ .chezmoi.homeDir }}/Library/Logs/qmd-mcp.log</string>
+</dict>
+</plist>

@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Fetch qmd's GGUF models so a fresh machine converges to a working search index
+# instead of discovering a multi-gigabyte download inside the qmd-mcp daemon on
+# the first query — where the only sign of it is a log file.
+#
+# Keyed on the mise config because that pins the qmd version, and the default
+# model set is resolved from qmd's own code. `qmd pull` reports each model as
+# "cached/checked" unless --refresh is passed, so re-running is cheap.
+#
+# mise config hash: {{ include "dot_config/mise/config.toml" | sha256sum }}
+
+[ -n "${DEBUG:-}" ] && set -o xtrace
+set -o errexit
+set -o nounset
+
+# Skip in containers — the image build runs `chezmoi init --apply`, and these
+# models are ~2.2GB that no container workload needs baked in.
+if [ -n "${CONTAINER:-}" ] || [ -f /.dockerenv ]; then
+    echo "Running in container, skipping qmd model download"
+    exit 0
+fi
+
+# Resolved at runtime, not with lookPath: on a fresh machine mise installs qmd
+# during this same apply, so the shim may not exist yet when this is rendered.
+if ! command -v qmd >/dev/null 2>&1; then
+    echo "qmd not found, skipping model download"
+    exit 0
+fi
+
+echo "Ensuring qmd models are present..."
+qmd pull

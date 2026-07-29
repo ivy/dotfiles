@@ -35,9 +35,14 @@ claudeExtensions:
   # Private/internal servers live in machine-local claudeExtensionsExtra.
   mcpServers:
     # Local search over the Obsidian vault (collections in ~/.config/qmd/index.yml).
-    # Runs fully on-device — no API keys, no network. Resolves `qmd` from PATH so it
-    # follows the mise-active node, which is the ABI its native addon is built for.
+    # Runs fully on-device — no API keys, no network.
+    #
+    # http rather than stdio: stdio spawns one qmd per Claude Code session, and each
+    # process loads its own copy of the GGUF models on first query. A single daemon
+    # behind localhost keeps them warm across every concurrent session. The daemon is
+    # the net.ivyevans.qmd-mcp launchd agent, which invokes the mise shim — so the
+    # native addon still runs under the mise-active node whose ABI it was built for.
+    # There is no Linux unit yet, so this server only resolves on darwin.
     - name: qmd
-      transport: stdio
-      command: qmd
-      args: [mcp]
+      transport: http
+      url: http://localhost:8181/mcp

@@ -1,0 +1,85 @@
+#!/usr/bin/env bash
+# Refresh the QMD index so `qmd query` and the QMD MCP tools see recent notes.
+#
+# QMD ships no file watcher and its MCP server only ever reads the index, so
+# nothing re-indexes on its own — notes stay invisible to search until this runs.
+# Both steps are incremental and cost ~2s when nothing changed: `update` re-reads
+# only modified files, and `embed` exits before loading the 300MB embedding model
+# once every content hash already has vectors.
+#
+# Run every 5 minutes by ~/Library/LaunchAgents/net.ivyevans.qmd-reindex.plist.
+
+set -o errexit -o nounset -o pipefail
+
+# launchd gives jobs a minimal PATH that excludes mise shims. The shim is a
+# standalone binary that resolves the tool itself, so an absolute path suffices.
+readonly QMD="$HOME/.local/share/mise/shims/qmd"
+readonly LOG_MAX_BYTES=$((1024 * 1024))
+readonly CLEANUP_STAMP="$HOME/.cache/qmd/.last-cleanup"
+readonly CLEANUP_INTERVAL_SECONDS=$((24 * 60 * 60))
+
+if [[ ! -x "$QMD" ]]; then
+    echo "qmd not installed at $QMD, skipping reindex"
+    exit 0
+fi
+
+# launchd owns these files and opens them in append mode, so truncating in place
+# is safe. This is the only thing running on a schedule, so it also caps the
+# qmd-mcp daemon's log — that daemon logs a line per HTTP request and serves
+# every Claude Code session at once, so it grows faster than this job's own log.
+cap_log() {
+    [[ -f "$1" ]] && (($(stat -f%z "$1") > LOG_MAX_BYTES)) && : >"$1"
+    return 0
+}
+
+cap_log "$HOME/Library/Logs/qmd-reindex.log"
+cap_log "$HOME/Library/Logs/qmd-mcp.log"
+
+log() {
+    printf '%s %s\n' "$(date +%Y-%m-%dT%H:%M:%S%z)" "$*"
+}
+
+# A cycle with nothing to do prints exactly these two summaries. Recognising them
+# keeps a job this frequent from burying real reindexes in no-op noise. The test
+# fails open: reworded summaries after a qmd upgrade get logged rather than
+# silently swallowed.
+is_noop() {
+    grep -qE 'Indexed: 0 new, 0 updated, [0-9]+ unchanged, 0 removed' <<<"$1" &&
+        grep -q 'All content hashes already have embeddings' <<<"$1"
+}
+
+# `qmd update` prunes orphaned content hashes as it goes, but only `qmd cleanup`
+# clears the cached LLM responses, drops inactive document records, and VACUUMs the
+# file back down — all of which accumulate as notes are edited and deleted. Daily
+# is ample. Driving it from this job instead of its own calendar agent means a
+# window missed because the laptop was asleep self-heals on the next tick, which
+# StartCalendarInterval would not.
+cleanup_due() {
+    [[ -f "$CLEANUP_STAMP" ]] || return 0
+    (($(date +%s) - $(stat -f%m "$CLEANUP_STAMP") >= CLEANUP_INTERVAL_SECONDS))
+}
+
+start=$SECONDS
+
+if ! output=$({ "$QMD" update && "$QMD" embed; } 2>&1); then
+    log "reindex failed after $((SECONDS - start))s"
+    printf '%s\n' "$output"
+    exit 1
+fi
+
+if ! is_noop "$output"; then
+    log "reindex completed in $((SECONDS - start))s"
+    printf '%s\n' "$output"
+fi
+
+# After the reindex, so it collects what this run just orphaned.
+if cleanup_due; then
+    if cleanup_output=$("$QMD" cleanup 2>&1); then
+        mkdir -p "$(dirname "$CLEANUP_STAMP")"
+        : >"$CLEANUP_STAMP"
+        log "cleanup completed"
+    else
+        log "cleanup failed"
+    fi
+    printf '%s\n' "$cleanup_output"
+fi

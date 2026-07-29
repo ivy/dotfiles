@@ -1,0 +1,38 @@
+{{ if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+
+# Load the qmd launchd agents so plist changes take effect without logging out.
+#
+# The filename matters: chezmoi applies entries in case-sensitive name order, and
+# this has to run after ~/Library/LaunchAgents/ is written. "bootstrap" sorts after
+# "Library" ('b' > 'L'); a numeric prefix does not, and would run first and find no
+# plist to load. Keep the leading lowercase letter when renaming.
+#
+# reindex plist hash: {{ include "private_Library/LaunchAgents/net.ivyevans.qmd-reindex.plist.tmpl" | sha256sum }}
+# mcp plist hash: {{ include "private_Library/LaunchAgents/net.ivyevans.qmd-mcp.plist.tmpl" | sha256sum }}
+
+[ -n "${DEBUG:-}" ] && set -o xtrace
+set -o errexit
+set -o nounset
+
+domain="gui/$(id -u)"
+
+# Both jobs write to StandardOutPath; launchd will not create the directory.
+mkdir -p "$HOME/Library/Logs"
+
+for label in net.ivyevans.qmd-reindex net.ivyevans.qmd-mcp; do
+    plist="$HOME/Library/LaunchAgents/${label}.plist"
+
+    if [ ! -f "$plist" ]; then
+        echo "$plist not found, skipping launchd bootstrap"
+        continue
+    fi
+
+    # Boot the old job out first so a running agent picks up the new plist. This
+    # fails when nothing is loaded yet, which is the normal first-run case.
+    launchctl bootout "$domain/$label" 2>/dev/null || true
+    launchctl bootstrap "$domain" "$plist"
+
+    echo "launchd agent $label loaded"
+done
+{{ end -}}
