@@ -123,7 +123,8 @@ Browse the two dirs above for the full set (~35 skills).
 | Vision | [docs/vision.md](docs/vision.md) |
 | Chezmoi operations | [docs/agents/chezmoi.md](docs/agents/chezmoi.md) |
 | Skill effort tuning | [docs/skill-effort-tuning.md](docs/skill-effort-tuning.md) |
-| Architecture decisions (ADR 001–006) | [docs/adrs/](docs/adrs/) |
+| Architecture decisions (ADR 001–007) | [docs/adrs/](docs/adrs/) |
+| Skill autonomy migration (in progress) | [docs/skill-autonomy-migration.md](docs/skill-autonomy-migration.md) |
 | Supply chain security | [docs/supply-chain-security.md](docs/supply-chain-security.md) |
 | GitHub labels & triage | [docs/labels.md](docs/labels.md) |
 
