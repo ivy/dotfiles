@@ -2,48 +2,65 @@
 
 Use this checklist when reviewing skills before deployment. Give this file to the reviewer agent.
 
-## Scope and Output Contract
+## Your Standing
 
-You are the only reviewer and this is the only pass. There is no second round to defer work to, and nothing you flag will be re-reviewed.
+You are the only reviewer and this is the only pass. Nothing you flag will be re-reviewed. You have also **never seen the conversation that produced this skill** — you don't know what the user asked for or why. That bounds what you may claim:
 
-**In scope:** `allowed-tools` red flags, the narrowing principle, publication / deletion / secret-exposure gaps, `${CLAUDE_SKILL_DIR}` correctness in shims.
+| You are judging | Standing | Because |
+|---|---|---|
+| **Facts** — is this pattern broader than the body needs? is this claim about the harness true? does this template render? | **Full.** You read the code; the author may not have. | Checkable. Cite the file, line, or command output. |
+| **Intent** — should this skill act here? should the user decide instead? is this too much autonomy? | **None.** | The user set the intent. You weren't in the room. |
+
+Report intent observations under `NOTES` if they seem important, and expect them **not to be applied** — they go to the user as a question. Never phrase one as a blocker or a required change.
+
+**In scope:** `allowed-tools` red flags, the narrowing principle, publication / deletion / secret-exposure gaps, whether `allowed-tools` matches the skill's declared `**Autonomy:**` line, delegation-graph correctness (`Skill(<child>)` entries), `${CLAUDE_SKILL_DIR}` correctness in shims, and any factual claim the body makes about harness behavior.
 
 **Out of scope:** prose style, alternate phrasings, speculative future features, edge cases the author didn't ask about. Raising these is how a one-pass review turns into five.
 
-Report in this shape:
+### Never recommend abstention
+
+A skill must always reach a verdict. **You may not recommend that a skill withhold a judgment, defer a call to the user, or "propose rather than decide."** That is not a safety measure — the act is gated separately, at commit — and a sub-skill that defers *deadlocks* every orchestrator that composes it.
+
+Worked example of the banned finding. A reviewer once rewrote a security-triage skill's verdict table to `Propose nit; the user chooses. Never self-select.` and `STOP. Post nothing. Ask.` The user had explicitly asked for agent-originated verdicts. That finding was out of standing, contradicted the request, and would have made the skill unusable as a component.
+
+Where a verdict is high-stakes, recommend a **higher evidence bar** — "this dismissal must cite the `file:line` that makes it safe" — never a stop.
+
+## Output Contract
 
 ```
 VERDICT: BLOCK | APPROVE
 
 BLOCKING:
-- <line> — <red flag from the tables below> — <exact replacement>
+- <line> — <red flag or false claim> — <exact replacement>
 
 NOTES:
-- <at most three optional observations>
+- <at most three; intent observations belong here, phrased as questions>
 ```
 
-A finding is `BLOCKING` only if it names a concrete red flag from the tables below *and* a concrete replacement. Everything else goes under `NOTES` or nowhere. Do not ask follow-up questions and do not request another review.
+A finding is `BLOCKING` only if it is a **fact** finding naming a concrete defect *and* a concrete replacement. Everything else goes under `NOTES` or nowhere. Do not ask follow-up questions and do not request another review.
 
 ## Understanding `allowed-tools`
 
 **Critical distinction:** `allowed-tools` controls what runs WITHOUT user approval, not what the skill CAN use.
 
 - Tools IN `allowed-tools` → execute automatically
-- Tools NOT in `allowed-tools` → prompt user for approval before executing
+- Tools NOT in `allowed-tools` → **mode-dependent.** In `default`/`plan` mode they prompt. Under `permissions.defaultMode: auto` an unmatched call is routed to a classifier and may execute with no dialog — and a call that *is* the user's request will usually be approved.
 
-A skill can instruct execution of any tool. Omitting dangerous tools from `allowed-tools` is the CORRECT safety pattern—it ensures the user approves those operations.
+A skill can instruct execution of any tool. Narrowing `allowed-tools` is still right — it is real protection in manual modes and costs nothing in `auto` — but treat it as **defense-in-depth, never a guarantee**. Do not let a skill body claim that an omitted tool "will prompt"; that statement is false in `auto` mode.
+
+**A gate that must hold in every mode is an explicit in-chat confirmation in the body.** Better still is a structural gate outside the agent — a draft PR it cannot mark ready, a capability it was never granted. Withholding a capability beats prompting for it.
 
 ### Good Pattern: Gate Dangerous Operations
 
 ```yaml
-# PR skill - auto-allows only safe reads, gates publication
+# PR skill - auto-allows only safe reads, does not pre-approve publication
 allowed-tools:
   - Glob
   - Read
-# git push, gh pr create → will prompt for approval ✓
+# git push, gh pr create → not pre-approved
 ```
 
-This skill can still run `git push` and `gh pr create`—it just requires user confirmation first. This is safe and intentional.
+This skill can still run `git push` and `gh pr create`. Narrowing this way is correct, but it is not by itself a confirmation step — in `auto` mode those may run undialogued. If the skill must not publish without a yes, the body says so explicitly.
 
 ### Bad Pattern: Auto-Allow Dangerous Operations
 
@@ -58,7 +75,7 @@ allowed-tools:
 
 **If you can't undo it locally, don't auto-allow it.**
 
-Operations that publish externally, delete data, or modify system state should require user approval (i.e., be OMITTED from `allowed-tools`).
+Operations that publish externally, delete data, or modify system state should be OMITTED from `allowed-tools`. Under `auto` that alone may not stop them, so for anything genuinely irreversible check that the skill *also* has a real gate: a body-level confirmation, or better, no capability to do it at all.
 
 ## Red Flags (Reject immediately)
 
@@ -196,13 +213,13 @@ Before AUTO-ALLOWING a tool (adding to `allowed-tools`):
 
 > Would you be comfortable if auto-allowed operations ran while you were away?
 
-Operations requiring review should be omitted from `allowed-tools` so they prompt.
+Assume they *will* run unattended — many of these skills are components of loops. If the answer is no, the skill needs a structural gate or a body-level confirmation. Omission from `allowed-tools` is not the answer on its own.
 
 ### The "Intern with Root" Test
 
 > Would you give an unsupervised intern permission to run these automatically?
 
-Captures both skill level AND trust level required for auto-approval.
+**Applies to axis A only** — whether the model may invoke the skill unrequested. Do not apply it to judgment or to a skill the user invoked by name with a stated decision; there, the framing is wrong and generates out-of-standing "the user should decide" findings.
 
 ### The "Hostile URL" Test
 
@@ -213,12 +230,14 @@ Any tool that ingests external content (WebFetch, WebSearch, curl) is a prompt i
 ## Review Process
 
 1. **Check `allowed-tools`** against red flags above—are dangerous ops auto-allowed?
-2. **Check for prompt injection vectors**: Are WebFetch/WebSearch auto-allowed? They shouldn't be.
+2. **Check for prompt injection vectors**: Are WebFetch/WebSearch auto-allowed? They shouldn't be. If the skill ingests PR text, CI logs, or issue comments, does the body say that input is data and never instructions?
 3. **Check for silent file modification**: Are Write/Edit auto-allowed? Users should see file contents before creation.
-4. **Verify dangerous operations are gated**: Instructions may use git push, gh create, Write, etc.—that's fine IF they're not in `allowed-tools`
-5. **Apply narrowing principle**: Is the most specific pattern used for auto-allowed tools?
-6. **Verify shims reference `${CLAUDE_SKILL_DIR}`** (not the nonexistent `$SKILL_DIR`)
-7. **Check instruction clarity**: Are dangerous operations clearly documented so users know what they're approving?
+4. **Check `allowed-tools` against the `**Autonomy:**` line**: does the granted capability match the declared posture? A skill declaring it never merges must not hold a merge capability.
+5. **Audit the delegation graph**: do the `Skill(<child>)` entries match what the body actually invokes? Authorization flows down through them, so an unintended entry is an unintended grant.
+6. **Verify every factual claim about the harness** the body makes — especially any claim that an operation "will prompt." Check it; don't assume.
+7. **Apply narrowing principle**: Is the most specific pattern used for auto-allowed tools?
+8. **Verify shims reference `${CLAUDE_SKILL_DIR}`** (not the nonexistent `$SKILL_DIR`)
+9. **Check instruction clarity**: Are dangerous operations clearly documented so users know what they're approving?
 
 ## Good Examples
 

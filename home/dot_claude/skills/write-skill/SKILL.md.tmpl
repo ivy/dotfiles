@@ -18,7 +18,7 @@ allowed-tools:
 
 # Skill Creation Playbook
 
-**CRITICAL: Before deploying any skill, spawn exactly one reviewer agent with REVIEW.md to audit `allowed-tools`. Overly permissive tool access (e.g., `Bash(git:*)`) can cause data loss or leak secrets. One agent, one pass — see step 5.**
+**CRITICAL: Before deploying, spawn exactly one reviewer agent with REVIEW.md to audit `allowed-tools` — overly permissive access (e.g. `Bash(git:*)`) can cause data loss or leak secrets. The reviewer advises on **facts** and has **no standing on intent**: never apply its opinion about how much autonomy a skill should have. One agent, one pass — see step 5.**
 
 **Note on substitutions (workaround):** This playbook is itself loaded as a skill, so Claude Code would substitute platform variables — ARGUMENTS, CLAUDE_SKILL_DIR, CLAUDE_SESSION_ID, etc. — *in this file* at load time if they appeared in their literal `$`-prefixed form. To teach the syntax without triggering premature substitution, the playbook below names variables **without** the leading `$` and describes the syntax in prose. In the new skill file you write, **always prefix with `$`** (or use the braced form for clarity). The body-structure example below uses `` \!\`echo` `` to inject one literal placeholder for copy/paste — dynamic-context output is not re-scanned for substitutions. The supporting files (LIFECYCLE.md, REVIEW.md, SHIM-PATTERN.md) are not loaded as skill bodies, so they show literal forms directly.
 
@@ -105,6 +105,8 @@ Both follow the same body structure (the line inside the Arguments block uses ``
 ```markdown
 # <Title>
 
+**Autonomy:** <trigger> · <commit posture>
+
 ## Arguments
 \`\`\`
 \!\`echo '$ARGUMENTS'`
@@ -135,7 +137,8 @@ Both follow the same body structure (the line inside the Arguments block uses ``
 - `user-invocable: false`: hide from `/` menu — background knowledge Claude loads silently
 - `effort`: `low|medium|high|xhigh|max` override for the skill's turn
 - `hooks`: lifecycle hooks scoped to this skill
-- `allowed-tools`: tools that run WITHOUT user approval (omitted tools still work but prompt user)
+- `allowed-tools`: tools that run without approval. Omitted tools still work; whether they *prompt* is **mode-dependent** — under `defaultMode: auto` they may run silently, so omission is never a gate
+- `Skill(<child>)` in `allowed-tools`: declares the delegation graph — the parent may invoke exactly these children, and its authorization flows down to them. It never relaxes a child's evidence bar
 
 **Arguments** *(prefix each name with `$` in your skill — see note at top):*
 - Free-form input pattern: `[package | url...]` not `<package>`
@@ -151,22 +154,25 @@ Both follow the same body structure (the line inside the Arguments block uses ``
 - Multi-line shell injection: open a fenced code block with three backticks + `!` instead of the inline single-backtick `!` form
 - Include the keyword `ultrathink` in the body to request deep reasoning at runtime
 
+**Autonomy** *(three independent axes — conflating them is the most common bug):*
+- **A. Trigger** — who invokes. `disable-model-invocation: true` for human-only. Use it when *unrequested* invocation is the risk; never to make a skill timid.
+- **B. Judgment** — **never gated.** A skill always reaches a verdict, gives the one-line reason, and says what would change its mind. "The user should decide" is not a posture: abstention deadlocks any orchestrator that composes the skill.
+- **C. Commit** — who performs the irreversible act. Prefer *withholding the capability* over prompting for it. A gate that must hold in every mode is an explicit in-chat confirmation in the body — never omission from `allowed-tools`.
+- Declare A and C in the body's `**Autonomy:**` line; the reviewer audits `allowed-tools` against it. Depth: AUTONOMY.md.
+- A skill named with a verb **acts**. If the request already carries the decision, act on it.
+
 ### 5. Review (REQUIRED — one agent, one pass)
 
-Spawn **one** reviewer agent, **once**. Give it this skill's `REVIEW.md` and the drafted file. It audits:
-- `allowed-tools` against red flags (reject `Bash(git:*)`, `Bash(npm:*)`, etc.)
-- Narrowing principle: most specific pattern used?
-- Publication risks: commands that send data externally?
-- Deletion risks: commands that remove data?
+Spawn **one** reviewer agent, **once**. Give it `REVIEW.md`, the drafted file, **the user's request verbatim**, and the `**Autonomy:**` line — a reviewer that can't see the intent will invent one.
 
-Then close the loop yourself:
+Dispose of findings by the reviewer's **standing**, not by how urgent they sound:
 
-| Reviewer finding | Action |
-|------------------|--------|
-| `BLOCKING` — red-flag `allowed-tools`, publication/deletion/secrets auto-allowed | Apply the stated replacement, deploy |
-| `NOTES` — wording, extra edge cases, "consider also…" | Pass along to the user, deploy as-is |
+| Finding | Standing | Disposition |
+|---|---|---|
+| **Fact** — checkable against source, docs, or observed behavior | Full; it read the code, you didn't | Verify, then apply. Mechanical and small. |
+| **Intent** — what the skill *should* do, who decides, how much autonomy | **None**; it never saw the request | Surface verbatim, **unapplied**. The user decides. |
 
-Blocking fixes are mechanical swaps from REVIEW.md's tables, so they need no second look. Do not spawn a second reviewer, re-review after fixing, or run reviewers in parallel — a skill file is a few dozen lines of YAML and prose, and the marginal pass costs more than it catches.
+Never spawn a second reviewer, re-review after fixing, or run reviewers in parallel. And never apply an intent finding on the reviewer's authority — it is an amnesiac with no memory of why this skill exists, and deferring to it overwrites the user's stated intent with a stranger's risk appetite. A reviewer that recommends a skill withhold a judgment is wrong by construction (axis B).
 
 ## Quick Reference
 
@@ -183,10 +189,13 @@ Blocking fixes are mechanical swaps from REVIEW.md's tables, so they need no sec
 | Adapt to effort | `effort: low\|medium\|high\|xhigh\|max` |
 | Named arguments | `arguments: [foo, bar]` → reference each by its `$`-prefixed name |
 | Lifecycle hooks | `hooks: ...` |
+| Declare autonomy | `**Autonomy:**` line in the body (axes A + C) |
+| Delegate to sub-skills | `Skill(<child>)` in `allowed-tools` |
 
 ## Supplementary Docs
 
 - **REVIEW.md** - **REQUIRED** checklist for the single reviewer pass; audits `allowed-tools` before deployment
+- **AUTONOMY.md** - The three axes, declaration grammar, delegation graphs, and writing skills that compose into unattended loops
 - **LIFECYCLE.md** - Skill content lifecycle, compaction budget, description cap, discovery rules
 - **MODEL-SELECTION.md** - When to use haiku vs sonnet vs opus
 - **SHIM-PATTERN.md** - Wrapper scripts for enforcing constraints (advanced)
@@ -226,3 +235,7 @@ Blocking fixes are mechanical swaps from REVIEW.md's tables, so they need no sec
 - Global skill for project-specific logic
 - Local skill for personal workflows you'd want everywhere
 - More than one reviewer agent, or a second review pass (see step 5)
+- Applying a reviewer's *intent* findings without the user — the crux failure
+- Gating judgment: a skill that reports findings without reaching a verdict
+- A confirmation prompt where withholding the capability would do
+- Treating omission from `allowed-tools` as a gate
