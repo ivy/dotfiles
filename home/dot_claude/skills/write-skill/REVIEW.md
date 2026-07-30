@@ -2,6 +2,28 @@
 
 Use this checklist when reviewing skills before deployment. Give this file to the reviewer agent.
 
+## Scope and Output Contract
+
+You are the only reviewer and this is the only pass. There is no second round to defer work to, and nothing you flag will be re-reviewed.
+
+**In scope:** `allowed-tools` red flags, the narrowing principle, publication / deletion / secret-exposure gaps, `${CLAUDE_SKILL_DIR}` correctness in shims.
+
+**Out of scope:** prose style, alternate phrasings, speculative future features, edge cases the author didn't ask about. Raising these is how a one-pass review turns into five.
+
+Report in this shape:
+
+```
+VERDICT: BLOCK | APPROVE
+
+BLOCKING:
+- <line> — <red flag from the tables below> — <exact replacement>
+
+NOTES:
+- <at most three optional observations>
+```
+
+A finding is `BLOCKING` only if it names a concrete red flag from the tables below *and* a concrete replacement. Everything else goes under `NOTES` or nowhere. Do not ask follow-up questions and do not request another review.
+
 ## Understanding `allowed-tools`
 
 **Critical distinction:** `allowed-tools` controls what runs WITHOUT user approval, not what the skill CAN use.

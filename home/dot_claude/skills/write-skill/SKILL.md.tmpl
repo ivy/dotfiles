@@ -18,9 +18,9 @@ allowed-tools:
 
 # Skill Creation Playbook
 
-**CRITICAL: Before deploying any skill, spawn a reviewer agent with REVIEW.md to audit `allowed-tools`. Overly permissive tool access (e.g., `Bash(git:*)`) can cause data loss or leak secrets.**
+**CRITICAL: Before deploying any skill, spawn exactly one reviewer agent with REVIEW.md to audit `allowed-tools`. Overly permissive tool access (e.g., `Bash(git:*)`) can cause data loss or leak secrets. One agent, one pass — see step 5.**
 
-**Note on substitutions (workaround):** This playbook is itself loaded as a skill, so Claude Code would substitute platform variables — ARGUMENTS, CLAUDE_SKILL_DIR, CLAUDE_SESSION_ID, etc. — *in this file* at load time if they appeared in their literal `$`-prefixed form. To teach the syntax without triggering premature substitution, the playbook below names variables **without** the leading `$` and describes the syntax in prose. In the new skill file you write, **always prefix with `$`** (or use the braced form for clarity). The body-structure example below uses `` !`echo` `` to inject one literal placeholder for copy/paste — dynamic-context output is not re-scanned for substitutions. The supporting files (LIFECYCLE.md, REVIEW.md, SHIM-PATTERN.md) are not loaded as skill bodies, so they show literal forms directly.
+**Note on substitutions (workaround):** This playbook is itself loaded as a skill, so Claude Code would substitute platform variables — ARGUMENTS, CLAUDE_SKILL_DIR, CLAUDE_SESSION_ID, etc. — *in this file* at load time if they appeared in their literal `$`-prefixed form. To teach the syntax without triggering premature substitution, the playbook below names variables **without** the leading `$` and describes the syntax in prose. In the new skill file you write, **always prefix with `$`** (or use the braced form for clarity). The body-structure example below uses `` \!\`echo` `` to inject one literal placeholder for copy/paste — dynamic-context output is not re-scanned for substitutions. The supporting files (LIFECYCLE.md, REVIEW.md, SHIM-PATTERN.md) are not loaded as skill bodies, so they show literal forms directly.
 
 Create skills as flexible playbooks, not rigid scripts.
 
@@ -100,14 +100,14 @@ allowed-tools: <minimal safe subset>
 ---
 ```
 
-Both follow the same body structure (the line inside the Arguments block uses `` !`echo` `` to print a literal ARGUMENTS placeholder, `$`-prefixed — copy that placeholder as-is into your skill):
+Both follow the same body structure (the line inside the Arguments block uses `` \!\`echo` `` to print a literal ARGUMENTS placeholder, `$`-prefixed — copy that placeholder as-is into your skill):
 
 ```markdown
 # <Title>
 
 ## Arguments
 \`\`\`
-!`echo '$ARGUMENTS'`
+\!\`echo '$ARGUMENTS'`
 \`\`\`
 
 ## Instructions
@@ -151,15 +151,22 @@ Both follow the same body structure (the line inside the Arguments block uses ``
 - Multi-line shell injection: open a fenced code block with three backticks + `!` instead of the inline single-backtick `!` form
 - Include the keyword `ultrathink` in the body to request deep reasoning at runtime
 
-### 5. Review (REQUIRED)
+### 5. Review (REQUIRED — one agent, one pass)
 
-**Spawn a reviewer agent** with this skill's `REVIEW.md` file to audit:
+Spawn **one** reviewer agent, **once**. Give it this skill's `REVIEW.md` and the drafted file. It audits:
 - `allowed-tools` against red flags (reject `Bash(git:*)`, `Bash(npm:*)`, etc.)
 - Narrowing principle: most specific pattern used?
 - Publication risks: commands that send data externally?
 - Deletion risks: commands that remove data?
 
-Also check verbosity, edge cases, and invocation clarity.
+Then close the loop yourself:
+
+| Reviewer finding | Action |
+|------------------|--------|
+| `BLOCKING` — red-flag `allowed-tools`, publication/deletion/secrets auto-allowed | Apply the stated replacement, deploy |
+| `NOTES` — wording, extra edge cases, "consider also…" | Pass along to the user, deploy as-is |
+
+Blocking fixes are mechanical swaps from REVIEW.md's tables, so they need no second look. Do not spawn a second reviewer, re-review after fixing, or run reviewers in parallel — a skill file is a few dozen lines of YAML and prose, and the marginal pass costs more than it catches.
 
 ## Quick Reference
 
@@ -179,7 +186,7 @@ Also check verbosity, edge cases, and invocation clarity.
 
 ## Supplementary Docs
 
-- **REVIEW.md** - **REQUIRED** checklist for auditing `allowed-tools` before deployment
+- **REVIEW.md** - **REQUIRED** checklist for the single reviewer pass; audits `allowed-tools` before deployment
 - **LIFECYCLE.md** - Skill content lifecycle, compaction budget, description cap, discovery rules
 - **MODEL-SELECTION.md** - When to use haiku vs sonnet vs opus
 - **SHIM-PATTERN.md** - Wrapper scripts for enforcing constraints (advanced)
@@ -218,3 +225,4 @@ Also check verbosity, edge cases, and invocation clarity.
 - Hardcoded paths vs arguments
 - Global skill for project-specific logic
 - Local skill for personal workflows you'd want everywhere
+- More than one reviewer agent, or a second review pass (see step 5)
