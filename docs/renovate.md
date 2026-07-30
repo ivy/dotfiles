@@ -105,7 +105,7 @@ Defined in `renovate.json5`:
 
 - Files: `.mise.toml`, `home/dot_config/mise/config.toml`
 - Pattern: `"pipx:(?<depName>[^\"]+)"\s*=\s*"(?<currentValue>[^\"]+)"`
-- Datasource: `pypi` (e.g., `pipx:gitingest` → `gitingest`)
+- Datasource: `pypi` (e.g., `pipx:<package>` → `<package>`)
 
 6) Optional Go/Node tool manifests (present if we add these files later)
 
@@ -267,4 +267,3 @@ The validator will:
 - Keep tag+digest for images: readable tag for humans, digest for reproducibility.
 - Use the gh commands above to sanity‑check SHAs/tags when reviewing Renovate PRs.
 - **Always validate renovate.json5 with `renovate-config-validator` before committing changes.**
-

@@ -35,7 +35,16 @@ $ARGUMENTS
 
 ## Reference
 
-LazyVim docs: `docs/reference/lazyvim-github-io.txt`. If missing, run `/gitingest https://github.com/LazyVim/lazyvim.github.io docs/**.md` first.
+LazyVim is installed on this machine — read its source, not documentation about it:
+
+| What | Where |
+|------|-------|
+| LazyVim itself | `~/.local/share/nvim/lazy/LazyVim/lua/lazyvim/` — `config/`, `plugins/`, `util/` |
+| Default plugin specs | `.../lua/lazyvim/plugins/*.lua` (`coding`, `editor`, `ui`, `lsp/`, `extras/`) |
+| A plugin's own source | `~/.local/share/nvim/lazy/<plugin>/` |
+| Resolved versions | `~/.config/nvim/lazy-lock.json` |
+
+Your overrides in `lua/plugins/` merge *against* those default specs, so when a keymap or option appears from nowhere, grep `lua/lazyvim/plugins/` to find what set it.
 
 ## Key Paths
 

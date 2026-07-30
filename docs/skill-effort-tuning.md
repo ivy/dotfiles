@@ -64,7 +64,6 @@ Rationale: the skill's job is adversarial critical thinking — catching gaps, a
 | **work-on** | opus / max | **opus** (inherit xhigh) | Orchestrator; max overthinks dispatch |
 | **plan** | opus / high | **opus** (inherit xhigh) | Don't downgrade from 4.7 default |
 | **review-plan** | sonnet | **opus / high** | Adversarial analysis, Sonnet follows too closely |
-| **grill-me** | inherit | **opus / xhigh** (pin) | Relentless interviewing needs depth |
 | adr | opus | keep | Pressure-testing decisions |
 | think | opus | keep | Rigorous thought partner |
 | reflect | opus | keep | Judgment-heavy |
@@ -80,13 +79,10 @@ Rationale: the skill's job is adversarial critical thinking — catching gaps, a
 | checkout | sonnet | **haiku** | Trivial git |
 | youtube | sonnet | **haiku** | Mechanical transcript fetch |
 | install-tool | haiku | **sonnet** | Detection logic is non-trivial |
-| share-log | haiku | keep | Mechanical |
 | bk | inherit | **haiku** (pin) | Tool calls + summary |
 | hk | inherit | **haiku or sonnet** (pin) | Scripted bootstrap — discuss |
 | copy | inherit | **haiku** (pin) | pbcopy |
 | mob | inherit | **haiku** (pin) | Wraps `git mob` |
-| export-log | inherit | **haiku** (pin) | Mechanical |
-| gitingest | inherit | **haiku** (pin) | Fetch |
 | gfm | inherit | **sonnet** (pin) | Writing/review |
 
 ## What this buys us
@@ -101,14 +97,13 @@ Rationale: the skill's job is adversarial critical thinking — catching gaps, a
 2. **`agents-md` — Opus vs Sonnet?** Generating AGENTS.md from scratch needs good writing. Has Opus been pulling its weight, or would Sonnet suffice given the skill's own structure?
 3. **`doc` — Opus vs Sonnet?** Diátaxis is prescriptive and Sonnet follows plans closely, but docs need taste. Has there been a quality comparison?
 4. **`hk` — haiku or sonnet?** Bootstrap is scripted but detection logic exists. Depends on how prescriptive the skill body is.
-5. **`grill-me` — is xhigh right, or should it be max?** This is the one skill where max's "push until you find the flaw" tendency might actually pay off. Though the article says max often overthinks on routine stuff — "relentless interviewing" may or may not count as routine.
 
 ## Rollout plan
 
 Split into two commits following the repo's "one change per commit" rule:
 
 1. **Commit 1 — fix the three bugs:** `work-on`, `plan`, `review-plan`. This is a quality change, not a cost change. Worth landing on its own.
-2. **Commit 2 — batch-pin the inheritance skills:** `bk`, `copy`, `export-log`, `gfm`, `gitingest`, `grill-me`, `hk`, `mob`. Same conceptual change applied uniformly. Acceptable as a batch per the "one logical change" interpretation.
+2. **Commit 2 — batch-pin the inheritance skills:** `bk`, `copy`, `gfm`, `hk`, `mob`. Same conceptual change applied uniformly. Acceptable as a batch per the "one logical change" interpretation.
 3. **Commit 3 (optional) — adjust misfits:** `share-plan`, `checkout`, `youtube`, `install-tool`, and the `agents-md` / `doc` decisions once resolved in review.
 
 Each commit needs `chezmoi diff && chezmoi apply home/dot_claude/skills/...` to validate the templates render correctly.

@@ -62,13 +62,10 @@ eza = "0.23.4"
 "github:smtg-ai/claude-squad" = "1.0.19"
 "github:sst/opencode" = "1.17.13"
 "github:starship/starship" = "1.26.0"
+"github:yt-dlp/yt-dlp" = { version = "2026.07.04", rename_exe = "yt-dlp" }
 
-# pipx itself (must be installed before any pipx: packages below)
+# pipx itself (prerequisite for any `pipx:` backend entries)
 pipx = "1.15.0"
-
-# Python tools via pipx
-"pipx:claude-conversation-extractor" = "1.1.2"
-"pipx:gitingest" = "0.3.1"
 
 # Node tools via npm
 "npm:@openai/codex" = "0.142.5"

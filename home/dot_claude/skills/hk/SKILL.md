@@ -114,7 +114,7 @@ Check for additional context that affects configuration:
 - Does the project use conventional commits? (check pre-computed context git log, or look for `commitlint`, `.commitlintrc`)
 - What YAML files exist outside `.github/`? (affects yaml linter inclusion)
 - Are there JSONC files? (`.json` files with `//` comments — VS Code/Cursor configs). Exclude from jq.
-- Are there reference/vendor directories? (`docs/reference/`, `vendor/`, gitingest dumps). Exclude from content-sensitive checks (`detect-private-key`, `markdown-lint`).
+- Are there reference/vendor directories? (`docs/reference/`, `vendor/`, large repo-to-text dumps). Exclude from content-sensitive checks (`detect-private-key`, `markdown-lint`).
 - Are there other projects nested in subdirectories with their own `hk.pkl`? Add them to the global `exclude`.
 
 #### 5. Fetch Latest hk Version

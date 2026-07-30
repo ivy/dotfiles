@@ -91,7 +91,7 @@ See "Writing the How section" below.]
 <!-- claude-session: ${CLAUDE_SESSION_ID} -->
 ```
 
-Always append the `<!-- claude-session: ${CLAUDE_SESSION_ID} -->` line as the last line of the body — including when a PR template is used instead of the default body. `${CLAUDE_SESSION_ID}` is a Claude Code runtime substitution (resolved when this skill is invoked, not a chezmoi template value) and GitHub renders HTML comments invisibly, so it won't clutter the PR description. It records which session produced the PR so `claude-extract-session` (bundled alongside this skill) can pull the full transcript later.
+Always append the `<!-- claude-session: ${CLAUDE_SESSION_ID} -->` line as the last line of the body — including when a PR template is used instead of the default body. `${CLAUDE_SESSION_ID}` is a Claude Code runtime substitution (resolved when this skill is invoked, not a chezmoi template value) and GitHub renders HTML comments invisibly, so it won't clutter the PR description. It records which session produced the PR, so the transcript stays reachable later — `cq -s <id>` scopes any query to that session.
 
 If user provided additional context in arguments, incorporate it appropriately into the PR body.
 

@@ -9,7 +9,7 @@ This guide explains how to add, update, and manage packages in this dotfiles rep
 | **Development Runtimes** | `home/dot_config/mise/config.toml` | `python = "3.14.2"` | ✅ Yes |
 | **CLI Tools (aqua)** | `home/dot_config/mise/config.toml` | `"aqua:dandavison/delta" = "0.18.2"` | ✅ Yes |
 | **CLI Tools (GitHub)** | `home/dot_config/mise/config.toml` | `"github:sst/opencode" = "1.1.14"` | ✅ Yes |
-| **Python Tools** | `home/dot_config/mise/config.toml` | `"pipx:gitingest" = "0.3.1"` | ✅ Yes |
+| **Python Tools** | `home/dot_config/mise/config.toml` | `"pipx:<package>" = "1.2.3"` | ✅ Yes |
 | **Node.js Tools** | `home/dot_config/mise/config.toml` | `"npm:@anthropic-ai/claude-code" = "2.1.19"` | ✅ Yes |
 | **System Utilities** | `home/.chezmoidata/packages.yaml` | `brews: [ripgrep]` | ❌ Manual |
 | **GUI Applications** | `home/.chezmoidata/packages.yaml` | `casks: [ghostty]` | ❌ Manual |
@@ -87,8 +87,8 @@ All CLI tools go in `home/dot_config/mise/config.toml` using the appropriate bac
 # GitHub releases (for tools not in aqua)
 "github:sst/opencode" = "1.1.14"
 
-# Python tools via pipx
-"pipx:gitingest" = "0.3.1"
+# Python tools via pipx (none pinned currently)
+"pipx:<package>" = "1.2.3"
 
 # Node.js tools via npm
 "npm:@anthropic-ai/claude-code" = "2.1.19"
@@ -104,7 +104,7 @@ gh api repos/owner/repo/releases/latest --jq .tag_name
 npm view @anthropic-ai/claude-code version
 
 # PyPI packages
-pip index versions gitingest 2>/dev/null | head -1
+pip index versions <package> 2>/dev/null | head -1
 ```
 
 ### 3. System Utilities & GUI Applications

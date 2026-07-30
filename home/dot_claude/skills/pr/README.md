@@ -1,6 +1,6 @@
 # `/pr` — Open a Pull Request
 
-Push the branch and open a PR in the browser for review. Attaches the session log so the conversation that produced the code is part of the record.
+Push the branch and open a PR in the browser for review. Stamps the session ID into the body so the conversation that produced the code stays traceable.
 
 ```
 /pr
@@ -11,9 +11,9 @@ Push the branch and open a PR in the browser for review. Attaches the session lo
 
 The PR is the final artifact of the [`/work-on`](../work-on/README.md) workflow — the deliverable that gets reviewed, approved, and merged. But it's more than a code delivery mechanism: it's the permanent record of why a change was made.
 
-Code tells you *what* changed. Commit messages tell you *why* each piece changed. The PR description tells you the *overall intent* — what problem was being solved, what approach was chosen, and (via the attached session log) what alternatives were considered and rejected.
+Code tells you *what* changed. Commit messages tell you *why* each piece changed. The PR description tells you the *overall intent* — what problem was being solved, what approach was chosen, and what alternatives were considered and rejected.
 
-This repo follows the "Source Truth" principle: truth lives with the artifact. The session log export attaches the conversation that produced the code directly to the PR. Future engineers don't need to ask "why was this done this way" — the reasoning is right there.
+This repo follows the "Source Truth" principle: truth lives with the artifact. The PR body carries a `<!-- claude-session: ... -->` marker, so the session that produced the code is identified on the artifact itself and the full transcript stays reachable via `cq -s <id>` — a pointer to the primary source rather than a copy of it.
 
 ## The `--web` flag
 
