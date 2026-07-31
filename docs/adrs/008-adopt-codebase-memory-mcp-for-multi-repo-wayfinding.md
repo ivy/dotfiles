@@ -101,7 +101,7 @@ repository and "the corpus" means every repository under `~/src`.
 | **Bulk index, entire corpus, `--mode full`** | **387s, every repository succeeded, zero failures** (monolith warm at 18s; ~560s fully cold) |
 | **Total cache after bulk index** | **7.3 GB, one DB per repository** |
 | Slowest repositories in the bulk run | 62s and 36s for the two largest after the monolith; `backstage` 15s |
-| `cross-repo-intelligence`, `target_projects=["*"]` | 0.65s, 13 MB RSS, **0 edges**, `projects_scanned: 1` |
+| `cross-repo-intelligence`, `target_projects=["*"]` | 42s, 122 projects scanned, 2 `CROSS_HTTP_CALLS` edges |
 | Free disk | 68 GiB |
 
 Upstream claims the Linux kernel (28M LOC, 75K files) in 3 minutes. A Ruby
@@ -152,12 +152,22 @@ only. `full` is affordable, so the ability to skip cross-file LSP via
   processes share one build fingerprint enforced by an admission barrier, and
   `home/run_onchange_00-install-mise-tools.sh.tmpl` runs `mise prune --yes`,
   which deletes the old version directory out from under a warm daemon.
-- `cross-repo-intelligence` MAY be run with `target_projects=["*"]`; it costs
-  essentially nothing (0.65s, 13 MB RSS). Edges are written bidirectionally —
-  `pass_cross_repo.c:514` emits "forward into source, reverse into target", `:830`
-  writes into the target store, and `:1271` opens targets read-write specifically
-  for this — so a single pass makes each link visible from both sides and no
-  per-project mesh is required. Its *value* is unverified: see below.
+- Projects MUST be named explicitly via `--name`, derived as the path under `~/src`
+  with every byte outside `[A-Za-z0-9_-]` mapped to `-`
+  (`github.com/owner/repo` → `github-com-owner-repo`). CBM's default derived name
+  embeds the absolute path and preserves dots, and it reads a node's top-level
+  package as the second dot-delimited segment of its qualified name
+  (`cbm_qn_to_top_package`, `store.c:4852`) — so a dotted project name makes every
+  cluster label and `packages` entry a fragment of the project name. This `$HOME`
+  contains a dot and so does `github.com`, so the default is wrong here. Dot-free
+  names also shorten the identifier agents pass on every call.
+- `cross-repo-intelligence` SHOULD be run with `target_projects=["*"]` after a bulk
+  index. Edges are written bidirectionally — `pass_cross_repo.c:514` emits "forward
+  into source, reverse into target", `:830` writes into the target store, and
+  `:1271` opens targets read-write for exactly this — so one pass makes each link
+  visible from both sides and no per-project mesh is required. It MUST be invoked
+  through the raw-JSON args form or the MCP tool, never the `--target-projects`
+  flag; see the Consequences below.
 - Agents SHOULD use the index to identify which repository, file, and symbol are
   relevant, and MUST read the actual source before asserting how it behaves.
 
@@ -198,18 +208,18 @@ only. `full` is affordable, so the ability to skip cross-file LSP via
   worse than the headline ratio. LZ4 applies to the in-memory pipeline and
   Zstandard to the optional shareable artifact; neither shrinks what sits in
   `~/.cache`.
-- **Bad**: The `cross-repo-intelligence` pass produced **zero** edges across all
-  the corpus, reporting `projects_scanned: 1` for `target_projects=["*"]`. Given
-  two explicitly named, existing target projects it reported
-  `projects_scanned: 1` and `status: success` — one target was dropped with no
-  diagnostic. `list_projects` enumerates the full corpus fine, so the divergence is in the
-  cross-repo resolver's extra per-project gate (`cr_project_exists` requires the
-  DB to hold exactly one project row whose name matches the filename stem) rather
-  than in the index itself. Whether the zero result is that gate or a genuine
-  absence of detectable HTTP/gRPC/GraphQL/tRPC/channel contracts is unresolved.
-  Cross-repository *structure* is therefore an unrealised capability, and the
-  silent-skip behaviour means a caller cannot tell a working pass from a
-  no-op. Worth an upstream issue.
+- **Neutral**: Cross-repository edges are sparse. A wildcard pass scanned 122
+  projects in 42s and produced 2 `CROSS_HTTP_CALLS` edges — unsurprising for a
+  corpus of largely unrelated checkouts, given the detector recognises only
+  HTTP/gRPC/GraphQL/tRPC/channel contracts rather than arbitrary calls. The
+  capability works; there is little here for it to find.
+- **Bad**: The `cli --target-projects` flag does not parse the JSON array its own
+  `--help` documents. It takes the raw string as a single target name, returns a
+  plausible-looking `projects_scanned: 1` / `total_cross_edges: 0` / `success`, and
+  creates a cache database named after the raw string — a name
+  `cbm_validate_project_name` would reject. Use the raw-JSON args form (or the MCP
+  tool, where `target_projects` is a real array) instead; see
+  [docs/codebase-memory-mcp.md](../codebase-memory-mcp.md).
 - **Bad**: `list_projects` is slow at this corpus size — one invocation enumerated
   the corpus successfully, a second exceeded four minutes and had to be killed.
   Agent-facing latency at this scale needs watching.
@@ -353,11 +363,8 @@ its own change rather than folding into adoption.
 - Reindex cycle cost becomes noticeable in practice rather than in projection.
 - A repository's index crashes repeatedly — a memory-safety signal worth
   reporting upstream and excluding locally.
-- `cross-repo-intelligence` starts producing edges — either because an upstream
-  fix lands for the resolver's silent target-skipping, or because a case arises
-  where a cross-repository contract is known to exist and can be used to tell the
-  two explanations apart. Until then, cross-repository structure is not part of
-  what this decision delivers.
+- Cross-repository edges become numerous enough to be worth querying deliberately,
+  rather than the handful a sparse corpus yields today.
 - The maintainer or governance posture changes materially: archived, transferred,
   or a bus-factor event.
 - Indexes need to be shared across machines or people, or retrieval needs to
