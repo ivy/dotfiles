@@ -37,6 +37,11 @@ eza = "0.23.4"
 # Avoid aqua: backend — registry lag and attestation mismatches break installs.
 # See docs/adrs/005-replace-aqua-backend-with-github-releases.md
 "github:BurntSushi/ripgrep" = "15.1.0"
+# codebase-memory-mcp: code knowledge graph over ~/src — see docs/adrs/008.
+# Releases ship a `-ui-` variant alongside the plain archive; the github: backend
+# picks the right one unaided and verifies the release's artifact attestations,
+# which none of the upstream installers do.
+"github:DeusData/codebase-memory-mcp" = "0.9.0"
 "github:ajeetdsouza/zoxide" = { version = "0.10.0", platforms.linux-arm64 = { asset_pattern = "zoxide-*-aarch64-unknown-linux-musl.tar.gz" } }
 "github:atuinsh/atuin" = "18.16.1"
 # plannotator: binary the plannotator Claude Code plugin's hooks invoke on PATH

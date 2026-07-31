@@ -13,6 +13,23 @@ if ! command -v mise >/dev/null 2>&1; then
     exit 0
 fi
 
+# Every codebase-memory-mcp process must share one build fingerprint, enforced by
+# an OS admission barrier. Installing a new version and then pruning the old one
+# out from under a warm daemon leaves that daemon rejecting work, which surfaces
+# later as "the MCP server stopped responding" with no obvious cause. Stopping it
+# first is cheap: it is a warm-start cache holding no watches, and the next
+# session respawns it. Skipped when the shim isn't there yet (fresh machine).
+stop_codebase_memory_daemon() {
+    local cbm="$HOME/.local/share/mise/shims/codebase-memory-mcp"
+
+    [ -x "${cbm}" ] || return 0
+
+    echo "Stopping codebase-memory-mcp daemon before tool changes..."
+    "${cbm}" daemon stop >/dev/null 2>&1 || true
+}
+
+stop_codebase_memory_daemon
+
 echo "Installing global mise tools..."
 
 # Install all tools defined in global config
