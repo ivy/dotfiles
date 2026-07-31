@@ -237,10 +237,31 @@ sandboxing is noted as follow-up work in ADR-008.
 Upstream also documents one best-effort update check to `api.github.com` after MCP
 `initialize`, carrying no project data. `cli` mode never reaches it.
 
-### `list_projects` is slow at this scale
+### Don't use `list_projects` for discovery — derive the name instead
 
-One invocation enumerated the corpus successfully; a second exceeded four minutes
-and had to be killed. Worth watching as agent-facing latency.
+It is the obvious entry point and it does not work at this scale. The response is
+~67,000 characters for this corpus, which overruns an MCP client's per-result token
+budget and gets spilled to a file rather than returned inline. Latency is erratic
+too: one invocation enumerated the corpus fine, a second exceeded four minutes and
+had to be killed.
+
+None of that matters, because the project name is derivable and never needs looking
+up. A repository at `~/src/<host>/<owner>/<repo>` is always:
+
+```
+<host>-<owner>-<repo>       with every . and / replaced by -
+```
+
+So `~/src/github.com/backstage/backstage` → `github-com-backstage-backstage`. Build
+the name and pass it straight to `search_graph` / `search_code` / `query_graph`.
+
+Guessing wrong is cheap and self-correcting: an unknown project returns an immediate
+error whose payload is the complete list of indexed project names — a few kilobytes,
+versus ~67,000 characters for `list_projects`. So if you ever do need the full
+roster, deliberately querying a bogus project name is the faster way to get it.
+
+Reserve `list_projects` for when you actually need the per-project node/edge/size
+stats, and expect to read the result from a file.
 
 ## Troubleshooting
 

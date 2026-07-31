@@ -161,8 +161,12 @@ only. `full` is affordable, so the ability to skip cross-file LSP via
   cluster label and `packages` entry a fragment of the project name. This `$HOME`
   contains a dot and so does `github.com`, so the default is wrong here. Dot-free
   names also shorten the identifier agents pass on every call.
-- `cross-repo-intelligence` SHOULD be run with `target_projects=["*"]` after a bulk
-  index. Edges are written bidirectionally — `pass_cross_repo.c:514` emits "forward
+- `cross-repo-intelligence` MAY be run manually with `target_projects=["*"]`; it is
+  deliberately *not* wired into the periodic job. The pass costs ~42s over the
+  corpus and yields 2 edges here, and because `--name` is ignored in that mode it
+  also leaves a 0-node project behind under the path-derived source name. Not worth
+  paying every 30 minutes for that; revisit if cross-repo edges become numerous.
+  Edges are written bidirectionally — `pass_cross_repo.c:514` emits "forward
   into source, reverse into target", `:830` writes into the target store, and
   `:1271` opens targets read-write for exactly this — so one pass makes each link
   visible from both sides and no per-project mesh is required. It MUST be invoked
