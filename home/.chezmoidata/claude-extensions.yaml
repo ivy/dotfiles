@@ -46,3 +46,22 @@ claudeExtensions:
     - name: qmd
       transport: http
       url: http://localhost:8181/mcp
+
+    # Code knowledge graph over every repository under ~/src, one SQLite project
+    # per repo under ~/.cache/codebase-memory-mcp/. Parsing, graph queries, and
+    # embeddings all run on-device (the embedding model is vendored into the
+    # binary) — no API keys, no network. See docs/codebase-memory-mcp.md and
+    # docs/adrs/008-adopt-codebase-memory-mcp-for-multi-repo-wayfinding.md.
+    #
+    # stdio rather than http: CBM ships no HTTP MCP transport. Keeping one warm
+    # process shared across concurrent sessions is already handled by its own
+    # per-account coordination daemon, which the first session spawns and the last
+    # one tears down — so the resident-service pattern qmd needs does not apply.
+    #
+    # Bare command rather than an absolute path: mise runs in shim mode and
+    # dot_zshenv prepends the shims dir for non-login shells precisely so agent
+    # subprocesses resolve tools, which keeps this entry portable across machines
+    # and platforms.
+    - name: codebase-memory
+      transport: stdio
+      command: codebase-memory-mcp

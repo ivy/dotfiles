@@ -119,11 +119,12 @@ Browse the two dirs above for the full set (~35 skills).
 | Zsh | [docs/zsh.md](docs/zsh.md) |
 | Claude Code integration | [docs/claude-code.md](docs/claude-code.md) |
 | QMD vault search | [docs/qmd.md](docs/qmd.md) |
+| Codebase memory (code graph over ~/src) | [docs/codebase-memory-mcp.md](docs/codebase-memory-mcp.md) |
 | Core principles | [docs/core-principles.md](docs/core-principles.md) |
 | Vision | [docs/vision.md](docs/vision.md) |
 | Chezmoi operations | [docs/agents/chezmoi.md](docs/agents/chezmoi.md) |
 | Skill effort tuning | [docs/skill-effort-tuning.md](docs/skill-effort-tuning.md) |
-| Architecture decisions (ADR 001–007) | [docs/adrs/](docs/adrs/) |
+| Architecture decisions | [docs/adrs/](docs/adrs/) |
 | Skill autonomy migration (in progress) | [docs/skill-autonomy-migration.md](docs/skill-autonomy-migration.md) |
 | Supply chain security | [docs/supply-chain-security.md](docs/supply-chain-security.md) |
 | GitHub labels & triage | [docs/labels.md](docs/labels.md) |
