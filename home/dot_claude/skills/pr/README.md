@@ -1,6 +1,6 @@
 # `/pr` — Open a Pull Request
 
-Push the branch and open a PR in the browser for review. Stamps the session ID into the body so the conversation that produced the code stays traceable.
+Push the branch, create the PR, and report the URL. Stamps the session ID into the body so the conversation that produced the code stays traceable.
 
 ```
 /pr
@@ -15,9 +15,11 @@ Code tells you *what* changed. Commit messages tell you *why* each piece changed
 
 This repo follows the "Source Truth" principle: truth lives with the artifact. The PR body carries a `<!-- claude-session: ... -->` marker, so the session that produced the code is identified on the artifact itself and the full transcript stays reachable via `cq -s <id>` — a pointer to the primary source rather than a copy of it.
 
-## The `--web` flag
+## No browser step
 
-[`/pr`](../pr/README.md) always opens the PR in the browser before creating it. This is enforced by a bundled shim — it's not possible to accidentally bypass via a flag. The reason is simple: no PR should be created without human eyes on it first. The browser review is the final human checkpoint before the change becomes visible to the team.
+The PR is created non-interactively with `gh pr create`, and the skill reports the URL.
+
+The bundled `gh-pr-create-web` shim is not invoked by this skill. It survives as the worked example that [`write-skill/SHIM-PATTERN.md`](../write-skill/SHIM-PATTERN.md) and [`write-skill/REVIEW.md`](../write-skill/REVIEW.md) cite.
 
 ## In the [`/work-on`](../work-on/README.md) workflow
 

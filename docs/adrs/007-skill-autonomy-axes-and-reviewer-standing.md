@@ -48,7 +48,7 @@ annoying in an interactive session; in a loop it is a hang.
 - **The real cost of a mistake is public embarrassment, not catastrophe.** Both
   security-suppression skills sit behind additional systems, teams, and reviewers,
   and their output is a public comment carrying its own evidence.
-- **27 skills already exist** under the old model.
+- **29 skills already exist** under the old model.
 
 ## Considered Options
 
@@ -125,7 +125,7 @@ The normative rules:
   authority by concluding the user "basically asked." This is an accepted cost of
   running `auto`; where the blast radius makes it unacceptable, the answer is
   axis A, not hedging on B or C.
-- **Bad**: 27 existing skills need revising, and 3 carry false claims today.
+- **Bad**: 29 existing skills need revising, and 4 carry false claims today.
 - **Neutral**: `permissions.ask` was considered and rejected as the enforcement
   point. Axis A plus withheld capability covers the same ground without adding
   prompt friction to a workflow built to avoid it.
@@ -175,7 +175,7 @@ Doctrine lives with the tooling that applies it, not in this ADR:
   declaration grammar, delegation graphs, unattended-composition audit.
 - `home/dot_claude/skills/write-skill/REVIEW.md` — the review rubric, standing
   table, and the never-recommend-abstention rule.
-- `docs/skill-autonomy-migration.md` — the runbook for bringing the existing 27
+- `docs/skill-autonomy-migration.md` — the runbook for bringing the existing 29
   skills into line. Delete it when the migration completes.
 
 Revisit this decision if any of the following change:

@@ -13,6 +13,8 @@ allowed-tools:
 
 # Mob Programming Co-author Manager
 
+**Autonomy:** human-only · acts autonomously — the mob, solo, and add-coauthor writes all land in local git config · confirms an inferred email before adding an unknown co-author
+
 ## Arguments
 
 ```

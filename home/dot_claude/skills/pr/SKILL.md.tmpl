@@ -1,6 +1,6 @@
 ---
 name: pr
-description: Use when creating a pull request. Opens PR in browser for review.
+description: Use when creating a pull request. Pushes the branch, creates the PR, and reports the URL.
 argument-hint: "[additional context]"
 {{- template "bedrock-model" (dict "tier" "sonnet" "root" .) }}
 allowed-tools:
@@ -10,7 +10,9 @@ allowed-tools:
 
 # Create Pull Request
 
-Opens a pull request in the browser for final review and submission.
+**Autonomy:** model-invocable · pushes the branch and creates the PR autonomously · asks for missing input (base branch, template choice) and confirms before opening an empty PR
+
+Pushes the branch and creates the pull request, then reports the URL.
 
 ## Arguments
 
@@ -159,7 +161,7 @@ Report the PR URL returned by `gh pr create`.
 ## Examples
 
 ```
-/pr                                           → Standard PR, opens browser
+/pr                                           → Standard PR, reports the URL
 /pr This needs careful review of the DB migrations → Emphasizes DB migration review
 /pr The API changes are breaking but documented    → Highlights breaking changes
 ```

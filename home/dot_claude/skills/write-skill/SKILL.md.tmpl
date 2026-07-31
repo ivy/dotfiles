@@ -18,6 +18,8 @@ allowed-tools:
 
 # Skill Creation Playbook
 
+**Autonomy:** human-only · acts autonomously — writes the skill file, spawns the single reviewer pass, and deploys with `chezmoi apply` without further confirmation
+
 **CRITICAL: Before deploying, spawn exactly one reviewer agent with REVIEW.md to audit `allowed-tools` — overly permissive access (e.g. `Bash(git:*)`) can cause data loss or leak secrets. The reviewer advises on **facts** and has **no standing on intent**: never apply its opinion about how much autonomy a skill should have. One agent, one pass — see step 5.**
 
 **Note on substitutions (workaround):** This playbook is itself loaded as a skill, so Claude Code would substitute platform variables — ARGUMENTS, CLAUDE_SKILL_DIR, CLAUDE_SESSION_ID, etc. — *in this file* at load time if they appeared in their literal `$`-prefixed form. To teach the syntax without triggering premature substitution, the playbook below names variables **without** the leading `$` and describes the syntax in prose. In the new skill file you write, **always prefix with `$`** (or use the braced form for clarity). The body-structure example below uses `` \!\`echo` `` to inject one literal placeholder for copy/paste — dynamic-context output is not re-scanned for substitutions. The supporting files (LIFECYCLE.md, REVIEW.md, SHIM-PATTERN.md) are not loaded as skill bodies, so they show literal forms directly.

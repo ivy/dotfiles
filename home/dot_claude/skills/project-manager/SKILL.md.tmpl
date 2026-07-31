@@ -15,6 +15,8 @@ allowed-tools:
 
 # Project Manager
 
+**Autonomy:** model-invocable · acts autonomously — an issue create or edit is externally visible but reversible · has no close, delete, or merge capability
+
 Write GitHub issues like a product manager. Focus on the user story, acceptance criteria, and context. Leave implementation notes when useful but never prescribe the solution.
 
 ## Arguments
@@ -70,7 +72,7 @@ If the repo has no issues yet, use a sensible default: user story + acceptance c
 
 ### 4. Assign Metadata
 
-- **Milestone:** Match the milestone of related issues, or ask if multiple candidates exist
+- **Milestone:** Match the milestone of related issues. With several candidates, pick the closest and say which evidence decided it; with none, leave it unset and say so
 - **Labels:** Match existing label conventions; don't invent new ones
 
 ### 5. Publish
@@ -101,7 +103,7 @@ When `triage` is specified:
 
 1. Fetch open issues for the active milestone
 2. Flag: missing acceptance criteria, vague scope, no dependencies listed, duplicates
-3. Suggest edits — don't apply them without confirmation
+3. Apply the edits that close a concrete gap, and report each one with the reason. For a duplicate, name which issue survives and why. Where the gap is a fact only the user holds, say which issue and which fact
 
 ## Examples
 

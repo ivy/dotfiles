@@ -2,6 +2,14 @@
 
 Runbook for bringing the existing skill set in line with [ADR 007](adrs/007-skill-autonomy-axes-and-reviewer-standing.md). Audience: agents revising skills. **Delete this file when the work list is empty.**
 
+## Status
+
+Tiers 1, 2, 3 and 5 are **done** — all 29 skills carry an `**Autonomy:**` line, and no skill body claims that an omitted tool prompts for approval.
+
+**Tier 4 is the only work left**, and it stays blocked until the draft-PR question at the bottom of this file is answered. The Autonomy lines for `pr`, `plan`, `work-on` and `checkout` are in place; what remains is the loop-hazard surgery — draft-by-default, the browser hand-off, `ExitPlanMode`, and `work-on`'s interactive phases.
+
+One caution learned during the first pass: an agent migrating `pr` breached the Tier 4 fence and invented a justification ("a Linux VM over SSH") that appears nowhere else in this repo. Verify claims about the environment against the repo before writing them into a skill body, and treat a fenced-off decision as the user's, not yours.
+
 ## Read first
 
 This runbook holds the *work*, not the doctrine. Read the doctrine at its source before editing anything:
@@ -12,7 +20,7 @@ This runbook holds the *work*, not the doctrine. Read the doctrine at its source
 | `home/dot_claude/skills/write-skill/REVIEW.md` | Review rubric, standing table, never-recommend-abstention |
 | `docs/adrs/007-...md` | Why, and what was rejected |
 
-Do not restate any of that in a skill body. Skill bodies persist in context every turn; the doctrine does not need to persist 27 times.
+Do not restate any of that in a skill body. Skill bodies persist in context every turn; the doctrine does not need to persist 29 times.
 
 ## The five changes
 
@@ -56,7 +64,7 @@ summarizes first when the verdict is its own
 
 ## Work list
 
-### Tier 1 — false claims (do first; these are actively wrong)
+### Tier 1 — false claims — DONE
 
 | File:line | Defect |
 |---|---|
@@ -64,7 +72,7 @@ summarizes first when the verdict is its own
 | `share-plan/SKILL.md.tmpl:103` | "Commands will prompt for approval since they're not in `allowed-tools`." Delete. |
 | `socket-ignore/SKILL.md.tmpl:42` | "(This publish prompts for approval — intended; it overrides a security gate.)" Replace with a real confirmation or drop it — see Tier 2. |
 
-### Tier 2 — the two security-triage leaves
+### Tier 2 — the two security-triage leaves — DONE
 
 Both stay **model-invocable** — they must be callable from a PR-hygiene orchestrator. Neither gets `disable-model-invocation`.
 
@@ -73,13 +81,13 @@ Both stay **model-invocable** — they must be callable from a PR-hygiene orches
 
 Neither is committed to git yet.
 
-### Tier 3 — blanket interactive gates
+### Tier 3 — blanket interactive gates — DONE
 
 | File:line | Change |
 |---|---|
 | `reflect/SKILL.md.tmpl:161` | "**Wait for user approval before executing any actions.**" Filing an issue on an internal tracker is work to be done, not an act to approve. Scope this to whatever here is actually irreversible, or delete it. `:129` ("unclear which repo → ask") is missing input, not abstention — keep it. |
 
-### Tier 4 — loop hazards, gated on an open question
+### Tier 4 — loop hazards — REMAINING, gated on an open question
 
 These block parallel unattended `/work-on`, and the shape of the fix depends on the draft-PR question below. **Do not start these until it is answered.**
 
@@ -90,7 +98,7 @@ These block parallel unattended `/work-on`, and the shape of the fix depends on 
 | `work-on/SKILL.md.tmpl:198-210` | Autonomy-boundary table marks `/think` **Interactive** and `/plan` as user-approved. Medium+ tiers therefore park before a PR exists; Quick Fix and Small do not. Parallel unattended runs are viable today only at those two tiers. Also needs `Skill()` entries for any triage children it should be allowed to delegate to — currently neither `dry-run-sec` nor `socket-ignore` is listed, so it cannot call them. |
 | `checkout/SKILL.md.tmpl` | Already declares `Skill()` children; verify the graph matches what the body invokes. |
 
-### Tier 5 — everything else
+### Tier 5 — everything else — DONE
 
 The remaining 18 skills need change #1 only. Derive the line, add it, verify it against `allowed-tools`. No other edits unless a factual defect turns up.
 
@@ -123,4 +131,4 @@ grep -rnE 'will prompt|prompts for approval' . | grep -v write-skill  # should b
 
 ## Definition of done
 
-All 27 skills carry an `**Autonomy:**` line consistent with their `allowed-tools`; no skill body makes a false claim about harness prompting; no skill defers a judgment as a terminal state; delegation graphs match invocation; and the loop-composable skills pass the `AUTONOMY.md` unattended audit. Then delete this file.
+All 29 skills carry an `**Autonomy:**` line consistent with their `allowed-tools`; no skill body makes a false claim about harness prompting; no skill defers a judgment as a terminal state; delegation graphs match invocation; and the loop-composable skills pass the `AUTONOMY.md` unattended audit. Then delete this file.

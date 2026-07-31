@@ -14,6 +14,8 @@ allowed-tools:
 
 # Handoff Brief
 
+**Autonomy:** human-only · acts autonomously · writes only locally (file or clipboard)
+
 Write a compact, actionable brief that lets a fresh agent (with empty context) resume where this conversation left off.
 
 ## Arguments

@@ -6,6 +6,8 @@ argument-hint: "[file | topic | review]"
 
 # GitHub-Flavored Markdown
 
+**Autonomy:** model-invocable · acts autonomously · writes and edits local markdown files
+
 ## Arguments
 ```
 $ARGUMENTS

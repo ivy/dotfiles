@@ -12,6 +12,8 @@ allowed-tools:
 
 # Git Commit
 
+**Autonomy:** model-invocable · acts autonomously — stages, commits, and amends unpushed commits without confirmation · has no push capability
+
 ## Arguments
 ```
 $ARGUMENTS
@@ -19,7 +21,7 @@ $ARGUMENTS
 
 ## Constraints
 
-**Never use `git -C <path>`** — always run git commands from the current working directory. The `-C` flag rewrites the command in a way that doesn't match `allowed-tools` patterns, forcing unnecessary user approval. Plain `git status`, `git log`, etc. already operate on the repo you're in.
+**Never use `git -C <path>`** — always run git commands from the current working directory. The `-C` flag rewrites the command so it no longer matches the `allowed-tools` patterns, giving up their pre-approval. Plain `git status`, `git log`, etc. already operate on the repo you're in.
 
 ## Instructions
 

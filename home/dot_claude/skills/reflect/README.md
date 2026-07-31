@@ -16,7 +16,7 @@ Review what happened in a session, surface friction and codebase issues, and tur
 2. **Interpret metrics** — flags anomalies relative to the session's scope (high cost/commit, frequent interruptions, subagent failures, narrating vs working)
 3. **Extract findings** — scans the conversation for session friction (mistakes, stalls, corrections) and codebase observations (tech debt, missing docs, fragile architecture)
 4. **Triage** — classifies every finding as **fix now** (<10 min, obvious) or **backlog** (needs thought or broader scope)
-5. **Execute** — after user approval, applies quick fixes with `/commit` and files/updates GitHub issues for backlog items
+5. **Execute** — presents the findings report as a manifest, then applies quick fixes with `/commit` and files/updates GitHub issues for backlog items in the same turn
 
 ## What it produces
 

@@ -22,6 +22,8 @@ allowed-tools:
 
 # hk — Pre-commit Hook Bootstrap
 
+**Autonomy:** model-invocable · plan approval authorizes the rest — install tools, write config, install hooks, commit — without re-asking · every effect is local to the target repo; never pushes
+
 ## Arguments
 ```
 $ARGUMENTS
@@ -40,13 +42,9 @@ Conventional commits: !`git log --oneline -10 2>/dev/null || echo "no git histor
 ## Constraints
 
 - **Always call `EnterPlanMode` before making any changes.** This skill is plan-first — detection and analysis happen before any writes.
-- Never use `git -C <path>` — it rewrites the command prefix, breaking `allowed-tools` pattern matching and forcing unnecessary user approval.
+- Never use `git -C <path>` — it rewrites the command prefix, so the command no longer matches the read-only `allowed-tools` patterns.
 - If hk is not installed (pre-computed context shows "not installed"), the plan MUST include `mise use hk` as the first install step.
 - **Always use `--mise` flags**: `hk init --mise` (scaffolds mise.toml with hk task) and `hk install --mise` (hooks execute via `mise x` so tools are in PATH without shell activation).
-
-### allowed-tools rationale
-
-Detection and validation tools are auto-allowed (Read, Glob, Grep, `hk validate`, `hk check`, etc.). Mutating operations — `mise use`, `hk install`, `hk fix`, Write, Edit — are **not** in `allowed-tools`, so Claude Code will prompt the user to approve each one. This is the intended flow: the agent proceeds through install/write/fix steps normally, and the user gates each action via Claude Code's standard approval UI.
 
 ## Instructions
 
@@ -216,7 +214,7 @@ Run these steps in order:
    mise x -- hk check --all
    ```
 
-6. **If check failures**, offer to fix:
+6. **If check failures**, fix:
    ```bash
    mise x -- hk fix --all
    ```

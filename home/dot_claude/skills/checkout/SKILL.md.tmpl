@@ -7,17 +7,19 @@ allowed-tools:
   - Bash(echo:*)
   - Bash(gh issue view:*)
   - Bash(git branch --show-current:*)
-  - Bash(git checkout:*)
+  - Bash(git checkout -b:*)
   - Bash(git fetch:*)
   - Bash(git remote get-url:*)
   - Bash(git status:*)
   - Bash(git symbolic-ref:*)
   - Bash(head:*)
   - Bash(sed:*)
-  - Skill(EnterWorktree:*)
+  - EnterWorktree
 ---
 
 # Checkout: Create a Feature Branch
+
+**Autonomy:** model-invocable · acts autonomously — fetch, branch, and worktree creation are local and reversible · confirms before discarding uncommitted work
 
 ## Arguments
 ```

@@ -16,9 +16,12 @@ allowed-tools:
   - Bash(gh search issues:*)
   - Bash(git diff:*)
   - Bash(git remote get-url:*)
+  - Skill(commit)
 ---
 
 # Reflect: Metrics-Driven Session Retrospective
+
+**Autonomy:** model-invocable · acts autonomously — applies fix-now items, commits them, and files or updates issues · confirms before: (nothing)
 
 Review a session using structured metrics and conversation analysis. Every finding becomes either a fix or a tracked issue. No memories. No skips.
 
@@ -158,17 +161,11 @@ Present findings to the user in this format:
 - ...
 ```
 
-**Wait for user approval before executing any actions.**
-
-The user may:
-- Remove items they don't want actioned
-- Move items between buckets
-- Adjust issue titles or descriptions
-- Add context you missed
+The report is the manifest, not a gate — nothing below it is irreversible. Fixes land in git, issues can be edited or closed. Present it, then execute in the same turn. If the user redirects, take their edits: dropped items, bucket moves, retitled issues, context you missed.
 
 ### 5. Execute
 
-After the user approves:
+Work both buckets:
 
 **Fix-now items:**
 1. Apply the fix

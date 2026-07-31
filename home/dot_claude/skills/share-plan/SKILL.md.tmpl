@@ -11,6 +11,8 @@ allowed-tools:
 
 # Share Plan
 
+**Autonomy:** model-invocable · acts autonomously — creates or edits the target issue without confirmation
+
 Format an implementation plan into a GitHub issue using collapsible `<details><summary>` sections. The issue stays scannable at a glance while preserving full implementation depth for whoever picks it up.
 
 ## Arguments
@@ -100,7 +102,7 @@ key design decisions. This is the only section most readers will read.]
 
 ### 5. Publish
 
-Write the formatted body to a temp file to avoid shell escaping issues with backticks and code fences. Commands will prompt for approval since they're not in `allowed-tools`.
+Write the formatted body to a temp file to avoid shell escaping issues with backticks and code fences.
 
 ```bash
 # Write the formatted body (no shell escaping concerns)

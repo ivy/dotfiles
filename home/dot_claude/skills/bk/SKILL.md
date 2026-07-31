@@ -24,6 +24,8 @@ allowed-tools:
 
 # Buildkite CI/CD
 
+**Autonomy:** model-invocable · acts autonomously — read-only Buildkite queries; has no retry, rebuild, cancel, or unblock capability
+
 Investigate Buildkite builds, diagnose failures, and answer questions about pipeline status.
 
 ## Arguments

@@ -5,9 +5,15 @@ argument-hint: "[focus areas for review]"
 {{- template "bedrock-model" (dict "tier" "sonnet" "root" .) }}
 context: fork
 agent: reviewer
+allowed-tools:
+  - Read
+  - Glob
+  - Grep
 ---
 
 # Review Plan: Validate Before Executing
+
+**Autonomy:** model-invocable · acts autonomously — verifies the plan's claims against the codebase and returns findings with an Approve/Revise verdict · reports only; does not edit the plan or execute it
 
 You are reviewing an implementation plan. Your job is to find problems before they waste execution time. Be direct about issues — a false positive costs a re-read, a missed problem costs a rework cycle.
 

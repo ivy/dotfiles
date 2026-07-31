@@ -10,6 +10,8 @@ allowed-tools:
 
 # Copy to Clipboard
 
+**Autonomy:** human-only · acts autonomously — copies to the local clipboard without confirmation
+
 ## Arguments
 
 ```
