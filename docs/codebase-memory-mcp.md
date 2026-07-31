@@ -258,8 +258,15 @@ up. A repository at `~/src/<host>/<owner>/<repo>` is always:
 <host>-<owner>-<repo>       with every . and / replaced by -
 ```
 
-So `~/src/github.com/backstage/backstage` → `github-com-backstage-backstage`. Build
-the name and pass it straight to `search_graph` / `search_code` / `query_graph`.
+Case is preserved — the lookup is exact:
+
+```
+~/src/github.com/backstage/backstage  →  github-com-backstage-backstage
+~/src/github.com/Gusto/glide          →  github-com-Gusto-glide
+```
+
+Lowercasing a capitalised owner is a hard miss, not a fuzzy one. Build the name and
+pass it straight to `search_graph` / `search_code` / `query_graph`.
 
 Guessing wrong is cheap and self-correcting: an unknown project returns an immediate
 error whose payload is the complete list of indexed project names — a few kilobytes,

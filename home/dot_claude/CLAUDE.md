@@ -25,7 +25,7 @@ Start non-trivial work with `/gather-context` instead of reading files ad hoc. P
 Two local indexes support that, and they answer different questions:
 
 - **qmd** — knowledge retrieval over the markdown vault: notes, decisions, meeting records, prior research. Use it for "what do I already know about this?"
-- **codebase-memory** — a code graph over every repository in `~/src`: which repo defines a symbol, who calls a function, what a change would ripple into. Use it for "where does this live?" and "what depends on this?", especially in repositories you have never worked in. Project names are derivable from the path — `~/src/github.com/owner/repo` is `github-com-owner-repo` — so there is no need to enumerate them.
+- **codebase-memory** — a code graph over every repository in `~/src`: which repo defines a symbol, who calls a function, what a change would ripple into. Use it for "where does this live?" and "what depends on this?", especially in repositories you have never worked in. Project names are derivable from the path — `~/src/github.com/Gusto/glide` is `github-com-Gusto-glide`, dots and slashes to dashes with case preserved — so there is no need to enumerate them.
 
 Both locate; neither is authoritative about behavior. Follow a hit back to the source and read it before concluding anything, because an index can be stale in ways it cannot signal.
 

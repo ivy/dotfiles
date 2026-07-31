@@ -13,6 +13,8 @@ Research a problem thoroughly before proposing solutions. Parallel exploration a
 
 **Serial exploration is slow.** When an agent investigates a problem, it naturally works serially: read the issue, then explore the codebase, then check the history, then follow links. These are independent tasks. [`/gather-context`](../gather-context/README.md) runs them in parallel via Explore agents, collapsing research time.
 
+**An agent cannot grep a checkout nobody pointed it at.** The expensive context problems are the cross-repo ones — a generated client here calling a service defined three checkouts away, a shared library whose contract nobody in this repo states. Grep takes a path, so an Explore agent *can* search another repo, but only once someone knows to send it there. Absent that, it reports nothing, and the silence is indistinguishable from "no such code exists." The indexes already cover every repository under `~/src`, so "who calls this?" stops depending on guessing the right directory first.
+
 **Open questions are expensive to discover late.** The synthesis output explicitly surfaces what's unknown: gaps in the issue spec, ambiguities that need human clarification, assumptions that need validation. Finding these during research costs a conversation turn. Finding them during implementation costs a rework cycle.
 
 ## How to use it
@@ -28,6 +30,19 @@ Fetches the issue, comments, and linked references, then spawns parallel agents 
 /gather-context "the dark mode toggle doesn't persist across page reloads"
 ```
 Skips issue fetching; goes straight to codebase and history exploration using the description as search context.
+
+## The two indexes
+
+They look interchangeable in a tool list and are not:
+
+| | Answers | Reach |
+|---|---|---|
+| **codebase-memory** | Where is this defined, who calls it, what would a change reach | Every repository under `~/src` |
+| **qmd** | What have I already written about this — decisions, notes, prior research | The markdown vault |
+
+Both **locate**; neither is authoritative about behaviour. A hit is a pointer to read, never a finding — a stale index answers confidently and gives no signal that it is out of date. Holding that line is the difference between an index that is wayfinding and one an agent starts trusting over the code.
+
+Tool selection and the argument shapes that bite live in `INDEXES.md` beside this file.
 
 ## Scope: light vs. full
 
