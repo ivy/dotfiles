@@ -23,6 +23,7 @@ readonly SRC="$HOME/src"
 readonly LOG="$HOME/Library/Logs/cbm-reindex.log"
 readonly LOG_MAX_BYTES=$((1024 * 1024))
 readonly STATE="$HOME/.cache/codebase-memory-mcp/.last-reindex-digest"
+readonly LOCKDIR="$HOME/.cache/codebase-memory-mcp/.reindex.lock"
 
 if [[ ! -x "$CBM" ]]; then
     echo "codebase-memory-mcp not installed at $CBM, skipping reindex"
@@ -43,6 +44,32 @@ fi
 log() {
     printf '%s %s\n' "$(date +%Y-%m-%dT%H:%M:%S%z)" "$*"
 }
+
+# Only one cycle at a time. launchd fires on StartInterval regardless of whether
+# the previous run finished, and a manual run can land on top of a scheduled one —
+# which happened during the move to explicit project names: two cycles overlapped,
+# one of them executing the pre-swap version of this file (chezmoi replaces it
+# atomically, so a running shell keeps the old inode), and the corpus ended up
+# indexed twice under two different naming schemes. CBM's own per-project locks
+# kept both runs correct, but the duplicate work and duplicate databases are pure
+# waste. mkdir is the atomic primitive here; macOS ships no flock(1).
+#
+# The parent must exist first, or a missing cache dir would fail the mkdir below
+# and get misreported as contention.
+mkdir -p "$(dirname "$LOCKDIR")"
+
+if ! mkdir "$LOCKDIR" 2>/dev/null; then
+    if [[ -r "$LOCKDIR/pid" ]] && ! kill -0 "$(cat "$LOCKDIR/pid")" 2>/dev/null; then
+        # Holder died without cleaning up — a reboot mid-cycle, or a SIGKILL.
+        rm -rf "$LOCKDIR"
+        mkdir "$LOCKDIR" 2>/dev/null || exit 0
+    else
+        log "another cbm-reindex cycle is running, skipping"
+        exit 0
+    fi
+fi
+printf '%s' "$$" >"$LOCKDIR/pid"
+trap 'rm -rf "$LOCKDIR"' EXIT
 
 # Project name: the path under ~/src with every byte outside [A-Za-z0-9_-] mapped
 # to '-', e.g. github.com/owner/repo -> github-com-owner-repo.

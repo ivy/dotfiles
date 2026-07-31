@@ -110,6 +110,12 @@ interval that is roughly a 10% duty cycle, which `ProcessType=Background` and
 `StartInterval` before reaching for anything cleverer; the active repository is
 covered by the per-session watcher regardless.
 
+Only one cycle runs at a time, guarded by a `mkdir` lock at
+`~/.cache/codebase-memory-mcp/.reindex.lock` — `StartInterval` fires whether or not
+the previous run finished, and a manual run can land on top of a scheduled one. A
+second cycle logs that it skipped and exits 0. If a holder dies without cleaning up,
+the next run checks the recorded pid and takes the lock over.
+
 The script stays silent unless node or edge counts moved somewhere, or something
 failed. It compares a digest of the whole corpus's counts against the previous
 cycle — a job this frequent would otherwise bury the cycles that did real work.
