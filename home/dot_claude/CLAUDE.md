@@ -18,6 +18,17 @@ Documents and comments state current facts, not their own history. Revision narr
 
 Comments stay in scope of the code they annotate. Don't use a comment to explain an external API, library, or system — that documentation rots the moment upstream changes. Link to authoritative docs instead of restating them; if staying in-scope requires more context than a comment can hold, that's a signal to refactor the abstraction, not to narrate around it.
 
+## Context
+
+Start non-trivial work with `/gather-context` instead of reading files ad hoc. Pulling the issue, the relevant code, git history, and linked references together up front is cheaper than discovering a constraint halfway through an implementation.
+
+Two local indexes support that, and they answer different questions:
+
+- **qmd** — knowledge retrieval over the markdown vault: notes, decisions, meeting records, prior research. Use it for "what do I already know about this?"
+- **codebase-memory** — a code graph over every repository in `~/src`: which repo defines a symbol, who calls a function, what a change would ripple into. Use it for "where does this live?" and "what depends on this?", especially in repositories you have never worked in. Project names are derivable from the path — `~/src/github.com/owner/repo` is `github-com-owner-repo` — so there is no need to enumerate them.
+
+Both locate; neither is authoritative about behavior. Follow a hit back to the source and read it before concluding anything, because an index can be stale in ways it cannot signal.
+
 ## Investigation
 
 Do not stop at the first plausible explanation. Trace the actual execution path until you can explain the behavior in terms of specific code, configuration, or data.
