@@ -1,0 +1,136 @@
+#!/usr/bin/env bash
+# Refresh the codebase-memory-mcp index for every repository under ~/src.
+#
+# CBM's own watcher only covers a repository that has a live MCP session attached:
+# watches are per-session reference-counted subscriptions, and the watcher-driven
+# index refuses to run once the last subscriber disconnects. Its permanent daemon
+# holds no watches at all — it is a warm-start cache. So with no session open,
+# nothing reindexes, and this job is what keeps the rest of the corpus current.
+#
+# An incremental pass is cheap because the incremental-vs-full gate is
+# content-hash based rather than git based: the largest repository here costs
+# ~17s with nothing changed, and the long tail is far less.
+#
+# Run every 30 minutes by ~/Library/LaunchAgents/net.ivyevans.cbm-reindex.plist.
+# See docs/codebase-memory-mcp.md.
+
+set -o errexit -o nounset -o pipefail
+
+# launchd gives jobs a minimal PATH that excludes mise shims. The shim is a
+# standalone binary that resolves the tool itself, so an absolute path suffices.
+readonly CBM="$HOME/.local/share/mise/shims/codebase-memory-mcp"
+readonly SRC="$HOME/src"
+readonly LOG="$HOME/Library/Logs/cbm-reindex.log"
+readonly LOG_MAX_BYTES=$((1024 * 1024))
+readonly STATE="$HOME/.cache/codebase-memory-mcp/.last-reindex-digest"
+
+if [[ ! -x "$CBM" ]]; then
+    echo "codebase-memory-mcp not installed at $CBM, skipping reindex"
+    exit 0
+fi
+
+if [[ ! -d "$SRC" ]]; then
+    echo "$SRC not present, skipping reindex"
+    exit 0
+fi
+
+# launchd owns this file and opens it in append mode, so truncating in place is
+# safe.
+if [[ -f "$LOG" ]] && (($(stat -f%z "$LOG") > LOG_MAX_BYTES)); then
+    : >"$LOG"
+fi
+
+log() {
+    printf '%s %s\n' "$(date +%Y-%m-%dT%H:%M:%S%z)" "$*"
+}
+
+# Project name: the path under ~/src with every byte outside [A-Za-z0-9_-] mapped
+# to '-', e.g. github.com/owner/repo -> github-com-owner-repo.
+#
+# We name projects explicitly rather than taking CBM's derived default, which
+# embeds the absolute path and preserves dots. That matters because CBM reads a
+# node's top-level package as the second dot-delimited segment of its qualified
+# name — so any dot in the project name (this $HOME has one, and so does
+# "github.com") makes every cluster label and `packages` entry a fragment of the
+# project name instead of a real package. Dot-free names keep that correct, and are
+# shorter for an agent to pass.
+#
+# Distinct paths could in principle collide here (foo.bar and foo-bar both become
+# foo-bar), which would merge two repos into one project. Not worth detecting until
+# it happens; the corpus is host/owner/repo.
+project_name() {
+    local rel="${1#"$SRC"/}"
+    printf '%s' "${rel//[^A-Za-z0-9_-]/-}"
+}
+
+# Set by index_with_recovery; read by the caller.
+out=''
+daemon_stopped=false
+
+# Index one repository, clearing a stale daemon once per cycle on first failure.
+#
+# Every CBM process must share one build fingerprint, enforced by an OS admission
+# barrier. A Renovate bump applied by `chezmoi apply` installs the new build and
+# then `mise prune` deletes the old one out from under a warm daemon, so the next
+# index is rejected. Stopping the daemon clears that. Recovering on *any* first
+# failure rather than matching an error string keeps this working when the message
+# changes — the retry is cheap and the alternative is a brittle grep.
+index_with_recovery() {
+    local repo="$1" name="$2"
+
+    if out=$("$CBM" cli index_repository --repo-path "$repo" --mode full \
+        --name "$name" 2>&1); then
+        return 0
+    fi
+
+    if [[ "$daemon_stopped" == true ]]; then
+        return 1
+    fi
+    daemon_stopped=true
+    "$CBM" daemon stop >/dev/null 2>&1 || true
+
+    out=$("$CBM" cli index_repository --repo-path "$repo" --mode full \
+        --name "$name" 2>&1) || return 1
+}
+
+start=$SECONDS
+indexed=0
+failed=0
+digest_input=''
+
+while IFS= read -r gitdir; do
+    repo="${gitdir%/.git}"
+
+    # A crash on one repository must not end the cycle. This parses untrusted
+    # source with memory-unsafe C — an abort on one tree is a survivable event,
+    # and the remaining repositories still need their refresh.
+    if ! index_with_recovery "$repo" "$(project_name "$repo")"; then
+        log "index failed: ${repo#"$SRC"/}"
+        printf '%s\n' "$out"
+        failed=$((failed + 1))
+        continue
+    fi
+
+    # Node and edge counts are the cheapest change signal the tool reports. The
+    # response also carries `expected_nodes` on a full pass and omits it on an
+    # incremental one, but that is undocumented, so the digest below relies only
+    # on counts that are always present.
+    # `|| true` matters: grep exits 1 when a response carries no counts, and under
+    # errexit+pipefail a failed substitution inside an assignment would abort the
+    # whole cycle over one unexpected response shape.
+    digest_input+="${repo} $(printf '%s' "$out" |
+        grep -oE '"(nodes|edges)":[0-9]+' | tr '\n' ' ' || true)"$'\n'
+    indexed=$((indexed + 1))
+done < <(find "$SRC" -maxdepth 4 -name .git -type d 2>/dev/null | sort)
+
+# Stay silent when the whole corpus came back byte-identical. A job this frequent
+# would otherwise bury the cycles that did real work. Any failure always speaks.
+digest="$(printf '%s' "$digest_input" | shasum -a 256 | cut -d' ' -f1)"
+previous="$(cat "$STATE" 2>/dev/null || true)"
+
+if [[ "$digest" != "$previous" ]] || ((failed > 0)); then
+    log "reindex cycle: $((SECONDS - start))s, ${indexed} indexed, ${failed} failed"
+fi
+
+mkdir -p "$(dirname "$STATE")"
+printf '%s\n' "$digest" >"$STATE"

@@ -1,15 +1,16 @@
 {{ if eq .chezmoi.os "darwin" -}}
 #!/bin/bash
 
-# Load the qmd launchd agents so plist changes take effect without logging out.
+# Load the launchd agents so plist changes take effect without logging out.
 #
 # The filename matters: chezmoi applies entries in case-sensitive name order, and
 # this has to run after ~/Library/LaunchAgents/ is written. "bootstrap" sorts after
 # "Library" ('b' > 'L'); a numeric prefix does not, and would run first and find no
 # plist to load. Keep the leading lowercase letter when renaming.
 #
-# reindex plist hash: {{ include "private_Library/LaunchAgents/net.ivyevans.qmd-reindex.plist.tmpl" | sha256sum }}
-# mcp plist hash: {{ include "private_Library/LaunchAgents/net.ivyevans.qmd-mcp.plist.tmpl" | sha256sum }}
+# qmd reindex plist hash: {{ include "private_Library/LaunchAgents/net.ivyevans.qmd-reindex.plist.tmpl" | sha256sum }}
+# qmd mcp plist hash: {{ include "private_Library/LaunchAgents/net.ivyevans.qmd-mcp.plist.tmpl" | sha256sum }}
+# cbm reindex plist hash: {{ include "private_Library/LaunchAgents/net.ivyevans.cbm-reindex.plist.tmpl" | sha256sum }}
 
 [ -n "${DEBUG:-}" ] && set -o xtrace
 set -o errexit
@@ -20,7 +21,7 @@ domain="gui/$(id -u)"
 # Both jobs write to StandardOutPath; launchd will not create the directory.
 mkdir -p "$HOME/Library/Logs"
 
-for label in net.ivyevans.qmd-reindex net.ivyevans.qmd-mcp; do
+for label in net.ivyevans.qmd-reindex net.ivyevans.qmd-mcp net.ivyevans.cbm-reindex; do
     plist="$HOME/Library/LaunchAgents/${label}.plist"
 
     if [ ! -f "$plist" ]; then

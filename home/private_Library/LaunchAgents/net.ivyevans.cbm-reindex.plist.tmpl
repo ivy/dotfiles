@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>net.ivyevans.cbm-reindex</string>
+
+	<key>ProgramArguments</key>
+	<array>
+		<string>{{ .chezmoi.homeDir }}/.local/bin/cbm-reindex</string>
+	</array>
+
+	<!-- Every 30 minutes. An all-quiet cycle across the corpus is a serial walk of
+	     every repo's content hashes, so it is not free the way the qmd tick is;
+	     whichever repo is actively open is already covered by CBM's own per-session
+	     watcher, leaving this job to catch up everything else. cbm-reindex stays
+	     silent unless counts moved or something failed. -->
+	<key>StartInterval</key>
+	<integer>1800</integer>
+
+	<!-- Nothing to catch up on at login that the next interval won't handle. -->
+	<key>RunAtLoad</key>
+	<false/>
+
+	<!-- Background earns throttled CPU and I/O from macOS, keeping indexing out
+	     of the way of foreground work. The incremental pass is I/O bound (it
+	     re-hashes file contents), so LowPriorityIO is what keeps it unnoticeable. -->
+	<key>ProcessType</key>
+	<string>Background</string>
+	<key>LowPriorityIO</key>
+	<true/>
+
+	<key>StandardOutPath</key>
+	<string>{{ .chezmoi.homeDir }}/Library/Logs/cbm-reindex.log</string>
+	<key>StandardErrorPath</key>
+	<string>{{ .chezmoi.homeDir }}/Library/Logs/cbm-reindex.log</string>
+</dict>
+</plist>
