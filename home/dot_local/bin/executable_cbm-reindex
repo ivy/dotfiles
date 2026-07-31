@@ -148,7 +148,11 @@ while IFS= read -r gitdir; do
     digest_input+="${repo} $(printf '%s' "$out" |
         grep -oE '"(nodes|edges)":[0-9]+' | tr '\n' ' ' || true)"$'\n'
     indexed=$((indexed + 1))
-done < <(find "$SRC" -maxdepth 4 -name .git -type d 2>/dev/null | sort)
+# No -type filter: a linked worktree's .git is a *file* holding a gitdir pointer,
+# and filtering to directories silently skips those repos entirely. CBM indexes
+# them fine. A stray non-repo file named .git would fail its own index call and
+# the loop moves on.
+done < <(find "$SRC" -maxdepth 4 -name .git 2>/dev/null | sort)
 
 # Stay silent when the whole corpus came back byte-identical. A job this frequent
 # would otherwise bury the cycles that did real work. Any failure always speaks.

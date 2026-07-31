@@ -1,0 +1,83 @@
+---
+name: dotfiles-doctor
+description: >-
+  Use when local tooling seems stale, silent, or wrong — search returning
+  nothing, an index that looks out of date, an MCP server missing from a
+  session — or for a routine health check. Probes the launchd jobs, MCP
+  servers, qmd, and codebase-memory indexes, repairs what is safely
+  repairable, and reports a verdict per subsystem.
+argument-hint: "[launchd | mcp | qmd | codebase-memory | sync]"
+{{- template "bedrock-model" (dict "tier" "sonnet" "root" .) }}
+context: fork
+allowed-tools:
+  - Read
+  - Bash(ls:*)
+  - Bash(tail:*)
+  - Bash(launchctl print:*)
+  # Scoped to this repo's own agents. launchctl(1) takes a *domain* target as
+  # well as a service target, so an unscoped `bootout` would permit
+  # `launchctl bootout gui/$UID` — tearing down the entire login session — and an
+  # unscoped `bootstrap` would load any plist on disk, which is a persistence
+  # primitive rather than a repair capability.
+  - Bash(launchctl bootout gui/*/net.ivyevans.*)
+  - Bash(launchctl bootstrap gui/* ~/Library/LaunchAgents/net.ivyevans.*.plist)
+  - Bash(claude mcp list:*)
+  - Bash(chezmoi status:*)
+  - Bash(mise ls:*)
+  - Bash(qmd status:*)
+  - Bash(codebase-memory-mcp --version:*)
+  - Bash(codebase-memory-mcp config list:*)
+  - Bash(codebase-memory-mcp cli index_status:*)
+  - Bash(codebase-memory-mcp daemon stop:*)
+  # Both scripts parse no arguments, and ~/.local/bin is on PATH.
+  - Bash(cbm-reindex)
+  - Bash(qmd-reindex)
+---
+
+# Dotfiles Doctor
+
+**Autonomy:** model-invocable · repairs autonomously within the idempotent class — reload an agent, rerun an index, stop a stale daemon · never deletes an index and never runs `chezmoi apply`
+
+## Arguments
+
+```
+$ARGUMENTS
+```
+
+A subsystem name narrows the run. Empty checks everything.
+
+## Instructions
+
+Probe, repair what is safely repairable, re-probe to confirm, then report. Always reach a verdict per subsystem — never hand back raw probe output.
+
+### Probes
+
+Not macOS? Report launchd as **not applicable** and run the rest — the scheduled jobs are launchd agents with no Linux equivalent wired up yet.
+
+| Subsystem | Probe | Healthy when |
+|---|---|---|
+| launchd | `launchctl print gui/$UID/<label>` for `net.ivyevans.{qmd-reindex,qmd-mcp,cbm-reindex}` | present, `last exit code = 0` — or `(never exited)` for the resident `qmd-mcp` |
+| mcp | `claude mcp list` | `qmd` and `codebase-memory` both `✔ Connected` |
+| qmd | `qmd status` | `Documents Total` above zero. This also proves the native `better-sqlite3` addon loads — a node ABI bump breaks it, and then every qmd call dies at `require` |
+| codebase-memory | `codebase-memory-mcp --version` against the pin in `~/.config/mise/config.toml` | equal |
+| codebase-memory | `ls ~/.cache/codebase-memory-mcp/*.db` excluding `_config.db`, vs `ls -d ~/src/*/*/*/.git` | equal — a shortfall means repos are unindexed |
+| codebase-memory | names in that directory | none begin `Users-` or `[` — both are known regressions, see README |
+| codebase-memory | `codebase-memory-mcp cli index_status --project <any indexed name>` | `"status":"ready"` |
+| codebase-memory | `codebase-memory-mcp config list` | `auto_index false`, `auto_watch true`. These live in `_config.db`, which chezmoi does not manage, so drift here is invisible everywhere else |
+| sync | `chezmoi status`, `mise ls --missing` | drift reported, nothing missing |
+
+`tail` the logs at `~/Library/Logs/{qmd-reindex,qmd-mcp,cbm-reindex}.log`. The reindex jobs are silent on a no-op cycle, so an empty log is health, not absence. `runs` and `last exit code` from `launchctl print` show a job has fired successfully before; pair them with the log's timestamp for when. Neither proves it fires *now* — to force a run, report `launchctl kickstart -p gui/$UID/<label>` for the user rather than triggering it here.
+
+A cycle already running holds `~/.cache/codebase-memory-mcp/.reindex.lock`. That is correct behaviour, not a fault; report it and skip the reindex repair.
+
+### Repair
+
+- **agent unloaded or failing** — `launchctl bootout gui/$UID/<label>`, ignore its failure, then `launchctl bootstrap gui/$UID ~/Library/LaunchAgents/<label>.plist`
+- **index stale or short** — run `cbm-reindex` or `qmd-reindex` (both on PATH, both take no arguments)
+- **codebase-memory refusing work after a version bump** — `codebase-memory-mcp daemon stop`; every process must share one build fingerprint, and `mise prune` deletes the old build from under a warm daemon
+
+Report the exact command rather than running it when the fix would delete an index, apply chezmoi over destination drift, or reinstall a tool. Those cost minutes to hours to undo and want a human's read first.
+
+### Report
+
+One line per subsystem — `OK`, `DEGRADED`, or `BROKEN`. For anything not OK, give the evidence and what it means. Close with what was repaired and what still needs a human. All clear is one line; do not pad it.
