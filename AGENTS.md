@@ -10,6 +10,7 @@ Personal dotfiles managed by coding agents via [Chezmoi](https://www.chezmoi.io/
 |-------|-----------|---------------|
 | Terminal | Ghostty | `home/dot_config/ghostty/config.tmpl` |
 | Multiplexer | tmux | `home/dot_config/tmux/tmux.conf` |
+| Agent runtime | herdr | `home/dot_config/herdr/config.toml` |
 | Shell | zsh + Oh-My-Zsh | `home/dot_zshrc.tmpl` |
 | Editor | Neovim / LazyVim | `home/dot_config/nvim/` |
 | Tools | mise (aqua backend) | `home/dot_config/mise/config.toml` |

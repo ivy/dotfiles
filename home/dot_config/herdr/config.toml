@@ -1,0 +1,104 @@
+# herdr configuration (XDG: ~/.config/herdr/config.toml)
+# Keybindings and theme mirror home/dot_config/tmux/tmux.conf so muscle memory
+# carries between the two. Only settings that differ from herdr's defaults, or
+# that pin a tmux mapping worth locking, appear here.
+#
+# Validate:  herdr config check
+# Reload:    herdr server reload-config
+#
+# herdr writes to this file itself — the onboarding flow and manual theme
+# selection in Settings both persist here. Expect chezmoi drift after either.
+
+# Onboarding is done; skip the first-run flow so herdr has no reason to rewrite
+# this file on launch.
+onboarding = false
+
+[theme]
+# Catppuccin Mocha when the terminal reports dark, Latte when it reports light —
+# the pairing home/dot_local/libexec/dotfiles/tmux-apply-theme applies to tmux
+# pane styling.
+name = "catppuccin"
+auto_switch = true
+dark_name = "catppuccin"
+light_name = "catppuccin-latte"
+# ui.accent is deliberately unset. tmux draws the active border in Lavender per
+# appearance (#b4befe mocha, #7287fd latte); ui.accent is one static value, so
+# the theme picks a better color than a hardcoded override would.
+
+[terminal]
+# tmux passes -c "#{pane_current_path}" on every split and new-window.
+new_cwd = "follow"
+
+[keys]
+# tmux: set -g prefix C-a
+# Pressing the prefix twice sends a literal ctrl+a through to the pane, which is
+# what `bind C-a send-prefix` does in tmux.
+prefix = "ctrl+a"
+
+# tmux: bind | split-window -h   (side by side)
+#       bind - split-window -v   (stacked)
+# herdr names these after the resulting layout rather than tmux's -h/-v flags:
+# split_vertical puts the new pane to the right, split_horizontal below.
+# prefix+\ covers terminals that report | as shift+backslash.
+split_vertical = ["prefix+|", 'prefix+\']
+split_horizontal = "prefix+minus"
+
+# tmux: bind h/j/k/l select-pane
+# The direct ctrl+h/j/k/l bindings from tmux.conf are intentionally absent.
+# They work in tmux only because vim-tmux-navigator inspects the pane's process
+# first; herdr has no such shim, so binding them would steal the keys from
+# Neovim splits running inside a pane.
+focus_pane_left = "prefix+h"
+focus_pane_down = "prefix+j"
+focus_pane_up = "prefix+k"
+focus_pane_right = "prefix+l"
+
+# tmux: bind r source-file. herdr ships prefix+r as resize mode, so the two trade
+# places. tmux's repeatable prefix+H/J/K/L resize has no 0.8.0 equivalent — enter
+# resize mode, then use h/j/k/l.
+reload_config = "prefix+r"
+resize_mode = "prefix+shift+r"
+
+# tmux: setw -g mode-keys vi. herdr's copy mode is already vi-keyed — h/j/k/l,
+# w/b/e, v to start a selection, y to yank, / to search, q to leave.
+copy_mode = "prefix+["
+
+# tmux: prefix+d detaches. herdr defaults to prefix+q, which means "display pane
+# numbers" to tmux hands.
+detach = "prefix+d"
+
+# Freed up so prefix+e can launch claude, below.
+edit_scrollback = "prefix+shift+e"
+
+# tmux: bind e / bind v open Claude Code in the dotfiles repo and the Obsidian
+# vault. Both paths come from chezmoi at runtime so the vault location stays out
+# of the repo. A type = "pane" command closes when the process exits, the same
+# way the tmux window and split it replaces do.
+[[keys.command]]
+key = "prefix+e"
+type = "pane"
+command = 'cd "$(chezmoi data | jq -r .chezmoi.workingTree)" && exec claude'
+description = "claude — dotfiles"
+
+[[keys.command]]
+key = "prefix+v"
+type = "pane"
+command = 'cd "$(chezmoi data | jq -r .obsidian.vault_path)" && exec claude'
+description = "claude — vault"
+
+[ui]
+# tmux: bind c creates the window immediately rather than prompting for a name.
+prompt_new_tab_name = false
+
+# tmux: set -g pane-border-status top with #{pane_title} in the border.
+show_agent_labels_on_pane_borders = true
+
+[ui.toast]
+# The tmux-powerline notification rail's counterpart: say something in-app when a
+# background agent finishes or blocks.
+delivery = "herdr"
+
+[ui.sound]
+# Claude Code hooks already play Minecraft sounds on these transitions.
+# Uncomment to silence herdr's own notification sounds instead of stacking them.
+# enabled = false
