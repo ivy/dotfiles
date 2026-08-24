@@ -125,6 +125,22 @@ mise lock                            # project-level (mise.toml)
 mise --cd home/dot_config/mise lock  # user-level (config.toml)
 ```
 
+Then normalize the user lockfile, or the next `chezmoi apply` stops to prompt:
+
+```bash
+chezmoi apply --force ~/.config/mise/mise.lock
+mise install --yes
+cp ~/.config/mise/mise.lock home/dot_config/mise/mise.lock
+```
+
+A tool carrying platform options (`zoxide` has an `asset_pattern`) gets two
+lockfile entries, and `mise lock` and `mise install` order that pair
+differently. chezmoi writes the `mise lock` order, the install script's
+`mise install` immediately rewrites it, and the following apply sees a file it
+did not write. Committing the post-install form settles it: apply and install
+then agree, and both leave the file alone. Verify with
+`diff home/dot_config/mise/mise.lock ~/.config/mise/mise.lock` after installing.
+
 ### Troubleshooting install failures
 
 **"No matching asset found"** — The tool doesn't publish binaries matching the

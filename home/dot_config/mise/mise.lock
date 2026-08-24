@@ -111,10 +111,6 @@ url = "https://github.com/oven-sh/bun/releases/download/bun-v1.3.14/bun-windows-
 version = "tag:0.6.0"
 backend = "cargo:https://github.com/technicalpickles/envsense"
 
-[[tools."cargo:https://github.com/technicalpickles/envsense"]]
-version = "ref:0.6.0"
-backend = "cargo:https://github.com/technicalpickles/envsense"
-
 [[tools."cargo:tokei"]]
 version = "14.0.0"
 backend = "cargo:tokei"
@@ -298,28 +294,6 @@ provenance = "github-attestations"
 version = "0.10.0"
 backend = "github:ajeetdsouza/zoxide"
 
-[tools."github:ajeetdsouza/zoxide".options]
-asset_pattern = "zoxide-*-aarch64-unknown-linux-musl.tar.gz"
-
-[tools."github:ajeetdsouza/zoxide"."platforms.linux-arm64"]
-checksum = "sha256:f1f16c5d6298d63dee467eedea1cdcd8490e43e493bea43acd416dc9033ef641"
-url = "https://github.com/ajeetdsouza/zoxide/releases/download/v0.10.0/zoxide-0.10.0-aarch64-unknown-linux-musl.tar.gz"
-url_api = "https://api.github.com/repos/ajeetdsouza/zoxide/releases/assets/466316402"
-
-[tools."github:ajeetdsouza/zoxide"."platforms.linux-arm64-musl"]
-checksum = "sha256:f1f16c5d6298d63dee467eedea1cdcd8490e43e493bea43acd416dc9033ef641"
-url = "https://github.com/ajeetdsouza/zoxide/releases/download/v0.10.0/zoxide-0.10.0-aarch64-unknown-linux-musl.tar.gz"
-url_api = "https://api.github.com/repos/ajeetdsouza/zoxide/releases/assets/466316402"
-
-[tools."github:ajeetdsouza/zoxide"."platforms.linux-x64"]
-checksum = "sha256:2d93385b99f3e82cf2701609a1bffcad863fbeb75aa3fe7eb6be4d29be68b1ae"
-url = "https://github.com/ajeetdsouza/zoxide/releases/download/v0.10.0/zoxide-0.10.0-x86_64-unknown-linux-musl.tar.gz"
-url_api = "https://api.github.com/repos/ajeetdsouza/zoxide/releases/assets/466316293"
-
-[[tools."github:ajeetdsouza/zoxide"]]
-version = "0.10.0"
-backend = "github:ajeetdsouza/zoxide"
-
 [tools."github:ajeetdsouza/zoxide"."platforms.linux-arm64"]
 checksum = "sha256:f1f16c5d6298d63dee467eedea1cdcd8490e43e493bea43acd416dc9033ef641"
 url = "https://github.com/ajeetdsouza/zoxide/releases/download/v0.10.0/zoxide-0.10.0-aarch64-unknown-linux-musl.tar.gz"
@@ -374,6 +348,23 @@ url_api = "https://api.github.com/repos/ajeetdsouza/zoxide/releases/assets/46631
 checksum = "sha256:f465ae548f8754c8e7edbc60b45fbf58c92bfe123db83d790252d6810fa5daf1"
 url = "https://github.com/ajeetdsouza/zoxide/releases/download/v0.10.0/zoxide-0.10.0-x86_64-pc-windows-msvc.zip"
 url_api = "https://api.github.com/repos/ajeetdsouza/zoxide/releases/assets/466316769"
+
+[[tools."github:ajeetdsouza/zoxide"]]
+version = "0.10.0"
+backend = "github:ajeetdsouza/zoxide"
+
+[tools."github:ajeetdsouza/zoxide".options]
+asset_pattern = "zoxide-*-aarch64-unknown-linux-musl.tar.gz"
+
+[tools."github:ajeetdsouza/zoxide"."platforms.linux-arm64"]
+checksum = "sha256:f1f16c5d6298d63dee467eedea1cdcd8490e43e493bea43acd416dc9033ef641"
+url = "https://github.com/ajeetdsouza/zoxide/releases/download/v0.10.0/zoxide-0.10.0-aarch64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/ajeetdsouza/zoxide/releases/assets/466316402"
+
+[tools."github:ajeetdsouza/zoxide"."platforms.linux-arm64-musl"]
+checksum = "sha256:f1f16c5d6298d63dee467eedea1cdcd8490e43e493bea43acd416dc9033ef641"
+url = "https://github.com/ajeetdsouza/zoxide/releases/download/v0.10.0/zoxide-0.10.0-aarch64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/ajeetdsouza/zoxide/releases/assets/466316402"
 
 [[tools."github:atuinsh/atuin"]]
 version = "18.16.1"
