@@ -20,6 +20,9 @@ packages:
       # System monitoring
       - htop
 
+      # Networking
+      - iperf3
+
       # Terminal multiplexer
       - tmux
 
@@ -90,6 +93,7 @@ packages:
       - git
       - git-lfs
       - htop
+      - iperf3
       - tmux
       - util-linux-user
       - zsh
@@ -100,6 +104,7 @@ packages:
       - git
       - git-lfs
       - htop
+      - iperf3
       - libssl-dev
       - passwd
       - pkg-config
