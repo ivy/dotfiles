@@ -60,6 +60,10 @@ EOF
 	# 3. Should use brew bundle to install packages
 	[[ "$output" == *"brew bundle"* ]]
 
+	# 4. Should not upgrade: admin-gated and self-updating casks would abort
+	#    the apply on every run.
+	[[ "$output" == *"--no-upgrade"* ]]
+
 	# 4. Should contain our actual package
 	[[ "$output" == *"font-fira-code-nerd-font"* ]]
 

@@ -34,7 +34,6 @@ packages:
       - devcontainer
       - docker
       - docker-buildx
-      - docker-completion
       - docker-compose
       - docker-credential-helper
       - docker-credential-helper-ecr
