@@ -49,12 +49,7 @@ SCRIPT="home/run_onchange_after_00-pull-qmd-models.sh.tmpl"
 }
 
 @test "renders on linux too — models are not darwin-specific" {
-	cat >"$TEST_TMPDIR/linux-config.toml" <<EOF
-[data]
-    chezmoi = { os = "linux", homeDir = "$TEST_HOME_DIR", sourceDir = "$TEST_SOURCE_DIR" }
-EOF
-
-	run chezmoi execute-template --config "$TEST_TMPDIR/linux-config.toml" --file "$SCRIPT"
+	run chezmoi execute-template --config "$(chezmoi_config linux)" --file "$SCRIPT"
 	[ "$status" -eq 0 ]
 
 	[[ "$output" == *"qmd pull"* ]]

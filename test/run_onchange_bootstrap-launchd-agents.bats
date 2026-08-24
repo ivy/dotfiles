@@ -2,45 +2,39 @@
 
 load test_helper
 
-SCRIPT="home/run_onchange_after_bootstrap-qmd-launchd-agents.sh.tmpl"
-
-darwin_config() {
-	cat >"$TEST_TMPDIR/darwin-config.toml" <<EOF
-[data]
-    chezmoi = { os = "darwin", homeDir = "$TEST_HOME_DIR", sourceDir = "$TEST_SOURCE_DIR" }
-EOF
-	printf '%s' "$TEST_TMPDIR/darwin-config.toml"
-}
+SCRIPT="home/run_onchange_after_bootstrap-launchd-agents.sh.tmpl"
 
 @test "renders valid shell on darwin" {
-	run chezmoi execute-template --config "$(darwin_config)" --file "$SCRIPT"
+	run chezmoi execute-template --config "$(chezmoi_config darwin)" --file "$SCRIPT"
 	[ "$status" -eq 0 ]
 
 	assert_script_structure "$output"
 	assert_valid_shell "$output"
 }
 
-@test "bootstraps both qmd agents" {
-	run chezmoi execute-template --config "$(darwin_config)" --file "$SCRIPT"
+@test "bootstraps every launchd agent" {
+	run chezmoi execute-template --config "$(chezmoi_config darwin)" --file "$SCRIPT"
 	[ "$status" -eq 0 ]
 
 	[[ "$output" == *"net.ivyevans.qmd-reindex"* ]]
 	[[ "$output" == *"net.ivyevans.qmd-mcp"* ]]
+	[[ "$output" == *"net.ivyevans.cbm-reindex"* ]]
 	[[ "$output" == *"launchctl bootstrap"* ]]
 	# Boots the old job out first so a running agent picks up a changed plist.
 	[[ "$output" == *"launchctl bootout"* ]]
 }
 
-@test "embeds both plist hashes so a change to either re-runs it" {
-	run chezmoi execute-template --config "$(darwin_config)" --file "$SCRIPT"
+@test "embeds every plist hash so a change to any of them re-runs it" {
+	run chezmoi execute-template --config "$(chezmoi_config darwin)" --file "$SCRIPT"
 	[ "$status" -eq 0 ]
 
 	[[ "$output" == *"reindex plist hash:"* ]]
 	[[ "$output" == *"mcp plist hash:"* ]]
+	[[ "$output" == *"cbm reindex plist hash:"* ]]
 }
 
 @test "creates the log directory launchd will not create itself" {
-	run chezmoi execute-template --config "$(darwin_config)" --file "$SCRIPT"
+	run chezmoi execute-template --config "$(chezmoi_config darwin)" --file "$SCRIPT"
 	[ "$status" -eq 0 ]
 
 	[[ "$output" == *"mkdir -p"* ]]
@@ -60,12 +54,7 @@ EOF
 }
 
 @test "does not render on non-darwin systems" {
-	cat >"$TEST_TMPDIR/linux-config.toml" <<EOF
-[data]
-    chezmoi = { os = "linux", homeDir = "$TEST_HOME_DIR", sourceDir = "$TEST_SOURCE_DIR" }
-EOF
-
-	run chezmoi execute-template --config "$TEST_TMPDIR/linux-config.toml" --file "$SCRIPT"
+	run chezmoi execute-template --config "$(chezmoi_config linux)" --file "$SCRIPT"
 	[ "$status" -eq 0 ]
 
 	[ "$output" = "" ]

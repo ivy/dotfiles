@@ -14,6 +14,9 @@ setup() {
 	mkdir -p "$TEST_SOURCE_DIR"
 	mkdir -p "$TEST_HOME_DIR"
 
+	REPO_ROOT="$(cd "$BATS_TEST_DIRNAME/.." && pwd)"
+	export REPO_ROOT
+
 	# Set up test environment variables
 	export CHEZMOI_SOURCE_DIR="$TEST_SOURCE_DIR"
 	export CHEZMOI_HOME_DIR="$TEST_HOME_DIR"
@@ -23,6 +26,25 @@ setup() {
 teardown() {
 	# Clean up temporary directories
 	rm -rf "$TEST_TMPDIR"
+}
+
+# Write a chezmoi config for `execute-template --config` and echo its path.
+#
+# sourceDir belongs at the top level, not under [data]. Templates that `include`
+# a sibling source resolve it against chezmoi's real source directory; a
+# .data.chezmoi.sourceDir override does not influence that, so a config without
+# this key sends `include` to the default ~/.local/share/chezmoi and fails.
+chezmoi_config() {
+	local os="$1"
+	local path="$TEST_TMPDIR/${os}-config.toml"
+
+	cat >"$path" <<EOF
+sourceDir = "$REPO_ROOT"
+
+[data]
+    chezmoi = { os = "$os", homeDir = "$TEST_HOME_DIR", sourceDir = "$TEST_SOURCE_DIR" }
+EOF
+	printf '%s' "$path"
 }
 
 # Helper function to assert valid YAML
