@@ -126,11 +126,31 @@
 
 [include]
 	path = ~/.config/git/config.local
-{{ if lookPath "gh" -}}
+{{ if lookPath "git-lfs" -}}
+# What `git lfs install` writes. Kept here so it survives an apply: without it
+# git-lfs re-adds the section, chezmoi sees a file it did not write, and the next
+# non-interactive apply stops to ask about the difference.
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+{{ end -}}
+{{/*
+   Prefer the mise shim over the resolved binary. lookPath returns a
+   version-pinned path (…/installs/github-cli-cli/2.92.0/bin/gh), and chezmoi
+   writes this file before run_onchange upgrades mise tools — so an apply that
+   also bumps gh leaves a helper pointing at the version it just pruned, and
+   every push fails until the following apply. The shim path is stable.
+*/}}
+{{- $ghShim := joinPath .chezmoi.homeDir ".local/share/mise/shims/gh" -}}
+{{- $gh := lookPath "gh" -}}
+{{- if stat $ghShim }}{{ $gh = $ghShim }}{{ end -}}
+{{ if $gh -}}
 [credential "https://github.com"]
 	helper =
-	helper = !{{ lookPath "gh" }} auth git-credential
+	helper = !{{ $gh }} auth git-credential
 [credential "https://gist.github.com"]
 	helper =
-	helper = !{{ lookPath "gh" }} auth git-credential
+	helper = !{{ $gh }} auth git-credential
 {{ end -}}
