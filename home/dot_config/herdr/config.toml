@@ -35,6 +35,17 @@ new_cwd = "follow"
 # what `bind C-a send-prefix` does in tmux.
 prefix = "ctrl+a"
 
+# tmux: bind <n> select-window. herdr's Spaces sit above tabs, and prefix+1..9
+# already selects tabs, so Spaces take the shifted number row in sidebar order:
+# prefix+! is Space 1, prefix+@ is Space 2, and so on.
+switch_workspace = "prefix+shift+1..9"
+
+# tmux: bind , rename-window. herdr renames three separate things, so the comma
+# pair takes the two reached most and prefix+shift+t keeps renaming a tab.
+# prefix+shift+p and prefix+shift+w, herdr's defaults for these, go unbound.
+rename_pane = "prefix+,"
+rename_workspace = "prefix+<"
+
 # tmux: bind | split-window -h   (side by side)
 #       bind - split-window -v   (stacked)
 # herdr names these after the resulting layout rather than tmux's -h/-v flags:
