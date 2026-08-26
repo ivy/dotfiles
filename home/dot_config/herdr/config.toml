@@ -21,9 +21,12 @@ name = "catppuccin"
 auto_switch = true
 dark_name = "catppuccin"
 light_name = "catppuccin-latte"
-# ui.accent is deliberately unset. tmux draws the active border in Lavender per
-# appearance (#b4befe mocha, #7287fd latte); ui.accent is one static value, so
-# the theme picks a better color than a hardcoded override would.
+# Both accent overrides — theme.custom.accent and the older ui.accent — are
+# deliberately unset. Each takes one static value, applied on top of whichever
+# flavor auto_switch resolves to, and the Lavender tmux draws its active border
+# in differs per appearance (#b4befe mocha, #7287fd latte). Either override
+# would therefore be wrong in one flavor; the built-in themes accent with Blue,
+# which reads correctly in both.
 
 [terminal]
 # tmux passes -c "#{pane_current_path}" on every split and new-window.
@@ -40,10 +43,13 @@ prefix = "ctrl+a"
 # prefix+! is Space 1, prefix+@ is Space 2, and so on.
 switch_workspace = "prefix+shift+1..9"
 
-# tmux: bind , rename-window. herdr renames three separate things, so the comma
-# pair takes the two reached most and prefix+shift+t keeps renaming a tab.
-# prefix+shift+p and prefix+shift+w, herdr's defaults for these, go unbound.
-rename_pane = "prefix+,"
+# tmux: bind , rename-window   (a tmux window is a herdr tab)
+#       bind $ rename-session  (a tmux session is a herdr Space)
+# prefix+$ is unavailable for the Space rename because the shifted number row
+# already switches Spaces above, so shift+comma sits next to the tab rename
+# instead. rename_pane keeps herdr's prefix+shift+p default — tmux ships no
+# pane-rename binding, so there is no muscle memory to mirror.
+rename_tab = "prefix+,"
 rename_workspace = "prefix+<"
 
 # tmux: bind | split-window -h   (side by side)
