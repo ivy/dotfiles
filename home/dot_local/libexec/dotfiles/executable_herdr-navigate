@@ -1,0 +1,65 @@
+#!/bin/sh
+# Move focus one pane in the given direction, unless the focused pane is
+# running an editor that wants the key for its own splits.
+#
+# herdr claims ctrl+h/j/k/l for every pane at once and has no equivalent of
+# tmux's if-shell test, so the choice between "forward the key" and "move
+# focus" has to happen out here. See the C-h binding in
+# home/dot_config/tmux/tmux.conf for the behaviour this mirrors.
+#
+# Usage: herdr-navigate <left|down|up|right>
+#
+# Bound from [[keys.command]] entries in home/dot_config/herdr/config.toml,
+# which is where HERDR_BIN_PATH and HERDR_ACTIVE_PANE_ID come from.
+
+set -eu
+
+usage() {
+  echo "usage: ${0##*/} <left|down|up|right>" >&2
+  exit 64
+}
+
+[ $# -eq 1 ] || usage
+
+case "$1" in
+  left)  key="ctrl+h" ;;
+  down)  key="ctrl+j" ;;
+  up)    key="ctrl+k" ;;
+  right) key="ctrl+l" ;;
+  *)     usage ;;
+esac
+
+# Prefer the path herdr hands us: resolving `herdr` through the mise shim costs
+# ~90ms per call, which is felt on a key pressed this often.
+herdr="${HERDR_BIN_PATH:-herdr}"
+pane="${HERDR_ACTIVE_PANE_ID:-}"
+
+# Nothing focused means nothing to navigate.
+[ -n "$pane" ] || exit 0
+
+# Same editor family as the is_vim test in tmux.conf: view, vim, nvim, vimx,
+# and their g-prefixed and -diff variants. awk rather than jq because jq on
+# PATH is a shim that costs ~100ms to resolve, which is a lot to pay on a key
+# pressed this often.
+editor_focused() {
+  "$herdr" pane process-info --pane "$pane" 2>/dev/null | awk '
+    {
+      rest = $0
+      while (match(rest, /"argv0":"[^"]*"/)) {
+        argv0 = substr(rest, RSTART + 9, RLENGTH - 10)
+        rest = substr(rest, RSTART + RLENGTH)
+        sub(/.*\//, "", argv0)
+        if (argv0 ~ /^g?(view|l?n?vim?x?)(diff)?$/) {
+          found = 1
+        }
+      }
+    }
+    END { exit !found }
+  '
+}
+
+if editor_focused; then
+  exec "$herdr" pane send-keys "$pane" "$key"
+fi
+
+exec "$herdr" pane focus --direction "$1" --pane "$pane"

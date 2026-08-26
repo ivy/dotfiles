@@ -60,11 +60,9 @@ rename_workspace = "prefix+<"
 split_vertical = ["prefix+|", 'prefix+\']
 split_horizontal = "prefix+minus"
 
-# tmux: bind h/j/k/l select-pane
-# The direct ctrl+h/j/k/l bindings from tmux.conf are intentionally absent.
-# They work in tmux only because vim-tmux-navigator inspects the pane's process
-# first; herdr has no such shim, so binding them would steal the keys from
-# Neovim splits running inside a pane.
+# tmux: bind h/j/k/l select-pane. tmux.conf also binds these prefixless, which
+# lives in the navigator entries under [[keys.command]] below. These stay bound
+# as the fallback that works no matter what the pane is running.
 focus_pane_left = "prefix+h"
 focus_pane_down = "prefix+j"
 focus_pane_up = "prefix+k"
@@ -102,6 +100,45 @@ key = "prefix+v"
 type = "pane"
 command = 'cd "$(chezmoi data | jq -r .obsidian.vault_path)" && exec claude'
 description = "claude — vault"
+
+# tmux: bind-key -n C-h if-shell "$is_vim" 'send-keys C-h' 'select-pane -L'
+# herdr forwards nothing conditionally, so herdr-navigate makes that call per
+# keypress: forward the key when the focused pane runs an editor, move focus
+# otherwise. Neovim's half of the handoff — move between splits first, ask
+# herdr only at the edge — is in
+# home/dot_config/nvim/lua/plugins/tmux-navigator.lua.
+[[keys.command]]
+key = "ctrl+h"
+type = "shell"
+command = '"$HOME/.local/libexec/dotfiles/herdr-navigate" left'
+description = "focus left, or ctrl+h to an editor"
+
+[[keys.command]]
+key = "ctrl+j"
+type = "shell"
+command = '"$HOME/.local/libexec/dotfiles/herdr-navigate" down'
+description = "focus down, or ctrl+j to an editor"
+
+[[keys.command]]
+key = "ctrl+k"
+type = "shell"
+command = '"$HOME/.local/libexec/dotfiles/herdr-navigate" up'
+description = "focus up, or ctrl+k to an editor"
+
+[[keys.command]]
+key = "ctrl+l"
+type = "shell"
+command = '"$HOME/.local/libexec/dotfiles/herdr-navigate" right'
+description = "focus right, or ctrl+l to an editor"
+
+# tmux: bind C-l send-keys C-l \; clear-history. The navigator owns bare
+# ctrl+l now, so clearing takes the prefix. Only the screen clears — herdr
+# exposes no clear-history equivalent, so the scrollback survives.
+[[keys.command]]
+key = "prefix+ctrl+l"
+type = "shell"
+command = '"${HERDR_BIN_PATH:-herdr}" pane send-keys "$HERDR_ACTIVE_PANE_ID" ctrl+l'
+description = "clear the focused pane"
 
 [ui]
 # tmux: bind c creates the window immediately rather than prompting for a name.
