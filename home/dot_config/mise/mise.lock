@@ -966,6 +966,8 @@ url_api = "https://api.github.com/repos/herdrdev/herdr/releases/assets/500422625
 checksum = "sha256:d53a9f93fccfdfcc55632927bf51002f5add0aa7990bcdf508ffbd84ac658178"
 url = "https://github.com/herdrdev/herdr/releases/download/v0.8.0/herdr-macos-aarch64"
 url_api = "https://api.github.com/repos/herdrdev/herdr/releases/assets/500422629"
+provenance = "github-attestations"
+provenance_verified = true
 
 [tools."github:herdrdev/herdr"."platforms.macos-x64"]
 checksum = "sha256:77cb5afd6c8fcaaaf3bc28e474ec01c209331ad08094e20d7f8aa9b0bb78d649"
