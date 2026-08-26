@@ -25,6 +25,7 @@ readonly MIB=1048576
 # ethernet switch, while still terminating on a genuinely dead host.
 readonly MAX_STALLED_PASSES=12
 readonly MAX_BACKOFF_SECONDS=120
+readonly BACKOFF_STEP_SECONDS=15
 
 SELF="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$(basename "${BASH_SOURCE[0]}")"
 readonly SELF
@@ -61,25 +62,38 @@ shell_quote() {
 	printf "'%s'" "${1//\'/\'\\\'\'}"
 }
 
-# BSD stat and GNU stat spell this differently and neither accepts the other.
-if [[ "$(uname -s)" == "Darwin" ]]; then
-	local_size() { stat -f %z "$1"; }
-else
-	local_size() { stat -c %s "$1"; }
-fi
+# GNU and BSD stat spell this differently and neither accepts the other's flag.
+# Try one and fall back rather than branching on uname: the remote need not run
+# the same platform as this side, and uname alone would miss non-Darwin BSDs.
+# shellcheck disable=SC2016 # $1 is for the inner shell, not this one
+readonly SIZE_SNIPPET='stat -c %s "$1" 2>/dev/null || stat -f %z "$1"'
 
-# macOS ships /usr/bin/shasum as a Perl script that runs ~5x slower than the
-# same algorithm through openssl, so it is a last resort rather than a default.
+# Picks a sha256 pipeline from whatever is installed and exports it as
+# PGET_HASH. Both ends run this same snippet, so their choices cannot drift
+# apart, and both fail loudly: a missing tool would otherwise yield an empty
+# digest, which the piece comparison would report as corruption rather than as
+# the tooling problem it is. openssl first because macOS ships /usr/bin/shasum
+# as a Perl script, several times slower for the same algorithm.
+read -r -d '' HASH_SELECT <<'SNIPPET' || true
 if command -v openssl >/dev/null 2>&1; then
-	# LibreSSL prints a bare digest, OpenSSL 3 prints "SHA2-256(stdin)= ...".
-	hash_stdin() { openssl dgst -sha256 | sed 's/.*= *//'; }
+	PGET_HASH='openssl dgst -sha256 | sed "s/.*= *//"'
 elif command -v sha256sum >/dev/null 2>&1; then
-	hash_stdin() { sha256sum | cut -d' ' -f1; }
+	PGET_HASH='sha256sum | cut -d" " -f1'
 elif command -v shasum >/dev/null 2>&1; then
-	hash_stdin() { shasum -a 256 | cut -d' ' -f1; }
+	PGET_HASH='shasum -a 256 | cut -d" " -f1'
 else
-	hash_stdin() { die "no sha256 tool found (openssl, sha256sum or shasum)"; }
+	echo 'pget: no sha256 tool found (openssl, sha256sum or shasum)' >&2
+	exit 1
 fi
+export PGET_HASH
+SNIPPET
+readonly HASH_SELECT
+
+# Workers inherit PGET_HASH, so they skip the lookup.
+[[ -n "${PGET_HASH:-}" ]] || eval "$HASH_SELECT"
+
+local_size() { sh -c "$SIZE_SNIPPET" _ "$1"; }
+hash_stdin() { eval "$PGET_HASH"; }
 
 ssh_run() {
 	ssh -o BatchMode=yes -o Compression=no -o ControlMaster=no \
@@ -134,34 +148,35 @@ count_missing() {
 }
 
 remote_size() {
-	# The remote may be BSD or GNU; ask for both and take whichever answers.
 	ssh_run "$PGET_REMOTE" \
-		"stat -c %s $(shell_quote "$PGET_RFILE") 2>/dev/null || stat -f %z $(shell_quote "$PGET_RFILE")"
+		"sh -c $(shell_quote "$SIZE_SNIPPET") _ $(shell_quote "$PGET_RFILE")"
 }
 
 transfer() {
-	local stalled=0 pass=0 remaining todo
+	local stalled=0 pass=0 remaining todo idx
 
 	while :; do
-		remaining=$(count_missing)
+		todo=''
+		remaining=0
+		for ((idx = 0; idx < PGET_PIECES; idx++)); do
+			[[ -f "$PGET_STATE/$idx" ]] && continue
+			todo+="$idx"$'\n'
+			remaining=$((remaining + 1))
+		done
 		((remaining == 0)) && break
 		pass=$((pass + 1))
 
 		printf 'pget: pass %d, %d of %d pieces remaining\n' \
 			"$pass" "$remaining" "$PGET_PIECES" >&2
 
-		todo=$(for ((i = 0; i < PGET_PIECES; i++)); do
-			[[ -f "$PGET_STATE/$i" ]] || printf '%d\n' "$i"
-		done)
-
-		printf '%s\n' "$todo" |
+		printf '%s' "$todo" |
 			xargs -P "$PGET_STREAMS" -I{} "$SELF" --fetch-piece {} || true
 
 		if (($(count_missing) >= remaining)); then
 			stalled=$((stalled + 1))
 			((stalled >= MAX_STALLED_PASSES)) &&
 				die "no progress after $stalled passes; run again to resume"
-			local backoff=$((stalled * 15))
+			local backoff=$((stalled * BACKOFF_STEP_SECONDS))
 			((backoff > MAX_BACKOFF_SECONDS)) && backoff=$MAX_BACKOFF_SECONDS
 			printf 'pget: no progress, retrying in %ds\n' "$backoff" >&2
 			sleep "$backoff"
@@ -170,6 +185,15 @@ transfer() {
 		fi
 	done
 }
+
+# Runs on the remote after HASH_SELECT, reading the same PGET_HASH it exports.
+read -r -d '' REMOTE_HASH_BODY <<'SNIPPET' || true
+f=$1 n=$2 m=$3 j=$4
+seq 0 $((n - 1)) | xargs -P "$j" -I@ sh -c '
+	d=$(dd if="$2" bs=1M skip=$(( $1 * $3 )) count=$3 status=none 2>/dev/null | eval "$PGET_HASH")
+	printf "%s %s\n" "$1" "$d"' _ @ "$f" "$m"
+SNIPPET
+readonly REMOTE_HASH_BODY
 
 # Compare per-piece digests computed concurrently on both ends. Cheaper than a
 # whole-file hash on each side, and it identifies which piece is wrong.
@@ -184,17 +208,10 @@ verify() {
 
 	ssh_run "$PGET_REMOTE" \
 		"bash -s $(shell_quote "$PGET_RFILE") $PGET_PIECES $PGET_PIECE_MIB $PGET_STREAMS" \
-		>"$remote_list" 2>"$tmp/err" <<-'REMOTE' &
-			f=$1 n=$2 m=$3 j=$4
-			seq 0 $((n - 1)) | xargs -P "$j" -I@ sh -c '
-				d=$(dd if="$2" bs=1M skip=$(( $1 * $3 )) count=$3 status=none 2>/dev/null |
-					if command -v sha256sum >/dev/null 2>&1; then
-						sha256sum | cut -d" " -f1
-					else
-						openssl dgst -sha256 | sed "s/.*= *//"
-					fi)
-				printf "%s %s\n" "$1" "$d"' _ @ "$f" "$m"
-		REMOTE
+		>"$remote_list" 2>"$tmp/err" <<REMOTE &
+$HASH_SELECT
+$REMOTE_HASH_BODY
+REMOTE
 	local remote_pid=$!
 
 	seq 0 $((PGET_PIECES - 1)) |
