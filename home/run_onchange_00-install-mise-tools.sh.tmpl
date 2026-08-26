@@ -58,7 +58,10 @@ rebuild_qmd_sqlite_addon() {
     node_bin="$(mise which node 2>/dev/null)" || return 0
     [ -x "${node_bin}" ] || return 0
 
-    if (cd "${pkg_dir}" && "${node_bin}" -e "require('better-sqlite3')") >/dev/null 2>&1; then
+    # Opening a database is the real probe: better-sqlite3 defers loading the
+    # native addon until the first Database is constructed, so a bare require()
+    # passes even when the addon is missing or built for another ABI.
+    if (cd "${pkg_dir}" && "${node_bin}" -e "new (require('better-sqlite3'))(':memory:')") >/dev/null 2>&1; then
         return 0
     fi
 
