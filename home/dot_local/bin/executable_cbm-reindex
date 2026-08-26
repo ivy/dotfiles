@@ -25,6 +25,17 @@ readonly LOG_MAX_BYTES=$((1024 * 1024))
 readonly STATE="$HOME/.cache/codebase-memory-mcp/.last-reindex-digest"
 readonly LOCKDIR="$HOME/.cache/codebase-memory-mcp/.reindex.lock"
 
+# Repositories to leave out of the corpus, as glob patterns matched against the
+# path relative to $SRC. The loop below is sequential and blocking, and CBM has
+# no per-repo memory ceiling or circuit-breaker: a tree it cannot finish takes
+# the whole cycle down with it, so every repository sorting after it never gets
+# attempted. Excluding one is cheaper than losing the tail of the corpus.
+readonly EXCLUDE=(
+    # 2 GB WordPress checkout, mostly LFS media. Exceeds the daemon's memory
+    # budget, whose worker is then respawned indefinitely on the same tree.
+    "github.com/ivy/nw-simracing-wordpress"
+)
+
 if [[ ! -x "$CBM" ]]; then
     echo "codebase-memory-mcp not installed at $CBM, skipping reindex"
     exit 0
@@ -127,6 +138,14 @@ digest_input=''
 
 while IFS= read -r gitdir; do
     repo="${gitdir%/.git}"
+    rel="${repo#"$SRC"/}"
+
+    for pattern in "${EXCLUDE[@]}"; do
+        # shellcheck disable=SC2053  # glob match is the point, not equality
+        if [[ "$rel" == $pattern ]]; then
+            continue 2
+        fi
+    done
 
     # A crash on one repository must not end the cycle. This parses untrusted
     # source with memory-unsafe C — an abort on one tree is a survivable event,
