@@ -118,6 +118,7 @@ Browse the two dirs above for the full set (~35 skills).
 | tmux | [docs/tmux.md](docs/tmux.md) |
 | tmux-powerline (notification rail) | [docs/tmux-powerline.md](docs/tmux-powerline.md) |
 | Zsh | [docs/zsh.md](docs/zsh.md) |
+| macOS preferences | [docs/macos.md](docs/macos.md) |
 | Claude Code integration | [docs/claude-code.md](docs/claude-code.md) |
 | QMD vault search | [docs/qmd.md](docs/qmd.md) |
 | Codebase memory (code graph over ~/src) | [docs/codebase-memory-mcp.md](docs/codebase-memory-mcp.md) |

@@ -71,17 +71,6 @@ else
     echo "Keyboard navigation enabled"
 fi
 
-# Enable Ctrl+scroll to zoom
-# com.apple.universalaccess requires sudo; com.apple.Accessibility is user-writable
-if [ "$(defaults read com.apple.Accessibility closeViewScrollWheelToggle 2>/dev/null)" = "1" ]; then
-    echo "Scroll zoom already enabled, skipping"
-else
-    echo "Enabling Ctrl+scroll zoom..."
-    defaults write com.apple.Accessibility closeViewScrollWheelToggle -bool true
-    defaults write com.apple.Accessibility HIDScrollZoomModifierMask -int 262144
-    echo "Scroll zoom enabled (logout required to take effect)"
-fi
-
 # Clear default Dock icons
 if [ "$(defaults read com.apple.dock persistent-apps 2>/dev/null | grep -c 'tile-data')" = "0" ]; then
     echo "Dock already empty, skipping"
