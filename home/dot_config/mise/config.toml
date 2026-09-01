@@ -54,6 +54,9 @@ eza = "0.23.4"
 "github:technicalpickles/cq" = "0.2.1"
 "github:dandavison/delta" = "0.19.2"
 "github:dlvhdr/gh-dash" = "4.25.0"
+# beads: issue graph the coding agent reads/writes as durable memory.
+# Ships its binary as `bd`, not `beads`.
+"github:gastownhall/beads" = "1.2.2"
 "github:gitleaks/gitleaks" = "8.30.1"
 # herdr: persistent runtime for agent terminal sessions. The mise registry still
 # points at the pre-transfer owner (ogulcancelik/herdr) — pin the canonical repo.
