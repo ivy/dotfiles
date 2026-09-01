@@ -18,14 +18,32 @@ fi
 # out from under a warm daemon leaves that daemon rejecting work, which surfaces
 # later as "the MCP server stopped responding" with no obvious cause. Stopping it
 # first is cheap: it is a warm-start cache holding no watches, and the next
-# session respawns it. Skipped when the shim isn't there yet (fresh machine).
+# session respawns it.
+#
+# Signal the daemon rather than asking the binary to stop itself. CBM dispatches
+# only cli/hook-augment/install/uninstall/update/config and treats anything else
+# as "no subcommand", falling through to the stdio server -- so a stop request is
+# indistinguishable from a start request, and it then blocks reading an inherited
+# terminal stdin forever, hanging the apply.
+#
+# The daemon is spawned as `codebase-memory-mcp --cbm-daemon-internal [...]`, so
+# that flag identifies it exactly and matches no session frontend. Frontends are
+# left alone: they are thin per-session stdio shims that exit with their session
+# and respawn a daemon from the new build on the next request.
 stop_codebase_memory_daemon() {
-    local cbm="$HOME/.local/share/mise/shims/codebase-memory-mcp"
+    local pattern='cbm-daemon-internal' attempt
 
-    [ -x "${cbm}" ] || return 0
+    pgrep -u "$(id -u)" -f "${pattern}" >/dev/null 2>&1 || return 0
 
     echo "Stopping codebase-memory-mcp daemon before tool changes..."
-    "${cbm}" daemon stop >/dev/null 2>&1 || true
+    pkill -TERM -u "$(id -u)" -f "${pattern}" >/dev/null 2>&1 || true
+
+    for attempt in 1 2 3 4 5; do
+        pgrep -u "$(id -u)" -f "${pattern}" >/dev/null 2>&1 || return 0
+        sleep 1
+    done
+
+    pkill -KILL -u "$(id -u)" -f "${pattern}" >/dev/null 2>&1 || true
 }
 
 stop_codebase_memory_daemon

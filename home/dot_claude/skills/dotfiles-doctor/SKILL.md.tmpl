@@ -28,7 +28,10 @@ allowed-tools:
   - Bash(codebase-memory-mcp --version:*)
   - Bash(codebase-memory-mcp config list:*)
   - Bash(codebase-memory-mcp cli index_status:*)
-  - Bash(codebase-memory-mcp daemon stop:*)
+  # CBM has no `daemon` subcommand; an unrecognised one starts the stdio
+  # server and blocks on stdin. Signal the daemon by its argv flag instead.
+  - Bash(pgrep -af cbm-daemon-internal)
+  - Bash(pkill -f cbm-daemon-internal)
   # Both scripts parse no arguments, and ~/.local/bin is on PATH.
   - Bash(cbm-reindex)
   - Bash(qmd-reindex)
@@ -74,7 +77,7 @@ A cycle already running holds `~/.cache/codebase-memory-mcp/.reindex.lock`. That
 
 - **agent unloaded or failing** — `launchctl bootout gui/$UID/<label>`, ignore its failure, then `launchctl bootstrap gui/$UID ~/Library/LaunchAgents/<label>.plist`
 - **index stale or short** — run `cbm-reindex` or `qmd-reindex` (both on PATH, both take no arguments)
-- **codebase-memory refusing work after a version bump** — `codebase-memory-mcp daemon stop`; every process must share one build fingerprint, and `mise prune` deletes the old build from under a warm daemon
+- **codebase-memory refusing work after a version bump** — `pkill -f cbm-daemon-internal`; every process must share one build fingerprint, and `mise prune` deletes the old build from under a warm daemon. There is no `daemon stop` subcommand: CBM treats an unrecognised subcommand as "run the stdio server", which then blocks on stdin
 
 Report the exact command rather than running it when the fix would delete an index, apply chezmoi over destination drift, or reinstall a tool. Those cost minutes to hours to undo and want a human's read first.
 

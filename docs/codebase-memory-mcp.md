@@ -77,9 +77,9 @@ tears it down.
 The important gap: **watches are per-session, reference-counted subscriptions.**
 When the last session referencing a watch disconnects, the physical watch is
 unregistered, and the watcher-driven index then declines to run because it requires
-a live watch. There *is* a permanent daemon (`daemon start`) that survives zero
-clients, but it holds no watches — its own help text calls it what it is, a way to
-"skip the per-command startup cost." It is a warm-start cache, not a background
+a live watch. There *is* a permanent daemon mode — the daemon spawns itself with
+`--cbm-daemon-permanent` — that survives zero clients, but it holds no watches. It
+exists to skip the per-command startup cost: a warm-start cache, not a background
 indexer.
 
 Consequence: with no session attached, nothing reindexes. Hence the launchd agent
@@ -132,9 +132,12 @@ This job is the backstop for everything else.
 codebase-memory-mcp cli index_repository --repo-path <path> --mode full \
   --name github-com-owner-repo
 
-# Runtime settings and daemon state
+# Runtime settings
 codebase-memory-mcp config list
-codebase-memory-mcp daemon status
+
+# Is the coordination daemon up? There is no `daemon` subcommand -- see
+# "There is no daemon subcommand" below. Inspect the process directly.
+pgrep -af cbm-daemon-internal
 
 # Reload the agent after a plist change
 launchctl bootout gui/$(id -u)/net.ivyevans.cbm-reindex
@@ -174,6 +177,22 @@ here and `dot_zshenv` prepends the shims directory for non-login shells
 specifically so agent subprocesses resolve tools, which keeps the entry portable.
 
 ## Constraints worth knowing
+
+### There is no `daemon` subcommand
+
+`main.c` dispatches exactly `cli`, `hook-augment`, `install`, `uninstall`,
+`update`, and `config`, plus the `--version`/`--help` flags. Anything else is
+treated as "no subcommand given", which is the documented way to ask for the
+stdio MCP server — so `daemon stop` starts a server and a watcher, then blocks
+reading stdin until EOF. Under `chezmoi apply` stdin is the terminal, so it never
+arrives and the apply hangs with no output.
+
+Manage the daemon by signal. It carries `--cbm-daemon-internal` in its argv:
+
+```bash
+pgrep -af cbm-daemon-internal    # is it up?
+pkill -f cbm-daemon-internal     # stop it
+```
 
 ### A version bump can wedge the daemon
 
@@ -292,7 +311,7 @@ Silence in the log is expected — the script only writes when counts moved or
 something failed.
 
 **"stopped responding" after an update** — the fingerprint case above. Run
-`codebase-memory-mcp daemon stop` and start a new session.
+`pkill -f cbm-daemon-internal` and start a new session.
 
 **Start over for one repository** — delete its database from
 `~/.cache/codebase-memory-mcp/` and reindex. The whole cache is disposable.

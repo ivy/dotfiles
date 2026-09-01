@@ -105,6 +105,14 @@ project_name() {
 out=''
 daemon_stopped=false
 
+# Kill the coordination daemon. CBM has no `daemon stop` subcommand: it dispatches
+# only cli/hook-augment/install/uninstall/update/config, and anything else falls
+# through to the stdio server — asking it to stop starts one instead. The daemon
+# carries `--cbm-daemon-internal` in its argv, which names it exactly.
+stop_daemon() {
+    pkill -TERM -u "$(id -u)" -f 'cbm-daemon-internal' >/dev/null 2>&1 || true
+}
+
 # Index one repository, clearing a stale daemon once per cycle on first failure.
 #
 # Every CBM process must share one build fingerprint, enforced by an OS admission
@@ -125,7 +133,7 @@ index_with_recovery() {
         return 1
     fi
     daemon_stopped=true
-    "$CBM" daemon stop >/dev/null 2>&1 || true
+    stop_daemon
 
     out=$("$CBM" cli index_repository --repo-path "$repo" --mode full \
         --name "$name" 2>&1) || return 1
