@@ -58,19 +58,27 @@ GITHUB_TOKEN=$(gh auth token) mise install --yes --verbose
 mise install --yes --verbose
 {{- end }}
 
-# qmd depends on better-sqlite3, which ships C++ source only and relies on a
-# postinstall script to fetch a prebuilt binary. Our global
-# NPM_CONFIG_IGNORE_SCRIPTS=1 (docs/supply-chain-security.md) blocks that, so the
-# native addon never lands and every qmd invocation dies with ERR_DLOPEN_FAILED.
-# Compile it from the source vendored in the tarball instead — that keeps the
-# hardening intact and trusts no third-party release blob. The addon is bound to
-# one Node ABI, so a node upgrade invalidates it; rebuild only when the current
-# interpreter can't load it.
-rebuild_qmd_sqlite_addon() {
-    local qmd_root pkg_dir addon_dir node_bin
+# better-sqlite3 ships C++ source only and relies on a postinstall script to
+# fetch a prebuilt binary. Our global NPM_CONFIG_IGNORE_SCRIPTS=1
+# (docs/supply-chain-security.md) blocks that, so the native addon never lands
+# and every dependent dies with ERR_DLOPEN_FAILED. Compile it from the source
+# vendored in the tarball instead — that keeps the hardening intact and trusts
+# no third-party release blob. The addon is bound to one Node ABI, so a node
+# upgrade invalidates it; rebuild only when the current interpreter can't load
+# it.
+#
+# Each entry is "<mise tool spec>:<package path under lib/node_modules>".
+BETTER_SQLITE3_DEPENDENTS=(
+    "npm:@tobilu/qmd:@tobilu/qmd"
+    "npm:obsidian-headless:obsidian-headless"
+)
 
-    qmd_root="$(mise where npm:@tobilu/qmd 2>/dev/null)" || return 0
-    pkg_dir="${qmd_root}/lib/node_modules/@tobilu/qmd"
+rebuild_better_sqlite3_addon() {
+    local tool="$1" pkg_name="$2"
+    local tool_root pkg_dir addon_dir node_bin
+
+    tool_root="$(mise where "${tool}" 2>/dev/null)" || return 0
+    pkg_dir="${tool_root}/lib/node_modules/${pkg_name}"
     [ -d "${pkg_dir}" ] || return 0
 
     node_bin="$(mise which node 2>/dev/null)" || return 0
@@ -86,17 +94,19 @@ rebuild_qmd_sqlite_addon() {
     addon_dir="${pkg_dir}/node_modules/better-sqlite3"
     [ -d "${addon_dir}" ] || return 0
 
-    echo "Rebuilding qmd's better-sqlite3 addon for Node ABI $("${node_bin}" -p 'process.versions.modules')..."
+    echo "Rebuilding ${pkg_name}'s better-sqlite3 addon for Node ABI $("${node_bin}" -p 'process.versions.modules')..."
     # build-release is the package's own source build. Going through `npm
     # rebuild` instead runs the install script, which prefers a prebuilt binary
     # and only compiles when overridden by a config npm no longer recognizes.
     if ! (cd "${addon_dir}" && PATH="$(dirname "${node_bin}"):${PATH}" \
         NPM_CONFIG_IGNORE_SCRIPTS=false npm run build-release); then
-        echo "warning: failed to rebuild better-sqlite3; qmd will not run until this succeeds" >&2
+        echo "warning: failed to rebuild better-sqlite3; ${pkg_name} will not run until this succeeds" >&2
     fi
 }
 
-rebuild_qmd_sqlite_addon
+for entry in "${BETTER_SQLITE3_DEPENDENTS[@]}"; do
+    rebuild_better_sqlite3_addon "${entry%:*}" "${entry##*:}"
+done
 
 echo "Pruning unused mise tool versions and stale caches..."
 mise prune --yes
