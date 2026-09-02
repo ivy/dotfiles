@@ -251,6 +251,92 @@ checksum = "sha256:bd13625a412f05357813b9b1182c61d5d2a75aa0a55ed71a9f882f28a7edc
 url = "https://github.com/buildkite/cli/releases/download/v3.51.0/bk_3.51.0_windows_amd64.zip"
 url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/460679687"
 
+[[tools."github:gitleaks/gitleaks"]]
+version = "8.30.1"
+backend = "github:gitleaks/gitleaks"
+
+[tools."github:gitleaks/gitleaks"."platforms.linux-arm64"]
+checksum = "sha256:e4a487ee7ccd7d3a7f7ec08657610aa3606637dab924210b3aee62570fb4b080"
+url = "https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_arm64.tar.gz"
+url_api = "https://api.github.com/repos/gitleaks/gitleaks/releases/assets/378332057"
+
+[tools."github:gitleaks/gitleaks"."platforms.linux-arm64-musl"]
+checksum = "sha256:e4a487ee7ccd7d3a7f7ec08657610aa3606637dab924210b3aee62570fb4b080"
+url = "https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_arm64.tar.gz"
+url_api = "https://api.github.com/repos/gitleaks/gitleaks/releases/assets/378332057"
+
+[tools."github:gitleaks/gitleaks"."platforms.linux-x64"]
+checksum = "sha256:551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb"
+url = "https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz"
+url_api = "https://api.github.com/repos/gitleaks/gitleaks/releases/assets/378332058"
+
+[tools."github:gitleaks/gitleaks"."platforms.linux-x64-musl"]
+checksum = "sha256:551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb"
+url = "https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz"
+url_api = "https://api.github.com/repos/gitleaks/gitleaks/releases/assets/378332058"
+
+[tools."github:gitleaks/gitleaks"."platforms.macos-arm64"]
+checksum = "sha256:b40ab0ae55c505963e365f271a8d3846efbc170aa17f2607f13df610a9aeb6a5"
+url = "https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_darwin_arm64.tar.gz"
+url_api = "https://api.github.com/repos/gitleaks/gitleaks/releases/assets/378332059"
+
+[tools."github:gitleaks/gitleaks"."platforms.macos-x64"]
+checksum = "sha256:dfe101a4db2255fc85120ac7f3d25e4342c3c20cf749f2c20a18081af1952709"
+url = "https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_darwin_x64.tar.gz"
+url_api = "https://api.github.com/repos/gitleaks/gitleaks/releases/assets/378332053"
+
+[tools."github:gitleaks/gitleaks"."platforms.windows-x64"]
+checksum = "sha256:d29144deff3a68aa93ced33dddf84b7fdc26070add4aa0f4513094c8332afc4e"
+url = "https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_windows_x64.zip"
+url_api = "https://api.github.com/repos/gitleaks/gitleaks/releases/assets/378333178"
+
+[[tools."github:jdx/hk"]]
+version = "1.50.0"
+backend = "github:jdx/hk"
+
+[tools."github:jdx/hk"."platforms.linux-arm64"]
+checksum = "sha256:759f782c24db20954b471de64b0aaf1b10157ed0aa1b64eca9b8f6dc4f7cfc0b"
+url = "https://github.com/jdx/hk/releases/download/v1.50.0/hk-aarch64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/468492723"
+provenance = "github-attestations"
+
+[tools."github:jdx/hk"."platforms.linux-arm64-musl"]
+checksum = "sha256:072ce468ec07d31797e2d08e96f5fd036ff220a5d8a97584eea3b7d780072c95"
+url = "https://github.com/jdx/hk/releases/download/v1.50.0/hk-aarch64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/468492724"
+provenance = "github-attestations"
+
+[tools."github:jdx/hk"."platforms.linux-x64"]
+checksum = "sha256:a86a19b51277401410fcfad76f650b5172882d91a6e624a63b9e20f81a6476bc"
+url = "https://github.com/jdx/hk/releases/download/v1.50.0/hk-x86_64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/468492733"
+provenance = "github-attestations"
+
+[tools."github:jdx/hk"."platforms.linux-x64-musl"]
+checksum = "sha256:cd49292560a497058a615a1c5537af131df73d893773cdd612585274db138c58"
+url = "https://github.com/jdx/hk/releases/download/v1.50.0/hk-x86_64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/468492735"
+provenance = "github-attestations"
+
+[tools."github:jdx/hk"."platforms.macos-arm64"]
+checksum = "sha256:0e11012d1106350774de880bfc54e5b2fef77b1a1b7bf51e09f4b1423e9cb39b"
+url = "https://github.com/jdx/hk/releases/download/v1.50.0/hk-aarch64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/468492721"
+provenance = "github-attestations"
+provenance_verified = true
+
+[tools."github:jdx/hk"."platforms.macos-x64"]
+checksum = "sha256:a690f0dc5aa3d9ee63f3794ab96570ba79d6b1d972d39ddc6f2768c65f6318a5"
+url = "https://github.com/jdx/hk/releases/download/v1.50.0/hk%401.50.0.zip"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/468492740"
+provenance = "github-attestations"
+
+[tools."github:jdx/hk"."platforms.windows-x64"]
+checksum = "sha256:19055e34af501a3cb7568b55f31ea4f0e38760d518b79e17d71fdd39ba0882eb"
+url = "https://github.com/jdx/hk/releases/download/v1.50.0/hk-x86_64-pc-windows-msvc.zip"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/468492725"
+provenance = "github-attestations"
+
 [[tools.jq]]
 version = "1.8.2"
 backend = "aqua:jqlang/jq"
