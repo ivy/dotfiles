@@ -128,6 +128,8 @@ ENVIRONMENT VARIABLES:
     CODEX_OP_REF            1Password ref for OpenAI Codex API key
     CLAUDE_API_OP_REF       1Password ref for Anthropic API key
     BUILDKITE_OP_REF        1Password ref for Buildkite API token
+    NGROK_OP_REF            1Password ref for ngrok authtoken
+    OBSIDIAN_VAULT_PATH     Absolute path to the Obsidian vault
     DEBUG                   Enable debug output
 
 EXAMPLES:
@@ -819,6 +821,12 @@ main() {
 	fi
 	if [ -n "${BUILDKITE_OP_REF:-}" ]; then
 		set -- "$@" --promptString "1Password ref for Buildkite=$BUILDKITE_OP_REF"
+	fi
+	if [ -n "${NGROK_OP_REF:-}" ]; then
+		set -- "$@" --promptString "1Password ref for ngrok=$NGROK_OP_REF"
+	fi
+	if [ -n "${OBSIDIAN_VAULT_PATH:-}" ]; then
+		set -- "$@" --promptString "Obsidian vault path (absolute)=$OBSIDIAN_VAULT_PATH"
 	fi
 
 	# Add any additional passthrough arguments

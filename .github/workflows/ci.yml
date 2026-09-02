@@ -36,8 +36,18 @@ jobs:
       - name: Setup mise
         uses: jdx/mise-action@5228313ee0372e111a38da051671ca30fc5a96db # v3.6.3
       - name: Install chezmoi
-        run: |
-          GIT_USER_NAME="CI Test User" GIT_USER_EMAIL="ci@example.com" USE_BEDROCK=false ./install.sh
+        env:
+          GIT_USER_NAME: CI Test User
+          GIT_USER_EMAIL: ci@example.com
+          USE_BEDROCK: "false"
+          CODEX_OP_REF: op://ci/codex/credential
+          CLAUDE_API_OP_REF: op://ci/claude/credential
+          BUILDKITE_OP_REF: op://ci/buildkite/credential
+          NGROK_OP_REF: op://ci/ngrok/credential
+          OBSIDIAN_VAULT_PATH: /tmp/vault
+        # --no-tty turns an unanswered prompt into an immediate error rather
+        # than a hang that burns the job timeout.
+        run: ./install.sh -- --no-tty
       - name: Install test dependencies
         run: |
           ./bin/setup
