@@ -67,7 +67,7 @@ mise install --yes --verbose
 # one Node ABI, so a node upgrade invalidates it; rebuild only when the current
 # interpreter can't load it.
 rebuild_qmd_sqlite_addon() {
-    local qmd_root pkg_dir node_bin
+    local qmd_root pkg_dir addon_dir node_bin
 
     qmd_root="$(mise where npm:@tobilu/qmd 2>/dev/null)" || return 0
     pkg_dir="${qmd_root}/lib/node_modules/@tobilu/qmd"
@@ -83,9 +83,15 @@ rebuild_qmd_sqlite_addon() {
         return 0
     fi
 
+    addon_dir="${pkg_dir}/node_modules/better-sqlite3"
+    [ -d "${addon_dir}" ] || return 0
+
     echo "Rebuilding qmd's better-sqlite3 addon for Node ABI $("${node_bin}" -p 'process.versions.modules')..."
-    if ! (cd "${pkg_dir}" && PATH="$(dirname "${node_bin}"):${PATH}" \
-        NPM_CONFIG_IGNORE_SCRIPTS=false npm rebuild better-sqlite3 --build-from-source); then
+    # build-release is the package's own source build. Going through `npm
+    # rebuild` instead runs the install script, which prefers a prebuilt binary
+    # and only compiles when overridden by a config npm no longer recognizes.
+    if ! (cd "${addon_dir}" && PATH="$(dirname "${node_bin}"):${PATH}" \
+        NPM_CONFIG_IGNORE_SCRIPTS=false npm run build-release); then
         echo "warning: failed to rebuild better-sqlite3; qmd will not run until this succeeds" >&2
     fi
 }
