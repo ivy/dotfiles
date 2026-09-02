@@ -2163,6 +2163,10 @@ backend = "npm:ccusage"
 version = "4.0.1"
 backend = "npm:git-mob"
 
+[[tools."npm:obsidian-headless"]]
+version = "0.0.14"
+backend = "npm:obsidian-headless"
+
 [[tools.pipx]]
 version = "1.15.0"
 backend = "aqua:pypa/pipx"
