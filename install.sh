@@ -599,7 +599,7 @@ download_chezmoi() {
 	base_url="$GITHUB_RELEASES_URL/$CHEZMOI_REPO/releases/download/v$version"
 	archive="chezmoi_${version}_${system}.${ext}"
 	checksums="chezmoi_${version}_checksums.txt"
-	signature="chezmoi_${version}_checksums.txt.sig"
+	signature="chezmoi_${version}_checksums.txt.sigstore.json"
 	pubkey="chezmoi_cosign.pub"
 
 	# Full paths in temporary directory
@@ -623,9 +623,10 @@ download_chezmoi() {
 
 	# Only download and verify signature if verification is enabled
 	if [ "$VERIFY_SIGNATURES" = "true" ]; then
-		log_info "Downloading signature..."
+		log_info "Downloading signature bundle..."
 		if ! $download_cmd "$base_url/$signature" >"$signature_path"; then
-			log_error "Failed to download signature"
+			log_error "Failed to download signature bundle"
+			log_error "URL attempted: $base_url/$signature"
 			exit 1
 		fi
 
@@ -637,7 +638,7 @@ download_chezmoi() {
 
 		# Verify signature using cosign
 		log_info "Verifying signature..."
-		if ! cosign verify-blob "$checksums_path" --signature "$signature_path" --key "$pubkey_path"; then
+		if ! cosign verify-blob "$checksums_path" --bundle "$signature_path" --key "$pubkey_path"; then
 			log_error "Signature verification failed"
 			exit 1
 		fi
@@ -732,8 +733,10 @@ main() {
 		_DOTFILES_LOG="/tmp/dotfiles-install-$(date +%Y%m%d-%H%M%S).log"
 		export _DOTFILES_LOG
 		case "$(uname -s)" in
+		# -e makes util-linux script(1) propagate the child's exit status;
+		# BSD script(1) already does, and rejects the flag.
 		Darwin*) exec script -q "$_DOTFILES_LOG" "$0" "$@" ;;
-		*) exec script -qc "$0 $*" "$_DOTFILES_LOG" ;;
+		*) exec script -e -qc "$0 $*" "$_DOTFILES_LOG" ;;
 		esac
 		# exec failed (script(1) not available) — continue without logging
 		unset _DOTFILES_LOG
