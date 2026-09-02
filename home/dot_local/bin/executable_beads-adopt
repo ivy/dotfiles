@@ -1,0 +1,204 @@
+#!/usr/bin/env bash
+# Opt one repository into beads without leaving tracked metadata behind.
+#
+# beads normally keeps its Dolt database in <repo>/.beads. That is committable
+# state, and `bd init` additionally scaffolds AGENTS.md, CLAUDE.md, .claude/ and
+# .codex/ into the checkout — none of which belongs in a repository shared with
+# people who do not use beads.
+#
+# So the database lives outside the checkout, under a per-repository workspace,
+# and the checkout gets only a `.beads/redirect` file naming it. bd's own
+# discovery follows that pointer (see `bd where`), so no environment variable is
+# needed and hooks, agents, and interactive shells all resolve identically —
+# which a shell function wrapping BEADS_DIR would not achieve, since hooks do not
+# load interactive shell functions.
+#
+# The redirect file is then hidden via .git/info/exclude rather than .gitignore,
+# because .gitignore is tracked and would itself be a visible change.
+#
+# See docs/beads.md for the full setup, upgrade, and removal procedures.
+
+set -o errexit -o nounset -o pipefail
+
+readonly WORKSPACE_ROOT="${BEADS_WORKSPACE_ROOT:-${XDG_DATA_HOME:-${HOME}/.local/share}/beads}"
+readonly EXCLUDE_MARKER='# beads (added by beads-adopt)'
+
+usage() {
+    cat <<'EOF'
+Usage: beads-adopt [--remove [--purge]] [--prefix <prefix>] [<repo>]
+
+Opts a repository into beads with its database held outside the checkout.
+
+  <repo>            Repository to act on (default: current directory)
+  --prefix <p>      Issue prefix for new workspaces (default: derived from repo name)
+  --remove          Undo: drop the redirect and the git exclude entry
+  --purge           With --remove, also delete the workspace and its issue data
+  -h, --help        This message
+
+Environment:
+  BEADS_WORKSPACE_ROOT   Where workspaces live (default: ~/.local/share/beads)
+EOF
+}
+
+die() {
+    printf 'beads-adopt: %s\n' "$1" >&2
+    exit 1
+}
+
+# Workspace names must survive two repositories sharing a basename, so derive the
+# name from the repository's path. Under ~/src the layout is already unique
+# (<host>/<owner>/<repo>), so reuse it with separators flattened -- matching the
+# project-naming convention codebase-memory uses for the same corpus. Anything
+# outside ~/src gets a path digest appended instead, which is unique but opaque.
+workspace_name_for() {
+    local repo_root="$1" src_root="${HOME}/src"
+
+    if [[ "${repo_root}" == "${src_root}/"* ]]; then
+        printf '%s' "${repo_root#"${src_root}/"}" | tr '/' '-'
+        return
+    fi
+
+    printf '%s-%s' \
+        "$(basename "${repo_root}")" \
+        "$(printf '%s' "${repo_root}" | sha256_hex | cut -c1-8)"
+}
+
+# macOS ships shasum but not sha256sum; Fedora is the reverse by default.
+sha256_hex() {
+    if command -v sha256sum >/dev/null 2>&1; then
+        sha256sum
+    else
+        shasum -a 256
+    fi
+}
+
+# bd embeds the prefix in every issue id, so keep it short and id-safe.
+prefix_for() {
+    basename "$1" | tr '[:upper:]' '[:lower:]' | tr -c 'a-z0-9' '-' \
+        | sed -e 's/-\{2,\}/-/g' -e 's/^-//' -e 's/-$//' | cut -c1-16
+}
+
+exclude_add() {
+    local exclude_file="$1"
+    mkdir -p "$(dirname "${exclude_file}")"
+    if [[ -f "${exclude_file}" ]] && grep -qxF '.beads/' "${exclude_file}"; then
+        return 0
+    fi
+    printf '%s\n.beads/\n' "${EXCLUDE_MARKER}" >>"${exclude_file}"
+}
+
+exclude_remove() {
+    local exclude_file="$1"
+    [[ -f "${exclude_file}" ]] || return 0
+
+    # Drop the marker and the single pattern that follows it, leaving any
+    # unrelated user entries untouched. Rewriting through a temp file rather than
+    # `sed -i` keeps this working on both BSD and GNU sed, whose -i flags differ
+    # in whether they take a mandatory suffix argument.
+    local tmp
+    tmp="$(mktemp)"
+    sed -e "/^${EXCLUDE_MARKER}$/,+1d" "${exclude_file}" >"${tmp}"
+    cat "${tmp}" >"${exclude_file}"
+    rm -f "${tmp}"
+}
+
+main() {
+    local mode=add purge=0 explicit_prefix='' target='.'
+
+    while (($#)); do
+        case "$1" in
+            --remove) mode=remove ;;
+            --purge) purge=1 ;;
+            --prefix)
+                [[ $# -ge 2 ]] || die "--prefix requires a value"
+                explicit_prefix="$2"
+                shift
+                ;;
+            -h | --help)
+                usage
+                return 0
+                ;;
+            -*) die "unknown option: $1" ;;
+            *) target="$1" ;;
+        esac
+        shift
+    done
+
+    command -v bd >/dev/null 2>&1 || die "bd not found on PATH"
+    [[ -d "${target}" ]] || die "not a directory: ${target}"
+
+    local repo_root
+    repo_root="$(git -C "${target}" rev-parse --show-toplevel 2>/dev/null)" \
+        || die "not a git repository: ${target}"
+
+    local exclude_file="${repo_root}/.git/info/exclude"
+    local redirect_dir="${repo_root}/.beads"
+    local redirect_file="${redirect_dir}/redirect"
+    local workspace_name
+    workspace_name="$(workspace_name_for "${repo_root}")"
+    local workspace="${WORKSPACE_ROOT}/${workspace_name}"
+    local beads_dir="${workspace}/.beads"
+
+    if [[ "${mode}" == remove ]]; then
+        if [[ -e "${redirect_file}" ]]; then
+            rm -f "${redirect_file}"
+            rmdir "${redirect_dir}" 2>/dev/null || true
+            printf 'removed redirect: %s\n' "${redirect_file}"
+        else
+            printf 'no redirect present in %s\n' "${repo_root}"
+        fi
+
+        exclude_remove "${exclude_file}"
+        printf 'cleaned git exclude: %s\n' "${exclude_file}"
+
+        if ((purge)); then
+            if [[ -d "${workspace}" ]]; then
+                rm -rf "${workspace}"
+                printf 'purged workspace and issue data: %s\n' "${workspace}"
+            fi
+        elif [[ -d "${workspace}" ]]; then
+            printf 'workspace kept (issue data intact): %s\n' "${workspace}"
+            printf '  delete it with: beads-adopt --remove --purge %s\n' "${repo_root}"
+        fi
+        return 0
+    fi
+
+    # bd refuses to initialize inside a .beads directory and treats an existing
+    # workspace as something to protect, so only initialize when absent.
+    if [[ -d "${beads_dir}" ]]; then
+        printf 'workspace exists: %s\n' "${beads_dir}"
+    else
+        local prefix="${explicit_prefix:-$(prefix_for "${repo_root}")}"
+        [[ -n "${prefix}" ]] || die "could not derive an issue prefix; pass --prefix"
+
+        mkdir -p "${workspace}"
+        printf 'initializing workspace: %s (prefix: %s)\n' "${beads_dir}" "${prefix}"
+
+        # --skip-agents keeps bd from scaffolding AGENTS.md/CLAUDE.md/.claude/
+        # here; the skill and the SessionStart hook are managed in the dotfiles.
+        # --skip-hooks keeps it from installing git hooks that would collide with hk.
+        (
+            cd "${workspace}"
+            BD_NON_INTERACTIVE=1 bd init \
+                --prefix "${prefix}" \
+                --non-interactive \
+                --skip-agents \
+                --skip-hooks \
+                --init-if-missing \
+                --quiet
+        ) || die "bd init failed in ${workspace}"
+    fi
+
+    mkdir -p "${redirect_dir}"
+    printf '%s\n' "${beads_dir}" >"${redirect_file}"
+    printf 'wrote redirect: %s -> %s\n' "${redirect_file}" "${beads_dir}"
+
+    exclude_add "${exclude_file}"
+    printf 'excluded .beads/ via %s\n' "${exclude_file}"
+
+    printf '\n'
+    bd --version
+    (cd "${repo_root}" && bd where)
+}
+
+main "$@"

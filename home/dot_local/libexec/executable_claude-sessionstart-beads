@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+#
+# claude-sessionstart-beads -- inject beads workflow context at session start.
+#
+# Emits `bd prime` output, which tells the agent the beads session protocol and
+# what work is outstanding. SessionStart also fires after compaction (its source
+# enum is startup|resume|clear|compact|fork), so this one hook covers context
+# recovery too -- no PreCompact hook is wanted. PreCompact stdout is appended as
+# *custom compact instructions*, so priming there would push several KB of command
+# reference into the prompt that decides what survives compaction.
+#
+# Why a wrapper rather than `bd prime --hook-json` directly in settings.json:
+#
+#   1. bd is optional. On a machine where it is not installed, a bare command would
+#      fail on every single session start, and a nonzero SessionStart hook shows its
+#      stderr to the user. This exits 0 silently instead.
+#   2. PATH is not guaranteed to carry mise shims in every context Claude Code is
+#      launched from (desktop app, IDE extension), so fall back to the shim path.
+#
+# --hook-json wraps the output in the SessionStart envelope. Raw stdout would also
+# be injected ("Exit code 0 - stdout shown to Claude"), but the envelope is the
+# explicit contract and is what bd's own installer writes.
+#
+# Registered by bin/sync-claude-settings. See docs/beads.md.
+
+set -o nounset -o pipefail
+
+bd_bin=''
+if command -v bd >/dev/null 2>&1; then
+    bd_bin="$(command -v bd)"
+elif [[ -x "${HOME}/.local/share/mise/shims/bd" ]]; then
+    bd_bin="${HOME}/.local/share/mise/shims/bd"
+fi
+
+# No bd on this machine: contribute no context rather than an error.
+[[ -n "${bd_bin}" ]] || exit 0
+
+# A repository with no beads workspace is the common case; bd prime exits 0 with an
+# empty envelope there, which injects nothing. Any real failure is swallowed for the
+# same reason as above -- a broken workspace should not put stderr in front of the
+# user on every session start. `bd doctor` is the place to see that.
+"${bd_bin}" prime --hook-json 2>/dev/null || exit 0

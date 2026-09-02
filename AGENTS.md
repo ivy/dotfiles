@@ -121,6 +121,7 @@ Browse the two dirs above for the full set (~35 skills).
 | Claude Code integration | [docs/claude-code.md](docs/claude-code.md) |
 | QMD vault search | [docs/qmd.md](docs/qmd.md) |
 | Codebase memory (code graph over ~/src) | [docs/codebase-memory-mcp.md](docs/codebase-memory-mcp.md) |
+| Beads (agent issue tracker, per-repo opt-in) | [docs/beads.md](docs/beads.md) |
 | Core principles | [docs/core-principles.md](docs/core-principles.md) |
 | Vision | [docs/vision.md](docs/vision.md) |
 | Chezmoi operations | [docs/agents/chezmoi.md](docs/agents/chezmoi.md) |

@@ -55,7 +55,7 @@ set_feature_flags() {
     | .autoDreamEnabled = true
     | .alwaysThinkingEnabled = true
     | .includeCoAuthoredBy = false
-    | .effortLevel = "xhigh"
+    | .effortLevel = "high"
     | .autoUpdatesChannel = "latest"' "${SETTINGS}" >"${SETTINGS}.tmp" && mv "${SETTINGS}.tmp" "${SETTINGS}"
 }
 
@@ -71,6 +71,23 @@ set_permissions() {
             "Bash(bash -n:*)",
             "Bash(bats:*)",
             "Bash(bc:*)",
+            "Bash(bd blocked:*)",
+            "Bash(bd close:*)",
+            "Bash(bd comments:*)",
+            "Bash(bd create:*)",
+            "Bash(bd dep:*)",
+            "Bash(bd doctor:*)",
+            "Bash(bd label:*)",
+            "Bash(bd list:*)",
+            "Bash(bd prime:*)",
+            "Bash(bd ready:*)",
+            "Bash(bd reopen:*)",
+            "Bash(bd search:*)",
+            "Bash(bd show:*)",
+            "Bash(bd stats:*)",
+            "Bash(bd update:*)",
+            "Bash(bd version:*)",
+            "Bash(bd where:*)",
             "Bash(bktide snapshot:*)",
             "Bash(bundle:*)",
             "Bash(cargo:*)",
@@ -347,6 +364,32 @@ set_hooks() {
     ' "${SETTINGS}" >"${SETTINGS}.tmp" && mv "${SETTINGS}.tmp" "${SETTINGS}"
 }
 
+# Register the global SessionStart hook: claude-sessionstart-beads. It primes beads
+# workflow context, and because SessionStart re-fires with source=compact it also
+# covers post-compaction recovery — so no PreCompact hook is registered. See the
+# wrapper's header for why priming on PreCompact would be actively harmful.
+#
+# The beads plugin is deliberately NOT installed (it ships exactly that PreCompact
+# hook, unconfigurably); the skill is vendored to home/dot_claude/skills/beads
+# instead. See docs/beads.md.
+#
+# Merge, don't overwrite: drop any SessionStart group already containing the wrapper
+# or a bare `bd prime` variant registered by `bd setup claude`, then re-append our
+# canonical group, leaving other groups intact. Idempotent.
+set_session_start_hook() {
+  printf 'setting SessionStart hook (beads prime) in %s\n' "${SETTINGS}"
+  jq '
+        "$HOME/.local/libexec/claude-sessionstart-beads" as $cmd
+        | ["bd prime", "bd prime --stealth", "bd prime --hook-json", "bd prime --stealth --hook-json"] as $bdvariants
+        | .hooks = (.hooks // {})
+        | .hooks.SessionStart = (
+            [ (.hooks.SessionStart // [])[]
+              | select((any(.hooks[]?; .command == $cmd or (.command | IN($bdvariants[])))) | not) ]
+            + [ { "matcher": "", "hooks": [ { "type": "command", "command": $cmd } ] } ]
+          )
+    ' "${SETTINGS}" >"${SETTINGS}.tmp" && mv "${SETTINGS}.tmp" "${SETTINGS}"
+}
+
 # Remove Bedrock model env vars (use_bedrock=false path)
 cleanup_model_env_vars() {
   if jq -e '.env.ANTHROPIC_MODEL // .env.ANTHROPIC_DEFAULT_HAIKU_MODEL // .env.ANTHROPIC_DEFAULT_OPUS_MODEL // .env.ANTHROPIC_DEFAULT_SONNET_MODEL' "${SETTINGS}" >/dev/null 2>&1; then
@@ -451,6 +494,7 @@ main() {
   set_feature_flags
   set_permissions
   set_hooks
+  set_session_start_hook
 
   local use_bedrock
   use_bedrock=$(chezmoi data --format json | jq -r '.claude.use_bedrock')
