@@ -55,7 +55,7 @@ set_feature_flags() {
     | .autoDreamEnabled = true
     | .alwaysThinkingEnabled = true
     | .includeCoAuthoredBy = false
-    | .effortLevel = "high"
+    | .effortLevel = "medium"
     | .autoUpdatesChannel = "latest"' "${SETTINGS}" >"${SETTINGS}.tmp" && mv "${SETTINGS}.tmp" "${SETTINGS}"
 }
 
