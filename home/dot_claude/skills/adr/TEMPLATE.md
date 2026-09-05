@@ -31,22 +31,16 @@ Chosen option: **{title of option}**, because {justification}.
 - **Bad**: {negative consequence}
 - **Neutral**: {neutral consequence}
 
-## Pros and Cons of the Options
+## Rejected Options
 
-### {title of option 1}
+{Only options that were NOT chosen. The chosen option is already covered by Decision Outcome and Consequences; do not restate it here.}
 
-{Brief description or link to more information}
-
-- **Good**: {argument}
-- **Good**: {argument}
-- **Bad**: {argument}
-
-### {title of option 2}
+### {title of rejected option}
 
 {Brief description or link to more information}
 
-- **Good**: {argument}
-- **Bad**: {argument}
+- **Good**: {what it would have offered}
+- **Bad**: {why it lost}
 
 ## More Information
 
