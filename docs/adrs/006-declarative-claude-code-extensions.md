@@ -82,7 +82,7 @@ Five sub-decisions follow from this:
 * **Float, not pin (a scoped exception to Principle 3).** Plugins track their
   marketplace's default branch. See the dedicated analysis below.
 * **Public-repo split.** The committed data file holds public OSS entries only;
-  employer-internal refs live in machine-local `[data.claude_extensions_extra]`
+  employer-internal refs live in machine-local `[data.claudeExtensionsExtra]`
   (uncommitted) and are merged by the reconciler at runtime.
 * **Guard hook.** A global `PreToolUse`/`Bash` hook denies ad-hoc installers
   (`npx`, `pipx run`, `pip install`, `npm i -g`, …) with a message redirecting to
@@ -92,7 +92,7 @@ Five sub-decisions follow from this:
 ### Implementation
 
 `home/.chezmoidata/claude-extensions.yaml` (public base set) + machine-local
-`[data.claude_extensions_extra]` → `bin/sync-claude-extensions` (idempotent,
+`[data.claudeExtensionsExtra]` → `bin/sync-claude-extensions` (idempotent,
 additive, `--prune` opt-in, skips `managed` scope) → `home/run_onchange_sync-claude-extensions.sh.tmpl`.
 `set_plugins()` is deleted from `bin/sync-claude-settings`; `set_hooks()` registers
 the guard. The consolidated `/install` skill supersedes `install-tool` and the
