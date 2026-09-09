@@ -1,0 +1,83 @@
+---
+name: greenfield
+description: Use when starting a substantial project from nothing and deciding what to build before building it. Runs the sequence that survives contact with implementation — neighbour inventory, problem space, vision, principles, domain model, paper test, architecture and ADRs, outside review, roadmap and backlog — with an exit gate on each step.
+argument-hint: "[what you want to build | step <name> | check]"
+{{- template "bedrock-model" (dict "tier" "opus" "root" .) }}
+allowed-tools:
+  - Read
+  - Glob
+  - Grep
+  - Write(docs/**)
+  - Edit(docs/**)
+  - Bash(git log:*)
+  - Bash(git status:*)
+---
+
+# Greenfield
+
+**Autonomy:** model-invocable · drafts and revises the documents under `docs/` without asking · also drafts the paper-test data file, its throwaway script, and the backlog, which live wherever the project puts them and so prompt in default mode · writes no product code, runs nothing, and makes no commits; you run the paper test and report what it said
+
+## Arguments
+
+```
+$ARGUMENTS
+```
+
+## Instructions
+
+Nine steps, each with an exit gate. Do not advance until the gate is met, and
+say which gate you are at when you report. `ARTIFACTS.md` holds what each
+document is for and how each one fails. ultrathink
+
+A description of something to build starts at step 1. `step <name>` resumes
+there. `check` audits documents that already exist against their gates.
+
+1. **Inventory the neighbours.** Before designing anything, read the adjacent
+   repos, the standards, and the tools already claiming this space. Record why
+   each is or is not the answer. *Gate:* you can name what you reuse and what
+   you replace, with a reason for each.
+
+2. **Problem space.** Get the concrete failure, not the category. *Gate:* one
+   paragraph a skeptic who likes the incumbent would accept.
+
+3. **Vision.** Write **what this is not** before anyone asks. That list will
+   answer most later scope questions on its own. *Gate:* a stranger could
+   predict from it which features you would refuse.
+
+4. **Principles.** Each carries a "says no to" list. A principle that forbids
+   nothing is decoration. *Gate:* every principle rules out something you might
+   plausibly have wanted.
+
+5. **Domain model.** Entities, fields, derived quantities — prose and tables,
+   never a schema. Modelling storage first models the wrong thing. *Gate:* it
+   distinguishes what is stored, what is derived, and what is deliberately
+   absent.
+
+6. **Paper test.** The cheapest step here and the one most often skipped. See
+   `PAPER-TEST.md`. Draft the data file and the script; the person runs it and
+   reports the answer. *Gate:* the central query, computed over hand-written
+   real data, returns what you know is true — or it did not and you fixed the
+   model.
+
+7. **Architecture and ADRs.** Write each ADR *while* deciding, never afterward;
+   an ADR written later is documentation, not a decision. Take the
+   expensive-to-reverse choices first: tenancy, identity, storage, the wire
+   contract. *Gate:* each ADR names the option it rejected and why.
+
+8. **Outside review.** Hand the whole design to a reviewer with no context.
+   Verify its **facts** and apply them. **Surface its scope advice unapplied** —
+   it will propose a year-long plan, and that is not a finding. *Gate:* every
+   fact triaged, every intent question decided by the person whose project it is.
+
+9. **Roadmap, then backlog.** The roadmap is where deferrals go to be honest;
+   the review's rejected findings live there with a milestone. Then the backlog.
+   If the domain is work itself, the backlog and the paper test are the same
+   artifact. *Gate:* nothing in the backlog contradicts a principle, and every
+   deferral has a milestone rather than a silence.
+
+## When to stop
+
+Design longer than the build is a failure. If a document is being revised a
+third time, the decision under it is unmade — go make the decision instead of
+rewriting the prose. Ship the smallest thing that exercises the model end to
+end, then let real use say what was wrong.
