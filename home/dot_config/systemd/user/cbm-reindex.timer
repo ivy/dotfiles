@@ -1,0 +1,20 @@
+[Unit]
+Description=Refresh the codebase-memory index every 30 minutes
+Documentation=file://%h/src/github.com/ivy/dotfiles/docs/codebase-memory-mcp.md
+
+[Timer]
+# An all-quiet cycle across the corpus costs ~190s, so this is not free the way
+# the qmd tick is. Whichever repository is actively open is already covered by
+# CBM's own per-session watcher, leaving this to catch up everything else.
+#
+# OnUnitInactiveSec measures from the end of the last run, so a cycle that
+# overruns delays the next rather than stacking on top of it. The script's mkdir
+# lock still guards against a manual run landing on a scheduled one.
+OnStartupSec=30min
+OnUnitInactiveSec=30min
+AccuracySec=1min
+
+Persistent=false
+
+[Install]
+WantedBy=timers.target

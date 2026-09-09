@@ -11,17 +11,28 @@
 # content-hash based rather than git based: the largest repository here costs
 # ~17s with nothing changed, and the long tail is far less.
 #
-# Run every 30 minutes by ~/Library/LaunchAgents/net.ivyevans.cbm-reindex.plist.
-# See docs/codebase-memory-mcp.md.
+# Run every 30 minutes by net.ivyevans.cbm-reindex (launchd, darwin) or
+# cbm-reindex.timer (systemd user, linux). See docs/codebase-memory-mcp.md.
 
 set -o errexit -o nounset -o pipefail
 
-# launchd gives jobs a minimal PATH that excludes mise shims. The shim is a
-# standalone binary that resolves the tool itself, so an absolute path suffices.
+# launchd and systemd both give jobs a minimal PATH that excludes mise shims. The
+# shim is a standalone binary that resolves the tool itself, so an absolute path
+# suffices.
 readonly CBM="$HOME/.local/share/mise/shims/codebase-memory-mcp"
 readonly SRC="$HOME/src"
-readonly LOG="$HOME/Library/Logs/cbm-reindex.log"
 readonly LOG_MAX_BYTES=$((1024 * 1024))
+
+# launchd never rotates a StandardOutPath, so on darwin this job caps its own log.
+# Under systemd it writes to the journal, which journald rotates itself — there is
+# no file to cap, so LOG stays empty.
+if [[ "$(uname -s)" == Darwin ]]; then
+    readonly DARWIN=true
+    readonly LOG="$HOME/Library/Logs/cbm-reindex.log"
+else
+    readonly DARWIN=false
+    readonly LOG=''
+fi
 readonly STATE="$HOME/.cache/codebase-memory-mcp/.last-reindex-digest"
 readonly LOCKDIR="$HOME/.cache/codebase-memory-mcp/.reindex.lock"
 
@@ -46,9 +57,20 @@ if [[ ! -d "$SRC" ]]; then
     exit 0
 fi
 
+# stat(1) is BSD on darwin and GNU coreutils elsewhere; neither spelling works on
+# both. Same for the digest below: sha256sum is coreutils, shasum is the perl
+# script macOS ships and Fedora does not.
+file_size() {
+    if [[ "$DARWIN" == true ]]; then stat -f%z "$1"; else stat -c%s "$1"; fi
+}
+
+sha256() {
+    if [[ "$DARWIN" == true ]]; then shasum -a 256; else sha256sum; fi
+}
+
 # launchd owns this file and opens it in append mode, so truncating in place is
 # safe.
-if [[ -f "$LOG" ]] && (($(stat -f%z "$LOG") > LOG_MAX_BYTES)); then
+if [[ -n "$LOG" ]] && [[ -f "$LOG" ]] && (($(file_size "$LOG") > LOG_MAX_BYTES)); then
     : >"$LOG"
 fi
 
@@ -56,14 +78,16 @@ log() {
     printf '%s %s\n' "$(date +%Y-%m-%dT%H:%M:%S%z)" "$*"
 }
 
-# Only one cycle at a time. launchd fires on StartInterval regardless of whether
-# the previous run finished, and a manual run can land on top of a scheduled one —
+# Only one cycle at a time. launchd fires on StartInterval whether or not the
+# previous run finished, and on either platform a manual run can land on top of a
+# scheduled one —
 # which happened during the move to explicit project names: two cycles overlapped,
 # one of them executing the pre-swap version of this file (chezmoi replaces it
 # atomically, so a running shell keeps the old inode), and the corpus ended up
 # indexed twice under two different naming schemes. CBM's own per-project locks
 # kept both runs correct, but the duplicate work and duplicate databases are pure
-# waste. mkdir is the atomic primitive here; macOS ships no flock(1).
+# waste. mkdir is the atomic primitive here, portable in a way flock(1) is not —
+# macOS does not ship it.
 #
 # The parent must exist first, or a missing cache dir would fail the mkdir below
 # and get misreported as contention.
@@ -183,7 +207,7 @@ done < <(find "$SRC" -maxdepth 4 -name .git 2>/dev/null | sort)
 
 # Stay silent when the whole corpus came back byte-identical. A job this frequent
 # would otherwise bury the cycles that did real work. Any failure always speaks.
-digest="$(printf '%s' "$digest_input" | shasum -a 256 | cut -d' ' -f1)"
+digest="$(printf '%s' "$digest_input" | sha256 | cut -d' ' -f1)"
 previous="$(cat "$STATE" 2>/dev/null || true)"
 
 if [[ "$digest" != "$previous" ]] || ((failed > 0)); then

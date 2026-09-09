@@ -40,9 +40,9 @@ claudeExtensions:
     # http rather than stdio: stdio spawns one qmd per Claude Code session, and each
     # process loads its own copy of the GGUF models on first query. A single daemon
     # behind localhost keeps them warm across every concurrent session. The daemon is
-    # the net.ivyevans.qmd-mcp launchd agent, which invokes the mise shim — so the
-    # native addon still runs under the mise-active node whose ABI it was built for.
-    # There is no Linux unit yet, so this server only resolves on darwin.
+    # the net.ivyevans.qmd-mcp launchd agent on darwin and the qmd-mcp.service
+    # systemd user unit on linux; both invoke the mise shim, so the native addon
+    # still runs under the mise-active node whose ABI it was built for.
     - name: qmd
       transport: http
       url: http://localhost:8181/mcp

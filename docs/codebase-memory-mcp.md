@@ -82,17 +82,17 @@ a live watch. There *is* a permanent daemon mode — the daemon spawns itself wi
 exists to skip the per-command startup cost: a warm-start cache, not a background
 indexer.
 
-Consequence: with no session attached, nothing reindexes. Hence the launchd agent
+Consequence: with no session attached, nothing reindexes. Hence the scheduled job
 below.
 
-### The reindex agent
+### The reindex job
 
-| Piece | Path |
-|---|---|
-| Script | `home/dot_local/bin/executable_cbm-reindex` |
-| Agent | `home/private_Library/LaunchAgents/net.ivyevans.cbm-reindex.plist.tmpl` |
-| Loader | `home/run_onchange_after_bootstrap-launchd-agents.sh.tmpl` |
-| Log | `~/Library/Logs/cbm-reindex.log` |
+| Piece | darwin | linux |
+|---|---|---|
+| Script | `home/dot_local/bin/executable_cbm-reindex` | same |
+| Unit | `home/private_Library/LaunchAgents/net.ivyevans.cbm-reindex.plist.tmpl` | `home/dot_config/systemd/user/cbm-reindex.{service,timer}` |
+| Loader | `home/run_onchange_after_bootstrap-launchd-agents.sh.tmpl` | `home/run_onchange_after_bootstrap-systemd-units.sh.tmpl` |
+| Log | `~/Library/Logs/cbm-reindex.log` | journal, `cbm-reindex` |
 
 Every 30 minutes it walks each repository under `~/src` serially and runs
 `cli index_repository`. `cli` mode never starts the coordination daemon or
@@ -105,16 +105,19 @@ largest repository in the corpus costs about 17 seconds with nothing changed.
 
 Across the whole corpus, though, an all-quiet cycle measures around **190
 seconds** — it is I/O bound, re-hashing file contents everywhere. At a 30-minute
-interval that is roughly a 10% duty cycle, which `ProcessType=Background` and
-`LowPriorityIO` keep out of the way. If it ever becomes noticeable, raise
-`StartInterval` before reaching for anything cleverer; the active repository is
-covered by the per-session watcher regardless.
+interval that is roughly a 10% duty cycle, which the units keep out of the way:
+`ProcessType=Background` plus `LowPriorityIO` on darwin, `Nice=10` plus
+`IOSchedulingClass=idle` on linux, since systemd has no single equivalent. If it
+ever becomes noticeable, raise the interval before reaching for anything cleverer;
+the active repository is covered by the per-session watcher regardless.
 
 Only one cycle runs at a time, guarded by a `mkdir` lock at
-`~/.cache/codebase-memory-mcp/.reindex.lock` — `StartInterval` fires whether or not
-the previous run finished, and a manual run can land on top of a scheduled one. A
-second cycle logs that it skipped and exits 0. If a holder dies without cleaning up,
-the next run checks the recorded pid and takes the lock over.
+`~/.cache/codebase-memory-mcp/.reindex.lock` — launchd's `StartInterval` fires
+whether or not the previous run finished, and on either platform a manual run can
+land on top of a scheduled one. (systemd's `OnUnitInactiveSec` measures from the
+end of the last run, so the timer alone will not overlap itself.) A second cycle
+logs that it skipped and exits 0. If a holder dies without cleaning up, the next
+run checks the recorded pid and takes the lock over.
 
 The script stays silent unless node or edge counts moved somewhere, or something
 failed. It compares a digest of the whole corpus's counts against the previous
@@ -139,9 +142,14 @@ codebase-memory-mcp config list
 # "There is no daemon subcommand" below. Inspect the process directly.
 pgrep -af cbm-daemon-internal
 
-# Reload the agent after a plist change
+# Reload the job after a unit change (darwin)
 launchctl bootout gui/$(id -u)/net.ivyevans.cbm-reindex
 launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/net.ivyevans.cbm-reindex.plist
+
+# Reload, force a cycle, and read the log (linux)
+systemctl --user daemon-reload && systemctl --user restart cbm-reindex.timer
+systemctl --user start cbm-reindex.service
+journalctl --user -u cbm-reindex.service -n 20
 ```
 
 A cold index of the whole corpus takes a few minutes. Run it **serially** — peak
@@ -325,4 +333,4 @@ something failed.
   evaluation across 31 repositories
 - [ADR-008](adrs/008-adopt-codebase-memory-mcp-for-multi-repo-wayfinding.md) —
   why this tool, why the whole corpus, and the alternatives rejected
-- [docs/qmd.md](qmd.md) — the launchd agent pattern this setup is modelled on
+- [docs/qmd.md](qmd.md) — the scheduled-job pattern this setup is modelled on

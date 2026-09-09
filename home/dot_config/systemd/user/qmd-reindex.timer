@@ -1,0 +1,22 @@
+[Unit]
+Description=Refresh the QMD index every 5 minutes
+Documentation=file://%h/src/github.com/ivy/dotfiles/docs/qmd.md
+
+[Timer]
+# A cycle with no new notes costs ~2s and never loads the embedding model, and
+# qmd-reindex stays silent unless it did work.
+#
+# OnUnitInactiveSec measures from the *end* of the last run, so a slow cycle
+# delays the next one rather than overlapping it — launchd's StartInterval
+# fires regardless. OnStartupSec seeds the first tick, because a timer with only
+# OnUnitInactiveSec has nothing to measure from until the service has run once.
+OnStartupSec=5min
+OnUnitInactiveSec=5min
+AccuracySec=30s
+
+# No Persistent=true: nothing to catch up on after a suspend that the next tick
+# won't handle, and a burst of missed runs at resume is pure waste.
+Persistent=false
+
+[Install]
+WantedBy=timers.target

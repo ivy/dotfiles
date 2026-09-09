@@ -3,5 +3,13 @@
 .oh-my-zsh/log/
 
 {{ if ne .chezmoi.os "darwin" }}
-private_Library/**
+# Patterns match the *target* path, not the source name — "private_Library/**"
+# matches nothing, and silently left the launchd plists applied on Linux.
+Library
+Library/**
+{{ end }}
+
+{{ if ne .chezmoi.os "linux" }}
+.config/systemd
+.config/systemd/**
 {{ end }}

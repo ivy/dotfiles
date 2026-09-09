@@ -3,10 +3,11 @@ name: dotfiles-doctor
 description: >-
   Use when local tooling seems stale, silent, or wrong — search returning
   nothing, an index that looks out of date, an MCP server missing from a
-  session — or for a routine health check. Probes the launchd jobs, MCP
-  servers, qmd, and codebase-memory indexes, repairs what is safely
-  repairable, and reports a verdict per subsystem.
-argument-hint: "[launchd | mcp | qmd | codebase-memory | sync]"
+  session — or for a routine health check. Probes the scheduled jobs (launchd
+  on darwin, systemd user units on linux), MCP servers, qmd, and
+  codebase-memory indexes, repairs what is safely repairable, and reports a
+  verdict per subsystem.
+argument-hint: "[scheduler | mcp | qmd | codebase-memory | sync]"
 {{- template "bedrock-model" (dict "tier" "sonnet" "root" .) }}
 context: fork
 allowed-tools:
@@ -21,6 +22,26 @@ allowed-tools:
   # primitive rather than a repair capability.
   - Bash(launchctl bootout gui/*/net.ivyevans.*)
   - Bash(launchctl bootstrap gui/* ~/Library/LaunchAgents/net.ivyevans.*.plist)
+  # systemd equivalents, scoped the same way and for the same reason: this user
+  # manager also owns unrelated units, and an unscoped `systemctl --user stop`
+  # would reach every one of them.
+  - Bash(systemctl --user list-timers:*)
+  - Bash(systemctl --user status qmd-mcp.service:*)
+  - Bash(systemctl --user status qmd-reindex.service:*)
+  - Bash(systemctl --user status qmd-reindex.timer:*)
+  - Bash(systemctl --user status cbm-reindex.service:*)
+  - Bash(systemctl --user status cbm-reindex.timer:*)
+  - Bash(systemctl --user restart qmd-mcp.service)
+  - Bash(systemctl --user restart qmd-reindex.timer)
+  - Bash(systemctl --user restart cbm-reindex.timer)
+  - Bash(systemctl --user start qmd-reindex.service)
+  - Bash(systemctl --user start cbm-reindex.service)
+  - Bash(journalctl --user -u qmd-mcp.service:*)
+  - Bash(journalctl --user -u qmd-reindex.service:*)
+  - Bash(journalctl --user -u cbm-reindex.service:*)
+  - Bash(loginctl show-user:*)
+  - Bash(curl -s localhost:8181/health)
+  - Bash(qmd collection list:*)
   - Bash(claude mcp list:*)
   - Bash(chezmoi status:*)
   - Bash(mise ls:*)
@@ -55,13 +76,15 @@ Probe, repair what is safely repairable, re-probe to confirm, then report. Alway
 
 ### Probes
 
-Not macOS? Report launchd as **not applicable** and run the rest — the scheduled jobs are launchd agents with no Linux equivalent wired up yet.
+The scheduler differs by platform and nothing else does. On darwin the jobs are launchd agents; on linux they are systemd user units. Pick the row that matches `uname -s` and run every other probe unchanged.
 
 | Subsystem | Probe | Healthy when |
 |---|---|---|
-| launchd | `launchctl print gui/$UID/<label>` for `net.ivyevans.{qmd-reindex,qmd-mcp,cbm-reindex}` | present, `last exit code = 0` — or `(never exited)` for the resident `qmd-mcp` |
-| mcp | `claude mcp list` | `qmd` and `codebase-memory` both `✔ Connected` |
-| qmd | `qmd status` | `Documents Total` above zero. This also proves the native `better-sqlite3` addon loads — a node ABI bump breaks it, and then every qmd call dies at `require` |
+| scheduler (darwin) | `launchctl print gui/$UID/<label>` for `net.ivyevans.{qmd-reindex,qmd-mcp,cbm-reindex}` | present, `last exit code = 0` — or `(never exited)` for the resident `qmd-mcp` |
+| scheduler (linux) | `systemctl --user list-timers` and `systemctl --user status qmd-mcp.service` | `qmd-reindex.timer` and `cbm-reindex.timer` both listed with a `NEXT`, `qmd-mcp.service` `active (running)` |
+| scheduler (linux) | `loginctl show-user $USER --property=Linger` | `yes` — without lingering the timers stop at logout, which is exactly when they are wanted |
+| mcp | `claude mcp list` | `qmd` and `codebase-memory` both `✔ Connected`. `qmd` is the http daemon on `localhost:8181`; `curl -s localhost:8181/health` separates a dead daemon from a bad declaration |
+| qmd | `qmd status`, `qmd collection list` | `Documents Total` above zero. This also proves the native `better-sqlite3` addon loads — a node ABI bump breaks it, and then every qmd call dies at `require`. Zero documents *with no collections listed* is a fresh machine, not a broken index: `~/.config/qmd/index.yml` is per-machine and deliberately unmanaged |
 | codebase-memory | `codebase-memory-mcp --version` against the pin in `~/.config/mise/config.toml` | equal |
 | codebase-memory | `ls ~/.cache/codebase-memory-mcp/*.db` excluding `_config.db`, vs `ls -d ~/src/*/*/*/.git` | equal — a shortfall means repos are unindexed |
 | codebase-memory | names in that directory | none begin `Users-` or `[` — both are known regressions, see README |
@@ -69,17 +92,20 @@ Not macOS? Report launchd as **not applicable** and run the rest — the schedul
 | codebase-memory | `codebase-memory-mcp config list` | `auto_index false`, `auto_watch true`. These live in `_config.db`, which chezmoi does not manage, so drift here is invisible everywhere else |
 | sync | `chezmoi status`, `mise ls --missing` | drift reported, nothing missing |
 
-`tail` the logs at `~/Library/Logs/{qmd-reindex,qmd-mcp,cbm-reindex}.log`. The reindex jobs are silent on a no-op cycle, so an empty log is health, not absence. `runs` and `last exit code` from `launchctl print` show a job has fired successfully before; pair them with the log's timestamp for when. Neither proves it fires *now* — to force a run, report `launchctl kickstart -p gui/$UID/<label>` for the user rather than triggering it here.
+Read the logs: `tail ~/Library/Logs/{qmd-reindex,qmd-mcp,cbm-reindex}.log` on darwin, `journalctl --user -u <unit>` on linux. The reindex jobs are silent on a no-op cycle, so an empty log is health, not absence. `runs` and `last exit code` from `launchctl print`, or `LAST` from `systemctl --user list-timers`, show a job has fired successfully before; pair them with the log's timestamp for when.
+
+Do not read `qmd doctor`'s model check as a fault on its own. `qmd pull` writes `.etag` sidecars next to the models, and `doctor` counts them as models and calls them invalid. Confirm the `.gguf` files start with `GGUF` before reporting anything.
 
 A cycle already running holds `~/.cache/codebase-memory-mcp/.reindex.lock`. That is correct behaviour, not a fault; report it and skip the reindex repair.
 
 ### Repair
 
-- **agent unloaded or failing** — `launchctl bootout gui/$UID/<label>`, ignore its failure, then `launchctl bootstrap gui/$UID ~/Library/LaunchAgents/<label>.plist`
+- **job unloaded or failing** — darwin: `launchctl bootout gui/$UID/<label>`, ignore its failure, then `launchctl bootstrap gui/$UID ~/Library/LaunchAgents/<label>.plist`. linux: `systemctl --user restart <unit>`
+- **an index needs forcing now** — linux: `systemctl --user start {qmd,cbm}-reindex.service`. darwin has no equivalent in this skill's scope: report `launchctl kickstart -p gui/$UID/<label>` for the user instead
 - **index stale or short** — run `cbm-reindex` or `qmd-reindex` (both on PATH, both take no arguments)
 - **codebase-memory refusing work after a version bump** — `pkill -f cbm-daemon-internal`; every process must share one build fingerprint, and `mise prune` deletes the old build from under a warm daemon. There is no `daemon stop` subcommand: CBM treats an unrecognised subcommand as "run the stdio server", which then blocks on stdin
 
-Report the exact command rather than running it when the fix would delete an index, apply chezmoi over destination drift, or reinstall a tool. Those cost minutes to hours to undo and want a human's read first.
+Report the exact command rather than running it when the fix would delete an index, apply chezmoi over destination drift, reinstall a tool, add a qmd collection (it decides what gets indexed off this machine's disk), or run `loginctl enable-linger` (it can raise a polkit prompt). Those cost minutes to hours to undo and want a human's read first.
 
 ### Report
 

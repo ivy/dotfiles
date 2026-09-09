@@ -7,14 +7,27 @@
 # only modified files, and `embed` exits before loading the 300MB embedding model
 # once every content hash already has vectors.
 #
-# Run every 5 minutes by ~/Library/LaunchAgents/net.ivyevans.qmd-reindex.plist.
+# Run every 5 minutes by net.ivyevans.qmd-reindex (launchd, darwin) or
+# qmd-reindex.timer (systemd user, linux).
 
 set -o errexit -o nounset -o pipefail
 
-# launchd gives jobs a minimal PATH that excludes mise shims. The shim is a
-# standalone binary that resolves the tool itself, so an absolute path suffices.
+# launchd and systemd both give jobs a minimal PATH that excludes mise shims. The
+# shim is a standalone binary that resolves the tool itself, so an absolute path
+# suffices.
 readonly QMD="$HOME/.local/share/mise/shims/qmd"
 readonly LOG_MAX_BYTES=$((1024 * 1024))
+
+# launchd never rotates a StandardOutPath, so on darwin this job caps the logs
+# itself. Under systemd both jobs write to the journal, which journald rotates on
+# its own — there is no file to cap, so LOG_DIR stays empty.
+if [[ "$(uname -s)" == Darwin ]]; then
+    readonly DARWIN=true
+    readonly LOG_DIR="$HOME/Library/Logs"
+else
+    readonly DARWIN=false
+    readonly LOG_DIR=''
+fi
 readonly CLEANUP_STAMP="$HOME/.cache/qmd/.last-cleanup"
 readonly CLEANUP_INTERVAL_SECONDS=$((24 * 60 * 60))
 
@@ -28,12 +41,23 @@ fi
 # qmd-mcp daemon's log — that daemon logs a line per HTTP request and serves
 # every Claude Code session at once, so it grows faster than this job's own log.
 cap_log() {
-    [[ -f "$1" ]] && (($(stat -f%z "$1") > LOG_MAX_BYTES)) && : >"$1"
+    [[ -n "$LOG_DIR" ]] || return 0
+    [[ -f "$1" ]] && (($(file_size "$1") > LOG_MAX_BYTES)) && : >"$1"
     return 0
 }
 
-cap_log "$HOME/Library/Logs/qmd-reindex.log"
-cap_log "$HOME/Library/Logs/qmd-mcp.log"
+# stat(1) is BSD on darwin and GNU coreutils elsewhere, and neither spelling of
+# these two fields works on both.
+file_size() {
+    if [[ "$DARWIN" == true ]]; then stat -f%z "$1"; else stat -c%s "$1"; fi
+}
+
+file_mtime() {
+    if [[ "$DARWIN" == true ]]; then stat -f%m "$1"; else stat -c%Y "$1"; fi
+}
+
+cap_log "$LOG_DIR/qmd-reindex.log"
+cap_log "$LOG_DIR/qmd-mcp.log"
 
 log() {
     printf '%s %s\n' "$(date +%Y-%m-%dT%H:%M:%S%z)" "$*"
@@ -53,10 +77,10 @@ is_noop() {
 # file back down — all of which accumulate as notes are edited and deleted. Daily
 # is ample. Driving it from this job instead of its own calendar agent means a
 # window missed because the laptop was asleep self-heals on the next tick, which
-# StartCalendarInterval would not.
+# neither StartCalendarInterval nor an OnCalendar timer would.
 cleanup_due() {
     [[ -f "$CLEANUP_STAMP" ]] || return 0
-    (($(date +%s) - $(stat -f%m "$CLEANUP_STAMP") >= CLEANUP_INTERVAL_SECONDS))
+    (($(date +%s) - $(file_mtime "$CLEANUP_STAMP") >= CLEANUP_INTERVAL_SECONDS))
 }
 
 start=$SECONDS

@@ -1,0 +1,33 @@
+[Unit]
+# Shared MCP server for every Claude Code session, declared as an http transport
+# in .chezmoidata/claude-extensions.yaml. One resident process keeps the GGUF
+# models warm instead of each session loading its own — see docs/qmd.md.
+Description=QMD MCP server (HTTP transport on localhost:8181)
+Documentation=https://github.com/tobi/qmd
+Documentation=file://%h/src/github.com/ivy/dotfiles/docs/qmd.md
+
+[Service]
+Type=exec
+
+# `mcp --http` stays in the foreground. The `--daemon` flag must not be used
+# here: it re-spawns itself detached and unrefs the child, so systemd would
+# supervise a process that exits immediately after handing off.
+#
+# The unit environment has no mise shims on PATH, hence the absolute path. The
+# shim is a standalone binary that resolves the mise-active node itself.
+ExecStart=%h/.local/share/mise/shims/qmd mcp --http --port 8181
+
+Restart=always
+
+# Well above the 100ms default so a qmd that cannot start — a native addon left
+# unbuilt by NPM_CONFIG_IGNORE_SCRIPTS after an upgrade, say — retries slowly
+# instead of filling the journal.
+RestartSec=30
+
+# Deliberately no Nice or IOSchedulingClass. Those are right for the reindex
+# units, but here they would throttle interactive queries.
+
+SyslogIdentifier=qmd-mcp
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,21 @@
+[Unit]
+# CBM's own watcher only covers a repository with a live MCP session attached,
+# so with no session open nothing reindexes. Driven by cbm-reindex.timer.
+Description=Refresh the codebase-memory index for every repository under ~/src
+Documentation=file://%h/src/github.com/ivy/dotfiles/docs/codebase-memory-mcp.md
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/cbm-reindex
+
+# An all-quiet cycle walks every repository's content hashes, so it is I/O bound
+# and measurably longer than the qmd tick. Both knobs together approximate
+# launchd's ProcessType=Background plus LowPriorityIO.
+Nice=10
+IOSchedulingClass=idle
+
+# A full index of the largest repository in the corpus peaks near 10 GiB RSS.
+# Left unbounded on purpose: a cap here would have the kernel kill the cycle
+# mid-repository, which is worse than the swap pressure it would avoid.
+
+SyslogIdentifier=cbm-reindex

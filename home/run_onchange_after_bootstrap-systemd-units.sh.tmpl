@@ -1,0 +1,63 @@
+{{ if eq .chezmoi.os "linux" -}}
+#!/bin/bash
+
+# Load the systemd user units so unit changes take effect without logging out.
+# The launchd equivalent for darwin is bootstrap-launchd-agents.sh.tmpl.
+#
+# The filename matters: chezmoi applies entries in case-sensitive name order, and
+# this has to run after ~/.config/systemd/user/ is written. "bootstrap" sorts
+# after ".config" ('b' > '.'); a numeric prefix does not, and would run first and
+# find no units to load. Keep the leading lowercase letter when renaming.
+#
+# qmd mcp unit hash: {{ include "dot_config/systemd/user/qmd-mcp.service" | sha256sum }}
+# qmd reindex unit hash: {{ include "dot_config/systemd/user/qmd-reindex.service" | sha256sum }}
+# qmd reindex timer hash: {{ include "dot_config/systemd/user/qmd-reindex.timer" | sha256sum }}
+# cbm reindex unit hash: {{ include "dot_config/systemd/user/cbm-reindex.service" | sha256sum }}
+# cbm reindex timer hash: {{ include "dot_config/systemd/user/cbm-reindex.timer" | sha256sum }}
+
+[ -n "${DEBUG:-}" ] && set -o xtrace
+set -o errexit
+set -o nounset
+
+# No user instance means no session bus to talk to: a container built with
+# `chezmoi init --apply`, or a bare `ssh host chezmoi apply` on a host without
+# lingering. Nothing to load, and failing here would fail the whole apply.
+if ! systemctl --user show-environment >/dev/null 2>&1; then
+    echo "no systemd user instance, skipping unit bootstrap"
+    exit 0
+fi
+
+systemctl --user daemon-reload
+
+# Only these three carry an [Install] section. The two oneshot services are
+# pulled in by their timers and must not be enabled on their own, or they would
+# also run once at every login.
+for unit in qmd-mcp.service qmd-reindex.timer cbm-reindex.timer; do
+    if [ ! -f "$HOME/.config/systemd/user/$unit" ]; then
+        echo "$unit not found, skipping"
+        continue
+    fi
+
+    # reenable rewrites the [Install] symlinks from the unit on disk, so a
+    # changed WantedBy converges; plain enable is a no-op once linked.
+    systemctl --user reenable "$unit"
+
+    # A running unit keeps its loaded-at-start configuration, so restart is what
+    # actually picks up an edited unit file. This script only re-runs when one of
+    # the hashes above changed, so the qmd-mcp restart — which drops the resident
+    # GGUF models until the next query reloads them — is not a per-apply cost.
+    systemctl --user restart "$unit"
+
+    echo "systemd user unit $unit loaded"
+done
+
+# Without lingering, the user manager is torn down at logout and the timers stop
+# until the next login — which is exactly when an unattended reindex is wanted.
+# Reported rather than enabled: `loginctl enable-linger` can raise a polkit
+# prompt, and a chezmoi apply that blocks on an auth dialog is worse than a line
+# of output.
+if [ "$(loginctl show-user "$USER" --property=Linger --value 2>/dev/null)" != "yes" ]; then
+    echo "warning: lingering is off, so the timers stop at logout."
+    echo "         enable it with: loginctl enable-linger $USER"
+fi
+{{ end -}}

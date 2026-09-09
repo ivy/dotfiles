@@ -1,0 +1,16 @@
+[Unit]
+# QMD ships no file watcher and its MCP server only ever reads the index, so
+# nothing re-indexes on its own. Driven by qmd-reindex.timer.
+Description=Refresh the QMD index
+Documentation=file://%h/src/github.com/ivy/dotfiles/docs/qmd.md
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/qmd-reindex
+
+# The launchd equivalent asks for ProcessType=Background, which earns throttled
+# CPU and I/O from macOS. systemd has no single equivalent, so ask for both.
+Nice=10
+IOSchedulingClass=idle
+
+SyslogIdentifier=qmd-reindex

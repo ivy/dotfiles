@@ -2,6 +2,7 @@
 #!/bin/bash
 
 # Load the launchd agents so plist changes take effect without logging out.
+# The systemd equivalent for linux is bootstrap-systemd-units.sh.tmpl.
 #
 # The filename matters: chezmoi applies entries in case-sensitive name order, and
 # this has to run after ~/Library/LaunchAgents/ is written. "bootstrap" sorts after
