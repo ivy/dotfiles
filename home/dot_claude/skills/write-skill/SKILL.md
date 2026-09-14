@@ -2,7 +2,6 @@
 name: write-skill
 description: Use when the user wants to create a new Claude Code skill. Guides skill creation with playbook patterns.
 argument-hint: "[global|local] [skill-name] [purpose...]"
-{{- template "bedrock-model" (dict "tier" "opus" "root" .) }}
 disable-model-invocation: true
 allowed-tools:
   - Read
@@ -72,35 +71,23 @@ If unclear, ask:
 
 ### 3. Draft Skill
 
-**For global skills:** Create `$(chezmoi source-path)/dot_claude/skills/<name>/SKILL.md.tmpl` (note `.tmpl` extension)
+**For global skills:** Create `$(chezmoi source-path)/dot_claude/skills/<name>/SKILL.md`. Use a `.tmpl` suffix only when the body needs a chezmoi directive (`.chezmoi.os`, `lookPath`, …).
 
-**For local skills:** Create `.claude/skills/<name>/SKILL.md` in the current working directory (plain `.md`, no template)
+**For local skills:** Create `.claude/skills/<name>/SKILL.md` in the current working directory.
 
-**Global skill template** (`.md.tmpl`):
+**Frontmatter template** (both scopes):
 ```yaml
 ---
 name: <kebab-case>
 description: <When to use + what it does>
 argument-hint: <flexible, use brackets>
-{{ "{{-" }} template "bedrock-model" (dict "tier" "<haiku|sonnet|opus>" "root" .) {{ "}}" }}
 disable-model-invocation: <true if user-only>
 context: <fork if output not needed>
 allowed-tools: <minimal safe subset>
 ---
 ```
 
-**Local skill template** (plain `.md`):
-```yaml
----
-name: <kebab-case>
-description: <When to use + what it does>
-argument-hint: <flexible, use brackets>
-# model: omit to inherit session default, or use plain: model: sonnet
-disable-model-invocation: <true if user-only>
-context: <fork if output not needed>
-allowed-tools: <minimal safe subset>
----
-```
+Leave `model:` and `effort:` unset. A skill runs in the main conversation, and a value that differs from the session's forces a full prompt-cache miss into and out of that turn (ADR-009, `docs/adrs/` in the dotfiles repo). Pin a model on a subagent instead — it has its own context.
 
 Both follow the same body structure (the line inside the Arguments block uses `` \!\`echo` `` to print a literal ARGUMENTS placeholder, `$`-prefixed — copy that placeholder as-is into your skill):
 
@@ -137,7 +124,7 @@ Both follow the same body structure (the line inside the Arguments block uses ``
 - `context: fork`: noisy output that won't inform follow-up
 - `disable-model-invocation: true`: side-effect skills (user-only trigger)
 - `user-invocable: false`: hide from `/` menu — background knowledge Claude loads silently
-- `effort`: `low|medium|high|xhigh|max` override for the skill's turn
+- `model` / `effort`: leave unset (see Draft Skill above)
 - `hooks`: lifecycle hooks scoped to this skill
 - `allowed-tools`: tools that run without approval. Omitted tools still work; whether they *prompt* is **mode-dependent** — under `defaultMode: auto` they may run silently, so omission is never a gate
 - `Skill(<child>)` in `allowed-tools`: declares the delegation graph — the parent may invoke exactly these children, and its authorization flows down to them. It never relaxes a child's evidence bar
@@ -187,8 +174,6 @@ Never spawn a second reviewer, re-review after fixing, or run reviewers in paral
 | Hidden from `/` menu | `user-invocable: false` |
 | Isolate context | `context: fork` |
 | Specific agent | `context: fork` + `agent: Explore` |
-| Right-size capability | `model: haiku\|sonnet\|opus` |
-| Adapt to effort | `effort: low\|medium\|high\|xhigh\|max` |
 | Named arguments | `arguments: [foo, bar]` → reference each by its `$`-prefixed name |
 | Lifecycle hooks | `hooks: ...` |
 | Declare autonomy | `**Autonomy:**` line in the body (axes A + C) |
@@ -199,7 +184,6 @@ Never spawn a second reviewer, re-review after fixing, or run reviewers in paral
 - **REVIEW.md** - **REQUIRED** checklist for the single reviewer pass; audits `allowed-tools` before deployment
 - **AUTONOMY.md** - The three axes, declaration grammar, delegation graphs, and writing skills that compose into unattended loops
 - **LIFECYCLE.md** - Skill content lifecycle, compaction budget, description cap, discovery rules
-- **MODEL-SELECTION.md** - When to use haiku vs sonnet vs opus
 - **SHIM-PATTERN.md** - Wrapper scripts for enforcing constraints (advanced)
 
 | Safe | Unsafe |

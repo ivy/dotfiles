@@ -2,7 +2,6 @@
 name: label-issue
 description: Use when labeling GitHub issues or triaging the backlog. Applies the project's label taxonomy from docs/labels.md.
 argument-hint: "[#123 | #123 #456 | all | unlabeled]"
-model: sonnet
 allowed-tools:
   - Read
   - Bash(gh issue list:*)

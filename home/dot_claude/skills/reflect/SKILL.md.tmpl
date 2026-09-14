@@ -5,7 +5,6 @@ description: >-
   and codebase issues, and turn findings into fixes or tracked issues.
   Invoked by the user directly or by /work-on at session close.
 argument-hint: "[@notes-file | general feedback text]"
-{{- template "bedrock-model" (dict "tier" "opus" "root" .) }}
 allowed-tools:
   - Read
   - Glob

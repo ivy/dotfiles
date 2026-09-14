@@ -2,7 +2,6 @@
 name: review-plan
 description: Validate an implementation plan by checking for gaps, ambiguity, incorrect assumptions, and missing dependencies. Use after creating a plan and before execution.
 argument-hint: "[focus areas for review]"
-{{- template "bedrock-model" (dict "tier" "sonnet" "root" .) }}
 context: fork
 agent: reviewer
 allowed-tools:

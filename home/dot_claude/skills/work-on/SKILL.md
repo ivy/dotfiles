@@ -2,8 +2,6 @@
 name: work-on
 description: End-to-end workflow for shipping a GitHub issue. Assesses complexity, builds a tailored workflow, and orchestrates skills from research through PR.
 argument-hint: "[#issue | issue URL | issue number]"
-{{- template "bedrock-model" (dict "tier" "opus" "root" .) }}
-effort: max
 disable-model-invocation: true
 allowed-tools:
   - Bash(gh issue view:*)

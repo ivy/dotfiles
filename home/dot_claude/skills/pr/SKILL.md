@@ -2,7 +2,6 @@
 name: pr
 description: Use when creating a pull request. Pushes the branch, creates the PR, and reports the URL.
 argument-hint: "[additional context]"
-{{- template "bedrock-model" (dict "tier" "sonnet" "root" .) }}
 allowed-tools:
   - Glob
   - Read

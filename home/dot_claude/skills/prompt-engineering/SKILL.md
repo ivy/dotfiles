@@ -2,7 +2,6 @@
 name: prompt-engineering
 description: Use when drafting, reviewing, or improving a prompt for an LLM or agent. Applies research-backed principles — explicit instructions, instruction/data separation, output contracts, examples, reasoning scaffolds, grounding, verification, and evals.
 argument-hint: "[draft|review|improve|explain] [task description | @prompt-file | principle...]"
-{{- template "bedrock-model" (dict "tier" "opus" "root" .) }}
 allowed-tools:
   - Read
   - Glob

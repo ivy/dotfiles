@@ -2,7 +2,6 @@
 name: greenfield
 description: Use when starting a substantial project from nothing and deciding what to build before building it. Runs the sequence that survives contact with implementation — neighbour inventory, problem space, vision, principles, domain model, paper test, architecture and ADRs, outside review, roadmap and backlog — with an exit gate on each step.
 argument-hint: "[what you want to build | step <name> | check]"
-{{- template "bedrock-model" (dict "tier" "opus" "root" .) }}
 allowed-tools:
   - Read
   - Glob

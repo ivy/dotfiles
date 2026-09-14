@@ -2,7 +2,6 @@
 name: checkout
 description: Create a feature branch from the up-to-date default branch. Use when starting work on a new issue or feature.
 argument-hint: "[#issue | branch-name]"
-{{- template "bedrock-model" (dict "tier" "sonnet" "root" .) }}
 allowed-tools:
   - Bash(echo:*)
   - Bash(gh issue view:*)

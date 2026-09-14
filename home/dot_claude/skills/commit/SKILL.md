@@ -2,7 +2,6 @@
 name: commit
 description: Use when committing code changes. Enforces intentional file selection, conventional commits, and why-focused messages.
 argument-hint: "[message | --amend | files...]"
-{{- template "bedrock-model" (dict "tier" "sonnet" "root" .) }}
 allowed-tools:
   - Bash(git status:*)
   - Bash(git diff:*)

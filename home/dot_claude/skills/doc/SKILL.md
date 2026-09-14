@@ -2,7 +2,6 @@
 name: doc
 description: Use when writing or improving documentation. Applies Diátaxis framework to create user-centered docs (tutorials, how-to guides, reference, explanation).
 argument-hint: "[topic | file | --type tutorial|howto|reference|explanation | --audit]"
-{{- template "bedrock-model" (dict "tier" "sonnet" "root" .) }}
 allowed-tools:
   - Read
   - Grep

@@ -2,8 +2,6 @@
 name: plan
 description: Create a parallelized implementation plan with task dependencies, sequencing, and agent team topology. Use after gathering context and reaching agreement on approach.
 argument-hint: "[context summary or focus area]"
-{{- template "bedrock-model" (dict "tier" "opus" "root" .) }}
-effort: high
 allowed-tools:
   - Bash(echo:*)
   - Bash(git diff:*)

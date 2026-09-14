@@ -3,7 +3,6 @@ name: youtube
 description: Fetch and structure the transcript from this YouTube video.
 argument-hint: [url | video-id]
 context: fork
-{{- template "bedrock-model" (dict "tier" "sonnet" "root" .) }}
 allowed-tools:
   - Bash(yt-dlp:*)
   - Bash(mkdir -p tmp:*)

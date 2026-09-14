@@ -2,7 +2,6 @@
 name: project-manager
 description: Use when creating, updating, or triaging GitHub issues. Writes issues from a product perspective — user stories, acceptance criteria, context, and dependencies — without prescribing implementation.
 argument-hint: "[create | update #NNN | triage] [description or context]"
-{{- template "bedrock-model" (dict "tier" "sonnet" "root" .) }}
 allowed-tools:
   - Read
   - Glob

@@ -8,7 +8,6 @@ description: >-
   codebase-memory indexes, repairs what is safely repairable, and reports a
   verdict per subsystem.
 argument-hint: "[scheduler | mcp | qmd | codebase-memory | sync]"
-{{- template "bedrock-model" (dict "tier" "sonnet" "root" .) }}
 context: fork
 allowed-tools:
   - Read

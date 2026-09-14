@@ -2,7 +2,6 @@
 name: install
 description: "Use when the user wants to make a tool, CLI, binary, package, GUI app, Claude Code plugin, or MCP server persistently available — in the dotfiles (user/global), the current project, or ephemerally. Triggers: install, add, set up, wire up, configure, pin a version of, make available. Routes by scope: user → chezmoi dotfiles; project → current repo. Prefers mise for dev tools."
 argument-hint: "<tool[@version]> | <plugin@marketplace> | <url> | <mcp-name> [--scope user|project|local]"
-{{- template "bedrock-model" (dict "tier" "sonnet" "root" .) }}
 allowed-tools:
   - AskUserQuestion
   - Read
