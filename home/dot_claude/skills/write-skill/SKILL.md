@@ -17,7 +17,7 @@ allowed-tools:
 
 # Skill Creation Playbook
 
-**Autonomy:** human-only · acts autonomously — writes the skill file, spawns the single reviewer pass, and deploys with `chezmoi apply` without further confirmation
+**Autonomy:** human-only · acts autonomously — writes the skill and README files, spawns the single reviewer pass, and deploys with `chezmoi apply` without further confirmation
 
 **CRITICAL: Before deploying, spawn exactly one reviewer agent with REVIEW.md to audit `allowed-tools` — overly permissive access (e.g. `Bash(git:*)`) can cause data loss or leak secrets. The reviewer advises on **facts** and has **no standing on intent**: never apply its opinion about how much autonomy a skill should have. One agent, one pass — see step 5.**
 
@@ -71,9 +71,11 @@ If unclear, ask:
 
 ### 3. Draft Skill
 
-**For global skills:** Create `$(chezmoi source-path)/dot_claude/skills/<name>/SKILL.md`. Use a `.tmpl` suffix only when the body needs a chezmoi directive (`.chezmoi.os`, `lookPath`, …).
+Every skill is **two files**: the `SKILL.md` the agent runs and a `README.md` a human reads. Write both — a skill without a README is not finished. Shape and section-by-section guidance: README-PATTERN.md.
 
-**For local skills:** Create `.claude/skills/<name>/SKILL.md` in the current working directory.
+**For global skills:** Create `$(chezmoi source-path)/dot_claude/skills/<name>/SKILL.md` and `README.md` alongside it. Use a `.tmpl` suffix on `SKILL.md` only when the body needs a chezmoi directive (`.chezmoi.os`, `lookPath`, …); the README is never templated.
+
+**For local skills:** Create `.claude/skills/<name>/SKILL.md` and `README.md` in the current working directory (plain `.md`, no template).
 
 **Frontmatter template** (both scopes):
 ```yaml
@@ -152,7 +154,7 @@ Both follow the same body structure (the line inside the Arguments block uses ``
 
 ### 5. Review (REQUIRED — one agent, one pass)
 
-Spawn **one** reviewer agent, **once**. Give it `REVIEW.md`, the drafted file, **the user's request verbatim**, and the `**Autonomy:**` line — a reviewer that can't see the intent will invent one.
+Spawn **one** reviewer agent, **once**. Give it `REVIEW.md`, the drafted files (`SKILL.md` **and** `README.md`), **the user's request verbatim**, and the `**Autonomy:**` line — a reviewer that can't see the intent will invent one.
 
 Dispose of findings by the reviewer's **standing**, not by how urgent they sound:
 
@@ -182,6 +184,7 @@ Never spawn a second reviewer, re-review after fixing, or run reviewers in paral
 ## Supplementary Docs
 
 - **REVIEW.md** - **REQUIRED** checklist for the single reviewer pass; audits `allowed-tools` before deployment
+- **README-PATTERN.md** - **REQUIRED** shape for the `README.md` every skill ships; what belongs there vs in `SKILL.md`
 - **AUTONOMY.md** - The three axes, declaration grammar, delegation graphs, and writing skills that compose into unattended loops
 - **LIFECYCLE.md** - Skill content lifecycle, compaction budget, description cap, discovery rules
 - **SHIM-PATTERN.md** - Wrapper scripts for enforcing constraints (advanced)
@@ -213,6 +216,8 @@ Never spawn a second reviewer, re-review after fixing, or run reviewers in paral
 
 ## Anti-patterns
 
+- Shipping a skill without a `README.md`, or templating one as `.md.tmpl`
+- A README that restates `SKILL.md` instead of arguing why the skill exists
 - Strict positional arguments
 - Broad tool access
 - Verbose prose over terse bullets

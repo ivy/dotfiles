@@ -15,6 +15,8 @@ Report intent observations under `NOTES` if they seem important, and expect them
 
 **In scope:** `allowed-tools` red flags, the narrowing principle, publication / deletion / secret-exposure gaps, whether `allowed-tools` matches the skill's declared `**Autonomy:**` line, delegation-graph correctness (`Skill(<child>)` entries), `${CLAUDE_SKILL_DIR}` correctness in shims, and any factual claim the body makes about harness behavior.
 
+Also check that the skill ships a `README.md` (plain `.md`, not `.md.tmpl`) and that it argues *why* rather than restating `SKILL.md` — see `README-PATTERN.md`. This is a `NOTES` finding, never `BLOCKING`; a missing README is a documentation gap, not a defect in the skill.
+
 **Out of scope:** prose style, alternate phrasings, speculative future features, edge cases the author didn't ask about. Raising these is how a one-pass review turns into five.
 
 ### Never recommend abstention
