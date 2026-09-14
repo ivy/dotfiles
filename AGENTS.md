@@ -126,7 +126,6 @@ Browse the two dirs above for the full set (~35 skills).
 | Core principles | [docs/core-principles.md](docs/core-principles.md) |
 | Vision | [docs/vision.md](docs/vision.md) |
 | Chezmoi operations | [docs/agents/chezmoi.md](docs/agents/chezmoi.md) |
-| Skill effort tuning | [docs/skill-effort-tuning.md](docs/skill-effort-tuning.md) |
 | Architecture decisions | [docs/adrs/](docs/adrs/) |
 | Skill autonomy migration (in progress) | [docs/skill-autonomy-migration.md](docs/skill-autonomy-migration.md) |
 | Supply chain security | [docs/supply-chain-security.md](docs/supply-chain-security.md) |
