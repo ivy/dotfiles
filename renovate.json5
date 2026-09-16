@@ -176,26 +176,6 @@
       "datasourceTemplate": "github-releases"
     },
 
-    // Go tools installed via `go install` — versions tracked from the Go module proxy
-    {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/dot_config/go-tools/tools\\.txt$/"],
-      "matchStrings": [
-        "^(?<depName>[^\\s@]+)@(?<currentValue>v?[^\\s#]+)"
-      ],
-      "datasourceTemplate": "go"
-    },
-
-    // Node.js global tools — versions tracked from npm
-    {
-      "customType": "regex",
-      "managerFilePatterns": ["/^home/dot_config/node-tools/tools\\.txt$/"],
-      "matchStrings": [
-        "^(?<depName>[^@\\n]+)@(?<currentValue>[^\\n#]+)"
-      ],
-      "datasourceTemplate": "npm"
-    },
-
     // --- Chezmoi external dependencies (.chezmoiexternal.toml.tmpl) --------------
     // Tarballs and repos that chezmoi downloads on `chezmoi apply`.
     // Each is pinned to a commit SHA and tracked via the git-refs datasource.

@@ -129,17 +129,7 @@ Defined in `renovate.json5`:
 - Pattern: `"pipx:(?<depName>[^\"]+)"\s*=\s*"(?<currentValue>[^\"]+)"`
 - Datasource: `pypi` (e.g., `pipx:<package>` → `<package>`)
 
-6) Optional Go/Node tool manifests (present if we add these files later)
-
-- Go tools file: `home/dot_config/go-tools/tools.txt`
-  - Pattern: `^(?<depName>[^\s@]+)@(?<currentValue>v?[^\s#]+)`
-  - Datasource: `go`
-
-- Node tools file: `home/dot_config/node-tools/tools.txt`
-  - Pattern: `^(?<depName>[^@\n]+)@(?<currentValue>[^\n#]+)`
-  - Datasource: `npm`
-
-7) Chezmoi externals pinned to SHAs (Git Refs)
+6) Chezmoi externals pinned to SHAs (Git Refs)
 
 - File: `home/.chezmoiexternal.toml.tmpl`
 - Datasource: `git-refs` with `currentValueTemplate: "master"` (we track the upstream default branch and replace our pinned SHA when the branch moves).
@@ -152,7 +142,7 @@ Current rules:
 
 Note: When adding new externals, add a matching regex rule so Renovate can keep their SHAs fresh automatically.
 
-8) Tmux plugins (JSONata + YAML)
+7) Tmux plugins (JSONata + YAML)
 
 - File: `home/.chezmoidata/tmux-plugins.yaml`
 - Manager: `jsonata` with `fileFormat: "yaml"`
