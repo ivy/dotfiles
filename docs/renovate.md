@@ -4,10 +4,11 @@ This guide explains how Renovate is configured in this repository, how the custo
 
 ## TL;DR
 
-- Renovate config lives at `renovate.json5`, runs unscheduled, and opens `type:chore` PRs that squash-automerge once checks pass.
+- Renovate config lives at `renovate.json5` and opens `type:chore` PRs that squash-automerge once checks pass.
 - We pin everything important to immutable versions or digests for reproducibility and supply‑chain safety.
 - Updates are batched into one PR per ecosystem — GitHub Actions, container images, mise tools, Neovim plugins, tmux plugins, chezmoi externals — so a week of upstream releases lands as a handful of PRs, not thirty.
 - Major version bumps are excluded from the batches and get their own PR, so one breaking change can't block a batch of safe ones.
+- Version updates to tools and Actions are held three days before they are raised, so a compromised release has a window to be caught. Branch-tip dependencies can't be held that way and land in a weekly batch instead — see [Quarantine](#quarantine).
 
 ---
 
@@ -16,11 +17,12 @@ This guide explains how Renovate is configured in this repository, how the custo
 File: `renovate.json5`
 
 - Extends: `config:recommended`, `:semanticCommits`, `:disableDependencyDashboard`
-- Timezone: `America/Los_Angeles`; no schedule — updates are raised as upstream publishes them
+- Timezone: `America/Los_Angeles`
 - Labels: `type:chore`
 - Automerge: on, squash strategy
 - PR limits: `prHourlyLimit: 10`
 - `rebaseWhen: "conflicted"` — see [Batching and rebase churn](#batching-and-rebase-churn)
+- `minimumReleaseAge: "3 days"` on timestamped datasources; branch-tip deps run on a weekly `schedule` instead — see [Quarantine](#quarantine)
 
 Enabled managers and file discovery:
 
@@ -55,8 +57,31 @@ The semver groups carry `matchUpdateTypes: ["minor", "patch", "digest", "pin", "
 
 **Rebasing.** `config:recommended` leaves `rebaseWhen` at `"auto"`, which resolves to `behind-base-branch` whenever `automerge` is enabled — so every push to `main` rebases every open Renovate branch. `main` carries no up-to-date-branch requirement, so automerge does not need that; `rebaseWhen: "conflicted"` restricts rebases to branches that genuinely conflict.
 
-> [!TIP]
-> To batch on a cadence rather than continuously, add a top-level `"schedule": ["before 9am on monday"]`. Renovate then collects a week of releases into each group PR instead of amending it as upstream publishes. The trade-off is up to a week of delay on a security fix.
+---
+
+## Quarantine
+
+A fresh release is the riskiest one. `minimumReleaseAge: "3 days"` holds an update until its release is three days old, which is long enough for scanners and researchers to flag a compromised publish and covers the window in which a registry can unpublish a version out from under an already-merged bump. Renovate's own `security:minimumReleaseAge*` presets use the same three days for the same reasons.
+
+The rule is keyed on **datasource**, not manager, because the binding constraint is whether a `releaseTimestamp` comes back at all. `minimumReleaseAgeBehaviour` defaults to `timestamp-required`, so an update with no timestamp is treated as pending — and a dependency that can never produce one is held not for three days but forever. Two classes can never produce one:
+
+| Class | Why no timestamp | Treatment |
+|---|---|---|
+| Branch-tip deps (`git-refs`) | No release exists to age against — the ref is a moving branch | Weekly `schedule`, below |
+| Non-Docker-Hub images | Renovate reads publish time from Docker Hub's `tag_last_pushed`; GHCR, Quay and other registries expose no equivalent | Left unquarantined |
+
+So the quarantine covers GitHub Actions, every mise tool, and `cli-versions.toml`. It does not cover the ~41 branch-tip dependencies or any container image.
+
+**Only version updates are held.** The rule carries `matchUpdateTypes: ["major", "minor", "patch"]`, and that filter is load-bearing rather than cosmetic. Renovate checks release age twice: once while looking up the update, and again at branch level against a `releaseTimestamp` field that only version updates carry. A digest update passes the first check and fails the second, leaving a PR open behind a stability check that never clears. One consequence worth knowing: an Action pinned to a moving tag rather than a version — `anthropics/claude-code-action@<sha> # beta`, for instance — produces digest updates, so its bumps are not held.
+
+**The hold is not proof against tag mutation.** For `github-tags` deps, age is measured from the tag's `committedDate`, not from when the tag was pushed. A tag force-pushed onto an old commit satisfies the window immediately. `github-releases` deps carry real publish metadata and don't have this gap.
+
+### Weekly window for branch tips
+
+Branch-tip dependencies get `schedule: ["before 6am on monday"]` instead, with automerge left on. A week of upstream commits collects into one batch per group and lands predictably.
+
+> [!IMPORTANT]
+> A schedule is **batching, not quarantine**. It constrains when Renovate looks, not how old a commit must be. A commit pushed on Sunday evening is picked up Monday morning having had hours of upstream scrutiny, not a week. Average delay is around half the window; worst case is none.
 
 ---
 

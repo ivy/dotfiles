@@ -34,7 +34,9 @@ Mise lockfiles (`lockfile = true`) resolve download URLs and checksums at lock t
 
 ### Automated Updates
 
-Renovate opens `type:chore` PRs as upstream publishes, batches them into one PR per ecosystem, and squash-automerges once CI passes. Major bumps are excluded from the batches and land individually. See [docs/renovate.md](renovate.md).
+Renovate opens `type:chore` PRs, batches them into one PR per ecosystem, and squash-automerges once CI passes. Major bumps are excluded from the batches and land individually.
+
+Version updates to Actions, mise tools and `cli-versions.toml` are held three days (`minimumReleaseAge`) so a compromised release has a window to be caught before it lands. Dependencies that carry no release timestamp — branch-tip refs and images outside Docker Hub — cannot be held that way, because Renovate treats a missing timestamp as pending indefinitely; branch-tip deps land in a weekly batch instead. See [docs/renovate.md](renovate.md#quarantine).
 
 ### Package Manager Hardening
 
@@ -75,7 +77,9 @@ The Containerfile uses `fedora:latest` (unpinned base), `curl | sh` (unverified 
 
 Homebrew has no hardening (`HOMEBREW_NO_INSECURE_REDIRECT`, `HOMEBREW_NO_ANALYTICS`, etc.). pip has no hardening. Hadolint is documented in the hk Docker stack guide but not configured in `hk.pkl`.
 
-Renovate PRs get no automated supply-chain review — nothing inspects the upstream diff for ownership transfers, unfamiliar release authors, or new lifecycle scripts before a batch automerges. Version and digest pinning still hold, so an update cannot change what a pin resolves to, but the decision to accept a new pin rests on CI alone.
+Renovate PRs get no automated supply-chain review — nothing inspects the upstream diff for ownership transfers, unfamiliar release authors, or new lifecycle scripts before a batch automerges. Version and digest pinning still hold, so an update cannot change what a pin resolves to, but the decision to accept a new pin rests on CI plus a three-day clock.
+
+That clock has known gaps. It does not apply to the ~41 branch-tip dependencies (Neovim and tmux plugins, chezmoi externals), to any container image, or to digest updates on Actions pinned to moving tags rather than versions. For `github-tags` deps it measures a tag's commit date rather than its push date, so a force-pushed tag clears the window instantly. Branch-tip deps are batched weekly, which bounds how often unreviewed upstream commits land but does not age them.
 
 ## Milestones
 
