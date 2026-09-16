@@ -118,6 +118,40 @@
     {
       "matchFileNames": ["home/.chezmoiexternal.toml.tmpl"],
       "groupName": "chezmoi externals"
+    },
+
+    // -------------------------------------------------------------------------
+    // Supply-chain quarantine
+    //
+    // Hold a release for three days so scanners and researchers get a window
+    // before it lands here. Keyed on datasource rather than manager, because
+    // the binding constraint is whether a releaseTimestamp comes back at all:
+    // minimumReleaseAgeBehaviour defaults to "timestamp-required", which treats
+    // a missing timestamp as pending indefinitely. git-refs supplies no
+    // timestamp, and the docker datasource only does so for Docker Hub — so
+    // both are left out entirely rather than quarantined into a permanent
+    // stall.
+    //
+    // matchUpdateTypes is load-bearing, not hygiene. Only major/minor/patch
+    // carry a releaseTimestamp onto the upgrade; digest, pinDigest, pin, bump,
+    // lockfileUpdate, rollback and replacement do not. Renovate checks the age
+    // a second time at branch level against that field, so any update type
+    // without one opens a PR that never merges.
+    // -------------------------------------------------------------------------
+    {
+      "matchDatasources": ["github-tags", "github-releases", "npm"],
+      "matchUpdateTypes": ["major", "minor", "patch"],
+      "minimumReleaseAge": "3 days",
+      "internalChecksFilter": "strict"
+    },
+
+    // Branch-tip deps track a moving ref, so there is no release to age against
+    // and no quarantine is possible. Batch them into one weekly window instead:
+    // automerge stays on, but updates land predictably rather than whenever an
+    // upstream maintainer happens to push.
+    {
+      "matchDatasources": ["git-refs"],
+      "schedule": ["before 6am on monday"]
     }
   ],
 
