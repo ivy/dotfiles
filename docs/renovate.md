@@ -4,10 +4,10 @@ This guide explains how Renovate is configured in this repository, how the custo
 
 ## TL;DR
 
-- Renovate config lives at `renovate.json5` and runs weekly (before 9am Monday), opening labeled PRs (`deps`, `automated`) with low concurrency.
+- Renovate config lives at `renovate.json5`, runs unscheduled, and opens `type:chore` PRs that squash-automerge once checks pass.
 - We pin everything important to immutable versions or digests for reproducibility and supply‑chain safety.
-- Standard managers are enabled (pip, mise, docker-compose, devcontainer, actions) and custom regex managers were added for Chezmoi externals and select version files.
-- Renovate updates these pins automatically and groups safe updates for fast review/automerge.
+- Updates are batched into one PR per ecosystem — GitHub Actions, container images, mise tools, Neovim plugins, tmux plugins, chezmoi externals — so a week of upstream releases lands as a handful of PRs, not thirty.
+- Major version bumps are excluded from the batches and get their own PR, so one breaking change can't block a batch of safe ones.
 
 ---
 
@@ -16,25 +16,47 @@ This guide explains how Renovate is configured in this repository, how the custo
 File: `renovate.json5`
 
 - Extends: `config:recommended`, `:semanticCommits`, `:disableDependencyDashboard`
-- Schedule: `before 9am on monday`
-- Labels: `deps`, `automated`
-- PR limits: `prHourlyLimit: 2`, `prConcurrentLimit: 5`
+- Timezone: `America/Los_Angeles`; no schedule — updates are raised as upstream publishes them
+- Labels: `type:chore`
+- Automerge: on, squash strategy
+- PR limits: `prHourlyLimit: 10`
+- `rebaseWhen: "conflicted"` — see [Batching and rebase churn](#batching-and-rebase-churn)
 
 Enabled managers and file discovery:
 
-- `mise`: `.mise.toml`, `home/dot_config/mise/config.toml` (includes npm and Python tools via custom regex managers)
-- `docker-compose`: `home/dot_config/docker-compose/*.yml`
-- `devcontainer`: `.devcontainer/devcontainer.json`
-- `github-actions`: `.github/workflows/*.yml` (with digest pinning)
+- `mise`: `home/dot_config/mise/config.toml`, plus `mise.lock` via `lockFileMaintenance`
+- `dockerfile`: `Containerfile`
+- `docker-compose`: `home/dot_config/docker-compose/*.y[a]ml`
+- `github-actions`: `.github/workflows/*.y[a]ml` (with digest pinning)
+- `jsonata`: `home/.chezmoidata/tmux-plugins.yaml`
 
-Grouping and automerge rules:
+Everything else — npm, pip, bundler and friends — is off via `enabledManagers`.
 
-- `github-actions`: group by manager, automerge minor/patch/digest
-- `devcontainer`: group by manager, automerge minor/patch/digest
-- `docker-compose`: group by manager, automerge digest updates
-- `mise`: grouped as `mise-tools` (no automerge; includes npm and Python packages)
+---
 
-Why: high-signal, low-risk updates (actions/devcontainer/digests) are auto‑merged to keep things current; others require review.
+## Batching and rebase churn
+
+One PR per dependency does not scale here. Between ~30 SHA-pinned Neovim plugins, tmux plugins, chezmoi externals, digest-pinned Actions and container images, a quiet week upstream still produces a double-digit pile of PRs — and each merge rebases every branch behind it.
+
+Two `packageRules` levers keep that in check.
+
+**Grouping.** Semver managers group by manager name; custom managers group by the manifest their versions live in, because each plugin has its own regex manager and there is no shared manager name to match:
+
+| Group | Matched by | Covers |
+|-------|-----------|--------|
+| `github actions` | `matchManagers: ["github-actions"]` | workflow action versions and digests |
+| `container images` | `matchManagers: ["dockerfile", "docker-compose"]` | `Containerfile` and compose image tags/digests |
+| `mise tools` | `matchManagers: ["mise"]` | every pinned tool in the mise manifest |
+| `neovim plugins` | `matchFileNames: ["home/dot_config/nvim/lazy-lock.json"]` | lazy.nvim lockfile commits |
+| `tmux plugins` | `matchFileNames: ["home/.chezmoidata/tmux-plugins.yaml"]` | tmux plugin commits |
+| `chezmoi externals` | `matchFileNames: ["home/.chezmoiexternal.toml.tmpl"]` | oh-my-zsh, zsh plugins, ghostty theme |
+
+The semver groups carry `matchUpdateTypes: ["minor", "patch", "digest", "pin", "pinDigest"]`. Major updates fall through to the default and get an individual PR, which is the point: a major bump usually needs a config change alongside it, and batching it would strand the safe updates behind that work. The three `matchFileNames` groups track branch tips through `git-refs`, so every update there is a digest update and no update-type filter is needed.
+
+**Rebasing.** `config:recommended` leaves `rebaseWhen` at `"auto"`, which resolves to `behind-base-branch` whenever `automerge` is enabled — so every push to `main` rebases every open Renovate branch. `main` carries no up-to-date-branch requirement, so automerge does not need that; `rebaseWhen: "conflicted"` restricts rebases to branches that genuinely conflict.
+
+> [!TIP]
+> To batch on a cadence rather than continuously, add a top-level `"schedule": ["before 9am on monday"]`. Renovate then collects a week of releases into each group PR instead of amending it as upstream publishes. The trade-off is up to a week of delay on a security fix.
 
 ---
 

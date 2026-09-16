@@ -14,7 +14,7 @@
   "timezone": "America/Los_Angeles",
 
   // Commit via the GitHub API instead of pushing with git
-  "platformCommit": true,
+  "platformCommit": "enabled",
 
   // Auto-raise a PR when Renovate config options need migration
   "configMigration": true,
@@ -22,6 +22,11 @@
   // Squash-merge passing PRs automatically; packageRules below can override
   "automerge": true,
   "automergeStrategy": "squash",
+
+  // "auto" (the config:recommended default) rebases every open branch on every
+  // push to main whenever automerge is on. main has no up-to-date-branch
+  // requirement, so automerge works fine without that — only rebase on conflict.
+  "rebaseWhen": "conflicted",
 
   // Default from config:recommended is 5; raise to avoid throttling with many pinned tools
   "prHourlyLimit": 10,
@@ -73,7 +78,47 @@
     {"matchCategories": ["docker"], "pinDigests": true},
     // mise's github: backend strips the "v" prefix from tags automatically,
     // but Renovate writes back the raw tag. Strip it so versions stay clean.
-    {"matchManagers": ["mise"], "extractVersion": "^v?(?<version>.+)$"}
+    {"matchManagers": ["mise"], "extractVersion": "^v?(?<version>.+)$"},
+
+    // -------------------------------------------------------------------------
+    // Batching: one PR per ecosystem, not one per dependency.
+    //
+    // Major updates are deliberately left out of the semver groups so a single
+    // breaking bump can't hold a batch of safe ones hostage. The git-refs groups
+    // below track branch tips, so every update there is a digest update and the
+    // major/minor distinction doesn't apply.
+    // -------------------------------------------------------------------------
+
+    {
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["minor", "patch", "digest", "pin", "pinDigest"],
+      "groupName": "github actions"
+    },
+    {
+      "matchManagers": ["dockerfile", "docker-compose"],
+      "matchUpdateTypes": ["minor", "patch", "digest", "pin", "pinDigest"],
+      "groupName": "container images"
+    },
+    {
+      "matchManagers": ["mise"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "mise tools"
+    },
+
+    // Custom managers have no manager name to match on — one regex manager per
+    // plugin — so these group by the manifest the version lives in instead.
+    {
+      "matchFileNames": ["home/dot_config/nvim/lazy-lock.json"],
+      "groupName": "neovim plugins"
+    },
+    {
+      "matchFileNames": ["home/.chezmoidata/tmux-plugins.yaml"],
+      "groupName": "tmux plugins"
+    },
+    {
+      "matchFileNames": ["home/.chezmoiexternal.toml.tmpl"],
+      "groupName": "chezmoi externals"
+    }
   ],
 
   // ---------------------------------------------------------------------------

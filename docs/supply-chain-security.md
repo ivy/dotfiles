@@ -34,7 +34,7 @@ Mise lockfiles (`lockfile = true`) resolve download URLs and checksums at lock t
 
 ### Automated Updates
 
-Renovate runs weekly (Monday mornings), opens labeled PRs, groups by risk, and automerges safe changes (action digests, container digests, minor/patch bumps). See [docs/renovate.md](renovate.md).
+Renovate opens `type:chore` PRs as upstream publishes, batches them into one PR per ecosystem, and squash-automerges once CI passes. Major bumps are excluded from the batches and land individually. See [docs/renovate.md](renovate.md).
 
 ### Package Manager Hardening
 
@@ -74,6 +74,8 @@ The `install.sh` bootstrap script installs cosign first, then uses it to verify 
 The Containerfile uses `fedora:latest` (unpinned base), `curl | sh` (unverified downloads in the image build — `install.sh` verifies but the Containerfile doesn't), and `dnf install` (unversioned packages). The workflow builds and attests but doesn't sign, scan, or produce an SBOM. Consumers can't verify the image came from this repo without trusting GHCR.
 
 Homebrew has no hardening (`HOMEBREW_NO_INSECURE_REDIRECT`, `HOMEBREW_NO_ANALYTICS`, etc.). pip has no hardening. Hadolint is documented in the hk Docker stack guide but not configured in `hk.pkl`.
+
+Renovate PRs get no automated supply-chain review — nothing inspects the upstream diff for ownership transfers, unfamiliar release authors, or new lifecycle scripts before a batch automerges. Version and digest pinning still hold, so an update cannot change what a pin resolves to, but the decision to accept a new pin rests on CI alone.
 
 ## Milestones
 
