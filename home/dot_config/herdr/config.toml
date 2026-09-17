@@ -1,7 +1,7 @@
 # herdr configuration (XDG: ~/.config/herdr/config.toml)
-# Keybindings and theme mirror home/dot_config/tmux/tmux.conf so muscle memory
-# carries between the two. Only settings that differ from herdr's defaults, or
-# that pin a tmux mapping worth locking, appear here.
+# herdr is the primary multiplexer; home/dot_config/tmux/tmux.conf mirrors the
+# bindings chosen here rather than the reverse. Only settings that differ from
+# herdr's defaults appear below.
 #
 # Validate:  herdr config check
 # Reload:    herdr server reload-config
@@ -38,10 +38,40 @@ new_cwd = "follow"
 # what `bind C-a send-prefix` does in tmux.
 prefix = "ctrl+a"
 
-# tmux: bind <n> select-window. herdr's Spaces sit above tabs, and prefix+1..9
-# already selects tabs, so Spaces take the shifted number row in sidebar order:
-# prefix+! is Space 1, prefix+@ is Space 2, and so on.
-switch_workspace = "prefix+shift+1..9"
+# The directional and indexed bindings follow one rule: unmodified acts inside
+# the current Space, shift addresses the Space itself, and alt moves a pane
+# rather than focusing one. herdr's defaults encode no such rule — shift means
+# "larger object" on close_tab and switch_workspace but "swap, not focus" on
+# hjkl — so every binding implementing the rule is pinned here, including the
+# ones that only partly diverge from a default.
+
+# prefix+1..9 selects tabs, so Spaces take the shifted number row in sidebar
+# order. alt+1..9 is the same jump without the prefix, which is what makes it
+# worth having: Space switching is at least as frequent as pane focus, and pane
+# focus already gets a prefixless row in the navigator entries below. The cost
+# is that alt+1..9 no longer reaches a program running in a pane.
+switch_workspace = ["prefix+shift+1..9", "alt+1..9"]
+
+# Both unbound by default. J walks down the sidebar and K up, the direction j/k
+# move a pane cursor. prefix+shift+h and prefix+shift+l are left unbound on
+# purpose: the sidebar is a one-dimensional list, so left and right address
+# nothing in it.
+next_workspace = "prefix+shift+j"
+previous_workspace = "prefix+shift+k"
+
+# herdr defaults these to the prefix+shift+hjkl row, where they would collide
+# with Space navigation above and overload shift with a second meaning. alt is
+# unused elsewhere in this file, so all four move there together and stay
+# symmetric. The swap is directional rather than by pane index, so the target is
+# whichever pane currently sits that way from the focused one.
+#
+# A binding set here silently empties whichever default held the same key —
+# `herdr config check` reports nothing, so the in-app keybinding help (prefix+?)
+# is the only way to confirm what is live.
+swap_pane_left = "prefix+alt+h"
+swap_pane_down = "prefix+alt+j"
+swap_pane_up = "prefix+alt+k"
+swap_pane_right = "prefix+alt+l"
 
 # tmux: bind , rename-window   (a tmux window is a herdr tab)
 #       bind $ rename-session  (a tmux session is a herdr Space)
