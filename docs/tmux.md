@@ -50,7 +50,7 @@ Renovate's JSONata manager reads `ref` as `currentValue` and `commit` as `curren
 4. General behavior (base-index, renumber, mouse)
 5. Vi mode + copy mode bindings
 6. vim-tmux-navigator smart pane switching
-7. Prefix-based pane navigation and resize
+7. Prefix-based pane navigation, session navigation, pane swap, resize mode
 8. Utility bindings (clear, split, reload, window chooser, Claude in dotfiles/vault)
 
 tmux-sensible loads first so explicit settings can override its defaults.
@@ -92,10 +92,27 @@ Requires `christoomey/vim-tmux-navigator` Neovim plugin.
 
 ### Prefix-based Navigation
 
+These mirror [`home/dot_config/herdr/config.toml`](../home/dot_config/herdr/config.toml). herdr is the primary multiplexer and tmux follows it, so the same rule applies in both: an unmodified key acts inside the current session, shift addresses the session itself, and alt moves a pane rather than focusing one. A herdr Space is a tmux session; a herdr tab is a tmux window.
+
 | Key | Action |
 |-----|--------|
 | `prefix + h/j/k/l` | Select pane |
-| `prefix + H/J/K/L` | Resize pane (repeatable) |
+| `prefix + M-h/j/k/l` | Swap pane in that direction, keeping focus on the moved pane |
+| `prefix + J` | Next session |
+| `prefix + K` | Previous session |
+| `prefix + L` | Last session (tmux's own default; herdr has no equivalent) |
+| `prefix + R` | Enter resize mode |
+
+`prefix + H` is unbound: a session list is one-dimensional, so left and right address nothing in it.
+
+Resize is a mode rather than a set of repeatable bindings, which is what frees `J` and `K` for session navigation. It mirrors herdr's `prefix+shift+r`:
+
+| Key | Action |
+|-----|--------|
+| `h/j/k/l` | Resize by 5 cells, staying in the mode |
+| `Escape` or `q` | Leave the mode |
+
+Any key the mode does not bind also leaves it.
 
 ### Copy Mode (Vi)
 
