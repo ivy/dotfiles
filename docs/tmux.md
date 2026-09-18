@@ -105,6 +105,16 @@ These mirror [`home/dot_config/herdr/config.toml`](../home/dot_config/herdr/conf
 
 `prefix + H` is unbound: a session list is one-dimensional, so left and right address nothing in it.
 
+Window cycling also has a prefixless pair, following the shape of what it addresses — the window strip is horizontal, so it takes `h` and `l`, the way the vertical session list takes `J` and `K`:
+
+| Key | Action |
+|-----|--------|
+| `M-h` | Previous window |
+| `M-l` | Next window |
+| `prefix + p` / `prefix + n` | Previous / next window (tmux defaults, kept as the fallback) |
+
+`M-j` and `M-k` stay free on purpose: LazyVim binds them to move-line-down and move-line-up, and a prefixless binding is intercepted before it reaches the editor in the pane. The same reasoning rules out `C-[` and `C-]`, which are Escape in nvim and `autosuggest-accept` in [`home/dot_zshrc.tmpl`](../home/dot_zshrc.tmpl).
+
 Resize is a mode rather than a set of repeatable bindings, which is what frees `J` and `K` for session navigation. It mirrors herdr's `prefix+shift+r`:
 
 | Key | Action |

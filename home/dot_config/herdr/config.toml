@@ -59,6 +59,18 @@ switch_workspace = ["prefix+shift+1..9", "alt+1..9"]
 next_workspace = "prefix+shift+j"
 previous_workspace = "prefix+shift+k"
 
+# The prefixless layer follows the shape of what it addresses: the Space
+# sidebar is vertical, so Spaces take j/k above, and the tab strip is
+# horizontal, so tabs take h/l here. prefix+p and prefix+n are herdr's own
+# defaults and stay as the fallback that costs no prefixless key.
+#
+# alt+j and alt+k are deliberately not used for this or for Spaces: LazyVim
+# binds them to move-line-down and move-line-up, and a prefixless binding here
+# never reaches the editor in the pane. The same reasoning rules out ctrl+[ and
+# ctrl+], which are Escape in nvim and autosuggest-accept in home/dot_zshrc.tmpl.
+previous_tab = ["prefix+p", "alt+h"]
+next_tab = ["prefix+n", "alt+l"]
+
 # herdr defaults these to the prefix+shift+hjkl row, where they would collide
 # with Space navigation above and overload shift with a second meaning. alt is
 # unused elsewhere in this file, so all four move there together and stay
