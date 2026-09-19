@@ -178,6 +178,14 @@ the hook defers to the normal permission classifier. An agent cannot set this fo
 itself — an inline `FOO=1 npx …` prefix doesn't reach the hook's process, and
 per-Bash-call environment doesn't persist.
 
+> [!IMPORTANT]
+> Keep this the only `PreToolUse`/`Bash` hook `set_hooks()` registers. Claude Code
+> aggregates two such hooks unreliably when one returns a `deny` decision and the
+> other returns `updatedInput`
+> ([anthropics/claude-code#15897](https://github.com/anthropics/claude-code/issues/15897),
+> closed as not planned), so a second concern belongs composed inside one script
+> rather than registered alongside.
+
 ## Where things live
 
 | Path | Purpose |
