@@ -5,9 +5,9 @@ version = "1.2.4"
 backend = "aqua:bootandy/dust"
 
 [tools."aqua:bootandy/dust"."platforms.linux-arm64"]
-checksum = "sha256:e09b0d24b5da0fa06aecf1561849c13ae41ef055c1ce7077e35e9a46744b16af"
-url = "https://github.com/bootandy/dust/releases/download/v1.2.4/dust-v1.2.4-aarch64-unknown-linux-musl.tar.gz"
-url_api = "https://api.github.com/repos/bootandy/dust/releases/assets/338101084"
+checksum = "sha256:1903296e662a80a504b132525c9360b503de3b900970e1245268605fc65e366d"
+url = "https://github.com/bootandy/dust/releases/download/v1.2.4/dust-v1.2.4-aarch64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/bootandy/dust/releases/assets/338100648"
 
 [tools."aqua:bootandy/dust"."platforms.linux-arm64-musl"]
 checksum = "sha256:e09b0d24b5da0fa06aecf1561849c13ae41ef055c1ce7077e35e9a46744b16af"
@@ -15,14 +15,14 @@ url = "https://github.com/bootandy/dust/releases/download/v1.2.4/dust-v1.2.4-aar
 url_api = "https://api.github.com/repos/bootandy/dust/releases/assets/338101084"
 
 [tools."aqua:bootandy/dust"."platforms.linux-x64"]
-checksum = "sha256:4e313f9f854017e58a2ada4c0d1774677b8cf53d63ab55a991d5871d5f504452"
-url = "https://github.com/bootandy/dust/releases/download/v1.2.4/dust-v1.2.4-x86_64-unknown-linux-musl.tar.gz"
-url_api = "https://api.github.com/repos/bootandy/dust/releases/assets/338099991"
+checksum = "sha256:707cfdbfb9d2dc536f8c3853815bbe98a01012f2772463835edae06816551160"
+url = "https://github.com/bootandy/dust/releases/download/v1.2.4/dust-v1.2.4-x86_64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/bootandy/dust/releases/assets/338099299"
 
 [tools."aqua:bootandy/dust"."platforms.linux-x64-baseline"]
-checksum = "sha256:4e313f9f854017e58a2ada4c0d1774677b8cf53d63ab55a991d5871d5f504452"
-url = "https://github.com/bootandy/dust/releases/download/v1.2.4/dust-v1.2.4-x86_64-unknown-linux-musl.tar.gz"
-url_api = "https://api.github.com/repos/bootandy/dust/releases/assets/338099991"
+checksum = "sha256:707cfdbfb9d2dc536f8c3853815bbe98a01012f2772463835edae06816551160"
+url = "https://github.com/bootandy/dust/releases/download/v1.2.4/dust-v1.2.4-x86_64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/bootandy/dust/releases/assets/338099299"
 
 [tools."aqua:bootandy/dust"."platforms.linux-x64-musl"]
 checksum = "sha256:4e313f9f854017e58a2ada4c0d1774677b8cf53d63ab55a991d5871d5f504452"
@@ -107,6 +107,10 @@ url = "https://github.com/oven-sh/bun/releases/download/bun-v1.3.14/bun-windows-
 checksum = "sha256:538f9c846355d9e847b2671bc00c47da4229a0befb24df3282b739770f3b475f"
 url = "https://github.com/oven-sh/bun/releases/download/bun-v1.3.14/bun-windows-x64-baseline.zip"
 
+[[tools."cargo:eza"]]
+version = "0.23.4"
+backend = "cargo:eza"
+
 [[tools."cargo:https://github.com/technicalpickles/envsense"]]
 version = "tag:0.6.0"
 backend = "cargo:https://github.com/technicalpickles/envsense"
@@ -117,49 +121,6 @@ backend = "cargo:tokei"
 
 [tools."cargo:tokei".options]
 features = "cli"
-
-[[tools.eza]]
-version = "0.23.4"
-backend = "aqua:eza-community/eza"
-
-[tools.eza."platforms.linux-arm64"]
-checksum = "sha256:366e8430225f9955c3dc659b452150c169894833ccfef455e01765e265a3edda"
-url = "https://github.com/eza-community/eza/releases/download/v0.23.4/eza_aarch64-unknown-linux-gnu.tar.gz"
-url_api = "https://api.github.com/repos/eza-community/eza/releases/assets/300249822"
-
-[tools.eza."platforms.linux-arm64-musl"]
-checksum = "sha256:366e8430225f9955c3dc659b452150c169894833ccfef455e01765e265a3edda"
-url = "https://github.com/eza-community/eza/releases/download/v0.23.4/eza_aarch64-unknown-linux-gnu.tar.gz"
-
-[tools.eza."platforms.linux-x64"]
-checksum = "sha256:d231bb3ee33b08c76279b5888845dceb7034d055c42bb9be46dbe0dae39394df"
-url = "https://github.com/eza-community/eza/releases/download/v0.23.4/eza_x86_64-unknown-linux-musl.tar.gz"
-url_api = "https://api.github.com/repos/eza-community/eza/releases/assets/300249833"
-
-[tools.eza."platforms.linux-x64-baseline"]
-checksum = "sha256:d231bb3ee33b08c76279b5888845dceb7034d055c42bb9be46dbe0dae39394df"
-url = "https://github.com/eza-community/eza/releases/download/v0.23.4/eza_x86_64-unknown-linux-musl.tar.gz"
-url_api = "https://api.github.com/repos/eza-community/eza/releases/assets/300249833"
-
-[tools.eza."platforms.linux-x64-musl"]
-checksum = "sha256:d231bb3ee33b08c76279b5888845dceb7034d055c42bb9be46dbe0dae39394df"
-url = "https://github.com/eza-community/eza/releases/download/v0.23.4/eza_x86_64-unknown-linux-musl.tar.gz"
-url_api = "https://api.github.com/repos/eza-community/eza/releases/assets/300249833"
-
-[tools.eza."platforms.linux-x64-musl-baseline"]
-checksum = "sha256:d231bb3ee33b08c76279b5888845dceb7034d055c42bb9be46dbe0dae39394df"
-url = "https://github.com/eza-community/eza/releases/download/v0.23.4/eza_x86_64-unknown-linux-musl.tar.gz"
-url_api = "https://api.github.com/repos/eza-community/eza/releases/assets/300249833"
-
-[tools.eza."platforms.windows-x64"]
-checksum = "sha256:4d4f87f6bc8e6ee176789c28bee698234ce0275da013709eb16b0f14819c1688"
-url = "https://github.com/eza-community/eza/releases/download/v0.23.4/eza.exe_x86_64-pc-windows-gnu.tar.gz"
-url_api = "https://api.github.com/repos/eza-community/eza/releases/assets/300249826"
-
-[tools.eza."platforms.windows-x64-baseline"]
-checksum = "sha256:4d4f87f6bc8e6ee176789c28bee698234ce0275da013709eb16b0f14819c1688"
-url = "https://github.com/eza-community/eza/releases/download/v0.23.4/eza.exe_x86_64-pc-windows-gnu.tar.gz"
-url_api = "https://api.github.com/repos/eza-community/eza/releases/assets/300249826"
 
 [[tools."github:BurntSushi/ripgrep"]]
 version = "15.1.0"
@@ -265,6 +226,7 @@ checksum = "sha256:faa02f0404230c451a9812230394481948f80183801fa5bf67044b41c2f25
 url = "https://github.com/DeusData/codebase-memory-mcp/releases/download/v0.9.0/codebase-memory-mcp-darwin-arm64.tar.gz"
 url_api = "https://api.github.com/repos/DeusData/codebase-memory-mcp/releases/assets/470188783"
 provenance = "github-attestations"
+provenance_verified = true
 
 [tools."github:DeusData/codebase-memory-mcp"."platforms.macos-x64"]
 checksum = "sha256:6af3d02a27f589901fa763d3971089337bc8c9838bbed5d0cf543ca9f1a9e543"
@@ -411,6 +373,7 @@ checksum = "sha256:0a3fdc4cfa18758d6a872950625f2042233df0412a0c10d0dadf30bfc3bc6
 url = "https://github.com/atuinsh/atuin/releases/download/v18.16.1/atuin-aarch64-apple-darwin.tar.gz"
 url_api = "https://api.github.com/repos/atuinsh/atuin/releases/assets/418813708"
 provenance = "github-attestations"
+provenance_verified = true
 
 [tools."github:atuinsh/atuin"."platforms.macos-x64"]
 checksum = "sha256:aec5c91207f080becc4b13593d5b7edc46685e8d4dbfbaef33d31f8058191bc6"
@@ -479,6 +442,7 @@ checksum = "sha256:7babad6796af8f7ea3198bd9633aa6f2cce6ab97c5ec68c2fde0e74e4c2a0
 url = "https://github.com/backnotprop/plannotator/releases/download/v0.22.0/plannotator-darwin-arm64"
 url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/467364640"
 provenance = "github-attestations"
+provenance_verified = true
 
 [tools."github:backnotprop/plannotator"."platforms.macos-x64"]
 checksum = "sha256:003317c515a1c44d284a9400a5efca0595221999f29bf2de671243976a2b390a"
@@ -785,6 +749,7 @@ checksum = "sha256:f23a0c37d963aacc3bed703ccbd59b41c5ca22101fab7f00eb2b7cad23aba
 url = "https://github.com/cli/cli/releases/download/v2.96.0/gh_2.96.0_macOS_arm64.zip"
 url_api = "https://api.github.com/repos/cli/cli/releases/assets/464728562"
 provenance = "github-attestations"
+provenance_verified = true
 
 [tools."github:cli/cli"."platforms.macos-x64"]
 checksum = "sha256:4bd449df9ad639391bc62b8032546f0fe9edcd8526e06682a4f88abd8c5d163c"
@@ -973,6 +938,7 @@ checksum = "sha256:2aa1245c666419900d2d6993a05049e92c40e0e601d19579cca5b07a7bb80
 url = "https://github.com/gastownhall/beads/releases/download/v1.2.2/beads_1.2.2_darwin_arm64.tar.gz"
 url_api = "https://api.github.com/repos/gastownhall/beads/releases/assets/515302581"
 provenance = "github-attestations"
+provenance_verified = true
 
 [tools."github:gastownhall/beads"."platforms.macos-x64"]
 checksum = "sha256:e192dcb60f0f48d9463cd3bcf425d41fc0a632080cf9a06153c97ce12368c4bb"
@@ -1065,31 +1031,37 @@ backend = "github:herdrdev/herdr"
 checksum = "sha256:f647ac66468d9efbc642fe534fb284468f0aea60641606fc008dfc0d82a3ca87"
 url = "https://github.com/herdrdev/herdr/releases/download/v0.8.0/herdr-linux-aarch64"
 url_api = "https://api.github.com/repos/herdrdev/herdr/releases/assets/500422627"
+provenance = "github-attestations"
 
 [tools."github:herdrdev/herdr"."platforms.linux-arm64-musl"]
 checksum = "sha256:f647ac66468d9efbc642fe534fb284468f0aea60641606fc008dfc0d82a3ca87"
 url = "https://github.com/herdrdev/herdr/releases/download/v0.8.0/herdr-linux-aarch64"
 url_api = "https://api.github.com/repos/herdrdev/herdr/releases/assets/500422627"
+provenance = "github-attestations"
 
 [tools."github:herdrdev/herdr"."platforms.linux-x64"]
 checksum = "sha256:b872ea7e40fa2cb17e857ac9b62b1bf26db7b403c622f5d2f3f5b35f6e9acd28"
 url = "https://github.com/herdrdev/herdr/releases/download/v0.8.0/herdr-linux-x86_64"
 url_api = "https://api.github.com/repos/herdrdev/herdr/releases/assets/500422625"
+provenance = "github-attestations"
 
 [tools."github:herdrdev/herdr"."platforms.linux-x64-baseline"]
 checksum = "sha256:b872ea7e40fa2cb17e857ac9b62b1bf26db7b403c622f5d2f3f5b35f6e9acd28"
 url = "https://github.com/herdrdev/herdr/releases/download/v0.8.0/herdr-linux-x86_64"
 url_api = "https://api.github.com/repos/herdrdev/herdr/releases/assets/500422625"
+provenance = "github-attestations"
 
 [tools."github:herdrdev/herdr"."platforms.linux-x64-musl"]
 checksum = "sha256:b872ea7e40fa2cb17e857ac9b62b1bf26db7b403c622f5d2f3f5b35f6e9acd28"
 url = "https://github.com/herdrdev/herdr/releases/download/v0.8.0/herdr-linux-x86_64"
 url_api = "https://api.github.com/repos/herdrdev/herdr/releases/assets/500422625"
+provenance = "github-attestations"
 
 [tools."github:herdrdev/herdr"."platforms.linux-x64-musl-baseline"]
 checksum = "sha256:b872ea7e40fa2cb17e857ac9b62b1bf26db7b403c622f5d2f3f5b35f6e9acd28"
 url = "https://github.com/herdrdev/herdr/releases/download/v0.8.0/herdr-linux-x86_64"
 url_api = "https://api.github.com/repos/herdrdev/herdr/releases/assets/500422625"
+provenance = "github-attestations"
 
 [tools."github:herdrdev/herdr"."platforms.macos-arm64"]
 checksum = "sha256:d53a9f93fccfdfcc55632927bf51002f5add0aa7990bcdf508ffbd84ac658178"
@@ -1102,11 +1074,13 @@ provenance_verified = true
 checksum = "sha256:77cb5afd6c8fcaaaf3bc28e474ec01c209331ad08094e20d7f8aa9b0bb78d649"
 url = "https://github.com/herdrdev/herdr/releases/download/v0.8.0/herdr-macos-x86_64"
 url_api = "https://api.github.com/repos/herdrdev/herdr/releases/assets/500422626"
+provenance = "github-attestations"
 
 [tools."github:herdrdev/herdr"."platforms.macos-x64-baseline"]
 checksum = "sha256:77cb5afd6c8fcaaaf3bc28e474ec01c209331ad08094e20d7f8aa9b0bb78d649"
 url = "https://github.com/herdrdev/herdr/releases/download/v0.8.0/herdr-macos-x86_64"
 url_api = "https://api.github.com/repos/herdrdev/herdr/releases/assets/500422626"
+provenance = "github-attestations"
 
 [[tools."github:jdx/hk"]]
 version = "1.50.0"
@@ -1153,6 +1127,7 @@ checksum = "sha256:0e11012d1106350774de880bfc54e5b2fef77b1a1b7bf51e09f4b1423e9cb
 url = "https://github.com/jdx/hk/releases/download/v1.50.0/hk-aarch64-apple-darwin.tar.gz"
 url_api = "https://api.github.com/repos/jdx/hk/releases/assets/468492721"
 provenance = "github-attestations"
+provenance_verified = true
 
 [tools."github:jdx/hk"."platforms.macos-x64"]
 checksum = "sha256:a690f0dc5aa3d9ee63f3794ab96570ba79d6b1d972d39ddc6f2768c65f6318a5"
@@ -1282,6 +1257,7 @@ checksum = "sha256:2d75340ba57a4b4b4c8708a21c2dc8e958a48aaa8bba13b27f77f6e4c0eca
 url = "https://github.com/jqlang/jq/releases/download/jq-1.8.2/jq-macos-arm64"
 url_api = "https://api.github.com/repos/jqlang/jq/releases/assets/453012783"
 provenance = "github-attestations"
+provenance_verified = true
 
 [tools."github:jqlang/jq"."platforms.macos-x64"]
 checksum = "sha256:e94b266e3c26690550006abe63152b782280f4e14374accdf04cbde844f00bc0"
@@ -1470,6 +1446,7 @@ checksum = "sha256:8415210a2c06e706e4037ccbbfc0d0e35c2518683da21a432d28258752567
 url = "https://github.com/mikefarah/yq/releases/download/v4.53.3/yq_darwin_arm64.tar.gz"
 url_api = "https://api.github.com/repos/mikefarah/yq/releases/assets/440146761"
 provenance = "github-attestations"
+provenance_verified = true
 
 [tools."github:mikefarah/yq"."platforms.macos-x64"]
 checksum = "sha256:d39a3296b56bdd0e1c78cdda0cb54baf854b1d492c84aef9023411e1c8d7537f"
@@ -1831,21 +1808,22 @@ url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/46334
 provenance = "github-attestations"
 
 [tools."github:sst/opencode"."platforms.macos-arm64"]
-checksum = "sha256:4c594beee17235c3d89ce7e791af37bdbc3dad52ff5b1e525e3a14a30ca5421d"
-url = "https://github.com/anomalyco/opencode/releases/download/v1.17.13/opencode-desktop-mac-arm64.app.tar.gz"
-url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/463361354"
+checksum = "sha256:dd016d3e26b347d675ab26c45d1e287545912d5c4c49fa0770b622d4a1367e23"
+url = "https://github.com/anomalyco/opencode/releases/download/v1.17.13/opencode-darwin-arm64.zip"
+url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/463343230"
 provenance = "github-attestations"
+provenance_verified = true
 
 [tools."github:sst/opencode"."platforms.macos-x64"]
-checksum = "sha256:ed8e0590ab95915144b22f9ea9af48ef3dd8d4073b98c703c2df709681c53dba"
-url = "https://github.com/anomalyco/opencode/releases/download/v1.17.13/opencode-desktop-mac-x64.app.tar.gz"
-url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/463361372"
+checksum = "sha256:0bf3d9d134097ca698b83f64c55db960d6d2d0c409069bf4cfd863e5de503b4a"
+url = "https://github.com/anomalyco/opencode/releases/download/v1.17.13/opencode-darwin-x64.zip"
+url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/463343229"
 provenance = "github-attestations"
 
 [tools."github:sst/opencode"."platforms.macos-x64-baseline"]
-checksum = "sha256:ed8e0590ab95915144b22f9ea9af48ef3dd8d4073b98c703c2df709681c53dba"
-url = "https://github.com/anomalyco/opencode/releases/download/v1.17.13/opencode-desktop-mac-x64.app.tar.gz"
-url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/463361372"
+checksum = "sha256:0bf3d9d134097ca698b83f64c55db960d6d2d0c409069bf4cfd863e5de503b4a"
+url = "https://github.com/anomalyco/opencode/releases/download/v1.17.13/opencode-darwin-x64.zip"
+url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/463343229"
 provenance = "github-attestations"
 
 [tools."github:sst/opencode"."platforms.windows-x64"]
@@ -1969,9 +1947,9 @@ url_api = "https://api.github.com/repos/yt-dlp/yt-dlp/releases/assets/466665348"
 provenance = "github-attestations"
 
 [tools."github:yt-dlp/yt-dlp"."platforms.linux-arm64-musl"]
-checksum = "sha256:0554d39b22e039b4c0f70a492b9852870f281ed6a93eb75e78f150b32df76543"
-url = "https://github.com/yt-dlp/yt-dlp/releases/download/2026.07.04/yt-dlp_linux_aarch64.zip"
-url_api = "https://api.github.com/repos/yt-dlp/yt-dlp/releases/assets/466665348"
+checksum = "sha256:fbbd71eb964513954232c705e82f36b982fec5af47718088fb5eaebca6421fc1"
+url = "https://github.com/yt-dlp/yt-dlp/releases/download/2026.07.04/yt-dlp_musllinux_aarch64.zip"
+url_api = "https://api.github.com/repos/yt-dlp/yt-dlp/releases/assets/466665378"
 provenance = "github-attestations"
 
 [tools."github:yt-dlp/yt-dlp"."platforms.linux-x64"]
@@ -1987,15 +1965,15 @@ url_api = "https://api.github.com/repos/yt-dlp/yt-dlp/releases/assets/466665341"
 provenance = "github-attestations"
 
 [tools."github:yt-dlp/yt-dlp"."platforms.linux-x64-musl"]
-checksum = "sha256:d7d2d09e900b5ae11821b5784b18cf064984a2bd88b1ca5c798d744bcbe3658b"
-url = "https://github.com/yt-dlp/yt-dlp/releases/download/2026.07.04/yt-dlp_linux.zip"
-url_api = "https://api.github.com/repos/yt-dlp/yt-dlp/releases/assets/466665341"
+checksum = "sha256:ee66ae15987ee1aa911e762883e94586fca958ba03040f659c67410b4672444e"
+url = "https://github.com/yt-dlp/yt-dlp/releases/download/2026.07.04/yt-dlp_musllinux.zip"
+url_api = "https://api.github.com/repos/yt-dlp/yt-dlp/releases/assets/466665368"
 provenance = "github-attestations"
 
 [tools."github:yt-dlp/yt-dlp"."platforms.linux-x64-musl-baseline"]
-checksum = "sha256:d7d2d09e900b5ae11821b5784b18cf064984a2bd88b1ca5c798d744bcbe3658b"
-url = "https://github.com/yt-dlp/yt-dlp/releases/download/2026.07.04/yt-dlp_linux.zip"
-url_api = "https://api.github.com/repos/yt-dlp/yt-dlp/releases/assets/466665341"
+checksum = "sha256:ee66ae15987ee1aa911e762883e94586fca958ba03040f659c67410b4672444e"
+url = "https://github.com/yt-dlp/yt-dlp/releases/download/2026.07.04/yt-dlp_musllinux.zip"
+url_api = "https://api.github.com/repos/yt-dlp/yt-dlp/releases/assets/466665368"
 provenance = "github-attestations"
 
 [tools."github:yt-dlp/yt-dlp"."platforms.macos-arm64"]
@@ -2003,6 +1981,7 @@ checksum = "sha256:b0724470a0cf6dae5175a87eee05d6e75c5a0c10d2c3015166bd4d34e92b1
 url = "https://github.com/yt-dlp/yt-dlp/releases/download/2026.07.04/yt-dlp_macos.zip"
 url_api = "https://api.github.com/repos/yt-dlp/yt-dlp/releases/assets/466665361"
 provenance = "github-attestations"
+provenance_verified = true
 
 [tools."github:yt-dlp/yt-dlp"."platforms.macos-x64"]
 checksum = "sha256:b0724470a0cf6dae5175a87eee05d6e75c5a0c10d2c3015166bd4d34e92b1b7b"
@@ -2017,15 +1996,15 @@ url_api = "https://api.github.com/repos/yt-dlp/yt-dlp/releases/assets/466665361"
 provenance = "github-attestations"
 
 [tools."github:yt-dlp/yt-dlp"."platforms.windows-x64"]
-checksum = "sha256:90254845be5282b1f4d843a873abff04f569f857f64250f833fe152b21eec152"
-url = "https://github.com/yt-dlp/yt-dlp/releases/download/2026.07.04/yt-dlp_win.zip"
-url_api = "https://api.github.com/repos/yt-dlp/yt-dlp/releases/assets/466665381"
+checksum = "sha256:ec8b896cca7883cfe3324e611cc7b1c9258b243a0405297c6ed7e7fca61db880"
+url = "https://github.com/yt-dlp/yt-dlp/releases/download/2026.07.04/yt-dlp_win_x86.zip"
+url_api = "https://api.github.com/repos/yt-dlp/yt-dlp/releases/assets/466665404"
 provenance = "github-attestations"
 
 [tools."github:yt-dlp/yt-dlp"."platforms.windows-x64-baseline"]
-checksum = "sha256:90254845be5282b1f4d843a873abff04f569f857f64250f833fe152b21eec152"
-url = "https://github.com/yt-dlp/yt-dlp/releases/download/2026.07.04/yt-dlp_win.zip"
-url_api = "https://api.github.com/repos/yt-dlp/yt-dlp/releases/assets/466665381"
+checksum = "sha256:ec8b896cca7883cfe3324e611cc7b1c9258b243a0405297c6ed7e7fca61db880"
+url = "https://github.com/yt-dlp/yt-dlp/releases/download/2026.07.04/yt-dlp_win_x86.zip"
+url_api = "https://api.github.com/repos/yt-dlp/yt-dlp/releases/assets/466665404"
 provenance = "github-attestations"
 
 [[tools."gitlab:gitlab-org/cli"]]

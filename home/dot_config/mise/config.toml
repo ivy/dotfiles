@@ -28,10 +28,12 @@ bun = "1.3.14"
 "cargo:https://github.com/technicalpickles/envsense" = "tag:0.6.0"
 # tokei v14 has no prebuilt binaries; `features` forces cargo install (skips binstall)
 "cargo:tokei" = { version = "14.0.0", features = "cli" }
+# eza publishes no darwin release asset; aqua's own registry falls back to the
+# crate on macOS, so build from source on both platforms instead
+"cargo:eza" = "0.23.4"
 
 # aqua: until github: backend works (github.com/bootandy/dust/issues/560)
 "aqua:bootandy/dust" = "1.2.4"
-eza = "0.23.4"
 
 # CLI tools (GitHub Releases - see ADR-005)
 # Avoid aqua: backend — registry lag and attestation mismatches break installs.
