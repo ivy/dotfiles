@@ -1,0 +1,6 @@
+{{- if stat "/Applications/Tailscale.app/Contents/MacOS/Tailscale" -}}
+#!/bin/sh
+# The app resolves its bundle from the exec path, so it must be launched in
+# place rather than symlinked: Contents/Resources/InstallTailscaleCLI.scpt.
+exec /Applications/Tailscale.app/Contents/MacOS/Tailscale "$@"
+{{ end -}}
