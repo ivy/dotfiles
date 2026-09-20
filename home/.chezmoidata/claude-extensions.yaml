@@ -65,3 +65,10 @@ claudeExtensions:
     - name: codebase-memory
       transport: stdio
       command: codebase-memory-mcp
+
+    # Browser automation via Playwright's accessibility tree — the binary comes from
+    # npm:@playwright/mcp in mise config.toml. stdio because each session owns its
+    # own browser context; bare command resolves through the mise shims as above.
+    - name: playwright
+      transport: stdio
+      command: playwright-mcp
