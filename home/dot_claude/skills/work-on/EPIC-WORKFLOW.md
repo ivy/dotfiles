@@ -1,89 +1,63 @@
-# Epic Workflow
+# Epic workflow
 
-How to handle epic-tier issues that span multiple PRs, issues, or sessions.
+Work spanning multiple PRs or sessions. The rule is the same on either tracker: **decompose first, then work the children one at a time through the normal loop.** An epic is never worked directly.
 
-## Identifying Epics
+## Recognising one
 
-An issue is an epic when:
-- It contains multiple checkboxes or sub-tasks
-- It links to other implementation issues
-- It uses phased language ("Phase 1", "Step 1", "First we need to...")
-- The scope is too large for a single PR without becoming unwieldy
-- It would benefit from multiple independent PRs that can be reviewed separately
+- Several independently shippable deliverables
+- Phased language — "Phase 1", "first we need to"
+- Too large for one reviewable PR
+- On dagger: a node with open children is already a grouping node and was never in the ready set
 
-## Decomposition Strategy
+## Decomposing
 
-### Step 1: Slice the Epic
+On dagger, **delegate to `/dagger:epic`.** It owns the mini-PRD, the node-per-file format, the frontmatter, and importing a directory as one patch — and it files the whole shape atomically, which matters: a half-built graph is worse than none. This workflow holds no `apply_patch` capability, by design.
 
-Break the epic into deliverable units. Each unit should be:
-- **Independently shippable** — produces a working state when merged
-- **Independently reviewable** — a reviewer can understand the change without context from other units
-- **Small enough for one session** — fits in a single `/work-on` cycle (Small/Medium/Large tier)
+Bring it the slicing decisions; it handles the filing. Each unit should be:
 
-Good slicing patterns:
-- **Vertical slices**: Each unit delivers end-to-end functionality for one aspect
-- **Layer slices**: Infrastructure first, then features that use it
-- **Dependency order**: Foundation pieces before things that build on them
+- **Independently shippable** — merging it leaves a working state
+- **Independently reviewable** — understandable without the other units
+- **One session's work** — a Small, Medium, or Large node
 
-Bad slicing patterns:
-- **Horizontal slices**: "All the models", "all the tests" — creates integration risk
-- **Arbitrary splits**: Splitting a cohesive change just to reduce PR size
+| Good slicing | Bad slicing |
+|---|---|
+| Vertical: each unit delivers one aspect end to end | Horizontal: "all the models", "all the tests" — pure integration risk |
+| Layered: infrastructure first, then what uses it | Arbitrary: splitting a cohesive change to make PRs smaller |
+| Dependency order: foundations before dependents | Preference order encoded as dependency — serialises work that could run in parallel |
 
-### Step 2: Decide on Tracking
+Two edges deserve care, because both are invisible when wrong:
 
-Choose based on team visibility needs:
+- **`blocked_by` is "cannot start until"**, not "should happen after". Ordering preference as a dependency means only one node is ever ready and nobody knows why.
+- **Giving a node children removes it from the ready set** until every child closes. That is what makes it a milestone instead of a task — intended for a grouping node, a bug anywhere else.
 
-| Approach | When to use | How |
-|----------|------------|-----|
-| **GitHub sub-issues** | Other people need to see the work breakdown; units will span sessions | `gh issue create --title "..." --body "..." --label "..." --milestone "..."` and link to parent |
-| **Internal tasks** | Solo work, single session, decomposition is just for execution | Use `TaskCreate` with dependencies |
-| **Hybrid** | Some units are significant enough to track, others are small | Create issues for significant units, internal tasks for small ones |
+Where a unit ends in a human act — a signup, a credential, a policy call — file it as a **gate** (`assignee_kind: user`) with the agent work that prepares it as a separate node the gate depends on. The person then arrives at the gate with the recommendation already in its inputs.
 
-When creating sub-issues:
-- Reference the parent issue in the body
-- Copy relevant labels from the parent
-- Set appropriate priority (usually same as parent)
-- Add a task list to the parent linking to sub-issues
+## Constraints that force the shape
 
-### Step 3: Order the Work
+Some repos impose ordering that has nothing to do with the design. Pinwheel's Danger gate fails any PR mixing `db/migrate/` with application code, so every migration is its own PR that must merge before the code using it. Find these early — they decide the node boundaries, and discovering one mid-epic means re-slicing.
 
-Map dependencies between units:
-1. Which units are independent (can run in parallel)?
-2. Which units block others (must complete first)?
-3. Which units should be reviewed before others proceed?
+A constraint like that also decides the *order you can work in*, not just the slicing: the later node cannot even start until the earlier one has merged. Every PR-shaped node waits for its own merge anyway ([DAGGER.md](DAGGER.md)), so within an epic expect to finish one node, watch it merge, complete it, and only then claim the next — rather than holding several open PRs whose bases keep moving.
 
-Create a task list reflecting this order. Use `addBlockedBy` to enforce sequencing.
+## Working the children
 
-### Step 4: Execute Each Unit
-
-For each unit, run the appropriate tier workflow:
-- Assess the unit's complexity independently (most epic sub-units are Small or Medium)
-- Use `/checkout` to create a branch per unit (or per logical group)
-- Execute the workflow for that tier
-- `/commit` and `/pr` for each unit
-
-### Step 5: Coordinate Across Units
+For each: run the full loop from `ready`/`show_node` — assess it independently (most are Small or Medium), take a worktree, and close its own loop. Do not carry one node's context into the next as if it were still true.
 
 Between units:
-- Check if earlier PRs have been merged — rebase if needed
-- Verify assumptions from earlier units still hold
-- Update the parent issue with progress
-- If a unit reveals that the plan for later units needs to change, update the remaining tasks
+- Re-run `ready`. The set has moved; other agents work the same graph.
+- Check whether earlier PRs merged, and rebase.
+- Re-read the inputs. An earlier unit's result is where its surprises were recorded, and it may have invalidated a later assumption.
+- If a unit reveals the remaining slicing is wrong, re-file it through `/dagger:epic` rather than improvising around it.
 
-### Step 6: Close Out
-
-After all units are complete:
-- Verify the parent issue's criteria are met
-- Close sub-issues that are done
-- Close the parent issue
-- `/reflect` on the full epic — what worked, what didn't
-
-## PR Strategy for Epics
+## PR strategy
 
 | Pattern | When |
-|---------|------|
-| **One PR per unit** | Units are independent, each is reviewable alone |
-| **Stacked PRs** | Units build on each other, want incremental review |
-| **Single PR** | Units are tightly coupled, splitting would make review harder |
+|---|---|
+| One PR per unit | Default. Units are independent and each reviewable alone |
+| Stacked PRs | Units build on each other and incremental review is worth the rebase cost |
+| Single PR | Units are tightly coupled and splitting would genuinely hurt review |
 
-Default to one PR per unit. Only consolidate if splitting genuinely hurts comprehension.
+Default to one per unit; consolidate only when splitting hurts comprehension. Note that a squash-merge of an earlier PR breaks a stack rebased onto it — reset and cherry-pick rather than rebasing through a merged commit, and audit for files the retarget turned into silent deletions.
+
+## Closing out
+
+The grouping node becomes ready only when its children close, so completing the last child is what surfaces it. Complete it with a result that summarises the whole epic — what shipped, what was deliberately deferred, and which assumptions are still unverified. Then `/reflect`.

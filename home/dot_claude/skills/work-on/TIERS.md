@@ -1,81 +1,58 @@
-# Complexity Tiers: Decision Matrix
+# Assessment: shape × tier
 
-How to assess issue complexity and select the right workflow.
+Two independent questions, and conflating them is how a spike turns into a pointless PR.
 
-## Signals
+- **Shape** — what the deliverable *is*. Decides how the loop ends.
+- **Tier** — how much work it is. Decides which phases run ([PHASES.md](PHASES.md)).
 
-Fetch the issue and its labels. If the project has labels, use `gh label list --json name,description` to understand the project's label taxonomy. Score these signals:
+Assess both before doing anything, and state each with its one-line reason.
 
-| Signal | Weight | How to check |
-|--------|--------|-------------|
-| **Labels: type/nature** | High | Bug/fix labels → simpler; feature/workflow labels → more complex |
-| **Labels: readiness** | High | Agent-ready labels → well-specified; human-required labels → needs clarification first |
-| **Labels: scope** | Medium | Single scope/area label → focused; multiple → cross-cutting |
-| **Body length** | Medium | Short + specific → simpler; long + discursive → complex |
-| **Comment count** | Medium | Many comments → unresolved discussion, likely complex |
-| **Linked issues** | High | Links to other issues → dependencies, broader scope |
-| **File references** | Low | Body names specific files → clearer scope |
-| **Design decisions** | High | Body asks "should we X or Y?" → needs `/think` |
-| **Sub-tasks** | High | Checkboxes, "Phase 1/2/3", multiple deliverables → epic |
+## Shape
 
-## Tier Definitions
+| Shape | Signals | Deliverable | Ends with |
+|---|---|---|---|
+| **Implementation** | Deliverables name paths; ACs name commands | a PR | `complete` once that PR is **merged** and the artifact is verified on the default branch |
+| **Spike** | `kind: spike`; the title says *measure*, *decide whether*, *investigate*; no path in Deliverables | **a decision, written as the result body** — plus a doc if it is worth keeping, plus follow-up nodes | `complete` with the recommendation and what would change it. Often no code at all. |
+| **Gate** | `assignee_kind: user` | a human act — a signup, a token, a payment, a policy call | **not claimable.** Prepare it; see [DAGGER.md](DAGGER.md) |
+| **Grouping** | has open children | its children | never ready; work the children |
 
-### Quick Fix
-**Profile**: Single-file change, exact description, no design decisions.
+A spike that opens a PR full of speculative code has misread its shape. A spike that ends with "measured X, recommend Y because Z, would revisit if W" has hit it exactly.
 
-Examples:
-- Fix a typo in a config file
-- Update a version pin
-- Add a missing label
-- Fix a broken link in docs
+## Tier
 
-Signals: Bug/chore-type labels, single scope, body describes the exact change, marked as agent-ready (if the project uses readiness labels).
+On the dagger path the node body is the signal, and it is a much better one than issue metadata:
 
-### Small
-**Profile**: Clear scope, few files, no architectural decisions.
+| Signal | Reads as |
+|---|---|
+| **Deliverable count** | One artifact → Quick/Small. Several across surfaces → Medium+ |
+| **AC count and specificity** | ACs that each name a command → smaller than they look; the thinking is already done |
+| **Notes section** | Long Notes means known traps — not more work, but more care |
+| **`inputs.count` / `.bytes`** | A large handoff means the shape was decided upstream → usually smaller than it appears |
+| **Open questions in the body** | "should we X or Y" → Medium at minimum; needs `/think` |
+| **`priority`** | Orders the ready set. Not a complexity signal — `p1` chores exist |
+| **`kind`** | `chore` → usually Quick. `bug` → whatever reproducing costs |
+| **Cited specs/ADRs** | Context that already exists. Read it; don't re-derive it |
 
-Examples:
-- Add a new alias to zsh config
-- Update a skill's instructions
-- Fix a broken shell function
-- Add a missing test case
+On the GitHub path, fall back to issue signals: labels (type, readiness, scope), body length, comment count, linked issues, sub-task checkboxes, and explicit "should we" questions.
 
-Signals: Clear scope, body references specific files, no "should we" questions, 1-3 files affected.
+### Tiers
 
-### Medium
-**Profile**: Multiple components, design choices, needs discussion.
+| Tier | Profile | Examples |
+|---|---|---|
+| **Quick fix** | One file, exact description, no decisions | A README claim that is wrong; a version pin; a wrong default |
+| **Small** | One concern, 1–3 files, ACs fully specify it | One migration; one predicate plus its test; a scoped rename |
+| **Medium** | Several components, or a design choice the body leaves open | A new service object and its callers; a tool plus its wiring; a bug spanning layers |
+| **Large** | Cross-cutting, parallelizable workstreams, architectural reach | A new subsystem boundary; replacing a mechanism across surfaces |
+| **Epic** | Multi-node, multi-PR, likely multi-session | See [EPIC-WORKFLOW.md](EPIC-WORKFLOW.md) — decompose first, work the children |
 
-Examples:
-- Add a new skill with supporting files
-- Refactor a config to use a new pattern
-- Integrate a new tool across the stack
-- Fix a complex bug spanning multiple files
+### A well-written node is smaller than it looks
 
-Signals: Multiple areas or components, body discusses tradeoffs, 4-10 files affected, benefits from planning.
+The reflex is to size by how much text the body has. That is backwards: a body with Context, named Deliverables, ACs carrying their own commands, and a Notes section full of traps has *already absorbed* the context-gathering and planning phases. Going straight to implementation is the correct response to one, not a shortcut.
 
-### Large
-**Profile**: Cross-cutting, architectural implications, multiple workstreams.
+Size by **how much is still undecided**, not by how much is written down. A one-paragraph node with an open design question is Medium; a page-long node that names every path and command is Small.
 
-Examples:
-- Replace a tool across the entire stack
-- Redesign how plugins are managed
-- Add a new layer to the stack (e.g., container support)
-- Major refactor touching 10+ files
+## When in doubt
 
-Signals: Cross-cutting concerns, linked issues, architectural implications, benefits from parallel execution.
-
-### Epic
-**Profile**: Multi-issue, multi-PR, potentially multi-session.
-
-Examples:
-- Implement an entire new subsystem
-- Migration from one tool ecosystem to another
-- Series of related improvements tracked as an umbrella issue
-
-Signals: Issue contains multiple sub-tasks (checkboxes), links to implementation issues, "Phase 1/2/3" language, too large for a single PR.
-
-## When in Doubt
-
-- If torn between two tiers, pick the higher one. Over-planning wastes minutes; under-planning wastes hours.
-- If labels indicate the issue needs human judgment (not agent-ready), start with `/gather-context` and `/think` regardless of apparent simplicity.
-- If the issue has no labels, assess from body content alone and note that labels should be added.
+- Torn between tiers → take the higher one. Over-planning costs minutes, under-planning costs hours.
+- Torn on shape → look at what a successor would consume. If it is a decision, it is a spike.
+- The body says it needs a human decision → it is a gate, or it needs one filed. Do not decide it for them, and do not file a gate to avoid a call you could make.

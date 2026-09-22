@@ -1,84 +1,63 @@
-# `/work-on` — Ship an Issue End-to-End
+# `/work-on` — Ship One Unit of Tracked Work
 
-The complete workflow for taking a GitHub issue from "open" to "merged PR." Invoke it once; the agent handles research, planning, implementation, and review — asking you only at the moments where human judgment matters.
+Takes a single unit of tracked work — a [dagger](https://github.com/steading-ai/dagger) node or a GitHub issue — from claimed to draft PR to a closed loop. Invoke it once; it assesses, composes the right skills, verifies against the acceptance criteria, and hands off to whatever comes next.
 
 ```
-/work-on #123
+/work-on                                   # claim the top of the ready set
+/work-on next --label migration            # steer which ready node
+/work-on pinwheel#3                        # a specific dagger node
+/work-on #412                              # probes dagger first, falls back to the issue
 ```
 
 ## Why this exists
 
-Agent-driven development has a failure mode: the agent codes confidently in the wrong direction. By the time it opens a PR, you've got a technically competent solution to the wrong problem. The expensive mistake isn't bad code — it's code that doesn't solve the actual issue.
+Agent-driven development has an obvious failure mode and a subtler one.
 
-[`/work-on`](../work-on/README.md) is designed around that insight. It front-loads the moments that require human judgment:
+**The obvious one:** the agent codes confidently in the wrong direction, and by the time a PR exists you have a competent solution to the wrong problem. `/work-on` front-loads the judgment — [`/gather-context`](../gather-context/README.md) for what the code actually says, [`/think`](../think/README.md) for the decisions the work leaves open, [`/plan`](../plan/README.md) for structure before code. Once human and agent agree, execution is mechanical.
 
-- **What's the actual problem?** ([`/gather-context`](../gather-context/README.md) surfaces what the code and history say)
-- **What should we build?** ([`/think`](../think/README.md) pressure-tests the approach against your vision and principles)
-- **How should we build it?** ([`/plan`](../plan/README.md) structures the work before any code gets written)
+**The subtler one, and the reason this skill is built around a graph:** work that closes too early breaks *someone else's* session. Completing a node unblocks its successors for every other agent on the graph, so a node marked done while its migration sits in an unmerged draft PR hands the next agent a column that does not exist — and nothing in that agent's context explains why. The failure surfaces far from its cause.
 
-Once those questions are answered — once human and agent are aligned — execution becomes mechanical. The agent works autonomously through implementation, review, and PR.
+So the loop's last step is not "open a PR". It is: comment the evidence on the node, then complete **only once the work is delivered** — merged to the default branch, verified by reading the artifact out of it rather than by trusting a merge notification. A node whose deliverable is a decision rather than a diff is delivered when its result body says so; everything else waits for the merge, with no "nothing depends on this" exemption, because that is exactly the judgment an agent under time pressure talks itself into.
+
+Between finishing the work and the merge landing, the node stays claimed with the PR link and the acceptance-criteria evidence attached. That is deliberately not the same as parking it — parking takes work out of the ready set, and only a person can do that.
 
 ## How it works
 
-When you run `/work-on #123`, the agent:
-
-1. Fetches the issue and reads [TIERS.md](TIERS.md) to assess complexity
-2. Proposes a tailored workflow based on the tier (see below)
-3. Waits for your confirmation before starting
-4. Builds a task list with dependencies, then works through it
-5. Surfaces findings during research, converges with you during [`/think`](../think/README.md), then executes autonomously
-
-### The tiers
-
-| Tier | Profile | Workflow |
-|------|---------|----------|
-| **Quick fix** | Single file, exact description | checkout → fix → commit → PR |
-| **Small** | Clear scope, few files | checkout → gather-context → fix → commit → PR |
-| **Medium** | Design choices needed | checkout → gather-context → **think** → plan → execute → PR |
-| **Large** | Cross-cutting, parallel workstreams | Medium + agent teams, worktree isolation |
-| **Epic** | Multi-PR, potentially multi-session | Decompose → run each sub-unit at appropriate tier |
-
-The tier is assessed from signals: issue labels, body length, comment count, linked issues, design questions. When in doubt, the agent picks the higher tier — over-planning wastes minutes; under-planning wastes hours.
-
-### The autonomy boundary
-
 ```
-/gather-context  →  /think  →  /plan  ‖  execution  →  /simplify  →  /pr
-                                       ↑
-                               handoff to autonomy
+resolve → read + inputs → claim → assess → isolate → work → verify ACs → draft PR → close the loop
 ```
 
-The human collaborates actively through research and planning. After [`/think`](../think/README.md) converges on a direction, the agent executes without interruption — committing incrementally, running reviews, opening the PR. If it hits a genuine blocker (unexpected test failures, ambiguous requirements), it flags you rather than guessing.
+Two things distinguish it from a linear runbook:
 
-### Adaptive behavior
+**A good node has already done the planning.** A body with named deliverables, acceptance criteria that each carry their own command, and a Notes section full of traps has absorbed the context-gathering and planning phases. Going straight to implementation is the *correct* reading of such a node, not a shortcut — so the tier is assessed on how much is still undecided, never on how much text there is.
 
-[`/work-on`](../work-on/README.md) reads available skills and agents at activation time. It only orchestrates what actually exists in your environment — it degrades gracefully in projects without the full suite. A project with only [`/checkout`](../checkout/README.md), [`/commit`](../commit/README.md), and [`/pr`](../pr/README.md) gets a lean workflow; a project with the complete toolkit gets the full orchestration.
+**The acceptance criteria are the contract.** Not "the tests pass" — each criterion is reported individually with the command that proves it. That is also the only honest defence against the agent declaring victory against its own reading of an ambiguous requirement.
+
+| Tier | Profile | Shape of the work |
+|---|---|---|
+| **Quick fix** | One file, no decisions | checkout → fix → commit → draft PR |
+| **Small** | One concern, ACs fully specify it | + context only where the body left a gap |
+| **Medium** | A design choice left open | + think → plan → review → simplify |
+| **Large** | Cross-cutting, parallel workstreams | + worktree fan-out, reflect |
+| **Epic** | Multi-node, multi-session | decompose via [`/dagger:epic`](https://github.com/steading-ai/dagger), then work the children |
+
+Orthogonal to tier is **shape**: an implementation node ends in a PR, a spike ends in a decision written as its result, and a gate cannot be claimed by an agent at all — it is prepared, then left for a person. Mistaking a spike for an implementation node is how you get a PR full of speculative code nobody asked for.
+
+## Files
+
+The agent reads these on demand; they are worth a human's time in roughly this order.
+
+- [DAGGER.md](DAGGER.md) — the argument for the completion rule above, plus the traps that make the graph loop worth writing down: why `claim` can hand you the wrong node, why `inputs` is the step everyone skips, what a result body owes the agent that reads it
+- [TIERS.md](TIERS.md) — why a long node body usually means *less* work, not more
+- [PHASES.md](PHASES.md) — where the one remaining human checkpoint sits, and why the PR is always a draft
+- [EPIC-WORKFLOW.md](EPIC-WORKFLOW.md) — slicing, the two edge mistakes that are invisible when wrong, and repo constraints that dictate node boundaries
 
 ## The component skills
 
-Each skill in the workflow is independently useful and documented separately:
+**Research** — [`/checkout`](../checkout/README.md) · [`/gather-context`](../gather-context/README.md)
+**Planning** — [`/think`](../think/README.md) · [`/plan`](../plan/README.md) · [`/review-plan`](../review-plan/README.md) · [`/share-plan`](../share-plan/README.md)
+**Execution** — [`/commit`](../commit/README.md)
+**Review** — `/simplify` · [`/pr`](../pr/README.md)
+**Retrospective** — [`/reflect`](../reflect/README.md)
 
-**Research phase**
-- [`/checkout`](../checkout/README.md) — create a feature branch
-- [`/gather-context`](../gather-context/README.md) — parallel research across issue, codebase, and history
-
-**Planning phase**
-- [`/think`](../think/README.md) — converge on approach with the human
-- [`/plan`](../plan/README.md) — build a parallelized task graph
-- [`/review-plan`](../review-plan/README.md) — validate the plan before execution
-- [`/share-plan`](../share-plan/README.md) — publish the plan to the issue
-
-**Execution phase**
-- [`/commit`](../commit/README.md) — incremental commits during autonomous execution
-
-**Review phase**
-- [`/simplify`](../simplify/README.md) — code quality pass (built-in)
-- [`/pr`](../pr/README.md) — open the PR
-
-**Retrospective**
-- [`/reflect`](../reflect/README.md) — extract lessons for future sessions
-
-## Supporting docs
-
-- [TIERS.md](TIERS.md) — decision matrix with signals, examples, and tier definitions
-- [EPIC-WORKFLOW.md](EPIC-WORKFLOW.md) — how to decompose and coordinate epic-scale work
+It reads what exists at activation time and degrades gracefully: a repo with only [`/checkout`](../checkout/README.md), [`/commit`](../commit/README.md), and [`/pr`](../pr/README.md) gets a lean workflow rather than a broken one. It holds no merge capability, and no capability to drop a node or reshape the graph — that is [`/dagger:dagger`](https://github.com/steading-ai/dagger)'s job.

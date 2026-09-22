@@ -1,7 +1,7 @@
 ---
 name: share-plan
-description: Use when sharing an implementation plan to a GitHub issue. Formats plans with collapsible details sections so issues are scannable but comprehensive.
-argument-hint: "[#issue-number | new] [plan source or context]"
+description: Use when sharing an implementation plan to a GitHub issue or a dagger node. Formats plans with collapsible details sections so the target stays scannable but comprehensive.
+argument-hint: "[#issue-number | slug#7 | new] [plan source or context]"
 allowed-tools:
   - Read
   - Glob
@@ -33,11 +33,14 @@ If no plan is found, stop and tell the user.
 
 ### 2. Determine Target
 
+- **`slug#7` in arguments** -- post to that dagger node as a `comment`
 - **`#NNN` in arguments** -- update that existing issue
 - **`new` in arguments** -- create a new issue (derive title from plan context or remaining args)
 - **Neither** -- ask whether to update an existing issue or create a new one
 
 **For existing issues:** fetch the body with `gh issue view NNN --json body,title`. Preserve the **Problem** and **Goal** sections if they exist -- only add/replace implementation sections.
+
+**For dagger nodes:** add a comment; never rewrite the body. The body is the work order someone else wrote, and a plan is your reading of it — the two must stay distinguishable. Node numbering is per-project, so `slug#7` is unrelated to GitHub issue 7: never resolve one as the other, and never let a node reference reach `gh issue edit`.
 
 ### 4. Format the Issue Body
 

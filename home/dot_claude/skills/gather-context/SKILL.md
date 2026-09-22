@@ -1,11 +1,14 @@
 ---
 name: gather-context
-description: Build comprehensive understanding of a problem by gathering context from GitHub issues, codebase exploration, git history, and linked references. Use when starting work on an issue or investigating a problem.
-argument-hint: "[#issue | problem description]"
+description: Build comprehensive understanding of a problem by gathering context from GitHub issues, dagger nodes, codebase exploration, git history, and linked references. Use when starting work on an issue or investigating a problem.
+argument-hint: "[#issue | slug#7 | problem description]"
 allowed-tools:
   - Bash(command -v:*)
   - Bash(echo:*)
   - Bash(gh issue view:*)
+  - mcp__plugin_dagger_dagger__show_node
+  - mcp__plugin_dagger_dagger__inputs
+  - mcp__plugin_dagger_dagger__explain
   - Bash(gh pr view:*)
   - Bash(git blame:*)
   - Bash(git diff:*)
@@ -67,9 +70,13 @@ Assess what kind of investigation is needed based on `$ARGUMENTS`:
 
 | Input | Scope |
 |-------|-------|
+| Dagger node whose body names deliverables, acceptance criteria and the docs that govern it | **Skip** — read the body and what it cites; re-reading it as "research" is pure cost |
+| Dagger node with a thin body, or one pointing into code you don't know | **Gap-scoped** — investigate only what the body left open, not the whole node |
 | Issue ref (`#123`) with clear, narrow body | **Light** — fetch issue, quick codebase scan |
 | Issue ref with broad/vague body or multiple comments | **Full** — fetch issue + parallel exploration + history |
 | Problem description (no issue) | **Full** — explore codebase, search history |
+
+A well-written work order has already absorbed this phase: its Context section names the specs, its Notes section carries the traps. Read those rather than rediscovering them, and say explicitly which gap you are investigating. On a dagger node, also read `inputs` — a predecessor's result is context that no amount of codebase exploration will recover.
 
 ### 2. Fetch the Issue (if applicable)
 
