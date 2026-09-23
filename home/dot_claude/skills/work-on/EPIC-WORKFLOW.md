@@ -40,10 +40,10 @@ A constraint like that also decides the *order you can work in*, not just the sl
 
 ## Working the children
 
-For each: run the full loop from `ready`/`show_node` — assess it independently (most are Small or Medium), take a worktree, and close its own loop. Do not carry one node's context into the next as if it were still true.
+For each: run the full loop from `claim` — assess it independently (most are Small or Medium), take a worktree, and close its own loop. Do not carry one node's context into the next as if it were still true.
 
 Between units:
-- Re-run `ready`. The set has moved; other agents work the same graph.
+- `claim` the next one, filtered to the epic's `labels` or `kind`. Do not list the children and pick; the set has moved, and other agents work the same graph.
 - Check whether earlier PRs merged, and rebase.
 - Re-read the inputs. An earlier unit's result is where its surprises were recorded, and it may have invalidated a later assumption.
 - If a unit reveals the remaining slicing is wrong, re-file it through `/dagger:epic` rather than improvising around it.

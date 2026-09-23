@@ -4,7 +4,7 @@ Takes a single unit of tracked work — a [dagger](https://github.com/steading-a
 
 ```
 /work-on                                   # claim the top of the ready set
-/work-on next --label migration            # steer which ready node
+/work-on next --label migration            # steer the claim
 /work-on pinwheel#3                        # a specific dagger node
 /work-on #412                              # probes dagger first, falls back to the issue
 ```
@@ -24,7 +24,7 @@ Between finishing the work and the merge landing, the node stays claimed with th
 ## How it works
 
 ```
-resolve → read + inputs → claim → assess → isolate → work → verify ACs → draft PR → close the loop
+claim → read + inputs → assess → isolate → work → verify ACs → draft PR → close the loop
 ```
 
 Two things distinguish it from a linear runbook:
@@ -47,7 +47,7 @@ Orthogonal to tier is **shape**: an implementation node ends in a PR, a spike en
 
 The agent reads these on demand; they are worth a human's time in roughly this order.
 
-- [DAGGER.md](DAGGER.md) — the argument for the completion rule above, plus the traps that make the graph loop worth writing down: why `claim` can hand you the wrong node, why `inputs` is the step everyone skips, what a result body owes the agent that reads it
+- [DAGGER.md](DAGGER.md) — the argument for the completion rule above, plus the traps that make the graph loop worth writing down: why `claim` comes before any reading of the graph, why `inputs` is the step everyone skips, what a result body owes the agent that reads it
 - [TIERS.md](TIERS.md) — why a long node body usually means *less* work, not more
 - [PHASES.md](PHASES.md) — where the one remaining human checkpoint sits, and why the PR is always a draft
 - [EPIC-WORKFLOW.md](EPIC-WORKFLOW.md) — slicing, the two edge mistakes that are invisible when wrong, and repo constraints that dictate node boundaries

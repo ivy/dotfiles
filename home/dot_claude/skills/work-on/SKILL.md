@@ -65,9 +65,9 @@ Dirty worktree: !`git status --porcelain 2>/dev/null | head -5 || echo 'clean'`
 
 ## The loop
 
-1. **Resolve** the unit of work — a dagger node by default, a GitHub issue when the argument says so ([DAGGER.md](DAGGER.md)).
-2. **Read it whole.** `show_node` at `view: full`, then **`inputs`** — the predecessors' results are the handoff, and skipping it is how you re-derive what someone already decided.
-3. **Claim it.** `claim` takes *filters, not a reference*: narrow with `kind` / `labels` / `min_priority`, then confirm the returned reference is the node you just read. If it differs you are holding other work — read that before touching anything.
+1. **Claim** — on dagger, `claim` with `assignee_kind: agent` plus any flags from the arguments. The claim *chooses* the work; the node it returns is your task. No `ready`, no browsing, no picking first ([DAGGER.md](DAGGER.md)). A GitHub issue, or an explicit node reference, resolves as the tracker table says.
+2. **Read it whole.** The claim response carries the body; then **`inputs`** — the predecessors' results are the handoff, and skipping it is how you re-derive what someone already decided.
+3. **Take what you were given.** Do not second-guess the claim, shop for a "better" node, or release it to try again. If the node is an Epic or a spike, that changes the shape of the work, not whether it is yours.
 4. **Assess** shape × tier ([TIERS.md](TIERS.md)) and state which, with the one-line reason.
 5. **Isolate** — `/checkout`, worktree by default: other agents work the same graph concurrently.
 6. **Work** the phases for that tier ([PHASES.md](PHASES.md)), tracked as a `TaskCreate` runbook.
@@ -77,6 +77,7 @@ Dirty worktree: !`git status --porcelain 2>/dev/null | head -5 || echo 'clean'`
 
 ## Hard rules
 
+- **`claim` is the selector.** It names no node, so a node picked out of `ready` is one you cannot ask for. `ready` is for explaining an empty claim, never for choosing.
 - **`inputs` before work, always.** A node's own body is never its predecessors' results, and `show_node` will not give them to you.
 - **The acceptance criteria are the contract.** Report each one individually, with the evidence. "Tests pass" verifies nothing the node asked for.
 - **Complete on delivered, not on work finished.** Anything that ships as a PR is delivered when it is **merged** — verify by reading the artifact out of `origin/<default>` and quoting it, never from the merge notification. A decision is delivered when the result body says it. There is no "nothing depends on this" exemption. While the PR is open: comment the evidence, keep the lease, don't complete and don't `release`; an agent may not `hold`.

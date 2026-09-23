@@ -6,33 +6,44 @@ The dagger skill (`/dagger:dagger`) covers the graph and how to *write* a node. 
 
 | Argument | Resolves to |
 |---|---|
-| empty, `next`, `ready` | dagger — `ready`, take the top of the set |
+| empty, `next`, `ready` | dagger — `claim`, and work what it returns |
 | `slug#7`, `org/slug#7` | that dagger node |
 | `dg:#7` / `gh:123` | forced, no probe |
 | a GitHub URL, `owner/repo#123` | GitHub issue |
 | bare `#7` or `7` | **probe, don't guess** — `show_node` first; if it resolves it is a node, otherwise `gh issue view` |
 
-`project_list` gives the slugs when no current project is configured. Trailing `--kind` / `--label` / `--min-priority` flags steer which ready node you get; pass them to `claim`.
+`project_list` gives the slugs when no current project is configured. Trailing `--kind` / `--label` / `--min-priority` flags steer the claim; pass them straight to `claim`, never to a `ready` listing you then choose from.
 
 Everything below is the dagger path. On the GitHub path, substitute the issue for the node, its body for the work order, and a comment for the result — the phases in [PHASES.md](PHASES.md) are the same.
 
-## Reading before claiming
+## Claiming
 
-`show_node` at `view: full` gives the body. It does **not** give you the predecessors' results — it reports `inputs.count` and `inputs.bytes` so you can see they exist and what reading them costs. `inputs` is the separate call that returns them, and it is the handoff from whoever did the work you depend on.
+**Claim first. Nothing comes before it.** `claim` names no node: it selects the most urgent ready node matching its filters and hands it to you under a lease, body included. Choosing the work *is* claiming it — the node it returns is your task.
+
+So do not open with `ready`, `show_node` or a search to find something promising. `ready` returns summaries without bodies, the listing is stale as it prints because a concurrent claimant takes what you were reading, and nothing will let you claim the node you picked from it. Put the preference in the filters instead:
+
+- **`assignee_kind: agent`, always.** Gates sit in the ready set, and a claim that lands on one is refused outright rather than passed over.
+- Then whatever the arguments carry — `kind`, `labels`, `min_priority`, `projects`.
+
+Do not release a claimed node because another looks more interesting, or to re-roll. The ordering is the graph owner's call, expressed as priority, and a claim is how you honour it.
+
+An empty answer is when reading the graph earns its keep: `ready` reports `held_count` beside the empty set, and `explain` names what is blocking the node you expected.
+
+### An explicit reference
+
+`slug#7` names a node, and `claim` still cannot. `show_node` it, then `claim` narrowed as hard as that node allows — its project, `kind`, `labels`, its priority as `min_priority`, `assignee_kind: agent` — and compare the returned reference. If it is a different node, say so and stop: you were asked for `slug#7` and are holding something else. This is the only path that reads before claiming.
+
+### The lease
+
+The returned `lease.id` is a fencing token: every later write to that node carries it, and a stale one is rejected — that is how a reclaimed node resists its previous holder. Through MCP the lease renews in the background, so a long run needs no `heartbeat`; if the session dies it releases with reason `crash`.
+
+## Reading the inputs
+
+The claim gives you the body. It does **not** give you the predecessors' results — it reports `inputs.count` and `inputs.bytes` so you can see they exist and what reading them costs. `inputs` is the separate call that returns them, and it is the handoff from whoever did the work you depend on.
 
 Skip it and you will re-derive a decision someone already made and wrote down. When the total is larger than you want at once, ask for `view: "summary"` and pull the ones you need individually with `show_node`.
 
 An open predecessor is not an input — it is what the node is waiting on, which `explain` answers. A dropped one is listed with no result. Inputs are not transitive: a predecessor's result already summarizes its own inputs.
-
-## Claiming
-
-`claim` takes **filters, not a reference.** There is no way to say "claim the one I just read", so:
-
-1. Narrow as hard as the node allows — `min_priority`, `kind`, `labels`.
-2. Read the returned `reference` and compare it to what you read.
-3. If they differ, you are holding *different work*. Read it properly before touching anything, or `release` it.
-
-The returned `lease.id` is a fencing token: every later write to that node carries it, and a stale one is rejected — that is how a reclaimed node resists its previous holder. Through MCP the lease renews in the background, so a long run needs no `heartbeat`; if the session dies it releases with reason `crash`.
 
 ## When the body is not enough
 
@@ -106,7 +117,7 @@ Do not try to route around it. Prepare it instead — the agent work that makes 
 Other agents and people work the same graph while you hold your node. Expect the ready set to move under you: nodes you saw leave it, nodes you didn't arrive.
 
 - Take a **worktree**, not a branch in the shared checkout. Two agents in one working tree is a corrupted diff.
-- Re-run `ready` before claiming anything else; a list you fetched five minutes ago is a guess.
+- Taking more work means another `claim`, not a fresh `ready` to choose from.
 - When something you expected to be ready isn't, `explain` it rather than inferring — it names holds, live leases and their expiry, and open blockers.
 - An empty `ready` is not a finished project. The response carries `held_count`, and held work is absent, not done.
 

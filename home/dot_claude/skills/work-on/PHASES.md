@@ -6,7 +6,7 @@ Use only skills that actually exist in the environment. When one is genuinely ab
 
 ## Sequences
 
-Steps 1–3 of the loop (resolve, read, claim) have already happened. `<ref>` is the node or issue reference.
+Steps 1–3 of the loop (claim, read, accept) have already happened. `<ref>` is the node or issue reference.
 
 Every sequence below ends at the draft PR, which is **not** the end of the loop — step 9, closing the loop, follows all of them, and the node is not complete until the work is delivered.
 
@@ -75,7 +75,7 @@ Adapt freely as reality intrudes — **except** the gate steps `/review-plan`, `
 
 | Phase | Mode | Behaviour |
 |---|---|---|
-| Resolve / read / claim | Autonomous | Surfaces the node, the inputs, and the assessment |
+| Claim / read | Autonomous | Surfaces the node, the inputs, and the assessment |
 | `/checkout`, `/gather-context` | Semi-autonomous | Works, then surfaces findings |
 | `/think` | **Interactive** | Converge with the human. Pass the specific open decisions as arguments, not "discuss the plan" |
 | `/plan` | **Interactive** | Calls `ExitPlanMode` and waits — its own declared posture, and the one stop this workflow does not drive through. Approval is the execution signal |
