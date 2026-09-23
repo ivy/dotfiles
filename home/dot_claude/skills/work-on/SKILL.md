@@ -22,6 +22,7 @@ allowed-tools:
   - mcp__plugin_dagger_dagger__inputs
   - mcp__plugin_dagger_dagger__explain
   - mcp__plugin_dagger_dagger__claim
+  - mcp__plugin_dagger_dagger__apply_patch
   - mcp__plugin_dagger_dagger__release
   - mcp__plugin_dagger_dagger__comment
   - mcp__plugin_dagger_dagger__complete
@@ -42,7 +43,7 @@ allowed-tools:
 
 # Work On: Ship One Unit of Tracked Work
 
-**Autonomy:** human-only · drives claim → work → draft PR → close the loop without confirmation, except the one plan approval `/plan` itself requires at Medium and up · claims, comments on, releases and completes nodes · has no merge, hold, drop, or `apply_patch` capability
+**Autonomy:** human-only · drives claim → work → draft PR → close the loop without confirmation, except the one plan approval `/plan` itself requires at Medium and up · claims, edits, comments on, releases and completes the node it holds · has no merge, hold, or drop capability
 
 ## Arguments
 ```
@@ -82,6 +83,8 @@ Dirty worktree: !`git status --porcelain 2>/dev/null | head -5 || echo 'clean'`
 - **The acceptance criteria are the contract.** Report each one individually, with the evidence. "Tests pass" verifies nothing the node asked for.
 - **Complete on delivered, not on work finished.** Anything that ships as a PR is delivered when it is **merged** — verify by reading the artifact out of `origin/<default>` and quoting it, never from the merge notification. A decision is delivered when the result body says it. There is no "nothing depends on this" exemption. While the PR is open: comment the evidence, keep the lease, don't complete and don't `release`; an agent may not `hold`.
 - **A node reference is not a GitHub issue number.** Never write `Closes #7` in a PR for `slug#7` — it closes an unrelated issue.
-- **Never drop a node or remove an edge.** Reshaping the graph is `/dagger:dagger`; decomposition is `/dagger:epic`.
+- **Keep the body true.** When the scope of the node you hold changes, `update_node` its body so it states the work actually being done. A comment beside a stale body leaves the next reader to reconcile the two ([DAGGER.md](DAGGER.md)).
+- **Never drop a node or remove an edge on your own initiative.** Reshaping the graph is `/dagger:dagger`; decomposition is `/dagger:epic`.
+- **The user outranks this file.** These rules bound what you do unprompted. When the user tells you to do something, do it — never quote this skill back at them as a reason not to.
 - **`/simplify` is a gate, not polish.** Mandatory at Medium and up. "The diff looks clean" is exactly when it earns its keep.
 - **Drive autonomously.** Interrupt only for a real blocker: a contradiction in the node body, a failure with no clear fix, or a decision the body leaves genuinely open.

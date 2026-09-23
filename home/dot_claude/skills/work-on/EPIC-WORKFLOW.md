@@ -11,7 +11,7 @@ Work spanning multiple PRs or sessions. The rule is the same on either tracker: 
 
 ## Decomposing
 
-On dagger, **delegate to `/dagger:epic`.** It owns the mini-PRD, the node-per-file format, the frontmatter, and importing a directory as one patch — and it files the whole shape atomically, which matters: a half-built graph is worse than none. This workflow holds no `apply_patch` capability, by design.
+On dagger, **delegate to `/dagger:epic`.** It owns the mini-PRD, the node-per-file format, the frontmatter, and importing a directory as one patch — and it files the whole shape atomically, which matters: a half-built graph is worse than none. This workflow edits only the node it holds; filing the epic's nodes is `/dagger:epic`'s job.
 
 Bring it the slicing decisions; it handles the filing. Each unit should be:
 

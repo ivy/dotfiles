@@ -56,6 +56,18 @@ A node body worth claiming carries Context, Deliverables, Acceptance criteria, S
 | Contradicts itself, or the ACs can't all hold | Stop. Comment the contradiction on the node and ask — this is one of the few real blockers |
 | Asks a question rather than naming a deliverable | It is a spike or it needs splitting ([TIERS.md](TIERS.md)) |
 
+## Editing the node you hold
+
+The body is the work order, and the next agent to read it has nothing else. When the scope moves — a clarification from the user, a constraint you found, a deliverable that turned out wrong — rewrite the body to say what the work now is, with an `apply_patch` holding a single `update_node`:
+
+```json
+{"ops": [{"update_node": {"node": "#7", "body": "…"}}]}
+```
+
+A comment is for evidence and handoff, not for amending the contract. A body that says one thing with a comment underneath saying another is two work orders, and the acceptance criteria you verify against in step 7 must be the ones in the body.
+
+Other operations on other nodes — creating, dropping, re-linking — reshape the graph, and that is `/dagger:dagger` or `/dagger:epic`, unless the user asks you to do it directly.
+
 ## Verifying against the acceptance criteria
 
 The ACs are the contract and the only thing a reviewer checks. Report them one per line, each with the command that proves it and its output — not a summary sentence that covers all of them at once.
@@ -127,4 +139,4 @@ These differ per tool, so: `show_node`, `inputs`, `explain`, `comment` and `comp
 
 Three take no `ref` at all. `ready` and `claim` are filter-addressed — `projects`, `kind`, `assignee_kind`, `labels`, `min_priority`, plus `wait` / `ttl` on `claim` and `page_size` / `page_token` on `ready`. `release` is *lease*-addressed: required `reason` (`gate` / `crash` / `budget` / `preempted`), optional `lease_id` (defaults to the session's single lease) and `detail`.
 
-Inside an `apply_patch`, the operations name their target **`node`** — except `add_edge`, which takes `from` / `to`.
+`apply_patch` takes **`ops`**, and its `lease_id` defaults to the session's single lease like `release`'s. The operations name their target **`node`** — except `add_edge`, which takes `from` / `to`.
