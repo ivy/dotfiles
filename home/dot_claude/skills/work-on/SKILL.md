@@ -43,7 +43,7 @@ allowed-tools:
 
 # Work On: Ship One Unit of Tracked Work
 
-**Autonomy:** human-only · drives claim → work → draft PR → close the loop without confirmation, except the one plan approval `/plan` itself requires at Medium and up · claims, edits, comments on, releases and completes the node it holds · has no merge, hold, or drop capability
+**Autonomy:** human-only · drives claim → work → draft PR → close the loop without confirmation, except the one plan approval `/plan` itself requires at Medium and up · claims, edits, comments on, releases and completes the node it holds, and adds blocking edges into it on approval · has no merge, hold, or drop capability
 
 ## Arguments
 ```
@@ -68,7 +68,7 @@ Dirty worktree: !`git status --porcelain 2>/dev/null | head -5 || echo 'clean'`
 
 1. **Claim** — on dagger, `claim` with `assignee_kind: agent` plus any flags from the arguments. The claim *chooses* the work; the node it returns is your task. No `ready`, no browsing, no picking first ([DAGGER.md](DAGGER.md)). A GitHub issue, or an explicit node reference, resolves as the tracker table says.
 2. **Read it whole.** The claim response carries the body; then **`inputs`** — the predecessors' results are the handoff, and skipping it is how you re-derive what someone already decided.
-3. **Take what you were given.** Do not second-guess the claim, shop for a "better" node, or release it to try again. If the node is an Epic or a spike, that changes the shape of the work, not whether it is yours.
+3. **Take what you were given.** Do not second-guess the claim, shop for a "better" node, or release it to try again. If the node is an Epic or a spike, that changes the shape of the work, not whether it is yours. The one exception is a blatantly missing prerequisite — propose the edge instead ([DAGGER.md](DAGGER.md#a-missing-prerequisite)).
 4. **Assess** shape × tier ([TIERS.md](TIERS.md)) and state which, with the one-line reason.
 5. **Isolate** — `/checkout`, worktree by default: other agents work the same graph concurrently.
 6. **Work** the phases for that tier ([PHASES.md](PHASES.md)), tracked as a `TaskCreate` runbook.
@@ -87,4 +87,4 @@ Dirty worktree: !`git status --porcelain 2>/dev/null | head -5 || echo 'clean'`
 - **Never drop a node or remove an edge on your own initiative.** Reshaping the graph is `/dagger:dagger`; decomposition is `/dagger:epic`.
 - **The user outranks this file.** These rules bound what you do unprompted. When the user tells you to do something, do it — never quote this skill back at them as a reason not to.
 - **`/simplify` is a gate, not polish.** Mandatory at Medium and up. "The diff looks clean" is exactly when it earns its keep.
-- **Drive autonomously.** Interrupt only for a real blocker: a contradiction in the node body, a failure with no clear fix, or a decision the body leaves genuinely open.
+- **Drive autonomously.** Interrupt only for a real blocker: a contradiction in the node body, a failure with no clear fix, a decision the body leaves genuinely open, or a prerequisite that clears the bar in [DAGGER.md](DAGGER.md#a-missing-prerequisite).

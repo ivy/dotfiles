@@ -54,7 +54,31 @@ A node body worth claiming carries Context, Deliverables, Acceptance criteria, S
 | Deliverables name paths, ACs name their own verification | Work it. `/gather-context` would only re-read what the body already told you. |
 | Thin, or points into code you don't know | `/gather-context` scoped to the gap, not the whole node |
 | Contradicts itself, or the ACs can't all hold | Stop. Comment the contradiction on the node and ask — this is one of the few real blockers |
+| A deliverable needs work another open node owns, and no edge says so | Propose the edge ([A missing prerequisite](#a-missing-prerequisite)) |
 | Asks a question rather than naming a deliverable | It is a spike or it needs splitting ([TIERS.md](TIERS.md)) |
+
+## A missing prerequisite
+
+The claim only proves nothing the graph *knows about* blocks the node. When the graph is wrong about that, the node cannot be finished as written, and working it anyway means building a predecessor's deliverable inside the wrong node or stubbing around it.
+
+The bar is **blatant**. Every one of these holds, each checked rather than inferred:
+
+- A named deliverable or acceptance criterion cannot be built or verified without something else existing first — the code it changes, the infrastructure it runs against.
+- That thing is absent from the default branch. Look; don't assume.
+- A specific open node owns delivering it, and you can name its reference.
+- `inputs` and `explain` show no edge from that node to yours.
+
+Anything short of that is not this case, and you keep working: an ordering you would prefer, a dependency you could stub within the node's own scope, a hunch that some node "probably" touches the same code. Note it under Traps in the result and move on.
+
+When the bar is met, stop **before `/checkout`** and propose — don't hand over an open question. One message: each edge as `owner → yours` with one line naming the deliverable it unblocks, then a single yes/no on adding them and releasing. Propose only the direct owner. If that owner is itself blocked, its own edges already carry that down to your node, so say so rather than proposing a second edge.
+
+On yes, in this order:
+
+1. One `apply_patch` with an `add_edge` per proposed edge — the policy lets a holder add `blocks` edges into its own node.
+2. `comment` on your node: which edges, and the evidence for each, so the next claimant knows why it was blocked.
+3. `release` with reason `preempted` and a `detail` naming the edges.
+
+Another node's body that contradicts what you found — Notes telling its implementer to do the thing yours exists to undo — is not yours to edit. Name it in the report and offer to fix it through `/dagger:dagger`.
 
 ## Editing the node you hold
 
@@ -66,7 +90,7 @@ The body is the work order, and the next agent to read it has nothing else. When
 
 A comment is for evidence and handoff, not for amending the contract. A body that says one thing with a comment underneath saying another is two work orders, and the acceptance criteria you verify against in step 7 must be the ones in the body.
 
-Other operations on other nodes — creating, dropping, re-linking — reshape the graph, and that is `/dagger:dagger` or `/dagger:epic`, unless the user asks you to do it directly.
+Other operations on other nodes — creating, dropping, re-linking — reshape the graph, and that is `/dagger:dagger` or `/dagger:epic`, unless the user asks you to do it directly. The one exception is an approved edge into your own node ([A missing prerequisite](#a-missing-prerequisite)).
 
 ## Verifying against the acceptance criteria
 

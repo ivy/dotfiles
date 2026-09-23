@@ -89,7 +89,7 @@ Adapt freely as reality intrudes — **except** the gate steps `/review-plan`, `
 
 A node whose body is fully specified has no interactive phase at all — Quick and Small never reach `/think` or `/plan`, which is the common case and should run start to finish without stopping. The two interactive rows exist only at Medium and up, and only because the work genuinely has an open decision.
 
-**Escape hatch:** on a genuine blocker — a self-contradictory body, a failure with no clear fix, an AC that cannot hold — stop and say so. Comment it on the node so the next reader inherits the question.
+**Escape hatch:** on a genuine blocker — a self-contradictory body, a failure with no clear fix, an AC that cannot hold, a blatantly missing prerequisite — stop and say so. Comment it on the node so the next reader inherits the question.
 
 ## Why the PR is a draft
 
