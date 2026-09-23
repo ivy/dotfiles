@@ -41,7 +41,7 @@ Two things distinguish it from a linear runbook:
 | **Large** | Cross-cutting, parallel workstreams | + worktree fan-out, reflect |
 | **Epic** | Multi-node, multi-session | decompose via [`/dagger:epic`](https://github.com/steading-ai/dagger), then work the children |
 
-Orthogonal to tier is **shape**: an implementation node ends in a PR, a spike ends in a decision written as its result, and a gate cannot be claimed by an agent at all — it is prepared, then left for a person. Mistaking a spike for an implementation node is how you get a PR full of speculative code nobody asked for.
+Orthogonal to tier is **shape**: an implementation node ends in a PR, a spike ends in a decision written as its result, and a gate is never claimed — the agent works it with the user at the terminal and completes it on their say-so. Mistaking a spike for an implementation node is how you get a PR full of speculative code nobody asked for.
 
 ## Files
 

@@ -43,7 +43,7 @@ allowed-tools:
 
 # Work On: Ship One Unit of Tracked Work
 
-**Autonomy:** human-only · drives claim → work → draft PR → close the loop without confirmation, except the one plan approval `/plan` itself requires at Medium and up · claims, edits, comments on, releases and completes the node it holds, and adds blocking edges into it on approval · has no merge, hold, or drop capability
+**Autonomy:** human-only · drives claim → work → draft PR → close the loop without confirmation, except the one plan approval `/plan` itself requires at Medium and up · claims, edits, comments on, releases and completes the node it holds, adds blocking edges into it on approval, and completes a gate on the user's say-so · has no merge, hold, or drop capability
 
 ## Arguments
 ```

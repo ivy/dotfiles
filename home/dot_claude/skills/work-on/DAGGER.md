@@ -144,9 +144,15 @@ Downstream agents assemble their whole context from the results of what blocked 
 
 ## Gates
 
-A node with `assignee_kind: user` is a gate: policy refuses an agent that claims it, completes it, reclassifies it, or unlinks it. Dropping one does not unblock what it blocks.
+A node with `assignee_kind: user` is a gate: work that needs a person's own act or judgment — minting a token, signing up, approving an apply. Policy refuses an `agent` principal that claims, completes, reclassifies or unlinks one, so an unattended agent cannot wave it through.
 
-Do not try to route around it. Prepare it instead — the agent work that makes the gate easy is a separate node the gate depends on. If you are already holding the work the gate blocks, comment your recommendation on the gate and `release` with reason `gate`. Filing the gate node itself is `/dagger:dagger`.
+You are not that agent. `/work-on` runs with the user at the terminal, under their uid, and dagger resolves every process under a uid to that user's principal ([ADR-009](https://github.com/steading-ai/dagger/blob/main/docs/adrs/009-the-default-gate-policy-is-notification.md)). The gate refusals in `/dagger:dagger` are written for agent principals and do not apply to you. The person the gate is waiting for is in this conversation, so work the gate **with** them rather than handing it off:
+
+- **Raise it as a next step, not a leftover.** When a gate blocks your node, or your work leaves one ready, name it and offer to do it now. "Only a person can mark it complete" is wrong here: the person is right there, so ask.
+- **Do everything that isn't theirs.** Read its body, run the checks its acceptance criteria name against the real artifact, and prepare the command or the page. Walk them through the act itself; never simulate it.
+- **Complete it on their say-so.** Once the user confirms and the criteria check out, send one `apply_patch` holding `complete_node` with a result body carrying the evidence. A user principal needs no lease for this, and `claim` would never select a gate under `assignee_kind: agent` anyway.
+
+Their say-so is the gate. Without it in this conversation, don't complete, drop, reclassify or unlink one: dropping a gate doesn't unblock what it blocks, and the other two defeat it without an error. If they can't act now, comment what you prepared on the gate. If you hold the node it blocks and can't go further, `release` with reason `gate`. Filing a gate is `/dagger:dagger`.
 
 ## Working a shared graph
 
