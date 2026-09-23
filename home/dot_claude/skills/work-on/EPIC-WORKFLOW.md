@@ -34,7 +34,7 @@ Where a unit ends in a human act — a signup, a credential, a policy call — f
 
 ## Constraints that force the shape
 
-Some repos impose ordering that has nothing to do with the design. Pinwheel's Danger gate fails any PR mixing `db/migrate/` with application code, so every migration is its own PR that must merge before the code using it. Find these early — they decide the node boundaries, and discovering one mid-epic means re-slicing.
+Some repos impose ordering that has nothing to do with the design. A Danger rule that fails any PR mixing `db/migrate/` with application code makes every migration its own PR that must merge before the code using it. Find these early — they decide the node boundaries, and discovering one mid-epic means re-slicing.
 
 A constraint like that also decides the *order you can work in*, not just the slicing: the later node cannot even start until the earlier one has merged. Every PR-shaped node waits for its own merge anyway ([DAGGER.md](DAGGER.md)), so within an epic expect to finish one node, watch it merge, complete it, and only then claim the next — rather than holding several open PRs whose bases keep moving.
 

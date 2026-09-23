@@ -5,7 +5,7 @@ Takes a single unit of tracked work — a [dagger](https://github.com/steading-a
 ```
 /work-on                                   # claim the top of the ready set
 /work-on next --label migration            # steer the claim
-/work-on pinwheel#3                        # a specific dagger node
+/work-on slug#7                            # a specific dagger node
 /work-on #412                              # probes dagger first, falls back to the issue
 ```
 

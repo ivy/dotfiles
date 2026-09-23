@@ -63,8 +63,8 @@ Decompose first; do not work it directly. [EPIC-WORKFLOW.md](EPIC-WORKFLOW.md).
 
 Build it with `TaskCreate` and dependencies as soon as the tier is assessed. Each subject is the **exact invocation or a scoped action** — never a catch-all:
 
-- Skill steps → the literal call: `/share-plan pinwheel#3`
-- Implementation steps → an imperative naming the file or module: `Add the runtime_session_id index to the migration`
+- Skill steps → the literal call: `/share-plan slug#7`
+- Implementation steps → an imperative naming the file or module: `Add the created_at index to the migration`
 - Never `Implement the feature` or `Make the changes`
 
 Sub-skills may create their own tasks; that is fine. They must not delete the workflow tasks. After each skill returns, `TaskList` and re-create anything that vanished with the same subjects and dependencies.
@@ -75,7 +75,7 @@ Adapt freely as reality intrudes — **except** the gate steps `/review-plan`, `
 
 | Phase | Mode | Behaviour |
 |---|---|---|
-| Claim / read | Autonomous | Surfaces the node, the inputs, and the assessment |
+| Claim / read | Autonomous | Names the node by reference and title, then surfaces the inputs and the assessment |
 | `/checkout`, `/gather-context` | Semi-autonomous | Works, then surfaces findings |
 | `/think` | **Interactive** | Converge with the human. Pass the specific open decisions as arguments, not "discuss the plan" |
 | `/plan` | **Interactive** | Calls `ExitPlanMode` and waits — its own declared posture, and the one stop this workflow does not drive through. Approval is the execution signal |

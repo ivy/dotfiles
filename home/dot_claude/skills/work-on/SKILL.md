@@ -66,10 +66,10 @@ Dirty worktree: !`git status --porcelain 2>/dev/null | head -5 || echo 'clean'`
 
 ## The loop
 
-1. **Claim** — on dagger, `claim` with `assignee_kind: agent` plus any flags from the arguments. The claim *chooses* the work; the node it returns is your task. No `ready`, no browsing, no picking first ([DAGGER.md](DAGGER.md)). A GitHub issue, or an explicit node reference, resolves as the tracker table says.
+1. **Claim** — on dagger, `claim` with `assignee_kind: agent` plus any flags from the arguments. The claim *chooses* the work; the node it returns is your task. No `ready`, no browsing, no picking first ([DAGGER.md](DAGGER.md)). A GitHub issue, or an explicit node reference, resolves as the tracker table says. The first thing you say after the claim names what you hold — its full reference and title: "I hold slug#7, 'Add rate limiting to the export endpoint'."
 2. **Read it whole.** The claim response carries the body; then **`inputs`** — the predecessors' results are the handoff, and skipping it is how you re-derive what someone already decided.
 3. **Take what you were given.** Do not second-guess the claim, shop for a "better" node, or release it to try again. If the node is an Epic or a spike, that changes the shape of the work, not whether it is yours. The one exception is a blatantly missing prerequisite — propose the edge instead ([DAGGER.md](DAGGER.md#a-missing-prerequisite)).
-4. **Assess** shape × tier ([TIERS.md](TIERS.md)) and state which, with the one-line reason.
+4. **Assess** shape × tier ([TIERS.md](TIERS.md)) and state which, with the one-line reason, led by the node's reference: "slug#7: Implementation × Small — …".
 5. **Isolate** — `/checkout`, worktree by default: other agents work the same graph concurrently.
 6. **Work** the phases for that tier ([PHASES.md](PHASES.md)), tracked as a `TaskCreate` runbook.
 7. **Verify against the acceptance criteria** — one line per criterion, each naming the command that proves it.
