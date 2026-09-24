@@ -45,6 +45,8 @@ bun = "1.3.14"
 # which none of the upstream installers do.
 "github:DeusData/codebase-memory-mcp" = "0.9.0"
 "github:ajeetdsouza/zoxide" = { version = "0.10.0", platforms.linux-arm64 = { asset_pattern = "zoxide-*-aarch64-unknown-linux-musl.tar.gz" } }
+# btop: upstream ships Linux binaries only; macOS gets it from Homebrew (packages.yaml)
+"github:aristocratos/btop" = { version = "1.4.7", os = ["linux"] }
 "github:atuinsh/atuin" = "18.16.1"
 # plannotator: binary the plannotator Claude Code plugin's hooks invoke on PATH
 "github:backnotprop/plannotator" = "0.22.0"

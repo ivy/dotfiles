@@ -18,6 +18,7 @@ packages:
       - tree
 
       # System monitoring
+      - btop
       - htop
 
       # Networking
