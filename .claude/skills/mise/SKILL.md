@@ -5,7 +5,7 @@ argument-hint: [tool...]
 allowed-tools:
   - Bash(chezmoi diff:*)
   - Bash(gh release view:*)
-  - Bash(mise --cd*lock:*)
+  - Bash(mise --cd home/dot_config/mise lock:*)
   - Bash(mise doctor:*)
   - Bash(mise fmt:*)
   - Bash(mise install:*)
