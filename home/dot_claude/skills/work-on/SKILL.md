@@ -12,6 +12,7 @@ allowed-tools:
   - Bash(git show:*)
   - Bash(git status:*)
   - Bash(head:*)
+  - Bash(herdr pane rename:*)
   - Read
   - TaskCreate
   - TaskList
@@ -55,6 +56,7 @@ $ARGUMENTS
 ```
 Current branch: !`git branch --show-current 2>/dev/null || echo 'unknown'`
 Dirty worktree: !`git status --porcelain 2>/dev/null | head -5 || echo 'clean'`
+Herdr pane: !`echo "${HERDR_PANE_ID:-none}"`
 ```
 
 ## Files
@@ -66,7 +68,7 @@ Dirty worktree: !`git status --porcelain 2>/dev/null | head -5 || echo 'clean'`
 
 ## The loop
 
-1. **Claim** — on dagger, `claim` with `assignee_kind: agent` plus any flags from the arguments. The claim *chooses* the work; the node it returns is your task. No `ready`, no browsing, no picking first ([DAGGER.md](DAGGER.md)). A GitHub issue, or an explicit node reference, resolves as the tracker table says. The first thing you say after the claim names what you hold — its full reference and title: "I hold slug#7, 'Add rate limiting to the export endpoint'."
+1. **Claim** — on dagger, `claim` with `assignee_kind: agent` plus any flags from the arguments. The claim *chooses* the work; the node it returns is your task. No `ready`, no browsing, no picking first ([DAGGER.md](DAGGER.md)). A GitHub issue, or an explicit node reference, resolves as the tracker table says. The first thing you say after the claim names what you hold — its full reference and title: "I hold slug#7, 'Add rate limiting to the export endpoint'." Then, unless the herdr pane above is `none`, label the pane with the short reference — `herdr pane rename <pane> slug#7`, or `widgets#123` for an issue in `owner/widgets` — so the user can tell sessions apart at a glance.
 2. **Read it whole.** The claim response carries the body; then **`inputs`** — the predecessors' results are the handoff, and skipping it is how you re-derive what someone already decided.
 3. **Take what you were given.** Do not second-guess the claim, shop for a "better" node, or release it to try again. If the node is an Epic or a spike, that changes the shape of the work, not whether it is yours. The one exception is a blatantly missing prerequisite — propose the edge instead ([DAGGER.md](DAGGER.md#a-missing-prerequisite)).
 4. **Assess** shape × tier ([TIERS.md](TIERS.md)) and state which, with the one-line reason, led by the node's reference: "slug#7: Implementation × Small — …".
