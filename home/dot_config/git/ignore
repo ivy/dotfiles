@@ -88,3 +88,6 @@ AGENTS.local.md
 compose.local.yml
 **/docker-compose.local.yml
 docker-compose.local.yml
+
+# Playwright MCP output (snapshots, screenshots, console logs)
+.playwright-mcp/
