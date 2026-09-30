@@ -1,6 +1,6 @@
 # The documents
 
-What each one is for, how it fails, and the line from dagger that shows it
+What each one is for, how it fails, and the line from skift that shows it
 working. Written for the person who has to keep them true a year later.
 
 ## Vision
@@ -14,7 +14,7 @@ scope question is answered by pointing at it.
 **Fails when:** it describes features. A vision that lists what you will build
 is a backlog with adjectives.
 
-**From dagger:** "Not an orchestrator. Not an agent runtime. Not a workflow
+**From skift:** "Not an orchestrator. Not an agent runtime. Not a workflow
 engine. Not a message bus. Not a distributed filesystem." Five lines that
 settled a dozen later arguments.
 
@@ -27,7 +27,7 @@ settled a dozen later arguments.
 **Fails when:** a principle forbids nothing. "We value quality" is decoration.
 The test is whether you can name a thing you wanted that the principle refuses.
 
-**From dagger:** "Ready is dumb" says no to budget logic in the store, to a
+**From skift:** "Ready is dumb" says no to budget logic in the store, to a
 scheduler in the store, and to any default two reasonable organizations would
 want to differ on. It ended three separate scope discussions.
 
@@ -41,7 +41,7 @@ absent, kept visibly separate.
 **Fails when:** it is written as a schema. Storage-shaped thinking invents
 fields the domain does not have and hides derivations behind columns.
 
-**From dagger:** status stores exactly three values; blocked, ready, and claimed
+**From skift:** status stores exactly three values; blocked, ready, and claimed
 are derived and never stored. Every migration header cites the section it
 implements, which is the document doing its job.
 
@@ -54,7 +54,7 @@ implements, which is the document doing its job.
 **Fails when:** written after the decision. Then it is documentation, and it
 records what you did instead of what you weighed. Write it while arguing.
 
-**From dagger:** seven, covering storage engine, wire contract, artifacts,
+**From skift:** seven, covering storage engine, wire contract, artifacts,
 policy, protocol alignment, provenance, and stack. The two that paid off most
 were the ones nobody would have thought to write down later.
 
@@ -68,7 +68,7 @@ naming who owns the rest.
 **Fails when:** it is a diagram with no boundary. Boxes and arrows without a
 responsibility split cannot answer a scope question.
 
-**From dagger:** the responsibility table made "no" cheap. Retrieval,
+**From skift:** the responsibility table made "no" cheap. Retrieval,
 notification, moderation, and supervision are all consumers of one event
 stream, and the system works without any of them.
 
@@ -83,7 +83,7 @@ to. Deferral in writing is a decision; deferral in silence is forgetting.
 **Fails when:** it becomes a schedule. Dates invite negotiation about dates
 instead of about scope.
 
-**From dagger:** the outside review's whole enterprise-readiness list went to
+**From skift:** the outside review's whole enterprise-readiness list went to
 M4 rather than into an argument, which is why the argument ended.
 
 ## Backlog
@@ -97,5 +97,5 @@ deliverables, verifiable acceptance criteria, and scenarios that become tests.
 inconsistent work, because every ambiguity gets resolved differently by whoever
 picks it up.
 
-**From dagger:** the first backlog was thin and had to be rewritten as real work
+**From skift:** the first backlog was thin and had to be rewritten as real work
 orders before it could be delegated. Write it thick the first time.

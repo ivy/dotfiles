@@ -1,12 +1,12 @@
 # `/work-on` — Ship One Unit of Tracked Work
 
-Takes a single unit of tracked work — a [dagger](https://github.com/steading-ai/dagger) node or a GitHub issue — from claimed to draft PR to a closed loop. Invoke it once; it assesses, composes the right skills, verifies against the acceptance criteria, and hands off to whatever comes next.
+Takes a single unit of tracked work — a [skift](https://github.com/steading-ai/skift) node or a GitHub issue — from claimed to draft PR to a closed loop. Invoke it once; it assesses, composes the right skills, verifies against the acceptance criteria, and hands off to whatever comes next.
 
 ```
 /work-on                                   # claim the top of the ready set
 /work-on next --label migration            # steer the claim
-/work-on slug#7                            # a specific dagger node
-/work-on #412                              # probes dagger first, falls back to the issue
+/work-on slug#7                            # a specific skift node
+/work-on #412                              # probes skift first, falls back to the issue
 ```
 
 ## Why this exists
@@ -39,7 +39,7 @@ Two things distinguish it from a linear runbook:
 | **Small** | One concern, ACs fully specify it | + context only where the body left a gap |
 | **Medium** | A design choice left open | + think → plan → review → simplify |
 | **Large** | Cross-cutting, parallel workstreams | + worktree fan-out, reflect |
-| **Epic** | Multi-node, multi-session | decompose via [`/dagger:epic`](https://github.com/steading-ai/dagger), then work the children |
+| **Epic** | Multi-node, multi-session | decompose via [`/skift:epic`](https://github.com/steading-ai/skift), then work the children |
 
 Orthogonal to tier is **shape**: an implementation node ends in a PR, a spike ends in a decision written as its result, and a gate is never claimed — the agent works it with the user at the terminal and completes it on their say-so. Mistaking a spike for an implementation node is how you get a PR full of speculative code nobody asked for.
 
@@ -47,7 +47,7 @@ Orthogonal to tier is **shape**: an implementation node ends in a PR, a spike en
 
 The agent reads these on demand; they are worth a human's time in roughly this order.
 
-- [DAGGER.md](DAGGER.md) — the argument for the completion rule above, plus the traps that make the graph loop worth writing down: why `claim` comes before any reading of the graph, why `inputs` is the step everyone skips, what a result body owes the agent that reads it
+- [SKIFT.md](SKIFT.md) — the argument for the completion rule above, plus the traps that make the graph loop worth writing down: why `claim` comes before any reading of the graph, why `inputs` is the step everyone skips, what a result body owes the agent that reads it
 - [TIERS.md](TIERS.md) — why a long node body usually means *less* work, not more
 - [PHASES.md](PHASES.md) — where the one remaining human checkpoint sits, and why the PR is always a draft
 - [EPIC-WORKFLOW.md](EPIC-WORKFLOW.md) — slicing, the two edge mistakes that are invisible when wrong, and repo constraints that dictate node boundaries
@@ -60,4 +60,4 @@ The agent reads these on demand; they are worth a human's time in roughly this o
 **Review** — `/simplify` · [`/pr`](../pr/README.md)
 **Retrospective** — [`/reflect`](../reflect/README.md)
 
-It reads what exists at activation time and degrades gracefully: a repo with only [`/checkout`](../checkout/README.md), [`/commit`](../commit/README.md), and [`/pr`](../pr/README.md) gets a lean workflow rather than a broken one. It holds no merge capability, and no capability to drop a node or reshape the graph — that is [`/dagger:dagger`](https://github.com/steading-ai/dagger)'s job.
+It reads what exists at activation time and degrades gracefully: a repo with only [`/checkout`](../checkout/README.md), [`/commit`](../commit/README.md), and [`/pr`](../pr/README.md) gets a lean workflow rather than a broken one. It holds no merge capability, and no capability to drop a node or reshape the graph — that is [`/skift:skift`](https://github.com/steading-ai/skift)'s job.

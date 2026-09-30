@@ -21,7 +21,7 @@ Every sequence below ends at the draft PR, which is **not** the end of the loop 
 ### Small
 ```
 1. /checkout <branch>            (worktree)
-2. /gather-context <ref>         ONLY if the body left a gap — see DAGGER.md
+2. /gather-context <ref>         ONLY if the body left a gap — see SKIFT.md
 3. Edit per the Deliverables
 4. Verify each acceptance criterion
 5. /commit

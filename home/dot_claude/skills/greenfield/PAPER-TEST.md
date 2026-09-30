@@ -33,10 +33,10 @@ price of an hour.
 If you cannot name one, that is the finding: the project's purpose is not
 settled. Go back to the vision before writing another table.
 
-## What it caught in dagger
+## What it caught in skift
 
-Dagger's central query is *which work is ready*. The paper test was
-`backlog.toml`, dagger's own build expressed in dagger's own domain model, plus
+Skift's central query is *which work is ready*. The paper test was
+`backlog.toml`, skift's own build expressed in skift's own domain model, plus
 a Python script computing readiness. The whole script was about 140 lines; the
 readiness computation inside it was under sixty, and the rest was argument
 parsing and a work-order printer.
@@ -74,7 +74,7 @@ it small enough to check by eye and real enough to embarrass the model.
 - **Sketching instead of using the real names.** The point is to find out that a
   field is missing. Placeholder names hide exactly that.
 - **Choosing convenient data.** Pick the workload you are most worried about.
-- **Skipping it because the model is obvious.** Dagger's was obvious, had been
+- **Skipping it because the model is obvious.** Skift's was obvious, had been
   discussed for hours, and was still wrong.
 - **Letting the script grow.** Past a hundred lines you are building the system,
   not testing the model.

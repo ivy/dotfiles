@@ -13,14 +13,14 @@ Assess both before doing anything, and state each with its one-line reason.
 |---|---|---|---|
 | **Implementation** | Deliverables name paths; ACs name commands | a PR | `complete` once that PR is **merged** and the artifact is verified on the default branch |
 | **Spike** | `kind: spike`; the title says *measure*, *decide whether*, *investigate*; no path in Deliverables | **a decision, written as the result body** — plus a doc if it is worth keeping, plus follow-up nodes | `complete` with the recommendation and what would change it. Often no code at all. |
-| **Gate** | `assignee_kind: user` | a human act — a signup, a token, a payment, a policy call | **not claimed** — worked with the user and completed on their say-so; see [DAGGER.md](DAGGER.md#gates) |
+| **Gate** | `assignee_kind: user` | a human act — a signup, a token, a payment, a policy call | **not claimed** — worked with the user and completed on their say-so; see [SKIFT.md](SKIFT.md#gates) |
 | **Grouping** | has open children | its children | never ready; work the children |
 
 A spike that opens a PR full of speculative code has misread its shape. A spike that ends with "measured X, recommend Y because Z, would revisit if W" has hit it exactly.
 
 ## Tier
 
-On the dagger path the node body is the signal, and it is a much better one than issue metadata:
+On the skift path the node body is the signal, and it is a much better one than issue metadata:
 
 | Signal | Reads as |
 |---|---|

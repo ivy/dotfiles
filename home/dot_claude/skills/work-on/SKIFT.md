@@ -1,20 +1,20 @@
-# Working a dagger node
+# Working a skift node
 
-The dagger skill (`/dagger:dagger`) covers the graph and how to *write* a node. This file covers the other side: consuming one — claiming it, proving you satisfied it, and handing off so the next agent doesn't start from nothing.
+The skift skill (`/skift:skift`) covers the graph and how to *write* a node. This file covers the other side: consuming one — claiming it, proving you satisfied it, and handing off so the next agent doesn't start from nothing.
 
 ## Which tracker
 
 | Argument | Resolves to |
 |---|---|
-| empty, `next`, `ready` | dagger — `claim`, and work what it returns |
-| `slug#7`, `org/slug#7` | that dagger node |
-| `dg:#7` / `gh:123` | forced, no probe |
+| empty, `next`, `ready` | skift — `claim`, and work what it returns |
+| `slug#7`, `org/slug#7` | that skift node |
+| `sk:#7` / `gh:123` | forced, no probe |
 | a GitHub URL, `owner/repo#123` | GitHub issue |
 | bare `#7` or `7` | **probe, don't guess** — `show_node` first; if it resolves it is a node, otherwise `gh issue view` |
 
 `project_list` gives the slugs when no current project is configured. Trailing `--kind` / `--label` / `--min-priority` flags steer the claim; pass them straight to `claim`, never to a `ready` listing you then choose from.
 
-Everything below is the dagger path. On the GitHub path, substitute the issue for the node, its body for the work order, and a comment for the result — the phases in [PHASES.md](PHASES.md) are the same.
+Everything below is the skift path. On the GitHub path, substitute the issue for the node, its body for the work order, and a comment for the result — the phases in [PHASES.md](PHASES.md) are the same.
 
 ## Claiming
 
@@ -78,7 +78,7 @@ On yes, in this order:
 2. `comment` on your node: which edges, and the evidence for each, so the next claimant knows why it was blocked.
 3. `release` with reason `preempted` and a `detail` naming the edges.
 
-Another node's body that contradicts what you found — Notes telling its implementer to do the thing yours exists to undo — is not yours to edit. Name it in the report and offer to fix it through `/dagger:dagger`.
+Another node's body that contradicts what you found — Notes telling its implementer to do the thing yours exists to undo — is not yours to edit. Name it in the report and offer to fix it through `/skift:skift`.
 
 ## Editing the node you hold
 
@@ -90,7 +90,7 @@ The body is the work order, and the next agent to read it has nothing else. When
 
 A comment is for evidence and handoff, not for amending the contract. A body that says one thing with a comment underneath saying another is two work orders, and the acceptance criteria you verify against in step 7 must be the ones in the body.
 
-Other operations on other nodes — creating, dropping, re-linking — reshape the graph, and that is `/dagger:dagger` or `/dagger:epic`, unless the user asks you to do it directly. The one exception is an approved edge into your own node ([A missing prerequisite](#a-missing-prerequisite)).
+Other operations on other nodes — creating, dropping, re-linking — reshape the graph, and that is `/skift:skift` or `/skift:epic`, unless the user asks you to do it directly. The one exception is an approved edge into your own node ([A missing prerequisite](#a-missing-prerequisite)).
 
 ## Verifying against the acceptance criteria
 
@@ -124,7 +124,7 @@ Work finished, PR unmerged: **comment and keep the lease.** The comment is the o
 
 Do not complete. Do not `release` to tidy up — that returns the node to the ready set where the open PR is invisible. And know what happens if the session simply ends: the lease releases with reason `crash`, the node goes back to the ready set, and your comment is the only thing standing between the next agent and redoing the work. That is why the comment is not optional.
 
-This is also not the same as parking. Parking is the `hold` tool, which takes work out of the ready set until a person releases it, and dagger refuses an agent principal that tries — so an agent that believes work should be parked says so in a comment where a person will read it.
+This is also not the same as parking. Parking is the `hold` tool, which takes work out of the ready set until a person releases it, and skift refuses an agent principal that tries — so an agent that believes work should be parked says so in a comment where a person will read it.
 
 ### Closing the loop after the merge
 
@@ -146,13 +146,13 @@ Downstream agents assemble their whole context from the results of what blocked 
 
 A node with `assignee_kind: user` is a gate: work that needs a person's own act or judgment — minting a token, signing up, approving an apply. Policy refuses an `agent` principal that claims, completes, reclassifies or unlinks one, so an unattended agent cannot wave it through.
 
-You are not that agent. `/work-on` runs with the user at the terminal, under their uid, and dagger resolves every process under a uid to that user's principal ([ADR-009](https://github.com/steading-ai/dagger/blob/main/docs/adrs/009-the-default-gate-policy-is-notification.md)). The gate refusals in `/dagger:dagger` are written for agent principals and do not apply to you. The person the gate is waiting for is in this conversation, so work the gate **with** them rather than handing it off:
+You are not that agent. `/work-on` runs with the user at the terminal, under their uid, and skift resolves every process under a uid to that user's principal ([ADR-009](https://github.com/steading-ai/skift/blob/main/docs/adrs/009-the-default-gate-policy-is-notification.md)). The gate refusals in `/skift:skift` are written for agent principals and do not apply to you. The person the gate is waiting for is in this conversation, so work the gate **with** them rather than handing it off:
 
 - **Raise it as a next step, not a leftover.** When a gate blocks your node, or your work leaves one ready, name it and offer to do it now. "Only a person can mark it complete" is wrong here: the person is right there, so ask.
 - **Do everything that isn't theirs.** Read its body, run the checks its acceptance criteria name against the real artifact, and prepare the command or the page. Walk them through the act itself; never simulate it.
 - **Complete it on their say-so.** Once the user confirms and the criteria check out, send one `apply_patch` holding `complete_node` with a result body carrying the evidence. A user principal needs no lease for this, and `claim` would never select a gate under `assignee_kind: agent` anyway.
 
-Their say-so is the gate. Without it in this conversation, don't complete, drop, reclassify or unlink one: dropping a gate doesn't unblock what it blocks, and the other two defeat it without an error. If they can't act now, comment what you prepared on the gate. If you hold the node it blocks and can't go further, `release` with reason `gate`. Filing a gate is `/dagger:dagger`.
+Their say-so is the gate. Without it in this conversation, don't complete, drop, reclassify or unlink one: dropping a gate doesn't unblock what it blocks, and the other two defeat it without an error. If they can't act now, comment what you prepared on the gate. If you hold the node it blocks and can't go further, `release` with reason `gate`. Filing a gate is `/skift:skift`.
 
 ## Working a shared graph
 

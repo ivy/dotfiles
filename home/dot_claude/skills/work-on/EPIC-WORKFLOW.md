@@ -7,11 +7,11 @@ Work spanning multiple PRs or sessions. The rule is the same on either tracker: 
 - Several independently shippable deliverables
 - Phased language — "Phase 1", "first we need to"
 - Too large for one reviewable PR
-- On dagger: a node with open children is already a grouping node and was never in the ready set
+- On skift: a node with open children is already a grouping node and was never in the ready set
 
 ## Decomposing
 
-On dagger, **delegate to `/dagger:epic`.** It owns the mini-PRD, the node-per-file format, the frontmatter, and importing a directory as one patch — and it files the whole shape atomically, which matters: a half-built graph is worse than none. This workflow edits only the node it holds; filing the epic's nodes is `/dagger:epic`'s job.
+On skift, **delegate to `/skift:epic`.** It owns the mini-PRD, the node-per-file format, the frontmatter, and importing a directory as one patch — and it files the whole shape atomically, which matters: a half-built graph is worse than none. This workflow edits only the node it holds; filing the epic's nodes is `/skift:epic`'s job.
 
 Bring it the slicing decisions; it handles the filing. Each unit should be:
 
@@ -36,7 +36,7 @@ Where a unit ends in a human act — a signup, a credential, a policy call — f
 
 Some repos impose ordering that has nothing to do with the design. A Danger rule that fails any PR mixing `db/migrate/` with application code makes every migration its own PR that must merge before the code using it. Find these early — they decide the node boundaries, and discovering one mid-epic means re-slicing.
 
-A constraint like that also decides the *order you can work in*, not just the slicing: the later node cannot even start until the earlier one has merged. Every PR-shaped node waits for its own merge anyway ([DAGGER.md](DAGGER.md)), so within an epic expect to finish one node, watch it merge, complete it, and only then claim the next — rather than holding several open PRs whose bases keep moving.
+A constraint like that also decides the *order you can work in*, not just the slicing: the later node cannot even start until the earlier one has merged. Every PR-shaped node waits for its own merge anyway ([SKIFT.md](SKIFT.md)), so within an epic expect to finish one node, watch it merge, complete it, and only then claim the next — rather than holding several open PRs whose bases keep moving.
 
 ## Working the children
 
@@ -46,7 +46,7 @@ Between units:
 - `claim` the next one, filtered to the epic's `labels` or `kind`. Do not list the children and pick; the set has moved, and other agents work the same graph.
 - Check whether earlier PRs merged, and rebase.
 - Re-read the inputs. An earlier unit's result is where its surprises were recorded, and it may have invalidated a later assumption.
-- If a unit reveals the remaining slicing is wrong, re-file it through `/dagger:epic` rather than improvising around it.
+- If a unit reveals the remaining slicing is wrong, re-file it through `/skift:epic` rather than improvising around it.
 
 ## PR strategy
 
