@@ -28,7 +28,7 @@ Every dependency has an exact version. Renovate opens PRs to update them.
 | **Tmux plugins** | Commit SHA pins | `home/.chezmoidata/tmux-plugins.yaml` |
 | **Docker Compose images** | Tag + `@sha256:` digest | `home/dot_config/docker-compose/*.yml` |
 | **Devcontainer** | `@sha256:` digest pins | `.devcontainer/devcontainer.json` |
-| **Cosign** | Pinned in `cli-versions.toml` | `home/dot_config/dotfiles/cli-versions.toml` |
+| **Cosign** | Exact version pins | `home/dot_config/dotfiles/cli-versions.toml`, `Containerfile` |
 
 Mise lockfiles (`lockfile = true`) resolve download URLs and checksums at lock time, preventing API calls to GitHub/aqua during install. Strict mode is the goal but blocked on #181 (self-hosted Renovate with lockfile support).
 
