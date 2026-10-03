@@ -23,7 +23,8 @@ jobs:
 
   test:
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 10
+    # A cold install of every tool takes 6-10 minutes on its own.
+    timeout-minutes: 20
     permissions:
       contents: read
     strategy:
