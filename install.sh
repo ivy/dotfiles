@@ -550,9 +550,14 @@ try_package_manager() {
 
 # Function to get latest version from GitHub
 get_latest_version() {
-	download_cmd=$(get_download_cmd)
-	$download_cmd "$GITHUB_API_URL/repos/$CHEZMOI_REPO/releases/latest" |
-		grep '"tag_name"' | cut -d'"' -f4 | sed 's/^v//'
+	url="$GITHUB_API_URL/repos/$CHEZMOI_REPO/releases/latest"
+	# Anonymous API calls share a per-IP rate limit, which CI runners exhaust.
+	if [ -n "${GITHUB_TOKEN:-}" ] && command -v curl >/dev/null 2>&1; then
+		curl -fsSL -H "Authorization: Bearer $GITHUB_TOKEN" "$url"
+	else
+		download_cmd=$(get_download_cmd)
+		$download_cmd "$url"
+	fi | grep '"tag_name"' | cut -d'"' -f4 | sed 's/^v//'
 }
 
 # Function to verify checksums (portable across systems)
@@ -579,6 +584,10 @@ download_chezmoi() {
 	# Get version
 	if [ "$CHEZMOI_VERSION" = "latest" ]; then
 		version=$(get_latest_version)
+		if [ -z "$version" ]; then
+			log_error "Could not determine the latest chezmoi version from $GITHUB_API_URL"
+			exit 1
+		fi
 	else
 		version="$CHEZMOI_VERSION"
 	fi
