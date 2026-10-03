@@ -166,12 +166,17 @@
 
     // --- Standalone version files ------------------------------------------------
 
-    // cosign binary version pinned in a TOML versions file
+    // cosign binary version, pinned for install.sh in a TOML versions file and
+    // for the container image as a build ARG
     {
       "customType": "regex",
-      "managerFilePatterns": ["/^home/dot_config/dotfiles/cli-versions\\.toml$/"],
+      "managerFilePatterns": [
+        "/^home/dot_config/dotfiles/cli-versions\\.toml$/",
+        "/^Containerfile$/"
+      ],
       "matchStrings": [
-        "(?:^|\\n)cosign\\s*=\\s*\"(?<currentValue>v?[^\"]+)\""
+        "(?:^|\\n)cosign\\s*=\\s*\"(?<currentValue>v?[^\"]+)\"",
+        "ARG COSIGN_VERSION=(?<currentValue>v?[^\\s]+)"
       ],
       "depNameTemplate": "sigstore/cosign",
       "datasourceTemplate": "github-releases"

@@ -126,8 +126,8 @@ Defined in `renovate.json5`:
 
 1) CLI versions (GitHub Releases)
 
-- File: `home/dot_config/dotfiles/cli-versions.toml`
-- Pattern: `^cosign\s*=\s*"(?<currentValue>v?[^\"]+)"`
+- Files: `home/dot_config/dotfiles/cli-versions.toml`, `Containerfile`
+- Patterns: `(?:^|\n)cosign\s*=\s*"(?<currentValue>v?[^\"]+)"` and `ARG COSIGN_VERSION=(?<currentValue>v?[^\s]+)`
 - Datasource: `github-releases`, `depNameTemplate: sigstore/cosign`
 
 2) Aqua‑prefixed tools in mise TOML (GitHub Releases)
