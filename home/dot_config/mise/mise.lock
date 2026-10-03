@@ -1825,68 +1825,68 @@ backend = "github:sst/opencode"
 
 [tools."github:sst/opencode"."platforms.linux-arm64"]
 checksum = "sha256:c63486624621924bf43be5c01abd252885661a734814224f6d70188a33aea858"
-url = "https://github.com/anomalyco/opencode/releases/download/v1.18.33/opencode-linux-arm64.tar.gz"
-url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/594449121"
+url = "https://github.com/sst/opencode/releases/download/v1.18.33/opencode-linux-arm64.tar.gz"
+url_api = "https://api.github.com/repos/sst/opencode/releases/assets/594449121"
 provenance = "github-attestations"
 
 [tools."github:sst/opencode"."platforms.linux-arm64-musl"]
 checksum = "sha256:916e4ca40cdd43025b7741a6c60cd1141b8622a8531e2eebdffcfd3e41f56907"
-url = "https://github.com/anomalyco/opencode/releases/download/v1.18.33/opencode-linux-arm64-musl.tar.gz"
-url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/594449118"
+url = "https://github.com/sst/opencode/releases/download/v1.18.33/opencode-linux-arm64-musl.tar.gz"
+url_api = "https://api.github.com/repos/sst/opencode/releases/assets/594449118"
 provenance = "github-attestations"
 
 [tools."github:sst/opencode"."platforms.linux-x64"]
 checksum = "sha256:e546123213ae47909a4268692aa4b94950d011afe9cac9938753a2194f1c16d5"
-url = "https://github.com/anomalyco/opencode/releases/download/v1.18.33/opencode-linux-x64.tar.gz"
-url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/594449176"
+url = "https://github.com/sst/opencode/releases/download/v1.18.33/opencode-linux-x64.tar.gz"
+url_api = "https://api.github.com/repos/sst/opencode/releases/assets/594449176"
 provenance = "github-attestations"
 
 [tools."github:sst/opencode"."platforms.linux-x64-baseline"]
 checksum = "sha256:e546123213ae47909a4268692aa4b94950d011afe9cac9938753a2194f1c16d5"
-url = "https://github.com/anomalyco/opencode/releases/download/v1.18.33/opencode-linux-x64.tar.gz"
-url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/594449176"
+url = "https://github.com/sst/opencode/releases/download/v1.18.33/opencode-linux-x64.tar.gz"
+url_api = "https://api.github.com/repos/sst/opencode/releases/assets/594449176"
 provenance = "github-attestations"
 
 [tools."github:sst/opencode"."platforms.linux-x64-musl"]
 checksum = "sha256:56636216a0b6595339ffdd5e2c885e6ea68a854f880720120e8cfa71172042c2"
-url = "https://github.com/anomalyco/opencode/releases/download/v1.18.33/opencode-linux-x64-musl.tar.gz"
-url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/594449134"
+url = "https://github.com/sst/opencode/releases/download/v1.18.33/opencode-linux-x64-musl.tar.gz"
+url_api = "https://api.github.com/repos/sst/opencode/releases/assets/594449134"
 provenance = "github-attestations"
 
 [tools."github:sst/opencode"."platforms.linux-x64-musl-baseline"]
 checksum = "sha256:56636216a0b6595339ffdd5e2c885e6ea68a854f880720120e8cfa71172042c2"
-url = "https://github.com/anomalyco/opencode/releases/download/v1.18.33/opencode-linux-x64-musl.tar.gz"
-url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/594449134"
+url = "https://github.com/sst/opencode/releases/download/v1.18.33/opencode-linux-x64-musl.tar.gz"
+url_api = "https://api.github.com/repos/sst/opencode/releases/assets/594449134"
 provenance = "github-attestations"
 
 [tools."github:sst/opencode"."platforms.macos-arm64"]
 checksum = "sha256:24b12873e605b3db3387cb355f43ba7451cd6065c180d8c188663337d2eeb553"
-url = "https://github.com/anomalyco/opencode/releases/download/v1.18.33/opencode-darwin-arm64.zip"
-url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/594449070"
+url = "https://github.com/sst/opencode/releases/download/v1.18.33/opencode-darwin-arm64.zip"
+url_api = "https://api.github.com/repos/sst/opencode/releases/assets/594449070"
 provenance = "github-attestations"
 
 [tools."github:sst/opencode"."platforms.macos-x64"]
 checksum = "sha256:90c7e7d9ffa0d8691ca0f15b42a7b89b72e17a4d26074b9ef06559ff87b221ec"
-url = "https://github.com/anomalyco/opencode/releases/download/v1.18.33/opencode-darwin-x64.zip"
-url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/594449065"
+url = "https://github.com/sst/opencode/releases/download/v1.18.33/opencode-darwin-x64.zip"
+url_api = "https://api.github.com/repos/sst/opencode/releases/assets/594449065"
 provenance = "github-attestations"
 
 [tools."github:sst/opencode"."platforms.macos-x64-baseline"]
 checksum = "sha256:90c7e7d9ffa0d8691ca0f15b42a7b89b72e17a4d26074b9ef06559ff87b221ec"
-url = "https://github.com/anomalyco/opencode/releases/download/v1.18.33/opencode-darwin-x64.zip"
-url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/594449065"
+url = "https://github.com/sst/opencode/releases/download/v1.18.33/opencode-darwin-x64.zip"
+url_api = "https://api.github.com/repos/sst/opencode/releases/assets/594449065"
 provenance = "github-attestations"
 
 [tools."github:sst/opencode"."platforms.windows-x64"]
 checksum = "sha256:cc827fda2e32502373c5de25a4b78471766b99881d12a441ae5b9fcff39c5780"
-url = "https://github.com/anomalyco/opencode/releases/download/v1.18.33/opencode-windows-x64.zip"
-url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/594453549"
+url = "https://github.com/sst/opencode/releases/download/v1.18.33/opencode-windows-x64.zip"
+url_api = "https://api.github.com/repos/sst/opencode/releases/assets/594453549"
 provenance = "github-attestations"
 
 [tools."github:sst/opencode"."platforms.windows-x64-baseline"]
 checksum = "sha256:cc827fda2e32502373c5de25a4b78471766b99881d12a441ae5b9fcff39c5780"
-url = "https://github.com/anomalyco/opencode/releases/download/v1.18.33/opencode-windows-x64.zip"
-url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/594453549"
+url = "https://github.com/sst/opencode/releases/download/v1.18.33/opencode-windows-x64.zip"
+url_api = "https://api.github.com/repos/sst/opencode/releases/assets/594453549"
 provenance = "github-attestations"
 
 [[tools."github:starship/starship"]]
