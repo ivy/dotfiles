@@ -1,6 +1,11 @@
 # mise configuration for chezmoi dotfiles project
 # Development tools for shell scripting and testing
 
+[settings]
+# Same choice as home/dot_config/mise/config.toml, so npm: tools install the
+# same way whether or not the user config is applied.
+npm.package_manager = "npm"
+
 [tools]
 "aqua:bats-core/bats-core" = "1.14.0"
 "aqua:boyter/scc" = "4.1.0"
