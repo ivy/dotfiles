@@ -128,6 +128,8 @@ RUN --mount=type=cache,target=/tmp/mise-data,uid=10000,gid=10000 \
         --promptString "1Password ref for OpenAI Codex=" \
         --promptString "1Password ref for Claude API=" \
         --promptString "1Password ref for Buildkite=" \
+        --promptString "1Password ref for ngrok=" \
+        --promptString "Obsidian vault path (absolute)=/home/agent/Documents" \
     && mkdir -p /home/agent/.local/share/mise \
     && cp -a /tmp/mise-data/. /home/agent/.local/share/mise/
 
