@@ -9,9 +9,9 @@ set -o nounset
 set -o pipefail
 
 if [[ -r "$HOME/.zshenv.local" ]]; then
-  # Load local environment variables
-  source "$HOME/.zshenv.local"
-  export OPENAI_API_KEY="${OPENAI_API_KEY:-}"
+	# Load local environment variables
+	source "$HOME/.zshenv.local"
+	export OPENAI_API_KEY="${OPENAI_API_KEY:-}"
 fi
 
 # Tailscale configuration
@@ -34,48 +34,48 @@ export COMPOSE_PROJECT_NAME="${COMPOSE_PROJECT_NAME:-open-webui}"
 COMPOSE_FILE="${COMPOSE_FILE:-${XDG_CONFIG_HOME:-$HOME/.config}/docker-compose/open-webui.yml}"
 
 status() {
-  docker-compose -f "$COMPOSE_FILE" ps
+	docker-compose -f "$COMPOSE_FILE" ps
 }
 
 start() {
-  # Create data directories if they don't exist
-  mkdir -p \
-    "$TAILSCALE_STATE_DIR" \
-    "$WEBUI_DATA_DIR"
+	# Create data directories if they don't exist
+	mkdir -p \
+		"$TAILSCALE_STATE_DIR" \
+		"$WEBUI_DATA_DIR"
 
-  docker-compose -f "$COMPOSE_FILE" up --detach --pull=always
+	docker-compose -f "$COMPOSE_FILE" up --detach --pull=always
 }
 
 stop() {
-  docker-compose -f "$COMPOSE_FILE" down
+	docker-compose -f "$COMPOSE_FILE" down
 }
 
 restart() {
-  stop || true
-  start
+	stop || true
+	start
 }
 
 logs() {
-  docker-compose -f "$COMPOSE_FILE" logs $*
+	docker-compose -f "$COMPOSE_FILE" logs "$@"
 }
 
 pull() {
-  docker-compose -f "$COMPOSE_FILE" pull
+	docker-compose -f "$COMPOSE_FILE" pull
 }
 
 update() {
-  echo "Pulling latest image..."
-  pull
-  echo "Restarting service with new image..."
-  docker-compose -f "$COMPOSE_FILE" up -d
+	echo "Pulling latest image..."
+	pull
+	echo "Restarting service with new image..."
+	docker-compose -f "$COMPOSE_FILE" up -d
 }
 
 shell() {
-  docker-compose -f "$COMPOSE_FILE" exec open-webui /bin/bash
+	docker-compose -f "$COMPOSE_FILE" exec open-webui /bin/bash
 }
 
 usage() {
-  echo "Usage: $0 <command> [args...]
+	echo "Usage: $0 <command> [args...]
 
 Commands:
   status              Show status of the service
@@ -90,59 +90,59 @@ Commands:
 }
 
 main() {
-  if [[ $# -eq 0 ]]; then
-    usage >&2
-    exit 1
-  fi
+	if [[ $# -eq 0 ]]; then
+		usage >&2
+		exit 1
+	fi
 
-  if [[ -z "${OPENAI_API_KEY:-}" ]]; then
-    echo "OPENAI_API_KEY is not set! See: https://docs.openwebui.com/tutorial/openai" >&2
-    exit 1
-  fi
+	if [[ -z "${OPENAI_API_KEY:-}" ]]; then
+		echo "OPENAI_API_KEY is not set! See: https://docs.openwebui.com/tutorial/openai" >&2
+		exit 1
+	fi
 
-  if [[ ! -f "$COMPOSE_FILE" ]]; then
-    echo "docker-compose.yml not found at: $COMPOSE_FILE" >&2
-    echo "Please ensure docker-compose.yml is in the same directory as this script" >&2
-    exit 1
-  fi
+	if [[ ! -f "$COMPOSE_FILE" ]]; then
+		echo "docker-compose.yml not found at: $COMPOSE_FILE" >&2
+		echo "Please ensure docker-compose.yml is in the same directory as this script" >&2
+		exit 1
+	fi
 
-  cmd="$1"
-  shift
+	cmd="$1"
+	shift
 
-  case "$cmd" in
-  status)
-    status
-    ;;
-  start)
-    start
-    ;;
-  stop)
-    stop
-    ;;
-  restart)
-    restart
-    ;;
-  logs)
-    logs "$@"
-    ;;
-  pull)
-    pull
-    ;;
-  update)
-    update
-    ;;
-  shell)
-    shell
-    ;;
-  help)
-    usage
-    ;;
-  *)
-    echo "Unknown command: $cmd" >&2
-    usage >&2
-    exit 1
-    ;;
-  esac
+	case "$cmd" in
+	status)
+		status
+		;;
+	start)
+		start
+		;;
+	stop)
+		stop
+		;;
+	restart)
+		restart
+		;;
+	logs)
+		logs "$@"
+		;;
+	pull)
+		pull
+		;;
+	update)
+		update
+		;;
+	shell)
+		shell
+		;;
+	help)
+		usage
+		;;
+	*)
+		echo "Unknown command: $cmd" >&2
+		usage >&2
+		exit 1
+		;;
+	esac
 }
 
 main "$@"

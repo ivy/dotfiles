@@ -1,4 +1,5 @@
 # shellcheck shell=bash
+# shellcheck disable=SC2154  # palette variables come from the sourcing theme
 # Shared helpers for notification rail color escalation.
 # Sourced by theme files after palette variables are defined.
 
