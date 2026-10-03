@@ -40,7 +40,8 @@
     "dockerfile",
     "docker-compose",
     "github-actions",
-    "jsonata"
+    "custom.regex",
+    "custom.jsonata"
   ],
 
   // Lock file maintenance: regenerate mise.lock to pick up new checksums.
