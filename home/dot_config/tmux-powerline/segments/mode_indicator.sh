@@ -6,8 +6,8 @@
 run_segment() {
 	local sep=" "
 	local keyboard=$'\xf3\xb0\x8c\x8c' # U+F030C nf-md-keyboard
-	local clipboard=$'\xef\x81\xbf'     # U+F07F  nf-fa-clipboard
-	local pause=$'\xf3\xb0\x8f\xa4'     # U+F03E4 nf-md-pause
+	local clipboard=$'\xef\x81\xbf'    # U+F07F  nf-fa-clipboard
+	local pause=$'\xf3\xb0\x8f\xa4'    # U+F03E4 nf-md-pause
 
 	# Suspend overrides all other modes.
 	if [ "$(tmux show-option -qv key-table)" = "suspended" ]; then

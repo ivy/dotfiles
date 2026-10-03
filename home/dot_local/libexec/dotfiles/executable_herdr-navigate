@@ -15,18 +15,18 @@
 set -eu
 
 usage() {
-  echo "usage: ${0##*/} <left|down|up|right>" >&2
-  exit 64
+	echo "usage: ${0##*/} <left|down|up|right>" >&2
+	exit 64
 }
 
 [ $# -eq 1 ] || usage
 
 case "$1" in
-  left)  key="ctrl+h" ;;
-  down)  key="ctrl+j" ;;
-  up)    key="ctrl+k" ;;
-  right) key="ctrl+l" ;;
-  *)     usage ;;
+left) key="ctrl+h" ;;
+down) key="ctrl+j" ;;
+up) key="ctrl+k" ;;
+right) key="ctrl+l" ;;
+*) usage ;;
 esac
 
 # Prefer the path herdr hands us: resolving `herdr` through the mise shim costs
@@ -42,7 +42,7 @@ pane="${HERDR_ACTIVE_PANE_ID:-}"
 # PATH is a shim that costs ~100ms to resolve, which is a lot to pay on a key
 # pressed this often.
 editor_focused() {
-  "$herdr" pane process-info --pane "$pane" 2>/dev/null | awk '
+	"$herdr" pane process-info --pane "$pane" 2>/dev/null | awk '
     {
       rest = $0
       while (match(rest, /"argv0":"[^"]*"/)) {
@@ -59,7 +59,7 @@ editor_focused() {
 }
 
 if editor_focused; then
-  exec "$herdr" pane send-keys "$pane" "$key"
+	exec "$herdr" pane send-keys "$pane" "$key"
 fi
 
 exec "$herdr" pane focus --direction "$1" --pane "$pane"

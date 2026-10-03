@@ -31,42 +31,42 @@ CACHE_FILE="${CACHE_DIR}/bedrock-models.json"
 CACHE_MAX_AGE=86400 # 24 hours
 
 require_command() {
-  local cmd="$1"
-  local hint="${2:-}"
+	local cmd="$1"
+	local hint="${2:-}"
 
-  if ! command -v "${cmd}" >/dev/null 2>&1; then
-    printf 'warning: required command "%s" not found in PATH\n' "${cmd}" >&2
-    [[ -n "${hint}" ]] && printf '  hint: %s\n' "${hint}" >&2
-    echo '{}'
-    exit 0
-  fi
+	if ! command -v "${cmd}" >/dev/null 2>&1; then
+		printf 'warning: required command "%s" not found in PATH\n' "${cmd}" >&2
+		[[ -n "${hint}" ]] && printf '  hint: %s\n' "${hint}" >&2
+		echo '{}'
+		exit 0
+	fi
 }
 
 cache_mtime() {
-  local mtime
-  mtime=$(stat -c %Y "$1" 2>/dev/null) ||
-    mtime=$(stat -f %m "$1" 2>/dev/null) ||
-    mtime=0
-  printf '%s\n' "${mtime}"
+	local mtime
+	mtime=$(stat -c %Y "$1" 2>/dev/null) ||
+		mtime=$(stat -f %m "$1" 2>/dev/null) ||
+		mtime=0
+	printf '%s\n' "${mtime}"
 }
 
 cache_is_fresh() {
-  [[ -f "${CACHE_FILE}" ]] || return 1
-  local now mtime age
-  now=$(date +%s)
-  mtime=$(cache_mtime "${CACHE_FILE}")
-  age=$(( now - mtime ))
-  (( age < CACHE_MAX_AGE ))
+	[[ -f "${CACHE_FILE}" ]] || return 1
+	local now mtime age
+	now=$(date +%s)
+	mtime=$(cache_mtime "${CACHE_FILE}")
+	age=$((now - mtime))
+	((age < CACHE_MAX_AGE))
 }
 
 fetch_foundation_models() {
-  aws bedrock list-foundation-models \
-    --output json \
-    --by-provider anthropic
+	aws bedrock list-foundation-models \
+		--output json \
+		--by-provider anthropic
 }
 
 resolve_latest_per_tier() {
-  jq '
+	jq '
     .modelSummaries
     | map(select(
         .modelLifecycle.status == "ACTIVE"
@@ -85,27 +85,27 @@ resolve_latest_per_tier() {
 }
 
 main() {
-  require_command aws "install the AWS CLI: https://aws.amazon.com/cli/"
-  require_command jq "install jq: https://jqlang.github.io/jq/"
+	require_command aws "install the AWS CLI: https://aws.amazon.com/cli/"
+	require_command jq "install jq: https://jqlang.github.io/jq/"
 
-  if cache_is_fresh; then
-    cat "${CACHE_FILE}"
-    return
-  fi
+	if cache_is_fresh; then
+		cat "${CACHE_FILE}"
+		return
+	fi
 
-  mkdir -p "${CACHE_DIR}"
+	mkdir -p "${CACHE_DIR}"
 
-  local result
-  result=$(fetch_foundation_models | resolve_latest_per_tier) || true
+	local result
+	result=$(fetch_foundation_models | resolve_latest_per_tier) || true
 
-  if [[ -n "${result}" && "${result}" != "{}" ]]; then
-    printf '%s\n' "${result}" > "${CACHE_FILE}"
-    printf '%s\n' "${result}"
-  elif [[ -f "${CACHE_FILE}" ]]; then
-    cat "${CACHE_FILE}"
-  else
-    echo '{}'
-  fi
+	if [[ -n "${result}" && "${result}" != "{}" ]]; then
+		printf '%s\n' "${result}" >"${CACHE_FILE}"
+		printf '%s\n' "${result}"
+	elif [[ -f "${CACHE_FILE}" ]]; then
+		cat "${CACHE_FILE}"
+	else
+		echo '{}'
+	fi
 }
 
 main "$@"

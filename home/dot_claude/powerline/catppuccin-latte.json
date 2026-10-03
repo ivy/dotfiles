@@ -1,6 +1,22 @@
 {
   "colors": {
     "custom": {
+      "block": {
+        "bg": "#fe640b",
+        "fg": "#eff1f5"
+      },
+      "context": {
+        "bg": "#7287fd",
+        "fg": "#eff1f5"
+      },
+      "contextCritical": {
+        "bg": "#d20f39",
+        "fg": "#eff1f5"
+      },
+      "contextWarning": {
+        "bg": "#df8e1d",
+        "fg": "#4c4f69"
+      },
       "directory": {
         "bg": "#1e66f5",
         "fg": "#eff1f5"
@@ -8,6 +24,10 @@
       "git": {
         "bg": "#40a02b",
         "fg": "#eff1f5"
+      },
+      "metrics": {
+        "bg": "#bcc0cc",
+        "fg": "#4c4f69"
       },
       "model": {
         "bg": "#8839ef",
@@ -17,33 +37,13 @@
         "bg": "#209fb5",
         "fg": "#eff1f5"
       },
-      "block": {
-        "bg": "#fe640b",
-        "fg": "#eff1f5"
-      },
-      "today": {
-        "bg": "#179299",
-        "fg": "#eff1f5"
-      },
       "tmux": {
         "bg": "#ccd0da",
         "fg": "#4c4f69"
       },
-      "context": {
-        "bg": "#7287fd",
+      "today": {
+        "bg": "#179299",
         "fg": "#eff1f5"
-      },
-      "contextWarning": {
-        "bg": "#df8e1d",
-        "fg": "#4c4f69"
-      },
-      "contextCritical": {
-        "bg": "#d20f39",
-        "fg": "#eff1f5"
-      },
-      "metrics": {
-        "bg": "#bcc0cc",
-        "fg": "#4c4f69"
       },
       "version": {
         "bg": "#acb0be",

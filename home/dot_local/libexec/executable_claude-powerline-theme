@@ -3,10 +3,10 @@
 # Merges shared.json (display, segments, limits) with the theme file (colors only).
 dir="$HOME/.claude/powerline"
 case "$("$HOME/.local/libexec/dotfiles/appearance")" in
-  dark) theme="catppuccin-mocha.json" ;;
-  *)    theme="catppuccin-latte.json" ;;
+dark) theme="catppuccin-mocha.json" ;;
+*) theme="catppuccin-latte.json" ;;
 esac
 merged=$(jq -s '.[0] * .[1]' "$dir/shared.json" "$dir/$theme")
 tmp="${TMPDIR:-/tmp}/claude-powerline-config.json"
-printf '%s\n' "$merged" > "$tmp"
+printf '%s\n' "$merged" >"$tmp"
 CLAUDE_POWERLINE_CONFIG="$tmp" exec claude-powerline "$@"

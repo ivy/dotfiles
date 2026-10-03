@@ -10,8 +10,8 @@ brew update && brew upgrade
 
 # Update mise tools
 if command -v mise >/dev/null 2>&1; then
-    echo "🛠️  Updating mise tools..."
-    mise upgrade --yes
+	echo "🛠️  Updating mise tools..."
+	mise upgrade --yes
 fi
 
 # Update Chezmoi managed externals (Oh-My-Zsh, tmux config)

@@ -29,8 +29,8 @@ tool_command="$(jq -r '.tool_input.command // empty' 2>/dev/null || true)"
 
 # Does a token list (after the command word) contain a global flag?
 has_global() {
-  local tokens=" $* "
-  [[ "${tokens}" == *" -g "* || "${tokens}" == *" --global "* ]]
+	local tokens=" $* "
+	[[ "${tokens}" == *" -g "* || "${tokens}" == *" --global "* ]]
 }
 
 # Inspect one command segment. Sets MATCHED and returns 0 if it is an ad-hoc
@@ -41,54 +41,54 @@ has_global() {
 # reinstall`, etc.). Keep it legible and auditable; revisit when a new runtime's
 # installer becomes common (e.g. `deno install`). The BATS suite pins the matrix.
 segment_blocked() {
-  local -a toks
-  read -ra toks <<<"$1"
-  ((${#toks[@]})) || return 1
+	local -a toks
+	read -ra toks <<<"$1"
+	((${#toks[@]})) || return 1
 
-  # Strip leading env-assignments and command wrappers (FOO=bar, sudo, env, ...).
-  local i=0
-  while ((i < ${#toks[@]})); do
-    case "${toks[i]}" in
-    *=* | sudo | env | exec | command | builtin | nice | nohup | time) ((i += 1)) ;;
-    *) break ;;
-    esac
-  done
+	# Strip leading env-assignments and command wrappers (FOO=bar, sudo, env, ...).
+	local i=0
+	while ((i < ${#toks[@]})); do
+		case "${toks[i]}" in
+		*=* | sudo | env | exec | command | builtin | nice | nohup | time) ((i += 1)) ;;
+		*) break ;;
+		esac
+	done
 
-  local c="${toks[i]:-}" s="${toks[i + 1]:-}" t="${toks[i + 2]:-}"
-  local rest=("${toks[@]:i+1}")
+	local c="${toks[i]:-}" s="${toks[i + 1]:-}" t="${toks[i + 2]:-}"
+	local rest=("${toks[@]:i+1}")
 
-  case "${c}" in
-  npx | bunx | uvx) MATCHED="${c}" && return 0 ;;
-  pnpm)
-    [[ "${s}" == dlx ]] && MATCHED="pnpm dlx" && return 0
-    [[ "${s}" =~ ^(add|install|i)$ ]] && has_global "${rest[@]}" && MATCHED="pnpm ${s} --global" && return 0
-    ;;
-  yarn)
-    [[ "${s}" == dlx ]] && MATCHED="yarn dlx" && return 0
-    [[ "${s}" == global ]] && MATCHED="yarn global" && return 0
-    ;;
-  npm)
-    [[ "${s}" =~ ^(install|i|add)$ ]] && has_global "${rest[@]}" && MATCHED="npm ${s} --global" && return 0
-    ;;
-  pipx)
-    [[ "${s}" =~ ^(run|install)$ ]] && MATCHED="pipx ${s}" && return 0
-    ;;
-  uv)
-    [[ "${s}" == tool && "${t}" =~ ^(run|install)$ ]] && MATCHED="uv tool ${t}" && return 0
-    [[ "${s}" == pip && "${t}" == install ]] && MATCHED="uv pip install" && return 0
-    ;;
-  pip | pip3)
-    [[ "${s}" == install ]] && MATCHED="${c} install" && return 0
-    ;;
-  python | python3)
-    [[ "${s}" == -m && "${t}" == pip && "${toks[i + 3]:-}" == install ]] && MATCHED="${c} -m pip install" && return 0
-    ;;
-  gem | brew | apt | apt-get | dnf | yum | cargo | go)
-    # These block only their `install` subcommand.
-    [[ "${s}" == install ]] && MATCHED="${c} install" && return 0
-    ;;
-  esac
-  return 1
+	case "${c}" in
+	npx | bunx | uvx) MATCHED="${c}" && return 0 ;;
+	pnpm)
+		[[ "${s}" == dlx ]] && MATCHED="pnpm dlx" && return 0
+		[[ "${s}" =~ ^(add|install|i)$ ]] && has_global "${rest[@]}" && MATCHED="pnpm ${s} --global" && return 0
+		;;
+	yarn)
+		[[ "${s}" == dlx ]] && MATCHED="yarn dlx" && return 0
+		[[ "${s}" == global ]] && MATCHED="yarn global" && return 0
+		;;
+	npm)
+		[[ "${s}" =~ ^(install|i|add)$ ]] && has_global "${rest[@]}" && MATCHED="npm ${s} --global" && return 0
+		;;
+	pipx)
+		[[ "${s}" =~ ^(run|install)$ ]] && MATCHED="pipx ${s}" && return 0
+		;;
+	uv)
+		[[ "${s}" == tool && "${t}" =~ ^(run|install)$ ]] && MATCHED="uv tool ${t}" && return 0
+		[[ "${s}" == pip && "${t}" == install ]] && MATCHED="uv pip install" && return 0
+		;;
+	pip | pip3)
+		[[ "${s}" == install ]] && MATCHED="${c} install" && return 0
+		;;
+	python | python3)
+		[[ "${s}" == -m && "${t}" == pip && "${toks[i + 3]:-}" == install ]] && MATCHED="${c} -m pip install" && return 0
+		;;
+	gem | brew | apt | apt-get | dnf | yum | cargo | go)
+		# These block only their `install` subcommand.
+		[[ "${s}" == install ]] && MATCHED="${c} install" && return 0
+		;;
+	esac
+	return 1
 }
 
 # Split the command into segments on shell operators, then inspect each. Order
@@ -101,13 +101,13 @@ norm="${norm//&/$'\n'}"
 
 MATCHED=""
 while IFS= read -r segment; do
-  [[ -z "${segment// /}" ]] && continue
-  if segment_blocked "${segment}"; then
-    reason="Ad-hoc installer \"${MATCHED}\" is blocked so tools stay captured in mise and the dotfiles. Use the /install skill instead — it pins the version and routes to the right scope (user or project)."
-    jq -cn --arg r "${reason}" \
-      '{hookSpecificOutput: {hookEventName: "PreToolUse", permissionDecision: "deny", permissionDecisionReason: $r}}'
-    exit 0
-  fi
+	[[ -z "${segment// /}" ]] && continue
+	if segment_blocked "${segment}"; then
+		reason="Ad-hoc installer \"${MATCHED}\" is blocked so tools stay captured in mise and the dotfiles. Use the /install skill instead — it pins the version and routes to the right scope (user or project)."
+		jq -cn --arg r "${reason}" \
+			'{hookSpecificOutput: {hookEventName: "PreToolUse", permissionDecision: "deny", permissionDecisionReason: $r}}'
+		exit 0
+	fi
 done <<<"${norm}"
 
 exit 0

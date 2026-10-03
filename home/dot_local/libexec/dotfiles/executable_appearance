@@ -8,26 +8,26 @@
 #   3. Fallback: "light"
 
 if [ -z "$BG" ] && [ -n "$TMUX" ]; then
-  BG="$(tmux show-environment BG 2>/dev/null | sed 's/^BG=//')"
+	BG="$(tmux show-environment BG 2>/dev/null | sed 's/^BG=//')"
 fi
 
 if [ -n "$BG" ]; then
-  case "$BG" in
-    dark) echo "dark" ;;
-    *)    echo "light" ;;
-  esac
-  exit 0
+	case "$BG" in
+	dark) echo "dark" ;;
+	*) echo "light" ;;
+	esac
+	exit 0
 fi
 
 case "$(uname -s)" in
-  Darwin)
-    if defaults read -g AppleInterfaceStyle >/dev/null 2>&1; then
-      echo "dark"
-    else
-      echo "light"
-    fi
-    ;;
-  *)
-    echo "light"
-    ;;
+Darwin)
+	if defaults read -g AppleInterfaceStyle >/dev/null 2>&1; then
+		echo "dark"
+	else
+		echo "light"
+	fi
+	;;
+*)
+	echo "light"
+	;;
 esac

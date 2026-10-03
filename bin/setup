@@ -9,7 +9,7 @@ set -o nounset
 
 # Check if mise is available
 if ! command -v mise >/dev/null 2>&1; then
-  cat >&2 <<'EOF'
+	cat >&2 <<'EOF'
 Warning: mise was not found in PATH.
 
 This project uses mise to manage its developer tools.
@@ -22,7 +22,7 @@ but you will need to install required dependencies on your own.
 
 Docs: https://mise.jdx.dev
 EOF
-  exit 1
+	exit 1
 fi
 
 # Install tools via mise
