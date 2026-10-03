@@ -19,6 +19,22 @@ local linters = new Mapping<String, Step|Group> {
     exclude = "docs/reference/**"
   }
   ["mise"] = Builtins.mise
+  // Every mise tool names an exact version — see docs/core-principles.md
+  ["mise-no-latest"] = new Step {
+    glob = List("mise.toml", "home/dot_config/mise/config.toml")
+    check =
+      #"""
+      failed=0
+      for f in {{ files }}; do
+        pins=$(yq -p toml -o yaml '.tools | .. | select(tag == "!!str" and . == "latest") | path | join(".")' "$f") || exit 2
+        if [ -n "$pins" ]; then
+          printf '%s: pinned to "latest", use an exact version:\n%s\n' "$f" "$pins"
+          failed=1
+        fi
+      done
+      exit $failed
+      """#
+  }
 
   // Shell — exclude chezmoi templates
   ["shellcheck"] = (Builtins.shellcheck) {
