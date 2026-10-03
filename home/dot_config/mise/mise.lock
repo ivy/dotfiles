@@ -2227,41 +2227,49 @@ url = "https://nodejs.org/dist/v26.10.0/node-v26.10.0-win-x64.zip"
 
 [[tools."npm:@openai/codex"]]
 version = "0.159.2"
+aube = { path = ".mise/locks/npm-openai-codex/0.159.2", digest = "sha256:2e5f4e6e70718e72966e1ae6f6592e9a43112d85e23f7a3c7be3908d4a56ba95" }
 backend = "npm:@openai/codex"
 specifiers = ["0.159.2"]
 
 [[tools."npm:@owloops/claude-powerline"]]
 version = "1.32.1"
+aube = { path = ".mise/locks/npm-owloops-claude-powerline/1.32.1", digest = "sha256:b353268f769ffff4ba7e9732ea649654f599dd03d77eaaac4516de0a1402273d" }
 backend = "npm:@owloops/claude-powerline"
 specifiers = ["1.32.1"]
 
 [[tools."npm:@playwright/mcp"]]
 version = "0.0.83"
+aube = { path = ".mise/locks/npm-playwright-mcp/0.0.83", digest = "sha256:9e3415e02fe50356d6a0ac9d135b198eef2d28fe887a41b0ec01c50a8f13b63c" }
 backend = "npm:@playwright/mcp"
 specifiers = ["0.0.83"]
 
 [[tools."npm:@tobilu/qmd"]]
 version = "2.8.3"
+aube = { path = ".mise/locks/npm-tobilu-qmd/2.8.3", digest = "sha256:ffc53221315b796ab6dabbad76fefa29a779f79661795930fad06cc89a56d0b1" }
 backend = "npm:@tobilu/qmd"
 specifiers = ["2.8.3"]
 
 [[tools."npm:bktide"]]
 version = "1.0.1782920867"
+aube = { path = ".mise/locks/npm-bktide/1.0.1782920867", digest = "sha256:e156abba645e8fe03238c39359d7bc62ecff9269b0d49fb899854f6bd20270a4" }
 backend = "npm:bktide"
 specifiers = ["1.0.1782920867"]
 
 [[tools."npm:ccusage"]]
 version = "20.0.26"
+aube = { path = ".mise/locks/npm-ccusage/20.0.26", digest = "sha256:e1229ed145ebbaaaa3e6116f5a729c75f32a6fc901a681ad0febc7451f529025" }
 backend = "npm:ccusage"
 specifiers = ["20.0.26"]
 
 [[tools."npm:git-mob"]]
 version = "4.0.1"
+aube = { path = ".mise/locks/npm-git-mob/4.0.1", digest = "sha256:070fec8852104ee6a2767b935e09a5d563197892733b9937a0e1ef6d1bf82264" }
 backend = "npm:git-mob"
 specifiers = ["4.0.1"]
 
 [[tools."npm:obsidian-headless"]]
 version = "0.0.14"
+aube = { path = ".mise/locks/npm-obsidian-headless/0.0.14", digest = "sha256:d53604577a72eae3bdbe3dc3856d1602c6945d5e8d4bdd920d58d0cc5c965703" }
 backend = "npm:obsidian-headless"
 specifiers = ["0.0.14"]
 

@@ -1,0 +1,24 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    dependencies:
+      '@owloops/claude-powerline':
+        specifier: 1.32.1
+        version: 1.32.1
+
+packages:
+
+  '@owloops/claude-powerline@1.32.1':
+    resolution: {integrity: sha512-2gMJt9o/mFNyYDoKFDjgOgrva7o2cBsNlHNvEcIzm2k4nAVN181EUA7arhtoL+E9FYQYq6iCrHNtoSAbWODdew==}
+    engines: {node: '>=18.0.0'}
+    hasBin: true
+
+snapshots:
+
+  '@owloops/claude-powerline@1.32.1': {}
