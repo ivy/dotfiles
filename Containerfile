@@ -50,7 +50,7 @@ RUN --mount=type=cache,target=/var/cache/dnf \
 # =============================================================================
 # Layer: cosign (signature verification)
 # =============================================================================
-ARG COSIGN_VERSION=v2.5.3
+ARG COSIGN_VERSION=v2.6.5
 RUN ARCH=$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/') \
     && curl -fsSL "https://github.com/sigstore/cosign/releases/download/${COSIGN_VERSION}/cosign-linux-${ARCH}" \
         -o /usr/local/bin/cosign \
