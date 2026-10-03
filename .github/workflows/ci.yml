@@ -46,6 +46,7 @@ jobs:
           BUILDKITE_OP_REF: op://ci/buildkite/credential
           NGROK_OP_REF: op://ci/ngrok/credential
           OBSIDIAN_VAULT_PATH: /tmp/vault
+          GITHUB_TOKEN: ${{ github.token }}
         # --no-tty turns an unanswered prompt into an immediate error rather
         # than a hang that burns the job timeout.
         run: ./install.sh -- --no-tty
