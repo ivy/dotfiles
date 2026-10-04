@@ -22,7 +22,7 @@ Every dependency has an exact version. Renovate opens PRs to update them.
 
 | Layer | How | Where |
 |---|---|---|
-| **Mise tools** | Exact versions + lockfile with per-platform SHA256 checksums | `home/dot_config/mise/config.toml`, `mise.lock` |
+| **Mise tools** | Exact versions + lockfile with per-platform SHA256 checksums; npm tools also lock their full dependency graph | `home/dot_config/mise/config.toml`, `mise.lock`, `.mise/locks/` |
 | **GitHub Actions** | Commit SHA pins | `.github/workflows/*.yml` |
 | **Shell plugins** | Commit SHA pins | `home/.chezmoiexternal.toml.tmpl` |
 | **Tmux plugins** | Commit SHA pins | `home/.chezmoidata/tmux-plugins.yaml` |

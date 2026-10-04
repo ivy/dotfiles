@@ -8,13 +8,12 @@
 #   4. pipx: - Python CLI tools (requires python)
 #   5. npm: - Node CLI tools (requires node)
 
+# Older releases cannot install from these lockfiles.
+min_version = "2026.10.1"
+
 [settings]
 color_theme = "catppuccin"
 lockfile = true
-# Use the node runtime's bundled npm for npm: tools. The default ("auto")
-# resolves to jdx/aube, whose shim breaks when aube isn't an active tool
-# version — deterministic npm avoids that failure mode entirely.
-npm.package_manager = "npm"
 
 [tools]
 # Runtimes (install first - required by pipx/npm/cargo backends)

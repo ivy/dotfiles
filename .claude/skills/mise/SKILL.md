@@ -47,7 +47,8 @@ $ARGUMENTS
 | File | Purpose |
 |------|---------|
 | `home/dot_config/mise/config.toml` | User tool manifest — edit here, never `~/.config/mise/config.toml` |
-| `home/dot_config/mise/mise.lock` | User lockfile (auto-generated) |
+| `home/dot_config/mise/mise.lock` | User lockfile (auto-generated); `~/.config/mise/mise.lock` is a symlink to it |
+| `home/dot_config/mise/.mise/locks/`, `.mise/locks/` | npm dependency graphs the lockfiles reference by path and digest (auto-generated) |
 | `mise.toml` | Project dev tool manifest (bats, shellcheck, hk, etc.) |
 | `mise.lock` | Project lockfile (auto-generated) |
 | `home/run_onchange_00-install-mise-tools.sh.tmpl` | Install trigger — runs on config/lock hash change |
@@ -125,21 +126,11 @@ mise lock                            # project-level (mise.toml)
 mise --cd home/dot_config/mise lock  # user-level (config.toml)
 ```
 
-Then normalize the user lockfile, or the next `chezmoi apply` stops to prompt:
-
-```bash
-chezmoi apply --force ~/.config/mise/mise.lock
-mise install --yes
-cp ~/.config/mise/mise.lock home/dot_config/mise/mise.lock
-```
-
-A tool carrying platform options (`zoxide` has an `asset_pattern`) gets two
-lockfile entries, and `mise lock` and `mise install` order that pair
-differently. chezmoi writes the `mise lock` order, the install script's
-`mise install` immediately rewrites it, and the following apply sees a file it
-did not write. Committing the post-install form settles it: apply and install
-then agree, and both leave the file alone. Verify with
-`diff home/dot_config/mise/mise.lock ~/.config/mise/mise.lock` after installing.
+`~/.config/mise/mise.lock` is a symlink to the user lockfile in this repository, so
+there is no deployed copy to keep in step. Anything `mise install` or `mise use`
+writes to the lockfile, or to the dependency graphs under `.mise/locks/`, shows up
+as a change in the working tree. Commit the graphs with the lockfile; never
+reformat them, because the lockfile records a digest of each.
 
 ### Troubleshooting install failures
 

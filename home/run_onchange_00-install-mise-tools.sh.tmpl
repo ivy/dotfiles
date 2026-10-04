@@ -58,16 +58,16 @@ GITHUB_TOKEN=$(gh auth token) mise install --yes --verbose
 mise install --yes --verbose
 {{- end }}
 
-# better-sqlite3 ships C++ source only and relies on a postinstall script to
-# fetch a prebuilt binary. Our global NPM_CONFIG_IGNORE_SCRIPTS=1
-# (docs/supply-chain-security.md) blocks that, so the native addon never lands
-# and every dependent dies with ERR_DLOPEN_FAILED. Compile it from the source
+# Some better-sqlite3 releases ship C++ source only and rely on an install
+# script to fetch a prebuilt binary. Dependency install scripts do not run here
+# (docs/supply-chain-security.md), so the native addon never lands and the
+# dependent dies with ERR_DLOPEN_FAILED. Compile it from the source
 # vendored in the tarball instead — that keeps the hardening intact and trusts
 # no third-party release blob. The addon is bound to one Node ABI, so a node
 # upgrade invalidates it; rebuild only when the current interpreter can't load
 # it.
 #
-# Each entry is "<mise tool spec>:<package path under lib/node_modules>".
+# Each entry is "<mise tool spec>:<package name>".
 BETTER_SQLITE3_DEPENDENTS=(
     "npm:@tobilu/qmd:@tobilu/qmd"
     "npm:obsidian-headless:obsidian-headless"
@@ -78,8 +78,10 @@ rebuild_better_sqlite3_addon() {
     local tool_root pkg_dir addon_dir node_bin
 
     tool_root="$(mise where "${tool}" 2>/dev/null)" || return 0
-    pkg_dir="${tool_root}/lib/node_modules/${pkg_name}"
-    [ -d "${pkg_dir}" ] || return 0
+    # Where the package sits under the install root depends on the installer,
+    # so find it rather than assuming a layout.
+    pkg_dir="$(find "${tool_root}" -type d -path "*/node_modules/${pkg_name}" -print -quit 2>/dev/null)"
+    [ -n "${pkg_dir}" ] || return 0
 
     node_bin="$(mise which node 2>/dev/null)" || return 0
     [ -x "${node_bin}" ] || return 0
@@ -91,7 +93,7 @@ rebuild_better_sqlite3_addon() {
         return 0
     fi
 
-    addon_dir="${pkg_dir}/node_modules/better-sqlite3"
+    addon_dir="$(cd "${pkg_dir}" && "${node_bin}" -p "require('path').dirname(require.resolve('better-sqlite3/package.json'))" 2>/dev/null)" || return 0
     [ -d "${addon_dir}" ] || return 0
 
     echo "Rebuilding ${pkg_name}'s better-sqlite3 addon for Node ABI $("${node_bin}" -p 'process.versions.modules')..."

@@ -13,7 +13,8 @@ local linters = new Mapping<String, Step|Group> {
   ["trailing-whitespace"] = Builtins.trailing_whitespace
   ["newlines"] = Builtins.newlines
   ["jq"] = (Builtins.jq) {
-    exclude = "**/*keybindings.json"
+    // mise records a digest of each sidecar, so reformatting one invalidates it
+    exclude = List("**/*keybindings.json", "**/.mise/locks/**")
   }
   ["markdown-lint"] = (Builtins.markdown_lint) {
     exclude = "docs/reference/**"
