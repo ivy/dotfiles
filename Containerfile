@@ -59,7 +59,8 @@ RUN ARCH=$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/') \
 # =============================================================================
 # Layer: mise (tool version manager)
 # =============================================================================
-RUN curl -fsSL https://mise.run | MISE_INSTALL_PATH=/usr/local/bin/mise sh
+ARG MISE_VERSION=v2026.10.1
+RUN curl -fsSL https://mise.run | MISE_VERSION="${MISE_VERSION}" MISE_INSTALL_PATH=/usr/local/bin/mise sh
 
 # =============================================================================
 # Layer: chezmoi (dotfiles manager)

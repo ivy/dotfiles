@@ -20,6 +20,7 @@
 # ENVIRONMENT VARIABLES:
 #   CHEZMOI_VERSION: Override the version to install (default: latest)
 #   COSIGN_VERSION: Override the cosign version to install (default: latest)
+#   MISE_VERSION: Override the mise version the official installer fetches
 #   BIN_DIR: Override installation directory (default: ~/.local/bin)
 #   VERIFY_SIGNATURES: Disable signature verification (default: true)
 #   SKIP_PACKAGE_MANAGER: Force binary download (default: false)
@@ -501,7 +502,7 @@ install_mise() {
 
 	# Fallback: official mise installer (works on any Linux/macOS)
 	log_info "Trying mise official installer..."
-	if curl -fsSL https://mise.run | sh 2>/dev/null; then
+	if curl -fsSL https://mise.run | MISE_VERSION="$MISE_VERSION" sh 2>/dev/null; then
 		# mise installer puts binary in ~/.local/bin or ~/.local/share/mise/bin
 		export PATH="$HOME/.local/bin:$HOME/.local/share/mise/bin:$PATH"
 		if command -v mise >/dev/null 2>&1; then
@@ -765,6 +766,12 @@ main() {
 		COSIGN_VERSION_FROM_FILE="$(grep '^cosign' "$script_dir/home/dot_config/dotfiles/cli-versions.toml" | cut -d'"' -f2 2>/dev/null || echo "")"
 	fi
 	readonly COSIGN_VERSION="${COSIGN_VERSION:-${COSIGN_VERSION_FROM_FILE:-latest}}"
+	# Same for mise; an empty version lets the official installer pick the latest
+	MISE_VERSION_FROM_FILE=""
+	if [ -f "$script_dir/home/dot_config/dotfiles/cli-versions.toml" ]; then
+		MISE_VERSION_FROM_FILE="$(grep '^mise' "$script_dir/home/dot_config/dotfiles/cli-versions.toml" | cut -d'"' -f2 2>/dev/null || echo "")"
+	fi
+	readonly MISE_VERSION="${MISE_VERSION:-${MISE_VERSION_FROM_FILE:-}}"
 	readonly VERIFY_SIGNATURES="${VERIFY_SIGNATURES:-true}"
 	readonly SKIP_PACKAGE_MANAGER="${SKIP_PACKAGE_MANAGER:-false}"
 	readonly REINSTALL_TOOLS="${REINSTALL_TOOLS:-false}"
