@@ -71,10 +71,8 @@ gh pr list --author "app/renovate" --json number,title,headRefName,statusCheckRo
 
 For each PR:
 - Check CI status with `gh pr checks <number>`
-- If all critical checks pass (tests, not claude-review), prepare to merge
+- If all checks pass, prepare to merge
 - If `--dry-run`, just show what would be merged
-
-**Edge case:** `claude-review` failing on its own update PR is fine—it's reviewing itself with an old version
 
 ### 3. Merge Passing PRs
 
