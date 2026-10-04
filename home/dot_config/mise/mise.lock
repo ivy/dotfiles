@@ -445,74 +445,74 @@ url_api = "https://api.github.com/repos/atuinsh/atuin/releases/assets/580134234"
 provenance = "github-attestations"
 
 [[tools."github:backnotprop/plannotator"]]
-version = "0.27.22"
+version = "0.27.23"
 backend = "github:backnotprop/plannotator"
-specifiers = ["0.27.22"]
+specifiers = ["0.27.23"]
 
 [tools."github:backnotprop/plannotator"."platforms.linux-arm64"]
-checksum = "sha256:b9632d72b0cdc3a27e458a3d08868704d917056201e0c9ff07eda8f3c14efc36"
-url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.22/plannotator-linux-arm64"
-url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/596866867"
+checksum = "sha256:d7f62c34cebfcd4cfb64ef00910765aac57fb052aa250c86c306242620f72e92"
+url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.23/plannotator-linux-arm64"
+url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/601843154"
 provenance = "github-attestations"
 
 [tools."github:backnotprop/plannotator"."platforms.linux-arm64-musl"]
-checksum = "sha256:b9632d72b0cdc3a27e458a3d08868704d917056201e0c9ff07eda8f3c14efc36"
-url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.22/plannotator-linux-arm64"
-url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/596866867"
+checksum = "sha256:d7f62c34cebfcd4cfb64ef00910765aac57fb052aa250c86c306242620f72e92"
+url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.23/plannotator-linux-arm64"
+url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/601843154"
 provenance = "github-attestations"
 
 [tools."github:backnotprop/plannotator"."platforms.linux-x64"]
-checksum = "sha256:30d1d1639b1dcb2e57695b2b18a61e29e398ad0af4b5df17981a0ca024bfc3b3"
-url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.22/plannotator-linux-x64"
-url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/596866878"
+checksum = "sha256:a1abca3fcd1799239ba3ec1aeb77f9f54029cfce7b1e856dbfcf14b008484237"
+url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.23/plannotator-linux-x64"
+url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/601843155"
 provenance = "github-attestations"
 
 [tools."github:backnotprop/plannotator"."platforms.linux-x64-baseline"]
-checksum = "sha256:30d1d1639b1dcb2e57695b2b18a61e29e398ad0af4b5df17981a0ca024bfc3b3"
-url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.22/plannotator-linux-x64"
-url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/596866878"
+checksum = "sha256:a1abca3fcd1799239ba3ec1aeb77f9f54029cfce7b1e856dbfcf14b008484237"
+url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.23/plannotator-linux-x64"
+url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/601843155"
 provenance = "github-attestations"
 
 [tools."github:backnotprop/plannotator"."platforms.linux-x64-musl"]
-checksum = "sha256:30d1d1639b1dcb2e57695b2b18a61e29e398ad0af4b5df17981a0ca024bfc3b3"
-url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.22/plannotator-linux-x64"
-url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/596866878"
+checksum = "sha256:a1abca3fcd1799239ba3ec1aeb77f9f54029cfce7b1e856dbfcf14b008484237"
+url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.23/plannotator-linux-x64"
+url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/601843155"
 provenance = "github-attestations"
 
 [tools."github:backnotprop/plannotator"."platforms.linux-x64-musl-baseline"]
-checksum = "sha256:30d1d1639b1dcb2e57695b2b18a61e29e398ad0af4b5df17981a0ca024bfc3b3"
-url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.22/plannotator-linux-x64"
-url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/596866878"
+checksum = "sha256:a1abca3fcd1799239ba3ec1aeb77f9f54029cfce7b1e856dbfcf14b008484237"
+url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.23/plannotator-linux-x64"
+url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/601843155"
 provenance = "github-attestations"
 
 [tools."github:backnotprop/plannotator"."platforms.macos-arm64"]
-checksum = "sha256:95445807f6a956b9f2cbe20b8a533e1f7ef28948275ab93895deba82b11e6443"
-url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.22/plannotator-darwin-arm64"
-url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/596866863"
+checksum = "sha256:3f5b2a50b0d63b2cd7443debb8dbf5138e17cbc78fe6b4cd8f44d765047630e9"
+url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.23/plannotator-darwin-arm64"
+url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/601843163"
 provenance = "github-attestations"
 
 [tools."github:backnotprop/plannotator"."platforms.macos-x64"]
-checksum = "sha256:07f53ef913c0968c0a90dde55f821f9a1dc17abd2556c226e8be1e8c71d9acfe"
-url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.22/plannotator-darwin-x64"
-url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/596866873"
+checksum = "sha256:dc3f813ff74fd81801680c69a26f9683f0e8a5d28b2ae4ab59e91a743e56fab4"
+url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.23/plannotator-darwin-x64"
+url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/601843162"
 provenance = "github-attestations"
 
 [tools."github:backnotprop/plannotator"."platforms.macos-x64-baseline"]
-checksum = "sha256:07f53ef913c0968c0a90dde55f821f9a1dc17abd2556c226e8be1e8c71d9acfe"
-url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.22/plannotator-darwin-x64"
-url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/596866873"
+checksum = "sha256:dc3f813ff74fd81801680c69a26f9683f0e8a5d28b2ae4ab59e91a743e56fab4"
+url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.23/plannotator-darwin-x64"
+url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/601843162"
 provenance = "github-attestations"
 
 [tools."github:backnotprop/plannotator"."platforms.windows-x64"]
-checksum = "sha256:ff0c52318f89fe3dd3190f5a6847e6ef748d3b000ffe17f1cb960e24d79b0d59"
-url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.22/plannotator-win32-x64.exe"
-url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/596866854"
+checksum = "sha256:221538f3761e5db0630cfbe1c034fa093893d90871dc2d1d07cbfbdccc6f92c3"
+url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.23/plannotator-win32-x64.exe"
+url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/601843139"
 provenance = "github-attestations"
 
 [tools."github:backnotprop/plannotator"."platforms.windows-x64-baseline"]
-checksum = "sha256:ff0c52318f89fe3dd3190f5a6847e6ef748d3b000ffe17f1cb960e24d79b0d59"
-url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.22/plannotator-win32-x64.exe"
-url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/596866854"
+checksum = "sha256:221538f3761e5db0630cfbe1c034fa093893d90871dc2d1d07cbfbdccc6f92c3"
+url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.23/plannotator-win32-x64.exe"
+url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/601843139"
 provenance = "github-attestations"
 
 [[tools."github:boyter/scc"]]
@@ -1855,74 +1855,74 @@ url = "https://github.com/smtg-ai/claude-squad/releases/download/v1.0.20/claude-
 url_api = "https://api.github.com/repos/smtg-ai/claude-squad/releases/assets/521791094"
 
 [[tools."github:sst/opencode"]]
-version = "1.18.33"
+version = "1.18.34"
 backend = "github:sst/opencode"
-specifiers = ["1.18.33"]
+specifiers = ["1.18.34"]
 
 [tools."github:sst/opencode"."platforms.linux-arm64"]
-checksum = "sha256:c63486624621924bf43be5c01abd252885661a734814224f6d70188a33aea858"
-url = "https://github.com/sst/opencode/releases/download/v1.18.33/opencode-linux-arm64.tar.gz"
-url_api = "https://api.github.com/repos/sst/opencode/releases/assets/594449121"
+checksum = "sha256:bbdb3f00c2c51e42e315525233151309724226a8776da8e9145e3b0fa3d5310f"
+url = "https://github.com/sst/opencode/releases/download/v1.18.34/opencode-linux-arm64.tar.gz"
+url_api = "https://api.github.com/repos/sst/opencode/releases/assets/601904056"
 provenance = "github-attestations"
 
 [tools."github:sst/opencode"."platforms.linux-arm64-musl"]
-checksum = "sha256:916e4ca40cdd43025b7741a6c60cd1141b8622a8531e2eebdffcfd3e41f56907"
-url = "https://github.com/sst/opencode/releases/download/v1.18.33/opencode-linux-arm64-musl.tar.gz"
-url_api = "https://api.github.com/repos/sst/opencode/releases/assets/594449118"
+checksum = "sha256:eaf0692e4b60dca382a126ca607d617be7b6eaf82d318a828f2b6eb1eacea99a"
+url = "https://github.com/sst/opencode/releases/download/v1.18.34/opencode-linux-arm64-musl.tar.gz"
+url_api = "https://api.github.com/repos/sst/opencode/releases/assets/601904034"
 provenance = "github-attestations"
 
 [tools."github:sst/opencode"."platforms.linux-x64"]
-checksum = "sha256:e546123213ae47909a4268692aa4b94950d011afe9cac9938753a2194f1c16d5"
-url = "https://github.com/sst/opencode/releases/download/v1.18.33/opencode-linux-x64.tar.gz"
-url_api = "https://api.github.com/repos/sst/opencode/releases/assets/594449176"
+checksum = "sha256:0f22479647226d1d2dd99595d20082ee7bda3870b62dc6a90b41efc1a71d7e9a"
+url = "https://github.com/sst/opencode/releases/download/v1.18.34/opencode-linux-x64.tar.gz"
+url_api = "https://api.github.com/repos/sst/opencode/releases/assets/601903965"
 provenance = "github-attestations"
 
 [tools."github:sst/opencode"."platforms.linux-x64-baseline"]
-checksum = "sha256:e546123213ae47909a4268692aa4b94950d011afe9cac9938753a2194f1c16d5"
-url = "https://github.com/sst/opencode/releases/download/v1.18.33/opencode-linux-x64.tar.gz"
-url_api = "https://api.github.com/repos/sst/opencode/releases/assets/594449176"
+checksum = "sha256:0f22479647226d1d2dd99595d20082ee7bda3870b62dc6a90b41efc1a71d7e9a"
+url = "https://github.com/sst/opencode/releases/download/v1.18.34/opencode-linux-x64.tar.gz"
+url_api = "https://api.github.com/repos/sst/opencode/releases/assets/601903965"
 provenance = "github-attestations"
 
 [tools."github:sst/opencode"."platforms.linux-x64-musl"]
-checksum = "sha256:56636216a0b6595339ffdd5e2c885e6ea68a854f880720120e8cfa71172042c2"
-url = "https://github.com/sst/opencode/releases/download/v1.18.33/opencode-linux-x64-musl.tar.gz"
-url_api = "https://api.github.com/repos/sst/opencode/releases/assets/594449134"
+checksum = "sha256:9dd4470885d07205e31b702465564aaee97be26ee3dc192ec6702a15e7a21272"
+url = "https://github.com/sst/opencode/releases/download/v1.18.34/opencode-linux-x64-musl.tar.gz"
+url_api = "https://api.github.com/repos/sst/opencode/releases/assets/601903962"
 provenance = "github-attestations"
 
 [tools."github:sst/opencode"."platforms.linux-x64-musl-baseline"]
-checksum = "sha256:56636216a0b6595339ffdd5e2c885e6ea68a854f880720120e8cfa71172042c2"
-url = "https://github.com/sst/opencode/releases/download/v1.18.33/opencode-linux-x64-musl.tar.gz"
-url_api = "https://api.github.com/repos/sst/opencode/releases/assets/594449134"
+checksum = "sha256:9dd4470885d07205e31b702465564aaee97be26ee3dc192ec6702a15e7a21272"
+url = "https://github.com/sst/opencode/releases/download/v1.18.34/opencode-linux-x64-musl.tar.gz"
+url_api = "https://api.github.com/repos/sst/opencode/releases/assets/601903962"
 provenance = "github-attestations"
 
 [tools."github:sst/opencode"."platforms.macos-arm64"]
-checksum = "sha256:24b12873e605b3db3387cb355f43ba7451cd6065c180d8c188663337d2eeb553"
-url = "https://github.com/sst/opencode/releases/download/v1.18.33/opencode-darwin-arm64.zip"
-url_api = "https://api.github.com/repos/sst/opencode/releases/assets/594449070"
+checksum = "sha256:8522b70f545184b3a8d97c5ca4f814093b2476d72aebfda8c48bcd072ec31d1b"
+url = "https://github.com/sst/opencode/releases/download/v1.18.34/opencode-darwin-arm64.zip"
+url_api = "https://api.github.com/repos/sst/opencode/releases/assets/601909071"
 provenance = "github-attestations"
 
 [tools."github:sst/opencode"."platforms.macos-x64"]
-checksum = "sha256:90c7e7d9ffa0d8691ca0f15b42a7b89b72e17a4d26074b9ef06559ff87b221ec"
-url = "https://github.com/sst/opencode/releases/download/v1.18.33/opencode-darwin-x64.zip"
-url_api = "https://api.github.com/repos/sst/opencode/releases/assets/594449065"
+checksum = "sha256:66bf0638cffad3b65bd6648cc3947619e1dd71f4bfeee0a81e087ac036bb1088"
+url = "https://github.com/sst/opencode/releases/download/v1.18.34/opencode-darwin-x64.zip"
+url_api = "https://api.github.com/repos/sst/opencode/releases/assets/601909069"
 provenance = "github-attestations"
 
 [tools."github:sst/opencode"."platforms.macos-x64-baseline"]
-checksum = "sha256:90c7e7d9ffa0d8691ca0f15b42a7b89b72e17a4d26074b9ef06559ff87b221ec"
-url = "https://github.com/sst/opencode/releases/download/v1.18.33/opencode-darwin-x64.zip"
-url_api = "https://api.github.com/repos/sst/opencode/releases/assets/594449065"
+checksum = "sha256:66bf0638cffad3b65bd6648cc3947619e1dd71f4bfeee0a81e087ac036bb1088"
+url = "https://github.com/sst/opencode/releases/download/v1.18.34/opencode-darwin-x64.zip"
+url_api = "https://api.github.com/repos/sst/opencode/releases/assets/601909069"
 provenance = "github-attestations"
 
 [tools."github:sst/opencode"."platforms.windows-x64"]
-checksum = "sha256:cc827fda2e32502373c5de25a4b78471766b99881d12a441ae5b9fcff39c5780"
-url = "https://github.com/sst/opencode/releases/download/v1.18.33/opencode-windows-x64.zip"
-url_api = "https://api.github.com/repos/sst/opencode/releases/assets/594453549"
+checksum = "sha256:8ec42ed1ad8db108052394b83ab69d0331398f761fbfff5fe50f91d65bdd3548"
+url = "https://github.com/sst/opencode/releases/download/v1.18.34/opencode-windows-x64.zip"
+url_api = "https://api.github.com/repos/sst/opencode/releases/assets/601908697"
 provenance = "github-attestations"
 
 [tools."github:sst/opencode"."platforms.windows-x64-baseline"]
-checksum = "sha256:cc827fda2e32502373c5de25a4b78471766b99881d12a441ae5b9fcff39c5780"
-url = "https://github.com/sst/opencode/releases/download/v1.18.33/opencode-windows-x64.zip"
-url_api = "https://api.github.com/repos/sst/opencode/releases/assets/594453549"
+checksum = "sha256:8ec42ed1ad8db108052394b83ab69d0331398f761fbfff5fe50f91d65bdd3548"
+url = "https://github.com/sst/opencode/releases/download/v1.18.34/opencode-windows-x64.zip"
+url_api = "https://api.github.com/repos/sst/opencode/releases/assets/601908697"
 provenance = "github-attestations"
 
 [[tools."github:starship/starship"]]
@@ -2226,10 +2226,10 @@ checksum = "sha256:9fef7eca6743a6b910989cd8e78712376b394fcb9b6e1e9c44a0799a287f9
 url = "https://nodejs.org/dist/v26.10.0/node-v26.10.0-win-x64.zip"
 
 [[tools."npm:@openai/codex"]]
-version = "0.159.2"
-aube = { path = ".mise/locks/npm-openai-codex/0.159.2", digest = "sha256:2e5f4e6e70718e72966e1ae6f6592e9a43112d85e23f7a3c7be3908d4a56ba95" }
+version = "0.159.3"
+aube = { path = ".mise/locks/npm-openai-codex/0.159.3", digest = "sha256:1749b0adbb74223af887182fc7b506a5afc2ac357ae72095c61a8287cd11563f" }
 backend = "npm:@openai/codex"
-specifiers = ["0.159.2"]
+specifiers = ["0.159.3"]
 
 [[tools."npm:@owloops/claude-powerline"]]
 version = "1.32.1"
