@@ -44,6 +44,10 @@
     "custom.jsonata"
   ],
 
+  // Run `mise lock` with the same mise the rest of the repo pins, so lockfiles
+  // are written by one version everywhere.
+  "constraints": {"mise": "2026.9.18"},
+
   // Lock file maintenance: regenerate mise.lock to pick up new checksums.
   "lockFileMaintenance": {
     "enabled": true,
@@ -180,6 +184,39 @@
       ],
       "depNameTemplate": "sigstore/cosign",
       "datasourceTemplate": "github-releases"
+    },
+
+    // mise itself, pinned wherever a script or workflow installs it. The "v"
+    // sits outside the capture so prefixed and bare pins update from the same
+    // release.
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/^home/dot_config/dotfiles/cli-versions\\.toml$/",
+        "/^Containerfile$/",
+        "/^\\.github/workflows/ci\\.yml$/"
+      ],
+      "matchStrings": [
+        "(?:^|\\n)mise\\s*=\\s*\"v(?<currentValue>[^\"]+)\"",
+        "ARG MISE_VERSION=v(?<currentValue>[^\\s]+)",
+        "version: (?<currentValue>[^\\s]+) # mise"
+      ],
+      "depNameTemplate": "jdx/mise",
+      "datasourceTemplate": "github-releases",
+      "extractVersionTemplate": "^v(?<version>.+)$"
+    },
+
+    // The mise version in `constraints` above. A manager of its own, because the
+    // patterns of the previous one would match their own definitions here.
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/^renovate\\.json5$/"],
+      "matchStrings": [
+        "\"constraints\": \\{\"mise\": \"(?<currentValue>[0-9][^\"]*)\"\\}"
+      ],
+      "depNameTemplate": "jdx/mise",
+      "datasourceTemplate": "github-releases",
+      "extractVersionTemplate": "^v(?<version>.+)$"
     },
 
     // --- Chezmoi external dependencies (.chezmoiexternal.toml.tmpl) --------------
