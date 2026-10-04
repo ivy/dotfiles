@@ -1,6 +1,9 @@
 # mise configuration for chezmoi dotfiles project
 # Development tools for shell scripting and testing
 
+# Older releases cannot install from these lockfiles.
+min_version = "2026.10.1"
+
 [tools]
 "aqua:bats-core/bats-core" = "1.14.0"
 "aqua:boyter/scc" = "4.1.0"

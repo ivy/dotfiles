@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# The global mise lockfile is a symlink into this repository rather than a copy.
+# mise resolves a lockfile's dependency-graph sidecars relative to the lockfile
+# it finally opens, so the link lets it find them beside the source file. See
+# https://mise.jdx.dev/dev-tools/mise-lock.html#sidecar-locations
+#
+# source: {{ .chezmoi.sourceDir }}
+
+[ -n "${DEBUG:-}" ] && set -o xtrace
+set -o errexit
+set -o nounset
+
+mkdir -p "${HOME}/.config/mise"
+ln -sfn "{{ .chezmoi.sourceDir }}/dot_config/mise/mise.lock" "${HOME}/.config/mise/mise.lock"

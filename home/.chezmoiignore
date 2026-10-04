@@ -13,3 +13,7 @@ Library/**
 .config/systemd
 .config/systemd/**
 {{ end }}
+
+# Linked into the source tree by run_onchange_before_link-mise-lock.sh.tmpl,
+# not copied.
+.config/mise/mise.lock
