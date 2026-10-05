@@ -445,74 +445,74 @@ url_api = "https://api.github.com/repos/atuinsh/atuin/releases/assets/580134234"
 provenance = "github-attestations"
 
 [[tools."github:backnotprop/plannotator"]]
-version = "0.27.24"
+version = "0.27.25"
 backend = "github:backnotprop/plannotator"
-specifiers = ["0.27.24"]
+specifiers = ["0.27.25"]
 
 [tools."github:backnotprop/plannotator"."platforms.linux-arm64"]
-checksum = "sha256:bfcfa49a65d3fe807d2c84689e3da7294c4c64d6a8166b36d3072e58be62692b"
-url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.24/plannotator-linux-arm64"
-url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/602341938"
+checksum = "sha256:efda692879b680bfa4ce049071199eec5daddf8f6921c2625fa88ac560cb4899"
+url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.25/plannotator-linux-arm64"
+url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/604441007"
 provenance = "github-attestations"
 
 [tools."github:backnotprop/plannotator"."platforms.linux-arm64-musl"]
-checksum = "sha256:bfcfa49a65d3fe807d2c84689e3da7294c4c64d6a8166b36d3072e58be62692b"
-url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.24/plannotator-linux-arm64"
-url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/602341938"
+checksum = "sha256:efda692879b680bfa4ce049071199eec5daddf8f6921c2625fa88ac560cb4899"
+url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.25/plannotator-linux-arm64"
+url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/604441007"
 provenance = "github-attestations"
 
 [tools."github:backnotprop/plannotator"."platforms.linux-x64"]
-checksum = "sha256:a949fec62cd338e46f030623d58ede1a4aab3e0f9d7be4fa8bf090ac543bab9f"
-url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.24/plannotator-linux-x64"
-url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/602341930"
+checksum = "sha256:001af7752f8542024589fafc44aec3be27c73133a2c37df38f0b591c2c145dd8"
+url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.25/plannotator-linux-x64"
+url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/604441010"
 provenance = "github-attestations"
 
 [tools."github:backnotprop/plannotator"."platforms.linux-x64-baseline"]
-checksum = "sha256:a949fec62cd338e46f030623d58ede1a4aab3e0f9d7be4fa8bf090ac543bab9f"
-url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.24/plannotator-linux-x64"
-url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/602341930"
+checksum = "sha256:001af7752f8542024589fafc44aec3be27c73133a2c37df38f0b591c2c145dd8"
+url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.25/plannotator-linux-x64"
+url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/604441010"
 provenance = "github-attestations"
 
 [tools."github:backnotprop/plannotator"."platforms.linux-x64-musl"]
-checksum = "sha256:a949fec62cd338e46f030623d58ede1a4aab3e0f9d7be4fa8bf090ac543bab9f"
-url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.24/plannotator-linux-x64"
-url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/602341930"
+checksum = "sha256:001af7752f8542024589fafc44aec3be27c73133a2c37df38f0b591c2c145dd8"
+url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.25/plannotator-linux-x64"
+url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/604441010"
 provenance = "github-attestations"
 
 [tools."github:backnotprop/plannotator"."platforms.linux-x64-musl-baseline"]
-checksum = "sha256:a949fec62cd338e46f030623d58ede1a4aab3e0f9d7be4fa8bf090ac543bab9f"
-url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.24/plannotator-linux-x64"
-url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/602341930"
+checksum = "sha256:001af7752f8542024589fafc44aec3be27c73133a2c37df38f0b591c2c145dd8"
+url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.25/plannotator-linux-x64"
+url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/604441010"
 provenance = "github-attestations"
 
 [tools."github:backnotprop/plannotator"."platforms.macos-arm64"]
-checksum = "sha256:599ec5fcefb89bbe596604fd2b7596e77f5bef6fd17c7e0094de3c6a93632988"
-url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.24/plannotator-darwin-arm64"
-url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/602341941"
+checksum = "sha256:24de60fbf8e3bdab5197cf3adf9ce381e8a818f2d54b2a055f61291c7b2260ea"
+url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.25/plannotator-darwin-arm64"
+url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/604441006"
 provenance = "github-attestations"
 
 [tools."github:backnotprop/plannotator"."platforms.macos-x64"]
-checksum = "sha256:67926c8d63a32fcedaaf56026a60705fb99bdc3c673b6c206aaab828b298aa4a"
-url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.24/plannotator-darwin-x64"
-url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/602341934"
+checksum = "sha256:fa407baa376e3478f9fed8ebe139f819942d26203f85442e6e7880c71589f877"
+url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.25/plannotator-darwin-x64"
+url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/604440999"
 provenance = "github-attestations"
 
 [tools."github:backnotprop/plannotator"."platforms.macos-x64-baseline"]
-checksum = "sha256:67926c8d63a32fcedaaf56026a60705fb99bdc3c673b6c206aaab828b298aa4a"
-url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.24/plannotator-darwin-x64"
-url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/602341934"
+checksum = "sha256:fa407baa376e3478f9fed8ebe139f819942d26203f85442e6e7880c71589f877"
+url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.25/plannotator-darwin-x64"
+url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/604440999"
 provenance = "github-attestations"
 
 [tools."github:backnotprop/plannotator"."platforms.windows-x64"]
-checksum = "sha256:c91b58d8af8025197eebf084ad3023e7c488e9a96eaa6d8ab9bc0e5cd52c3583"
-url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.24/plannotator-win32-x64.exe"
-url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/602341933"
+checksum = "sha256:986d4aa536b0e8223289d00815d76cfb8576ba41cd5545f1ba23f807d3383598"
+url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.25/plannotator-win32-x64.exe"
+url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/604440998"
 provenance = "github-attestations"
 
 [tools."github:backnotprop/plannotator"."platforms.windows-x64-baseline"]
-checksum = "sha256:c91b58d8af8025197eebf084ad3023e7c488e9a96eaa6d8ab9bc0e5cd52c3583"
-url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.24/plannotator-win32-x64.exe"
-url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/602341933"
+checksum = "sha256:986d4aa536b0e8223289d00815d76cfb8576ba41cd5545f1ba23f807d3383598"
+url = "https://github.com/backnotprop/plannotator/releases/download/v0.27.25/plannotator-win32-x64.exe"
+url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/604440998"
 provenance = "github-attestations"
 
 [[tools."github:boyter/scc"]]
@@ -2226,10 +2226,10 @@ checksum = "sha256:9fef7eca6743a6b910989cd8e78712376b394fcb9b6e1e9c44a0799a287f9
 url = "https://nodejs.org/dist/v26.10.0/node-v26.10.0-win-x64.zip"
 
 [[tools."npm:@openai/codex"]]
-version = "0.159.3"
-aube = { path = ".mise/locks/npm-openai-codex/0.159.3", digest = "sha256:1749b0adbb74223af887182fc7b506a5afc2ac357ae72095c61a8287cd11563f" }
+version = "0.160.0"
+aube = { path = ".mise/locks/npm-openai-codex/0.160.0", digest = "sha256:3ca7c1883e40c80b1a886d0ee5348dec716b084b626895a06a2593c158cab291" }
 backend = "npm:@openai/codex"
-specifiers = ["0.159.3"]
+specifiers = ["0.160.0"]
 
 [[tools."npm:@owloops/claude-powerline"]]
 version = "1.32.1"
@@ -2274,54 +2274,54 @@ backend = "npm:obsidian-headless"
 specifiers = ["0.0.14"]
 
 [[tools.pipx]]
-version = "1.17.8"
+version = "1.17.9"
 backend = "aqua:pypa/pipx"
-specifiers = ["1.17.8"]
+specifiers = ["1.17.9"]
 
 [tools.pipx."platforms.linux-arm64"]
-checksum = "sha256:a5827798e78767c7f83c7261400e3521a68c18cae9f6635ad7fe739290cb3e87"
-url = "https://github.com/pypa/pipx/releases/download/1.17.8/pipx.pyz"
-url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/598951216"
+checksum = "sha256:fdeb4c8fa0205d2a1d7feaee37ea50e5171077225bcd02d7375c19692d57e5e6"
+url = "https://github.com/pypa/pipx/releases/download/1.17.9/pipx.pyz"
+url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/604357373"
 
 [tools.pipx."platforms.linux-arm64-musl"]
-checksum = "sha256:a5827798e78767c7f83c7261400e3521a68c18cae9f6635ad7fe739290cb3e87"
-url = "https://github.com/pypa/pipx/releases/download/1.17.8/pipx.pyz"
-url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/598951216"
+checksum = "sha256:fdeb4c8fa0205d2a1d7feaee37ea50e5171077225bcd02d7375c19692d57e5e6"
+url = "https://github.com/pypa/pipx/releases/download/1.17.9/pipx.pyz"
+url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/604357373"
 
 [tools.pipx."platforms.linux-x64"]
-checksum = "sha256:a5827798e78767c7f83c7261400e3521a68c18cae9f6635ad7fe739290cb3e87"
-url = "https://github.com/pypa/pipx/releases/download/1.17.8/pipx.pyz"
-url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/598951216"
+checksum = "sha256:fdeb4c8fa0205d2a1d7feaee37ea50e5171077225bcd02d7375c19692d57e5e6"
+url = "https://github.com/pypa/pipx/releases/download/1.17.9/pipx.pyz"
+url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/604357373"
 
 [tools.pipx."platforms.linux-x64-baseline"]
-checksum = "sha256:a5827798e78767c7f83c7261400e3521a68c18cae9f6635ad7fe739290cb3e87"
-url = "https://github.com/pypa/pipx/releases/download/1.17.8/pipx.pyz"
-url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/598951216"
+checksum = "sha256:fdeb4c8fa0205d2a1d7feaee37ea50e5171077225bcd02d7375c19692d57e5e6"
+url = "https://github.com/pypa/pipx/releases/download/1.17.9/pipx.pyz"
+url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/604357373"
 
 [tools.pipx."platforms.linux-x64-musl"]
-checksum = "sha256:a5827798e78767c7f83c7261400e3521a68c18cae9f6635ad7fe739290cb3e87"
-url = "https://github.com/pypa/pipx/releases/download/1.17.8/pipx.pyz"
-url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/598951216"
+checksum = "sha256:fdeb4c8fa0205d2a1d7feaee37ea50e5171077225bcd02d7375c19692d57e5e6"
+url = "https://github.com/pypa/pipx/releases/download/1.17.9/pipx.pyz"
+url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/604357373"
 
 [tools.pipx."platforms.linux-x64-musl-baseline"]
-checksum = "sha256:a5827798e78767c7f83c7261400e3521a68c18cae9f6635ad7fe739290cb3e87"
-url = "https://github.com/pypa/pipx/releases/download/1.17.8/pipx.pyz"
-url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/598951216"
+checksum = "sha256:fdeb4c8fa0205d2a1d7feaee37ea50e5171077225bcd02d7375c19692d57e5e6"
+url = "https://github.com/pypa/pipx/releases/download/1.17.9/pipx.pyz"
+url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/604357373"
 
 [tools.pipx."platforms.macos-arm64"]
-checksum = "sha256:a5827798e78767c7f83c7261400e3521a68c18cae9f6635ad7fe739290cb3e87"
-url = "https://github.com/pypa/pipx/releases/download/1.17.8/pipx.pyz"
-url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/598951216"
+checksum = "sha256:fdeb4c8fa0205d2a1d7feaee37ea50e5171077225bcd02d7375c19692d57e5e6"
+url = "https://github.com/pypa/pipx/releases/download/1.17.9/pipx.pyz"
+url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/604357373"
 
 [tools.pipx."platforms.macos-x64"]
-checksum = "sha256:a5827798e78767c7f83c7261400e3521a68c18cae9f6635ad7fe739290cb3e87"
-url = "https://github.com/pypa/pipx/releases/download/1.17.8/pipx.pyz"
-url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/598951216"
+checksum = "sha256:fdeb4c8fa0205d2a1d7feaee37ea50e5171077225bcd02d7375c19692d57e5e6"
+url = "https://github.com/pypa/pipx/releases/download/1.17.9/pipx.pyz"
+url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/604357373"
 
 [tools.pipx."platforms.macos-x64-baseline"]
-checksum = "sha256:a5827798e78767c7f83c7261400e3521a68c18cae9f6635ad7fe739290cb3e87"
-url = "https://github.com/pypa/pipx/releases/download/1.17.8/pipx.pyz"
-url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/598951216"
+checksum = "sha256:fdeb4c8fa0205d2a1d7feaee37ea50e5171077225bcd02d7375c19692d57e5e6"
+url = "https://github.com/pypa/pipx/releases/download/1.17.9/pipx.pyz"
+url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/604357373"
 
 [[tools.pkl]]
 version = "0.32.1"

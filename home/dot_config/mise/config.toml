@@ -48,7 +48,7 @@ bun = "1.4.2"
 "github:aristocratos/btop" = { version = "1.4.7", os = ["linux"] }
 "github:atuinsh/atuin" = "18.23.0"
 # plannotator: binary the plannotator Claude Code plugin's hooks invoke on PATH
-"github:backnotprop/plannotator" = "0.27.24"
+"github:backnotprop/plannotator" = "0.27.25"
 "github:boyter/scc" = "4.1.0"
 "github:buildkite/cli" = "3.59.1"
 "github:carapace-sh/carapace-bin" = "1.8.0"
@@ -81,10 +81,10 @@ bun = "1.4.2"
 "gitlab:gitlab-org/cli" = "1.120.0"
 
 # pipx itself (prerequisite for any `pipx:` backend entries)
-pipx = "1.17.8"
+pipx = "1.17.9"
 
 # Node tools via npm
-"npm:@openai/codex" = "0.159.3"
+"npm:@openai/codex" = "0.160.0"
 "npm:@playwright/mcp" = "0.0.83"
 "npm:@owloops/claude-powerline" = "1.32.1"
 "npm:@tobilu/qmd" = "2.8.3"
