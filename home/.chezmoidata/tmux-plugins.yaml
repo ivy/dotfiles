@@ -10,4 +10,4 @@ tmuxPlugins:
   - name: tmux-powerline
     repo: erikw/tmux-powerline
     ref: main
-    commit: d70011158dc389070d6ed7a67b65367206b6ddec
+    commit: 67e21efaeb560443c741e240b74ce7f3995c765d
