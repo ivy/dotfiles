@@ -221,44 +221,44 @@ url_api = "https://api.github.com/repos/suzuki-shunsuke/ghalint/releases/assets/
 url = "https://github.com/suzuki-shunsuke/ghalint/releases/download/v1.5.6/multiple.intoto.jsonl"
 
 [[tools."github:buildkite/cli"]]
-version = "3.59.1"
+version = "3.60.0"
 backend = "github:buildkite/cli"
-specifiers = ["3.59.1"]
+specifiers = ["3.60.0"]
 
 [tools."github:buildkite/cli"."platforms.linux-arm64"]
-checksum = "sha256:76ff95f4351339e269867282332398a5c047277b9193e5322d66999919614b79"
-url = "https://github.com/buildkite/cli/releases/download/v3.59.1/bk_3.59.1_linux_arm64.tar.gz"
-url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/600209844"
+checksum = "sha256:e57d8a90d923d78b9e6a6ec06665d07c686bcfd7035127795686d3662dd8831b"
+url = "https://github.com/buildkite/cli/releases/download/v3.60.0/bk_3.60.0_linux_arm64.tar.gz"
+url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/614461467"
 
 [tools."github:buildkite/cli"."platforms.linux-arm64-musl"]
-checksum = "sha256:76ff95f4351339e269867282332398a5c047277b9193e5322d66999919614b79"
-url = "https://github.com/buildkite/cli/releases/download/v3.59.1/bk_3.59.1_linux_arm64.tar.gz"
-url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/600209844"
+checksum = "sha256:e57d8a90d923d78b9e6a6ec06665d07c686bcfd7035127795686d3662dd8831b"
+url = "https://github.com/buildkite/cli/releases/download/v3.60.0/bk_3.60.0_linux_arm64.tar.gz"
+url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/614461467"
 
 [tools."github:buildkite/cli"."platforms.linux-x64"]
-checksum = "sha256:ef98fddcc26796ba402154b82a2f7386564d4006f10f69166db2c64a011ff72e"
-url = "https://github.com/buildkite/cli/releases/download/v3.59.1/bk_3.59.1_linux_amd64.tar.gz"
-url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/600209843"
+checksum = "sha256:a4e215407b1c82ba13cdb6cee91584c656c1d70b6ccbff87aa19c8ce06bc9b32"
+url = "https://github.com/buildkite/cli/releases/download/v3.60.0/bk_3.60.0_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/614461464"
 
 [tools."github:buildkite/cli"."platforms.linux-x64-musl"]
-checksum = "sha256:ef98fddcc26796ba402154b82a2f7386564d4006f10f69166db2c64a011ff72e"
-url = "https://github.com/buildkite/cli/releases/download/v3.59.1/bk_3.59.1_linux_amd64.tar.gz"
-url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/600209843"
+checksum = "sha256:a4e215407b1c82ba13cdb6cee91584c656c1d70b6ccbff87aa19c8ce06bc9b32"
+url = "https://github.com/buildkite/cli/releases/download/v3.60.0/bk_3.60.0_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/614461464"
 
 [tools."github:buildkite/cli"."platforms.macos-arm64"]
-checksum = "sha256:ecb9b20906a6e1ce5906bac7c099f1c8aa487e154b7ef1dd425bca130967c394"
-url = "https://github.com/buildkite/cli/releases/download/v3.59.1/bk_3.59.1_macOS_arm64.zip"
-url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/600209846"
+checksum = "sha256:2cda6486ac82f86e606ce3d710faa21a2608dff9b1641dc957d836cf7760b4ee"
+url = "https://github.com/buildkite/cli/releases/download/v3.60.0/bk_3.60.0_macOS_arm64.zip"
+url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/614461468"
 
 [tools."github:buildkite/cli"."platforms.macos-x64"]
-checksum = "sha256:b5d37441470393fe8d58e7431eacb928ecec353e9f6cf1df73a3841ee271bc31"
-url = "https://github.com/buildkite/cli/releases/download/v3.59.1/bk_3.59.1_macOS_amd64.zip"
-url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/600209845"
+checksum = "sha256:9aee37f7e21ef4f8d00a4cc6ee7f1fdeaa04c292f37d3a728857ee2fb7b192a1"
+url = "https://github.com/buildkite/cli/releases/download/v3.60.0/bk_3.60.0_macOS_amd64.zip"
+url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/614461462"
 
 [tools."github:buildkite/cli"."platforms.windows-x64"]
-checksum = "sha256:9bd96da18e403aba8ad0968d6bdb8a8d3fd3d02ab9612a6b1fe17a612ad1c72f"
-url = "https://github.com/buildkite/cli/releases/download/v3.59.1/bk_3.59.1_windows_amd64.zip"
-url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/600209875"
+checksum = "sha256:953b50d22e0c75e9ec7057789a3f3f55533e51d0c05f0b19f66e16cc93cbfe51"
+url = "https://github.com/buildkite/cli/releases/download/v3.60.0/bk_3.60.0_windows_amd64.zip"
+url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/614461505"
 
 [[tools."github:gitleaks/gitleaks"]]
 version = "8.30.1"
@@ -301,50 +301,50 @@ url = "https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8
 url_api = "https://api.github.com/repos/gitleaks/gitleaks/releases/assets/378333178"
 
 [[tools."github:jdx/hk"]]
-version = "2.4.0"
+version = "2.5.0"
 backend = "github:jdx/hk"
-specifiers = ["2.4.0"]
+specifiers = ["2.5.0"]
 
 [tools."github:jdx/hk"."platforms.linux-arm64"]
-checksum = "sha256:836235bd8aa06f25e7ff28591b32efb5297abe55366e912095636a49ffe4d363"
-url = "https://github.com/jdx/hk/releases/download/v2.4.0/hk-aarch64-unknown-linux-gnu.tar.gz"
-url_api = "https://api.github.com/repos/jdx/hk/releases/assets/594327179"
+checksum = "sha256:c800091c414e1c8e8628137275d88c257bcfe0c35dd31d2762923a71dae7df7f"
+url = "https://github.com/jdx/hk/releases/download/v2.5.0/hk-aarch64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/609776357"
 provenance = "github-attestations"
 
 [tools."github:jdx/hk"."platforms.linux-arm64-musl"]
-checksum = "sha256:ad5c5a556e0a505d9a3441868217976bd4ae610e1364e93516993b9717d9ef28"
-url = "https://github.com/jdx/hk/releases/download/v2.4.0/hk-aarch64-unknown-linux-musl.tar.gz"
-url_api = "https://api.github.com/repos/jdx/hk/releases/assets/594327184"
+checksum = "sha256:1e839b96defad21b5118d9554f2146811a2ce8d8eef90b3da1d592834969b717"
+url = "https://github.com/jdx/hk/releases/download/v2.5.0/hk-aarch64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/609776359"
 provenance = "github-attestations"
 
 [tools."github:jdx/hk"."platforms.linux-x64"]
-checksum = "sha256:6efabe30aeabc4611a42ce6cf0fd46b9a19478e2cfd9acfd1bd93998736f3153"
-url = "https://github.com/jdx/hk/releases/download/v2.4.0/hk-x86_64-unknown-linux-gnu.tar.gz"
-url_api = "https://api.github.com/repos/jdx/hk/releases/assets/594327200"
+checksum = "sha256:449b83c35ac3a460f80a4c9a41ad99430add8cf6caa6ceadc27e810feac3647d"
+url = "https://github.com/jdx/hk/releases/download/v2.5.0/hk-x86_64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/609776378"
 provenance = "github-attestations"
 
 [tools."github:jdx/hk"."platforms.linux-x64-musl"]
-checksum = "sha256:f34598671ca40be5c308324a60ef30b736dbbbf4259dfb511abd79009ee4de2a"
-url = "https://github.com/jdx/hk/releases/download/v2.4.0/hk-x86_64-unknown-linux-musl.tar.gz"
-url_api = "https://api.github.com/repos/jdx/hk/releases/assets/594327202"
+checksum = "sha256:55b349ed8ebbb9cc11e3ff7f741230035061e45621c0b2c87fffeeb37fadcfd0"
+url = "https://github.com/jdx/hk/releases/download/v2.5.0/hk-x86_64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/609776386"
 provenance = "github-attestations"
 
 [tools."github:jdx/hk"."platforms.macos-arm64"]
-checksum = "sha256:6e1c970b9de7ab4ee52c85869b2ea9cfe8769d25a0fe9536062e0ba62366ec59"
-url = "https://github.com/jdx/hk/releases/download/v2.4.0/hk-aarch64-apple-darwin.tar.gz"
-url_api = "https://api.github.com/repos/jdx/hk/releases/assets/594327181"
+checksum = "sha256:fabbed3a44e72c601759fa81d56f3c9403ca466853bdf77e87cc69d986cb151a"
+url = "https://github.com/jdx/hk/releases/download/v2.5.0/hk-aarch64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/609776358"
 provenance = "github-attestations"
 
 [tools."github:jdx/hk"."platforms.macos-x64"]
-checksum = "sha256:fc4be984e8c3c0c4340848370b1ce91e5794f805ffb95e6c5243c17bf7030f42"
-url = "https://github.com/jdx/hk/releases/download/v2.4.0/hk%402.4.0.zip"
-url_api = "https://api.github.com/repos/jdx/hk/releases/assets/594327208"
+checksum = "sha256:959e25d5f2a230b0889c6cfb2e623fe73ee1386d2cbf318297e7dbdf0e51ab56"
+url = "https://github.com/jdx/hk/releases/download/v2.5.0/hk%402.5.0.zip"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/609776393"
 provenance = "github-attestations"
 
 [tools."github:jdx/hk"."platforms.windows-x64"]
-checksum = "sha256:028931e00fd670ad891a428bf44e14ac8e2726a8f72b7fae80b27b6502af2be3"
-url = "https://github.com/jdx/hk/releases/download/v2.4.0/hk-x86_64-pc-windows-msvc.zip"
-url_api = "https://api.github.com/repos/jdx/hk/releases/assets/594327180"
+checksum = "sha256:9d3063f0eadb316415dc2aaea51608f436eb6ffe44e00c2e460294c66f269a54"
+url = "https://github.com/jdx/hk/releases/download/v2.5.0/hk-x86_64-pc-windows-msvc.zip"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/609776356"
 provenance = "github-attestations"
 
 [[tools.jq]]
