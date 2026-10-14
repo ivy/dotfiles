@@ -295,10 +295,11 @@ Case is preserved — the lookup is exact:
 Lowercasing a capitalised owner is a hard miss, not a fuzzy one. Build the name and
 pass it straight to `search_graph` / `search_code` / `query_graph`.
 
-Guessing wrong is cheap and self-correcting: an unknown project returns an immediate
-error whose payload is the complete list of indexed project names — a few kilobytes,
-versus ~67,000 characters for `list_projects`. So if you ever do need the full
-roster, deliberately querying a bogus project name is the faster way to get it.
+Guessing wrong is cheap: an unknown project returns an immediate error. Its
+`available_projects` payload is **not** the full roster, though — it stops at 122
+names while more databases than that answer queries — so a name missing from it
+may still be indexed. Confirm a derived name with `index_status` instead of
+scanning that list.
 
 Reserve `list_projects` for when you actually need the per-project node/edge/size
 stats, and expect to read the result from a file.
