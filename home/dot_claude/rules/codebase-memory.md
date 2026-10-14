@@ -24,6 +24,7 @@ Don't call `list_projects` to find a name — its output overflows the result bu
 - `search_graph` — find a definition. `query` for keywords (BM25), `name_pattern` for a regex on the symbol name, `semantic_query` (an array of keywords) when the vocabulary is unknown. Narrow with `label` (`Function`, `Method`, `Class`) or `file_pattern`.
 - `search_code` — grep for a text pattern, with matches grouped by the function that contains them. Use it for strings, config keys, and anything that isn't a symbol.
 - `get_code_snippet` — source for a `qualified_name` from `search_graph`.
+- `get_file_outline` — the declarations in one file, in source order, for picking what to `Read` in a large file.
 - `trace_path` — callers and callees of a function, to a given `depth`. Needs an exact name, so find it with `search_graph` first.
 - `detect_changes` — map the working tree's git diff to the symbols it touches and what depends on them.
 - `query_graph` — Cypher for anything the others can't express. Methods carry the `Method` label, not `Function`; match unlabeled (`MATCH (f) WHERE f.name = ...`) when unsure. Call `get_graph_schema` for the labels and edge types a project actually has.
