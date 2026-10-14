@@ -33,8 +33,9 @@ else
 	readonly DARWIN=false
 	readonly LOG=''
 fi
-readonly STATE="$HOME/.cache/codebase-memory-mcp/.last-reindex-digest"
-readonly LOCKDIR="$HOME/.cache/codebase-memory-mcp/.reindex.lock"
+readonly CACHE="$HOME/.cache/codebase-memory-mcp"
+readonly STATE="$CACHE/.last-reindex-digest"
+readonly LOCKDIR="$CACHE/.reindex.lock"
 
 # Repositories to leave out of the corpus, as glob patterns matched against the
 # path relative to $SRC. The loop below is sequential and blocking, and CBM has
@@ -166,7 +167,11 @@ index_with_recovery() {
 start=$SECONDS
 indexed=0
 failed=0
+pruned=0
 digest_input=''
+# Newline-separated project names found this cycle, for the prune pass. A string
+# rather than an associative array: launchd runs this under macOS's bash 3.2.
+seen=''
 
 while IFS= read -r gitdir; do
 	repo="${gitdir%/.git}"
@@ -179,10 +184,13 @@ while IFS= read -r gitdir; do
 		fi
 	done
 
+	name="$(project_name "$repo")"
+	seen+="${name}"$'\n'
+
 	# A crash on one repository must not end the cycle. This parses untrusted
 	# source with memory-unsafe C — an abort on one tree is a survivable event,
 	# and the remaining repositories still need their refresh.
-	if ! index_with_recovery "$repo" "$(project_name "$repo")"; then
+	if ! index_with_recovery "$repo" "$name"; then
 		log "index failed: ${repo#"$SRC"/}"
 		printf '%s\n' "$out"
 		failed=$((failed + 1))
@@ -205,13 +213,47 @@ while IFS= read -r gitdir; do
 	# the loop moves on.
 done < <(find "$SRC" -maxdepth 4 -name .git 2>/dev/null | sort)
 
+# Drop databases whose checkout is gone. A renamed repository or a removed
+# worktree otherwise leaves a database that keeps answering queries about code
+# that no longer exists, with nothing to signal it is stale.
+#
+# A database is pruned only when its recorded root is under $SRC and missing, so a
+# project indexed by hand from elsewhere is never touched. Skipped entirely when
+# the scan found nothing: an empty or unmounted $SRC must not wipe the corpus.
+# delete_project rather than rm, so CBM takes its pipeline lock and removes the
+# WAL and SHM sidecars with the database.
+if [[ -n "$seen" ]]; then
+	for db in "$CACHE"/*.db; do
+		[[ -e "$db" ]] || continue
+		name="$(basename "$db" .db)"
+		[[ "$name" == _config ]] && continue
+		if printf '%s' "$seen" | grep -Fxq -- "$name"; then
+			continue
+		fi
+
+		root="$("$CBM" cli --quiet index_status --project "$name" --format json 2>/dev/null |
+			grep -oE '"root_path":"[^"]*"' | head -1 | cut -d'"' -f4 || true)"
+		if [[ "$root" != "$SRC"/* ]] || [[ -e "$root" ]]; then
+			continue
+		fi
+
+		if "$CBM" cli --quiet delete_project --project "$name" >/dev/null 2>&1; then
+			log "pruned ${name}: ${root#"$SRC"/} no longer exists"
+			pruned=$((pruned + 1))
+		else
+			log "prune failed: ${name}"
+			failed=$((failed + 1))
+		fi
+	done
+fi
+
 # Stay silent when the whole corpus came back byte-identical. A job this frequent
 # would otherwise bury the cycles that did real work. Any failure always speaks.
 digest="$(printf '%s' "$digest_input" | sha256 | cut -d' ' -f1)"
 previous="$(cat "$STATE" 2>/dev/null || true)"
 
-if [[ "$digest" != "$previous" ]] || ((failed > 0)); then
-	log "reindex cycle: $((SECONDS - start))s, ${indexed} indexed, ${failed} failed"
+if [[ "$digest" != "$previous" ]] || ((failed > 0)) || ((pruned > 0)); then
+	log "reindex cycle: $((SECONDS - start))s, ${indexed} indexed, ${pruned} pruned, ${failed} failed"
 fi
 
 mkdir -p "$(dirname "$STATE")"
