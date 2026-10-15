@@ -54,6 +54,8 @@ bun = "1.4.2"
 "github:carapace-sh/carapace-bin" = "1.8.0"
 "github:charmbracelet/glow" = "3.0.0"
 "github:cli/cli" = "2.102.0"
+# 7-Zip proper (7zz): extracts RAR, which the p7zip in Fedora's repos cannot
+"github:ip7z/7zip" = "26.04"
 "github:technicalpickles/cq" = "0.9.1"
 "github:dandavison/delta" = "0.19.2"
 "github:dlvhdr/gh-dash" = "4.26.0"
