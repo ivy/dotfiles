@@ -17,10 +17,10 @@ lockfile = true
 
 [tools]
 # Runtimes (install first - required by pipx/npm/cargo backends)
-node = "26.10.0"
-python = "3.14.8"
+node = "26.12.0"
+python = "3.15.0"
 pkl = "0.32.1"
-rust = "1.99.0"
+rust = "1.99.1"
 bun = "1.4.2"
 
 # Cargo (Rust tools built from source)
@@ -48,49 +48,49 @@ bun = "1.4.2"
 "github:aristocratos/btop" = { version = "1.4.7", os = ["linux"] }
 "github:atuinsh/atuin" = "18.23.0"
 # plannotator: binary the plannotator Claude Code plugin's hooks invoke on PATH
-"github:backnotprop/plannotator" = "0.27.25"
+"github:backnotprop/plannotator" = "0.28.20"
 "github:boyter/scc" = "4.1.0"
-"github:buildkite/cli" = "3.59.1"
+"github:buildkite/cli" = "3.62.0"
 "github:carapace-sh/carapace-bin" = "1.8.0"
 "github:charmbracelet/glow" = "3.0.0"
 "github:cli/cli" = "2.102.0"
 # 7-Zip proper (7zz): extracts RAR, which the p7zip in Fedora's repos cannot
 "github:ip7z/7zip" = "26.04"
-"github:technicalpickles/cq" = "0.9.1"
-"github:dandavison/delta" = "0.19.2"
-"github:dlvhdr/gh-dash" = "4.26.0"
+"github:technicalpickles/cq" = "0.10.0"
+"github:dandavison/delta" = "0.20.1"
+"github:dlvhdr/gh-dash" = "4.26.1"
 "github:gitleaks/gitleaks" = "8.30.1"
 # herdr: persistent runtime for agent terminal sessions. The mise registry still
 # points at the pre-transfer owner (ogulcancelik/herdr) — pin the canonical repo.
-"github:herdrdev/herdr" = "0.9.3"
-"github:jesseduffield/lazygit" = "0.65.1"
+"github:herdrdev/herdr" = "0.9.5"
+"github:jesseduffield/lazygit" = "0.66.1"
 "github:jqlang/jq" = "jq-1.8.2"
-"github:jdx/hk" = "2.4.0"
-"github:junegunn/fzf" = "0.74.4"
+"github:jdx/hk" = "2.6.0"
+"github:junegunn/fzf" = "0.74.5"
 "github:librespeed/speedtest-cli" = "1.0.14"
 "github:lima-vm/lima" = "2.2.1"
 "github:mikefarah/yq" = "4.54.1"
 "github:muesli/duf" = "0.9.1"
-"github:neovim/neovim" = "0.12.5"
+"github:neovim/neovim" = "0.12.6"
 "github:sharkdp/bat" = "0.26.1"
 "github:sharkdp/fd" = "10.5.0"
 "github:smtg-ai/claude-squad" = "1.0.20"
-"github:sst/opencode" = "1.18.34"
+"github:sst/opencode" = "1.19.0"
 "github:starship/starship" = "1.26.0"
 "github:yt-dlp/yt-dlp" = { version = "2026.08.19", rename_exe = "yt-dlp" }
 # glab: GitLab CLI. Ships releases on gitlab.com, not GitHub — the gitlab: backend
 # (not aqua:) is the appropriate fetcher here, unrelated to ADR-005's aqua concerns.
-"gitlab:gitlab-org/cli" = "1.121.0"
+"gitlab:gitlab-org/cli" = "1.123.0"
 
 # pipx itself (prerequisite for any `pipx:` backend entries)
-pipx = "1.17.11"
+pipx = "1.17.14"
 
 # Node tools via npm
-"npm:@openai/codex" = "0.160.0"
+"npm:@openai/codex" = "0.162.1"
 "npm:@playwright/mcp" = "0.0.83"
-"npm:@owloops/claude-powerline" = "1.32.1"
+"npm:@owloops/claude-powerline" = "1.32.3"
 "npm:@tobilu/qmd" = "2.8.3"
 "npm:bktide" = "1.0.1782920867"
-"npm:ccusage" = "20.0.26"
+"npm:ccusage" = "20.0.32"
 "npm:git-mob" = "4.0.1"
 "npm:obsidian-headless" = "0.0.14"
