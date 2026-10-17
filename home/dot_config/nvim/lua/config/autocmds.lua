@@ -10,7 +10,21 @@
 -- Sync vim.o.background with system appearance (dark/light).
 -- Runs at startup and on FocusGained so tmux set-environment BG changes
 -- propagate into running Neovim instances automatically.
+--
+-- Only when there is a real signal: macOS, or BG set in the environment or
+-- tmux. Without one the appearance script falls back to "light", which would
+-- clobber the background Neovim already detected from the terminal.
+local function has_appearance_signal()
+  if vim.fn.has("mac") == 1 or vim.env.BG then
+    return true
+  end
+  return vim.env.TMUX ~= nil and vim.system({ "tmux", "show-environment", "BG" }):wait().code == 0
+end
+
 local function sync_background()
+  if not has_appearance_signal() then
+    return
+  end
   local obj = vim.system({ vim.fn.expand("~/.local/libexec/dotfiles/appearance") }, { text = true }):wait()
   if obj.code == 0 then
     local bg = vim.trim(obj.stdout)
