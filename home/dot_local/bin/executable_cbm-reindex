@@ -46,6 +46,9 @@ readonly EXCLUDE=(
 	# 2 GB WordPress checkout, mostly LFS media. Exceeds the daemon's memory
 	# budget, whose worker is then respawned indefinitely on the same tree.
 	"github.com/ivy/nw-simracing-wordpress"
+	# 3.8 GB Unreal Engine source clone kept for reference. A full index ran
+	# above 600% CPU for minutes against UE builds sharing the host.
+	"github.com/EpicGames/UnrealEngine"
 )
 
 if [[ ! -x "$CBM" ]]; then
