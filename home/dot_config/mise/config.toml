@@ -34,6 +34,10 @@ bun = "1.4.2"
 # aqua: until github: backend works (github.com/bootandy/dust/issues/560)
 "aqua:bootandy/dust" = "1.2.6"
 
+# conda: poppler publishes source tarballs only. Provides pdftoppm, which
+# Claude Code's Read tool needs to render PDF page ranges.
+"conda:poppler" = "26.09.0"
+
 # CLI tools (GitHub Releases - see ADR-005)
 # Avoid aqua: backend — registry lag and attestation mismatches break installs.
 # See docs/adrs/005-replace-aqua-backend-with-github-releases.md
