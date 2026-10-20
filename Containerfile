@@ -19,7 +19,7 @@
 #     --secret id=github_token,env=GITHUB_TOKEN \
 #     -t dotfiles .
 
-FROM registry.fedoraproject.org/fedora:latest@sha256:99741a26ce7d4ee2746a564552210f267a458c527cc09ea7dd103ecbe62b0d5a
+FROM registry.fedoraproject.org/fedora:latest@sha256:12151022b0ec7cb4d70ae14e4a4d319377323265d7198b69dd53ec92713198d5
 
 # =============================================================================
 # Layer: system packages
