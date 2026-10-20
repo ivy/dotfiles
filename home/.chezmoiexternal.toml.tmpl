@@ -4,9 +4,9 @@
 # the git-refs datasource to track upstream master branches and propose SHA updates.
 
 # =============================================================================
-# Zsh (only installed if zsh is available)
+# Zsh (a declared system package, so not gated on zsh being on PATH: this file
+# is read before any script runs, when a fresh machine has no zsh yet)
 # =============================================================================
-{{ if lookPath "zsh" }}
 # Oh-My-Zsh framework
 [".oh-my-zsh"]
     type = "archive"
@@ -30,7 +30,6 @@
     exact = true
     stripComponents = 1
     refreshPeriod = "168h"
-{{ end }}
 
 # =============================================================================
 # Terminal themes

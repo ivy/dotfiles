@@ -13,6 +13,19 @@ if ! command -v mise >/dev/null 2>&1; then
     exit 0
 fi
 
+# This runs before chezmoi writes any file, so templates that probe for tools
+# (lookPath) render against an installed toolset on the very first apply. mise
+# reads its config and lockfile from the source tree ([scriptEnv] in
+# .chezmoi.toml.tmpl), since ~/.config/mise is not written yet.
+
+# Install exactly what the committed lockfile records and never rewrite it.
+# Unlocked, both `mise install` and `mise prune` re-resolve every platform
+# afterwards and edit the lockfile in the source tree. Only this repo's config
+# is held to it: a machine's system config (/etc/mise) declares tools this
+# lockfile cannot know about.
+export MISE_LOCKED=1
+export MISE_LOCKED_SCOPES=global
+
 # Every codebase-memory-mcp process must share one build fingerprint, enforced by
 # an OS admission barrier. Installing a new version and then pruning the old one
 # out from under a warm daemon leaves that daemon rejecting work, which surfaces
@@ -51,12 +64,14 @@ stop_codebase_memory_daemon
 echo "Installing global mise tools..."
 
 # Install all tools defined in global config
-# Authenticate with GitHub via gh CLI to avoid API rate limits
-{{- if lookPath "gh" }}
-GITHUB_TOKEN=$(gh auth token) mise install --yes --verbose
-{{- else }}
+# Authenticate with GitHub to avoid API rate limits. Checked when this runs, not
+# when it renders: gh is itself a mise tool, so a render-time check would change
+# this script, and re-trigger it, as soon as gh is installed.
+if [ -z "${GITHUB_TOKEN:-}" ] && command -v gh >/dev/null 2>&1; then
+    GITHUB_TOKEN="$(gh auth token 2>/dev/null || true)"
+    export GITHUB_TOKEN
+fi
 mise install --yes --verbose
-{{- end }}
 
 # Some better-sqlite3 releases ship C++ source only and rely on an install
 # script to fetch a prebuilt binary. Dependency install scripts do not run here

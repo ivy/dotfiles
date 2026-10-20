@@ -37,7 +37,7 @@ load test_helper
 
 @test "renders correctly on darwin with packages" {
 	# Test our ACTUAL script with our ACTUAL packages data
-	local script_file="home/run_onchange_install-packages-darwin.sh.tmpl"
+	local script_file="home/run_onchange_before_00-install-packages-darwin.sh.tmpl"
 
 	# Create config with our actual data
 	cat >"$TEST_TMPDIR/real-config.toml" <<EOF
@@ -74,7 +74,7 @@ EOF
 
 @test "does not render on non-darwin systems" {
 	# Test our ACTUAL script on non-darwin systems
-	local script_file="home/run_onchange_install-packages-darwin.sh.tmpl"
+	local script_file="home/run_onchange_before_00-install-packages-darwin.sh.tmpl"
 
 	# Create config with linux OS
 	cat >"$TEST_TMPDIR/linux-config.toml" <<EOF
@@ -93,7 +93,7 @@ EOF
 
 @test "produces valid shell syntax" {
 	# Test that our ACTUAL script renders to valid shell syntax
-	local script_file="home/run_onchange_install-packages-darwin.sh.tmpl"
+	local script_file="home/run_onchange_before_00-install-packages-darwin.sh.tmpl"
 
 	# Create config with our actual data
 	cat >"$TEST_TMPDIR/syntax-config.toml" <<EOF
@@ -116,7 +116,7 @@ EOF
 
 @test "handles empty sections gracefully" {
 	# Test that the script handles empty brew/cask sections without errors
-	local script_file="home/run_onchange_install-packages-darwin.sh.tmpl"
+	local script_file="home/run_onchange_before_00-install-packages-darwin.sh.tmpl"
 
 	# Create config with empty sections
 	cat >"$TEST_TMPDIR/empty-config.toml" <<EOF

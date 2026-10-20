@@ -188,11 +188,12 @@ Scripts in `home/` execute when their trigger conditions change:
 
 | Script | Triggers On | Installs |
 |--------|------------|----------|
-| `run_onchange_00-install-mise-tools.sh.tmpl` | mise config changes | All mise-managed tools (runtimes + backend tools) |
-| `run_onchange_install-packages-darwin.sh.tmpl` | packages.yaml changes | Homebrew packages |
-| `run_onchange_install-nvim-plugins.sh.tmpl` | Neovim plugin specs | LazyVim plugins |
+| `run_onchange_before_00-install-packages-darwin.sh.tmpl` | packages.yaml changes | Homebrew packages |
+| `run_onchange_before_00-install-packages-linux.sh.tmpl` | packages.yaml changes | apt/dnf packages that are not already installed |
+| `run_onchange_before_10-install-mise-tools.sh.tmpl` | mise config or lock changes | All mise-managed tools (runtimes + backend tools) |
+| `run_onchange_install-nvim-plugins.sh.tmpl` | Neovim plugin specs or `lazy-lock.json` | LazyVim plugins at their locked commits |
 
-The `00-` prefix ensures mise tools install first. All Python/Node tools are now installed via mise backends (`pipx:`, `npm:`) in a single script.
+The `before_` scripts run ahead of every file chezmoi writes, in prefix order: system packages first (mise compiles some tools against them), then mise tools. Templates that probe for a tool with `lookPath` therefore see the full toolset on the first apply, so a fresh machine converges in one pass. The mise script reads its config and lockfile from the source tree for that reason. All Python/Node tools are installed via mise backends (`pipx:`, `npm:`) in that one script.
 
 ## Best Practices
 
@@ -281,7 +282,7 @@ Always check `mise registry` first—prefer mise when available.
 ## Troubleshooting
 
 **Package not installing?**
-- Check the `run_onchange_00-install-mise-tools.sh.tmpl` script executed: `chezmoi status`
+- Check the `run_onchange_before_10-install-mise-tools.sh.tmpl` script executed: `chezmoi status`
 - Verify the backend prefix is correct (`aqua:`, `pipx:`, `npm:`, `github:`)
 - Run `mise install` manually to see detailed errors
 - Check if the tool exists: `mise registry | grep toolname`

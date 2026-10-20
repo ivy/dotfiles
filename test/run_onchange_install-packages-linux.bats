@@ -32,7 +32,7 @@ load test_helper
 }
 
 @test "renders correctly on linux with dnf packages" {
-	local script_file="home/run_onchange_install-packages-linux.sh.tmpl"
+	local script_file="home/run_onchange_before_00-install-packages-linux.sh.tmpl"
 
 	cat >"$TEST_TMPDIR/linux-config.toml" <<EOF
 [data]
@@ -59,7 +59,7 @@ EOF
 }
 
 @test "renders correctly on linux with apt packages" {
-	local script_file="home/run_onchange_install-packages-linux.sh.tmpl"
+	local script_file="home/run_onchange_before_00-install-packages-linux.sh.tmpl"
 
 	cat >"$TEST_TMPDIR/apt-config.toml" <<EOF
 [data]
@@ -86,7 +86,7 @@ EOF
 }
 
 @test "does not render on non-linux systems" {
-	local script_file="home/run_onchange_install-packages-linux.sh.tmpl"
+	local script_file="home/run_onchange_before_00-install-packages-linux.sh.tmpl"
 
 	cat >"$TEST_TMPDIR/darwin-config.toml" <<EOF
 [data]
@@ -102,7 +102,7 @@ EOF
 }
 
 @test "produces valid shell syntax (dnf path)" {
-	local script_file="home/run_onchange_install-packages-linux.sh.tmpl"
+	local script_file="home/run_onchange_before_00-install-packages-linux.sh.tmpl"
 
 	cat >"$TEST_TMPDIR/syntax-config.toml" <<EOF
 [data]
@@ -117,7 +117,7 @@ EOF
 }
 
 @test "produces valid shell syntax (apt path)" {
-	local script_file="home/run_onchange_install-packages-linux.sh.tmpl"
+	local script_file="home/run_onchange_before_00-install-packages-linux.sh.tmpl"
 
 	cat >"$TEST_TMPDIR/apt-syntax-config.toml" <<EOF
 [data]
@@ -132,7 +132,7 @@ EOF
 }
 
 @test "handles empty dnf section gracefully" {
-	local script_file="home/run_onchange_install-packages-linux.sh.tmpl"
+	local script_file="home/run_onchange_before_00-install-packages-linux.sh.tmpl"
 
 	cat >"$TEST_TMPDIR/empty-config.toml" <<EOF
 [data]
@@ -148,7 +148,7 @@ EOF
 }
 
 @test "handles empty apt section gracefully" {
-	local script_file="home/run_onchange_install-packages-linux.sh.tmpl"
+	local script_file="home/run_onchange_before_00-install-packages-linux.sh.tmpl"
 
 	cat >"$TEST_TMPDIR/empty-apt-config.toml" <<EOF
 [data]

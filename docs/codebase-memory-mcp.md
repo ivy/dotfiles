@@ -205,7 +205,7 @@ pkill -f cbm-daemon-internal     # stop it
 ### A version bump can wedge the daemon
 
 Every CBM process must share one build fingerprint, enforced by an OS admission
-barrier. `run_onchange_00-install-mise-tools.sh.tmpl` runs `mise prune --yes` after
+barrier. `run_onchange_before_10-install-mise-tools.sh.tmpl` runs `mise prune --yes` after
 installing, which deletes the old version directory out from under a warm daemon —
 after which it rejects work, presenting as "the MCP server stopped responding" with
 no obvious cause.

@@ -27,7 +27,7 @@ Agents reach it through the `qmd` MCP server, which exposes `query`, `get`,
 | Loader (darwin) | `home/run_onchange_after_bootstrap-launchd-agents.sh.tmpl` | — |
 | Loader (linux) | `home/run_onchange_after_bootstrap-systemd-units.sh.tmpl` | — |
 | Model fetch | `home/run_onchange_after_00-pull-qmd-models.sh.tmpl` | — |
-| Native addon rebuild | `rebuild_qmd_sqlite_addon()` in `home/run_onchange_00-install-mise-tools.sh.tmpl` | — |
+| Native addon rebuild | `rebuild_qmd_sqlite_addon()` in `home/run_onchange_before_10-install-mise-tools.sh.tmpl` | — |
 
 Each platform gets exactly one set: `.chezmoiignore` excludes `Library/**` on
 non-darwin and `.config/systemd/**` on non-linux, and each loader template is
@@ -197,7 +197,7 @@ binary. `NPM_CONFIG_IGNORE_SCRIPTS=1` (see
 [supply-chain-security.md](supply-chain-security.md)) blocks that, so a fresh qmd
 install has no native addon and every invocation dies with `ERR_DLOPEN_FAILED`.
 
-`rebuild_qmd_sqlite_addon()` in `run_onchange_00-install-mise-tools.sh.tmpl` fixes
+`rebuild_qmd_sqlite_addon()` in `run_onchange_before_10-install-mise-tools.sh.tmpl` fixes
 this by compiling from the source vendored in the tarball, and only when the current
 interpreter cannot load the addon. Do **not** "fix" it with `prebuild-install` —
 that downloads a third-party release blob, which is exactly what the hardening

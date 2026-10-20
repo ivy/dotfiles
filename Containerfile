@@ -36,6 +36,7 @@ RUN --mount=type=cache,target=/var/cache/dnf \
         git \
         git-lfs \
         htop \
+        iperf3 \
         jq \
         make \
         ncurses \
