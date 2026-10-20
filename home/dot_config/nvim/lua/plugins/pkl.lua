@@ -9,9 +9,10 @@ return {
     end,
     "L3MON4D3/LuaSnip",
   },
+  -- The pkl parser is installed via ensure_installed in treesitter.lua; this
+  -- plugin is lazy, so :TSInstall does not exist yet when its build runs.
   build = function()
     require("pkl-neovim").init()
-    vim.cmd("TSInstall pkl")
   end,
   config = function()
     require("luasnip.loaders.from_snipmate").lazy_load()

@@ -1,4 +1,4 @@
 return {
   "nvim-treesitter/nvim-treesitter",
-  opts = { ensure_installed = { "proto" } },
+  opts = { ensure_installed = { "pkl", "proto" } },
 }

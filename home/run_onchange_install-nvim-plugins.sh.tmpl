@@ -2,9 +2,10 @@
 
 set -o errexit -o nounset -o pipefail
 
-# This script automatically syncs Neovim plugins when any plugin config changes
-# The hash below triggers re-execution when files in lua/plugins/ are modified
+# Installs Neovim plugins at the commits pinned in lazy-lock.json (Renovate
+# bumps them). Re-runs when the plugin specs or the pins change.
 # Hash: {{ (glob "dot_config/nvim/lua/plugins/*.lua") | join "" | sha256sum }}
+# Lock: {{ include "dot_config/nvim/lazy-lock.json" | sha256sum }}
 
 if [[ "${DEBUG:-}" == "1" ]]; then
     echo "🔄 Installing/updating Neovim plugins due to configuration changes..."
@@ -16,9 +17,15 @@ if ! command -v nvim >/dev/null 2>&1; then
     exit 0
 fi
 
-# Install/update plugins
-echo "🚀 Syncing Neovim plugins..."
-nvim --headless "+Lazy! sync" +qa
+# `restore` checks out the locked commits; `sync` would move past them and
+# rewrite the lockfile chezmoi manages. On a fresh machine the first pass
+# clones LazyVim before its plugin specs exist, and rewriting the lockfile at
+# that point drops their pins, so put the committed lockfile back and restore
+# again once every spec is known.
+echo "🚀 Restoring Neovim plugins to lazy-lock.json..."
+nvim --headless "+Lazy! restore" +qa
+cp "{{ .chezmoi.sourceDir }}/dot_config/nvim/lazy-lock.json" "${HOME}/.config/nvim/lazy-lock.json"
+nvim --headless "+Lazy! restore" +qa
 
 if [[ "${DEBUG:-}" == "1" ]]; then
     echo "✅ Neovim plugins synchronized successfully!"

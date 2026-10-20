@@ -13,8 +13,10 @@ local linters = new Mapping<String, Step|Group> {
   ["trailing-whitespace"] = Builtins.trailing_whitespace
   ["newlines"] = Builtins.newlines
   ["jq"] = (Builtins.jq) {
-    // mise records a digest of each sidecar, so reformatting one invalidates it
-    exclude = List("**/*keybindings.json", "**/.mise/locks/**")
+    // mise records a digest of each sidecar, so reformatting one invalidates it.
+    // lazy.nvim rewrites its lockfile in its own layout on every restore, so any
+    // other layout shows up as drift in `chezmoi status`.
+    exclude = List("**/*keybindings.json", "**/.mise/locks/**", "**/lazy-lock.json")
   }
   ["markdown-lint"] = (Builtins.markdown_lint) {
     exclude = "docs/reference/**"
