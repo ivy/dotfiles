@@ -131,6 +131,7 @@ ENVIRONMENT VARIABLES:
     BUILDKITE_OP_REF        1Password ref for Buildkite API token
     NGROK_OP_REF            1Password ref for ngrok authtoken
     OBSIDIAN_VAULT_PATH     Absolute path to the Obsidian vault
+    NONINTERACTIVE          Never prompt; take defaults (default: set when stdin is not a TTY)
     DEBUG                   Enable debug output
 
 EXAMPLES:
@@ -321,13 +322,8 @@ install_homebrew() {
 
 	log_info "Installing Homebrew..."
 
-	# Use non-interactive mode when there's no TTY (CI, piped input, etc.)
-	brew_env=""
-	if [ ! -t 0 ]; then
-		brew_env="NONINTERACTIVE=1"
-	fi
-
-	if ! env $brew_env /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; then
+	# The Homebrew installer reads the exported NONINTERACTIVE set in main()
+	if ! /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; then
 		log_info "Homebrew installation failed, will fall back to binary downloads"
 		return 1
 	fi
@@ -724,11 +720,11 @@ install_chezmoi() {
 # PATH MANAGEMENT
 # =============================================================================
 
-# Add BIN_DIR to PATH if not already there
+# Prepend a directory to PATH if not already there
 add_to_path() {
 	case ":$PATH:" in
-	*":$BIN_DIR:"*) ;;
-	*) export PATH="$BIN_DIR:$PATH" ;;
+	*":$1:"*) ;;
+	*) export PATH="$1:$PATH" ;;
 	esac
 }
 
@@ -738,10 +734,22 @@ add_to_path() {
 
 # Main execution
 main() {
+	# Decide before the script(1) re-exec below, which hands the child a PTY
+	# and makes every later TTY check true. With nobody at a terminal (CI,
+	# docker build, piped stdin) every prompt takes its default.
+	if [ -z "${NONINTERACTIVE:-}" ] && [ ! -t 0 ]; then
+		NONINTERACTIVE=1
+	fi
+	if [ -n "${NONINTERACTIVE:-}" ]; then
+		export NONINTERACTIVE
+	fi
+
 	# Re-exec under script(1) to capture a full install log.
 	# The env var guard prevents infinite recursion — the second invocation
 	# sees _DOTFILES_LOG already set and skips straight to the real work.
-	if [ -z "${_DOTFILES_LOG:-}" ]; then
+	# Non-interactive callers already capture output, and a PTY would invite
+	# tools to prompt, so they skip it.
+	if [ -z "${_DOTFILES_LOG:-}" ] && [ -z "${NONINTERACTIVE:-}" ]; then
 		_DOTFILES_LOG="/tmp/dotfiles-install-$(date +%Y%m%d-%H%M%S).log"
 		export _DOTFILES_LOG
 		case "$(uname -s)" in
@@ -789,6 +797,13 @@ main() {
 	# Set up environment and validate requirements
 	setup_environment
 
+	# Tools installed to BIN_DIR (cosign) are used before chezmoi is installed,
+	# and chezmoi's run scripts use tools that `mise install` puts behind shims
+	# (the same shim dir the shell config puts on PATH). Neither is on a fresh
+	# machine's PATH, and the run scripts inherit this one.
+	add_to_path "$BIN_DIR"
+	add_to_path "$HOME/.local/share/mise/shims"
+
 	# Install Homebrew on macOS (primary source for cosign, mise, chezmoi)
 	if ! install_homebrew; then
 		log_info "Homebrew not available, tools will be downloaded to $BIN_DIR"
@@ -801,9 +816,6 @@ main() {
 
 	# Install Chezmoi
 	install_chezmoi
-
-	# Add BIN_DIR to PATH
-	add_to_path
 
 	# Get the actual chezmoi path
 	chezmoi="$(command -v chezmoi)"
@@ -843,6 +855,11 @@ main() {
 	fi
 	if [ -n "${OBSIDIAN_VAULT_PATH:-}" ]; then
 		set -- "$@" --promptString "Obsidian vault path (absolute)=$OBSIDIAN_VAULT_PATH"
+	fi
+
+	# Take every prompt's default; one without a default fails instead of waiting
+	if [ -n "${NONINTERACTIVE:-}" ]; then
+		set -- "$@" --no-tty --promptDefaults
 	fi
 
 	# Add any additional passthrough arguments

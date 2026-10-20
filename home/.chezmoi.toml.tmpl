@@ -2,20 +2,20 @@
 # This template is processed during `chezmoi init` to create the actual config file.
 # Variables are prompted from the user and stored in the [data] section.
 
-{{- $gitName := promptString "Git user.name" -}}
-{{- $gitEmail := promptString "Git user.email" -}}
+{{- $gitName := promptString "Git user.name" "" -}}
+{{- $gitEmail := promptString "Git user.email" "" -}}
 {{- $useBedrock := false -}}
 {{- if hasKey . "claude" -}}
 {{-   $useBedrock = .claude.use_bedrock -}}
 {{- else -}}
-{{-   $useBedrock = promptBool "Use AWS Bedrock for Claude Code" -}}
+{{-   $useBedrock = promptBool "Use AWS Bedrock for Claude Code" false -}}
 {{- end -}}
 
 {{- /* 1Password credential references — override per machine via chezmoi init */ -}}
-{{- $credCodex := promptStringOnce . "credentials.codex" "1Password ref for OpenAI Codex" -}}
-{{- $credClaudeApi := promptStringOnce . "credentials.claude_api" "1Password ref for Claude API" -}}
-{{- $credBuildkite := promptStringOnce . "credentials.buildkite" "1Password ref for Buildkite" -}}
-{{- $credNgrok := promptStringOnce . "credentials.ngrok" "1Password ref for ngrok" -}}
+{{- $credCodex := promptStringOnce . "credentials.codex" "1Password ref for OpenAI Codex" "" -}}
+{{- $credClaudeApi := promptStringOnce . "credentials.claude_api" "1Password ref for Claude API" "" -}}
+{{- $credBuildkite := promptStringOnce . "credentials.buildkite" "1Password ref for Buildkite" "" -}}
+{{- $credNgrok := promptStringOnce . "credentials.ngrok" "1Password ref for ngrok" "" -}}
 
 {{- /* Obsidian vault path — per-machine, kept out of git (lives in local chezmoi config) */ -}}
 {{- $obsidianVaultPath := promptStringOnce . "obsidian.vault_path" "Obsidian vault path (absolute)" (joinPath .chezmoi.homeDir "Documents") -}}
