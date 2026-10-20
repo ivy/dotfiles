@@ -18,7 +18,7 @@ Using mise is optional. You can run `bin/test` and `chezmoi` yourself,
 but you will need to install required dependencies on your own.
 
 - For hints, read `.mise.toml`.
-- For a fully self-contained environment, use Dev Containers (VS Code / Cursor).
+- For a fully self-contained environment, use Dev Containers (VS Code).
 
 Docs: https://mise.jdx.dev
 EOF

@@ -59,7 +59,6 @@ packages:
       - zstd
     casks:
       # Development tools
-      - cursor
       - ngrok
       - visual-studio-code
 
