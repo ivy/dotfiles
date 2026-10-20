@@ -12,8 +12,11 @@
 
 claudeExtensions:
   # Marketplaces to register: claude plugin marketplace add <repo>
-  # claude-plugins-official is built in — do not declare it.
+  # The built-in marketplace on a fresh install is anthropic-plugin-directory;
+  # claude-plugins-official must be added from GitHub for the plugins below.
   marketplaces:
+    - name: claude-plugins-official
+      repo: anthropics/claude-plugins-official
     - name: pickled-claude-plugins
       repo: technicalpickles/pickled-claude-plugins
     - name: plannotator
