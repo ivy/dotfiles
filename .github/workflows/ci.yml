@@ -19,7 +19,7 @@ jobs:
       - name: Setup mise
         uses: jdx/mise-action@fc42bcc7ddbf51124c30f95a877a0c5168a3bfde # v5.2.1
         with:
-          version: 2026.10.14 # mise
+          version: 2026.10.15 # mise
       - name: Run linting checks
         run: hk check
 
@@ -39,7 +39,7 @@ jobs:
       - name: Setup mise
         uses: jdx/mise-action@fc42bcc7ddbf51124c30f95a877a0c5168a3bfde # v5.2.1
         with:
-          version: 2026.10.14 # mise
+          version: 2026.10.15 # mise
       - name: Install chezmoi
         env:
           GIT_USER_NAME: CI Test User
