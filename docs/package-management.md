@@ -119,7 +119,7 @@ packages:
       - bat
     casks:
       - ghostty     # GUI applications
-      - visual-studio-code
+      - obsidian
     mas:
       - 1532419400  # Mac App Store apps (MeetingBar)
 ```

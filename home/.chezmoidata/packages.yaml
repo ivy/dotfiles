@@ -60,7 +60,6 @@ packages:
     casks:
       # Development tools
       - ngrok
-      - visual-studio-code
 
       # Communication
       - slack
