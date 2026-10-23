@@ -18,10 +18,10 @@ lockfile = true
 [tools]
 # Runtimes (install first - required by pipx/npm/cargo backends)
 node = "26.12.1"
-python = "3.14.8"
+python = "3.14.9"
 pkl = "0.32.1"
 rust = "1.99.0"
-bun = "1.4.2"
+bun = "1.4.4"
 
 # Cargo (Rust tools built from source)
 "cargo:https://github.com/technicalpickles/envsense" = "tag:0.6.0"
