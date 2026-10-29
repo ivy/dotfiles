@@ -2,6 +2,6 @@
   "name": "mise-npm-install",
   "private": true,
   "dependencies": {
-    "ccusage": "20.0.26"
+    "ccusage": "20.0.44"
   }
 }
