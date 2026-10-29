@@ -3549,6 +3549,9 @@ version = "0.10.0"
 backend = "github:ajeetdsouza/zoxide"
 specifiers = ["0.10.0"]
 
+[tools."github:ajeetdsouza/zoxide".options]
+asset_pattern = "zoxide-*-aarch64-unknown-linux-musl.tar.gz"
+
 [tools."github:ajeetdsouza/zoxide"."platforms.linux-arm64"]
 checksum = "sha256:f1f16c5d6298d63dee467eedea1cdcd8490e43e493bea43acd416dc9033ef641"
 url = "https://github.com/ajeetdsouza/zoxide/releases/download/v0.10.0/zoxide-0.10.0-aarch64-unknown-linux-musl.tar.gz"
@@ -3558,6 +3561,11 @@ url_api = "https://api.github.com/repos/ajeetdsouza/zoxide/releases/assets/46631
 checksum = "sha256:f1f16c5d6298d63dee467eedea1cdcd8490e43e493bea43acd416dc9033ef641"
 url = "https://github.com/ajeetdsouza/zoxide/releases/download/v0.10.0/zoxide-0.10.0-aarch64-unknown-linux-musl.tar.gz"
 url_api = "https://api.github.com/repos/ajeetdsouza/zoxide/releases/assets/466316402"
+
+[[tools."github:ajeetdsouza/zoxide"]]
+version = "0.10.0"
+backend = "github:ajeetdsouza/zoxide"
+specifiers = ["0.10.0"]
 
 [tools."github:ajeetdsouza/zoxide"."platforms.linux-x64"]
 checksum = "sha256:2d93385b99f3e82cf2701609a1bffcad863fbeb75aa3fe7eb6be4d29be68b1ae"
@@ -3603,24 +3611,6 @@ url_api = "https://api.github.com/repos/ajeetdsouza/zoxide/releases/assets/46631
 checksum = "sha256:f465ae548f8754c8e7edbc60b45fbf58c92bfe123db83d790252d6810fa5daf1"
 url = "https://github.com/ajeetdsouza/zoxide/releases/download/v0.10.0/zoxide-0.10.0-x86_64-pc-windows-msvc.zip"
 url_api = "https://api.github.com/repos/ajeetdsouza/zoxide/releases/assets/466316769"
-
-[[tools."github:ajeetdsouza/zoxide"]]
-version = "0.10.0"
-backend = "github:ajeetdsouza/zoxide"
-specifiers = ["0.10.0"]
-
-[tools."github:ajeetdsouza/zoxide".options]
-asset_pattern = "zoxide-*-aarch64-unknown-linux-musl.tar.gz"
-
-[tools."github:ajeetdsouza/zoxide"."platforms.linux-arm64"]
-checksum = "sha256:f1f16c5d6298d63dee467eedea1cdcd8490e43e493bea43acd416dc9033ef641"
-url = "https://github.com/ajeetdsouza/zoxide/releases/download/v0.10.0/zoxide-0.10.0-aarch64-unknown-linux-musl.tar.gz"
-url_api = "https://api.github.com/repos/ajeetdsouza/zoxide/releases/assets/466316402"
-
-[tools."github:ajeetdsouza/zoxide"."platforms.linux-arm64-musl"]
-checksum = "sha256:f1f16c5d6298d63dee467eedea1cdcd8490e43e493bea43acd416dc9033ef641"
-url = "https://github.com/ajeetdsouza/zoxide/releases/download/v0.10.0/zoxide-0.10.0-aarch64-unknown-linux-musl.tar.gz"
-url_api = "https://api.github.com/repos/ajeetdsouza/zoxide/releases/assets/466316402"
 
 [[tools."github:aristocratos/btop"]]
 version = "1.4.8"
@@ -5692,13 +5682,13 @@ specifiers = ["0.0.83"]
 
 [[tools."npm:@tobilu/qmd"]]
 version = "2.8.3"
-aube = { path = ".mise/locks/npm-tobilu-qmd/2.8.3", digest = "sha256:ffc53221315b796ab6dabbad76fefa29a779f79661795930fad06cc89a56d0b1" }
+aube = { path = ".mise/locks/npm-tobilu-qmd/2.8.3", digest = "sha256:a22e66a65d4d5bc5df46238c6dc0b95a47059c34e5b68de478d9b50f336c7f81" }
 backend = "npm:@tobilu/qmd"
 specifiers = ["2.8.3"]
 
 [[tools."npm:bktide"]]
 version = "1.0.1782920867"
-aube = { path = ".mise/locks/npm-bktide/1.0.1782920867", digest = "sha256:e156abba645e8fe03238c39359d7bc62ecff9269b0d49fb899854f6bd20270a4" }
+aube = { path = ".mise/locks/npm-bktide/1.0.1782920867", digest = "sha256:6836aaed6d0ef272f3523448e4ac978343aabdc7963730a3d6ca74bbfb7df698" }
 backend = "npm:bktide"
 specifiers = ["1.0.1782920867"]
 
@@ -5716,7 +5706,7 @@ specifiers = ["4.0.1"]
 
 [[tools."npm:obsidian-headless"]]
 version = "0.0.14"
-aube = { path = ".mise/locks/npm-obsidian-headless/0.0.14", digest = "sha256:d53604577a72eae3bdbe3dc3856d1602c6945d5e8d4bdd920d58d0cc5c965703" }
+aube = { path = ".mise/locks/npm-obsidian-headless/0.0.14", digest = "sha256:bba11f182796c98900db820c09863fc168fe0aa05395c669cc706f4860d9942d" }
 backend = "npm:obsidian-headless"
 specifiers = ["0.0.14"]
 
@@ -5914,133 +5904,3 @@ provenance = "github-attestations"
 version = "1.99.1"
 backend = "core:rust"
 specifiers = ["1.99.1"]
-
-[[tools.websocat]]
-version = "1.14.1"
-backend = "aqua:vi/websocat"
-specifiers = ["latest"]
-
-[tools.websocat."platforms.linux-arm64"]
-checksum = "sha256:711a69576a2ff473fb01a90ffafb571c2ed019e55479d7ae71b12c2eadeb7011"
-url = "https://github.com/vi/websocat/releases/download/v1.14.1/websocat.aarch64-unknown-linux-musl"
-url_api = "https://api.github.com/repos/vi/websocat/releases/assets/333370262"
-
-[tools.websocat."platforms.linux-arm64-musl"]
-checksum = "sha256:711a69576a2ff473fb01a90ffafb571c2ed019e55479d7ae71b12c2eadeb7011"
-url = "https://github.com/vi/websocat/releases/download/v1.14.1/websocat.aarch64-unknown-linux-musl"
-url_api = "https://api.github.com/repos/vi/websocat/releases/assets/333370262"
-
-[tools.websocat."platforms.linux-x64"]
-checksum = "sha256:66f8dd3a0394761556339117f8bb5123bddefd44e087af2a72ec22b0bd08d514"
-url = "https://github.com/vi/websocat/releases/download/v1.14.1/websocat.x86_64-unknown-linux-musl"
-url_api = "https://api.github.com/repos/vi/websocat/releases/assets/333370405"
-
-[tools.websocat."platforms.linux-x64-baseline"]
-checksum = "sha256:66f8dd3a0394761556339117f8bb5123bddefd44e087af2a72ec22b0bd08d514"
-url = "https://github.com/vi/websocat/releases/download/v1.14.1/websocat.x86_64-unknown-linux-musl"
-url_api = "https://api.github.com/repos/vi/websocat/releases/assets/333370405"
-
-[tools.websocat."platforms.linux-x64-musl"]
-checksum = "sha256:66f8dd3a0394761556339117f8bb5123bddefd44e087af2a72ec22b0bd08d514"
-url = "https://github.com/vi/websocat/releases/download/v1.14.1/websocat.x86_64-unknown-linux-musl"
-url_api = "https://api.github.com/repos/vi/websocat/releases/assets/333370405"
-
-[tools.websocat."platforms.linux-x64-musl-baseline"]
-checksum = "sha256:66f8dd3a0394761556339117f8bb5123bddefd44e087af2a72ec22b0bd08d514"
-url = "https://github.com/vi/websocat/releases/download/v1.14.1/websocat.x86_64-unknown-linux-musl"
-url_api = "https://api.github.com/repos/vi/websocat/releases/assets/333370405"
-
-[tools.websocat."platforms.macos-arm64"]
-checksum = "sha256:45521ba59a6604785543406bf8e398ce7d565d54c09657176afba795dd28f191"
-url = "https://github.com/vi/websocat/releases/download/v1.14.1/websocat.x86_64-apple-darwin"
-url_api = "https://api.github.com/repos/vi/websocat/releases/assets/333370364"
-
-[tools.websocat."platforms.macos-x64"]
-checksum = "sha256:45521ba59a6604785543406bf8e398ce7d565d54c09657176afba795dd28f191"
-url = "https://github.com/vi/websocat/releases/download/v1.14.1/websocat.x86_64-apple-darwin"
-url_api = "https://api.github.com/repos/vi/websocat/releases/assets/333370364"
-
-[tools.websocat."platforms.macos-x64-baseline"]
-checksum = "sha256:45521ba59a6604785543406bf8e398ce7d565d54c09657176afba795dd28f191"
-url = "https://github.com/vi/websocat/releases/download/v1.14.1/websocat.x86_64-apple-darwin"
-url_api = "https://api.github.com/repos/vi/websocat/releases/assets/333370364"
-
-[tools.websocat."platforms.windows-x64"]
-checksum = "sha256:284339b5b86f2b11496137d97b6705bb2ef27e64f21527c1ba240bdb6177ba3b"
-url = "https://github.com/vi/websocat/releases/download/v1.14.1/websocat.x86_64-pc-windows-gnu.exe"
-url_api = "https://api.github.com/repos/vi/websocat/releases/assets/333370392"
-
-[tools.websocat."platforms.windows-x64-baseline"]
-checksum = "sha256:284339b5b86f2b11496137d97b6705bb2ef27e64f21527c1ba240bdb6177ba3b"
-url = "https://github.com/vi/websocat/releases/download/v1.14.1/websocat.x86_64-pc-windows-gnu.exe"
-url_api = "https://api.github.com/repos/vi/websocat/releases/assets/333370392"
-
-[[tools.yt-dlp]]
-version = "2026.07.04"
-backend = "github:yt-dlp/yt-dlp"
-
-[tools.yt-dlp."platforms.linux-arm64"]
-checksum = "sha256:0554d39b22e039b4c0f70a492b9852870f281ed6a93eb75e78f150b32df76543"
-url = "https://github.com/yt-dlp/yt-dlp/releases/download/2026.07.04/yt-dlp_linux_aarch64.zip"
-url_api = "https://api.github.com/repos/yt-dlp/yt-dlp/releases/assets/466665348"
-provenance = "github-attestations"
-
-[tools.yt-dlp."platforms.linux-arm64-musl"]
-checksum = "sha256:fbbd71eb964513954232c705e82f36b982fec5af47718088fb5eaebca6421fc1"
-url = "https://github.com/yt-dlp/yt-dlp/releases/download/2026.07.04/yt-dlp_musllinux_aarch64.zip"
-url_api = "https://api.github.com/repos/yt-dlp/yt-dlp/releases/assets/466665378"
-provenance = "github-attestations"
-
-[tools.yt-dlp."platforms.linux-x64"]
-checksum = "sha256:d7d2d09e900b5ae11821b5784b18cf064984a2bd88b1ca5c798d744bcbe3658b"
-url = "https://github.com/yt-dlp/yt-dlp/releases/download/2026.07.04/yt-dlp_linux.zip"
-url_api = "https://api.github.com/repos/yt-dlp/yt-dlp/releases/assets/466665341"
-provenance = "github-attestations"
-
-[tools.yt-dlp."platforms.linux-x64-baseline"]
-checksum = "sha256:d7d2d09e900b5ae11821b5784b18cf064984a2bd88b1ca5c798d744bcbe3658b"
-url = "https://github.com/yt-dlp/yt-dlp/releases/download/2026.07.04/yt-dlp_linux.zip"
-url_api = "https://api.github.com/repos/yt-dlp/yt-dlp/releases/assets/466665341"
-provenance = "github-attestations"
-
-[tools.yt-dlp."platforms.linux-x64-musl"]
-checksum = "sha256:ee66ae15987ee1aa911e762883e94586fca958ba03040f659c67410b4672444e"
-url = "https://github.com/yt-dlp/yt-dlp/releases/download/2026.07.04/yt-dlp_musllinux.zip"
-url_api = "https://api.github.com/repos/yt-dlp/yt-dlp/releases/assets/466665368"
-provenance = "github-attestations"
-
-[tools.yt-dlp."platforms.linux-x64-musl-baseline"]
-checksum = "sha256:ee66ae15987ee1aa911e762883e94586fca958ba03040f659c67410b4672444e"
-url = "https://github.com/yt-dlp/yt-dlp/releases/download/2026.07.04/yt-dlp_musllinux.zip"
-url_api = "https://api.github.com/repos/yt-dlp/yt-dlp/releases/assets/466665368"
-provenance = "github-attestations"
-
-[tools.yt-dlp."platforms.macos-arm64"]
-checksum = "sha256:b0724470a0cf6dae5175a87eee05d6e75c5a0c10d2c3015166bd4d34e92b1b7b"
-url = "https://github.com/yt-dlp/yt-dlp/releases/download/2026.07.04/yt-dlp_macos.zip"
-url_api = "https://api.github.com/repos/yt-dlp/yt-dlp/releases/assets/466665361"
-provenance = "github-attestations"
-
-[tools.yt-dlp."platforms.macos-x64"]
-checksum = "sha256:b0724470a0cf6dae5175a87eee05d6e75c5a0c10d2c3015166bd4d34e92b1b7b"
-url = "https://github.com/yt-dlp/yt-dlp/releases/download/2026.07.04/yt-dlp_macos.zip"
-url_api = "https://api.github.com/repos/yt-dlp/yt-dlp/releases/assets/466665361"
-provenance = "github-attestations"
-
-[tools.yt-dlp."platforms.macos-x64-baseline"]
-checksum = "sha256:b0724470a0cf6dae5175a87eee05d6e75c5a0c10d2c3015166bd4d34e92b1b7b"
-url = "https://github.com/yt-dlp/yt-dlp/releases/download/2026.07.04/yt-dlp_macos.zip"
-url_api = "https://api.github.com/repos/yt-dlp/yt-dlp/releases/assets/466665361"
-provenance = "github-attestations"
-
-[tools.yt-dlp."platforms.windows-x64"]
-checksum = "sha256:ec8b896cca7883cfe3324e611cc7b1c9258b243a0405297c6ed7e7fca61db880"
-url = "https://github.com/yt-dlp/yt-dlp/releases/download/2026.07.04/yt-dlp_win_x86.zip"
-url_api = "https://api.github.com/repos/yt-dlp/yt-dlp/releases/assets/466665404"
-provenance = "github-attestations"
-
-[tools.yt-dlp."platforms.windows-x64-baseline"]
-checksum = "sha256:ec8b896cca7883cfe3324e611cc7b1c9258b243a0405297c6ed7e7fca61db880"
-url = "https://github.com/yt-dlp/yt-dlp/releases/download/2026.07.04/yt-dlp_win_x86.zip"
-url_api = "https://api.github.com/repos/yt-dlp/yt-dlp/releases/assets/466665404"
-provenance = "github-attestations"
