@@ -2,6 +2,6 @@
   "name": "mise-npm-install",
   "private": true,
   "dependencies": {
-    "@openai/codex": "0.160.0"
+    "markdownlint-cli": "0.50.0"
   }
 }

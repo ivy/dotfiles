@@ -17,10 +17,10 @@ lockfile = true
 
 [tools]
 # Runtimes (install first - required by pipx/npm/cargo backends)
-node = "26.12.1"
-python = "3.14.9"
-pkl = "0.32.1"
-rust = "1.99.0"
+node = "26.13.0"
+python = "3.15.2"
+pkl = "0.32.2"
+rust = "1.99.1"
 bun = "1.4.4"
 
 # Cargo (Rust tools built from source)
@@ -46,55 +46,55 @@ bun = "1.4.4"
 # Releases ship a `-ui-` variant alongside the plain archive; the github: backend
 # picks the right one unaided and verifies the release's artifact attestations,
 # which none of the upstream installers do.
-"github:DeusData/codebase-memory-mcp" = "0.11.0"
+"github:DeusData/codebase-memory-mcp" = "0.12.1"
 "github:ajeetdsouza/zoxide" = { version = "0.10.0", platforms.linux-arm64 = { asset_pattern = "zoxide-*-aarch64-unknown-linux-musl.tar.gz" } }
 # btop: upstream ships Linux binaries only; macOS gets it from Homebrew (packages.yaml)
-"github:aristocratos/btop" = { version = "1.4.7", os = ["linux"] }
-"github:atuinsh/atuin" = "18.23.0"
+"github:aristocratos/btop" = { version = "1.4.8", os = ["linux"] }
+"github:atuinsh/atuin" = "18.24.2"
 # plannotator: binary the plannotator Claude Code plugin's hooks invoke on PATH
-"github:backnotprop/plannotator" = "0.27.25"
+"github:backnotprop/plannotator" = "0.28.31"
 "github:boyter/scc" = "4.1.0"
-"github:buildkite/cli" = "3.59.1"
-"github:carapace-sh/carapace-bin" = "1.8.0"
+"github:buildkite/cli" = "3.66.0"
+"github:carapace-sh/carapace-bin" = "1.8.1"
 "github:charmbracelet/glow" = "3.0.0"
-"github:cli/cli" = "2.102.0"
+"github:cli/cli" = "2.103.2"
 # 7-Zip proper (7zz): extracts RAR, which the p7zip in Fedora's repos cannot
-"github:ip7z/7zip" = "26.04"
-"github:technicalpickles/cq" = "0.9.1"
-"github:dandavison/delta" = "0.19.2"
-"github:dlvhdr/gh-dash" = "4.26.0"
+"github:ip7z/7zip" = "26.05"
+"github:technicalpickles/cq" = "0.11.0"
+"github:dandavison/delta" = "0.20.1"
+"github:dlvhdr/gh-dash" = "4.26.2"
 "github:gitleaks/gitleaks" = "8.30.1"
 # herdr: persistent runtime for agent terminal sessions. The mise registry still
 # points at the pre-transfer owner (ogulcancelik/herdr) — pin the canonical repo.
-"github:herdrdev/herdr" = "0.9.3"
-"github:jesseduffield/lazygit" = "0.65.1"
+"github:herdrdev/herdr" = "0.9.5"
+"github:jesseduffield/lazygit" = "0.66.2"
 "github:jqlang/jq" = "jq-1.8.2"
-"github:jdx/hk" = "2.4.0"
-"github:junegunn/fzf" = "0.74.4"
+"github:jdx/hk" = "2.8.1"
+"github:junegunn/fzf" = "0.74.5"
 "github:librespeed/speedtest-cli" = "1.0.14"
 "github:lima-vm/lima" = "2.2.1"
 "github:mikefarah/yq" = "4.54.1"
 "github:muesli/duf" = "0.9.1"
-"github:neovim/neovim" = "0.12.5"
+"github:neovim/neovim" = "0.12.6"
 "github:sharkdp/bat" = "0.26.1"
 "github:sharkdp/fd" = "10.5.0"
 "github:smtg-ai/claude-squad" = "1.0.20"
-"github:sst/opencode" = "1.18.34"
-"github:starship/starship" = "1.26.0"
-"github:yt-dlp/yt-dlp" = { version = "2026.08.19", rename_exe = "yt-dlp" }
+"github:sst/opencode" = "1.19.4"
+"github:starship/starship" = "1.27.0"
+"github:yt-dlp/yt-dlp" = { version = "2026.10.21", rename_exe = "yt-dlp" }
 # glab: GitLab CLI. Ships releases on gitlab.com, not GitHub — the gitlab: backend
 # (not aqua:) is the appropriate fetcher here, unrelated to ADR-005's aqua concerns.
-"gitlab:gitlab-org/cli" = "1.121.0"
+"gitlab:gitlab-org/cli" = "1.126.0"
 
 # pipx itself (prerequisite for any `pipx:` backend entries)
-pipx = "1.17.11"
+pipx = "1.18.4"
 
 # Node tools via npm
-"npm:@openai/codex" = "0.160.0"
+"npm:@openai/codex" = "0.164.0"
 "npm:@playwright/mcp" = "0.0.83"
-"npm:@owloops/claude-powerline" = "1.32.1"
+"npm:@owloops/claude-powerline" = "1.32.5"
 "npm:@tobilu/qmd" = "2.8.3"
 "npm:bktide" = "1.0.1782920867"
-"npm:ccusage" = "20.0.26"
+"npm:ccusage" = "20.0.44"
 "npm:git-mob" = "4.0.1"
 "npm:obsidian-headless" = "0.0.14"

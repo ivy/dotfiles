@@ -2,6 +2,6 @@
   "name": "mise-npm-install",
   "private": true,
   "dependencies": {
-    "@owloops/claude-powerline": "1.32.1"
+    "@owloops/claude-powerline": "1.32.5"
   }
 }
