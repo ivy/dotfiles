@@ -5270,74 +5270,74 @@ url = "https://github.com/smtg-ai/claude-squad/releases/download/v1.0.20/claude-
 url_api = "https://api.github.com/repos/smtg-ai/claude-squad/releases/assets/521791094"
 
 [[tools."github:sst/opencode"]]
-version = "1.19.4"
+version = "2.2.0"
 backend = "github:sst/opencode"
-specifiers = ["1.19.4"]
+specifiers = ["2.2.0"]
 
 [tools."github:sst/opencode"."platforms.linux-arm64"]
-checksum = "sha256:8568230ccd847dc93e95b9f6894379077d3e014a16b48040743573e77c23e85f"
-url = "https://github.com/sst/opencode/releases/download/v1.19.4/opencode-linux-arm64.tar.gz"
-url_api = "https://api.github.com/repos/sst/opencode/releases/assets/665821079"
+checksum = "sha256:1f1ce0fc07b9245a815ffa9d652dbb80e6b0f07e5bf74ea87d2b1c0339fbac52"
+url = "https://github.com/sst/opencode/releases/download/v2.2.0/opencode-linux-arm64.tar.gz"
+url_api = "https://api.github.com/repos/sst/opencode/releases/assets/681034317"
 provenance = "github-attestations"
 
 [tools."github:sst/opencode"."platforms.linux-arm64-musl"]
-checksum = "sha256:aa32a91f62cfddfa4615ba4deffc2b13696e77cbee83551824e3f16e6770b37e"
-url = "https://github.com/sst/opencode/releases/download/v1.19.4/opencode-linux-arm64-musl.tar.gz"
-url_api = "https://api.github.com/repos/sst/opencode/releases/assets/665821408"
+checksum = "sha256:d5aa42f33abc7af1075854e9be94224219a37d98c28289cacc5544cc88f1af82"
+url = "https://github.com/sst/opencode/releases/download/v2.2.0/opencode-linux-arm64-musl.tar.gz"
+url_api = "https://api.github.com/repos/sst/opencode/releases/assets/681034258"
 provenance = "github-attestations"
 
 [tools."github:sst/opencode"."platforms.linux-x64"]
-checksum = "sha256:849bd6b3d959a1d2ef200ed1634a51c79a45ca236aa26665d75debd694805cce"
-url = "https://github.com/sst/opencode/releases/download/v1.19.4/opencode-linux-x64.tar.gz"
-url_api = "https://api.github.com/repos/sst/opencode/releases/assets/665821750"
+checksum = "sha256:6d597970a8cc448f1b9a9f645532584b339dd3ab9583bb5f063f13d83e54768f"
+url = "https://github.com/sst/opencode/releases/download/v2.2.0/opencode-linux-x64.tar.gz"
+url_api = "https://api.github.com/repos/sst/opencode/releases/assets/681034526"
 provenance = "github-attestations"
 
 [tools."github:sst/opencode"."platforms.linux-x64-baseline"]
-checksum = "sha256:849bd6b3d959a1d2ef200ed1634a51c79a45ca236aa26665d75debd694805cce"
-url = "https://github.com/sst/opencode/releases/download/v1.19.4/opencode-linux-x64.tar.gz"
-url_api = "https://api.github.com/repos/sst/opencode/releases/assets/665821750"
+checksum = "sha256:6d597970a8cc448f1b9a9f645532584b339dd3ab9583bb5f063f13d83e54768f"
+url = "https://github.com/sst/opencode/releases/download/v2.2.0/opencode-linux-x64.tar.gz"
+url_api = "https://api.github.com/repos/sst/opencode/releases/assets/681034526"
 provenance = "github-attestations"
 
 [tools."github:sst/opencode"."platforms.linux-x64-musl"]
-checksum = "sha256:265bd8027e84fe01837f72df8b7615d2959491f45569d52a21f2fcdbec9decdf"
-url = "https://github.com/sst/opencode/releases/download/v1.19.4/opencode-linux-x64-musl.tar.gz"
-url_api = "https://api.github.com/repos/sst/opencode/releases/assets/665821029"
+checksum = "sha256:41779c8bb115189a2949f5638e7007c3e75a137ec72e9219dd26ae812e561623"
+url = "https://github.com/sst/opencode/releases/download/v2.2.0/opencode-linux-x64-musl.tar.gz"
+url_api = "https://api.github.com/repos/sst/opencode/releases/assets/681034472"
 provenance = "github-attestations"
 
 [tools."github:sst/opencode"."platforms.linux-x64-musl-baseline"]
-checksum = "sha256:265bd8027e84fe01837f72df8b7615d2959491f45569d52a21f2fcdbec9decdf"
-url = "https://github.com/sst/opencode/releases/download/v1.19.4/opencode-linux-x64-musl.tar.gz"
-url_api = "https://api.github.com/repos/sst/opencode/releases/assets/665821029"
+checksum = "sha256:41779c8bb115189a2949f5638e7007c3e75a137ec72e9219dd26ae812e561623"
+url = "https://github.com/sst/opencode/releases/download/v2.2.0/opencode-linux-x64-musl.tar.gz"
+url_api = "https://api.github.com/repos/sst/opencode/releases/assets/681034472"
 provenance = "github-attestations"
 
 [tools."github:sst/opencode"."platforms.macos-arm64"]
-checksum = "sha256:c400a2f8c8ab7e99478a7f4dd1a466b57bf33888e520d85c55780a5464c4b689"
-url = "https://github.com/sst/opencode/releases/download/v1.19.4/opencode-darwin-arm64.zip"
-url_api = "https://api.github.com/repos/sst/opencode/releases/assets/665836811"
+checksum = "sha256:c71b1cd96541539ad38e2a75377d2f43d2a27567289a14371a182e9a0800db3d"
+url = "https://github.com/sst/opencode/releases/download/v2.2.0/opencode-darwin-arm64.zip"
+url_api = "https://api.github.com/repos/sst/opencode/releases/assets/681032330"
 provenance = "github-attestations"
 
 [tools."github:sst/opencode"."platforms.macos-x64"]
-checksum = "sha256:123ebd72609c4f8dbae0485cdac39b9aedfeb6576b2eef64f2e73152b1de82f4"
-url = "https://github.com/sst/opencode/releases/download/v1.19.4/opencode-darwin-x64.zip"
-url_api = "https://api.github.com/repos/sst/opencode/releases/assets/665836813"
+checksum = "sha256:cc191a1cec9b9cd0192d78dc066bbf48730639131422fa54c87c485a821ba1d5"
+url = "https://github.com/sst/opencode/releases/download/v2.2.0/opencode-darwin-x64.zip"
+url_api = "https://api.github.com/repos/sst/opencode/releases/assets/681032317"
 provenance = "github-attestations"
 
 [tools."github:sst/opencode"."platforms.macos-x64-baseline"]
-checksum = "sha256:123ebd72609c4f8dbae0485cdac39b9aedfeb6576b2eef64f2e73152b1de82f4"
-url = "https://github.com/sst/opencode/releases/download/v1.19.4/opencode-darwin-x64.zip"
-url_api = "https://api.github.com/repos/sst/opencode/releases/assets/665836813"
+checksum = "sha256:cc191a1cec9b9cd0192d78dc066bbf48730639131422fa54c87c485a821ba1d5"
+url = "https://github.com/sst/opencode/releases/download/v2.2.0/opencode-darwin-x64.zip"
+url_api = "https://api.github.com/repos/sst/opencode/releases/assets/681032317"
 provenance = "github-attestations"
 
 [tools."github:sst/opencode"."platforms.windows-x64"]
-checksum = "sha256:93b899277bd6f68803009e32bf71772ce43c34b18adf1e93b9b4d8780fdf62e5"
-url = "https://github.com/sst/opencode/releases/download/v1.19.4/opencode-windows-x64.zip"
-url_api = "https://api.github.com/repos/sst/opencode/releases/assets/665834171"
+checksum = "sha256:a56307bdccdafd3fc5255556f3bf867703ea56dbeffaf00add4e9663edb3b974"
+url = "https://github.com/sst/opencode/releases/download/v2.2.0/opencode-windows-x64.zip"
+url_api = "https://api.github.com/repos/sst/opencode/releases/assets/681034686"
 provenance = "github-attestations"
 
 [tools."github:sst/opencode"."platforms.windows-x64-baseline"]
-checksum = "sha256:93b899277bd6f68803009e32bf71772ce43c34b18adf1e93b9b4d8780fdf62e5"
-url = "https://github.com/sst/opencode/releases/download/v1.19.4/opencode-windows-x64.zip"
-url_api = "https://api.github.com/repos/sst/opencode/releases/assets/665834171"
+checksum = "sha256:a56307bdccdafd3fc5255556f3bf867703ea56dbeffaf00add4e9663edb3b974"
+url = "https://github.com/sst/opencode/releases/download/v2.2.0/opencode-windows-x64.zip"
+url_api = "https://api.github.com/repos/sst/opencode/releases/assets/681034686"
 provenance = "github-attestations"
 
 [[tools."github:starship/starship"]]
