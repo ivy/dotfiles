@@ -52,12 +52,12 @@ bun = "1.4.4"
 "github:aristocratos/btop" = { version = "1.4.8", os = ["linux"] }
 "github:atuinsh/atuin" = "18.24.2"
 # plannotator: binary the plannotator Claude Code plugin's hooks invoke on PATH
-"github:backnotprop/plannotator" = "0.28.31"
+"github:backnotprop/plannotator" = "0.28.33"
 "github:boyter/scc" = "4.1.0"
 "github:buildkite/cli" = "3.66.0"
 "github:carapace-sh/carapace-bin" = "1.8.1"
 "github:charmbracelet/glow" = "3.0.0"
-"github:cli/cli" = "2.103.2"
+"github:cli/cli" = "2.103.3"
 # 7-Zip proper (7zz): extracts RAR, which the p7zip in Fedora's repos cannot
 "github:ip7z/7zip" = "26.05"
 "github:technicalpickles/cq" = "0.11.0"
@@ -69,7 +69,7 @@ bun = "1.4.4"
 "github:herdrdev/herdr" = "0.9.5"
 "github:jesseduffield/lazygit" = "0.66.2"
 "github:jqlang/jq" = "jq-1.8.2"
-"github:jdx/hk" = "2.8.1"
+"github:jdx/hk" = "2.9.0"
 "github:junegunn/fzf" = "0.74.5"
 "github:librespeed/speedtest-cli" = "1.0.14"
 "github:lima-vm/lima" = "2.2.1"
@@ -81,20 +81,20 @@ bun = "1.4.4"
 "github:smtg-ai/claude-squad" = "1.0.20"
 "github:sst/opencode" = "1.19.4"
 "github:starship/starship" = "1.27.0"
-"github:yt-dlp/yt-dlp" = { version = "2026.10.21", rename_exe = "yt-dlp" }
+"github:yt-dlp/yt-dlp" = { version = "2026.10.26", rename_exe = "yt-dlp" }
 # glab: GitLab CLI. Ships releases on gitlab.com, not GitHub — the gitlab: backend
 # (not aqua:) is the appropriate fetcher here, unrelated to ADR-005's aqua concerns.
 "gitlab:gitlab-org/cli" = "1.126.0"
 
 # pipx itself (prerequisite for any `pipx:` backend entries)
-pipx = "1.18.4"
+pipx = "1.18.5"
 
 # Node tools via npm
-"npm:@openai/codex" = "0.164.0"
+"npm:@openai/codex" = "0.165.0"
 "npm:@playwright/mcp" = "0.0.83"
 "npm:@owloops/claude-powerline" = "1.32.5"
 "npm:@tobilu/qmd" = "2.8.3"
 "npm:bktide" = "1.0.1782920867"
-"npm:ccusage" = "20.0.44"
+"npm:ccusage" = "20.0.45"
 "npm:git-mob" = "4.0.1"
 "npm:obsidian-headless" = "0.0.14"
