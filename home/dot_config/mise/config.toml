@@ -79,7 +79,7 @@ bun = "1.4.4"
 "github:sharkdp/bat" = "0.26.1"
 "github:sharkdp/fd" = "10.5.0"
 "github:smtg-ai/claude-squad" = "1.0.20"
-"github:sst/opencode" = "1.19.4"
+"github:sst/opencode" = "2.2.0"
 "github:starship/starship" = "1.27.0"
 "github:yt-dlp/yt-dlp" = { version = "2026.10.21", rename_exe = "yt-dlp" }
 # glab: GitLab CLI. Ships releases on gitlab.com, not GitHub — the gitlab: backend
