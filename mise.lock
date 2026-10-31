@@ -394,7 +394,7 @@ provenance = "github-attestations"
 
 [[tools."npm:markdownlint-cli"]]
 version = "0.50.0"
-aube = { path = ".mise/locks/npm-markdownlint-cli/0.50.0", digest = "sha256:95a24ea400de52f7c0a9df1e11244d54cbed6ce843ab23024c7b99a2e050b2de" }
+aube = { path = ".mise/locks/npm-markdownlint-cli/0.50.0", digest = "sha256:3742ce7aa88f2d513fc74394d83f191e9a99c779ae1bd1362c407cecd220af3f" }
 backend = "npm:markdownlint-cli"
 specifiers = ["0.50.0"]
 
