@@ -116,6 +116,13 @@
       "matchFileNames": ["home/dot_config/nvim/lazy-lock.json"],
       "groupName": "neovim plugins"
     },
+    // LazyVim installs blink.cmp from its latest release tag, but this manager
+    // tracks the main branch, where unreleased v2 needs a blink.lib dependency
+    // LazyVim does not declare. Hold the pin at the release tag.
+    {
+      "matchPackageNames": ["Saghen/blink.cmp"],
+      "enabled": false
+    },
     {
       "matchFileNames": ["home/.chezmoidata/tmux-plugins.yaml"],
       "groupName": "tmux plugins"
