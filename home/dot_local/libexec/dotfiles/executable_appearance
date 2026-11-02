@@ -7,7 +7,9 @@
 #   2. macOS `defaults read` (local desktop)
 #   3. Fallback: "light"
 
-if [ -z "$BG" ] && [ -n "$TMUX" ]; then
+# BG lives in the session environment, and tmux.conf calls this before the
+# first session exists; querying it then logs "no current session".
+if [ -z "$BG" ] && [ -n "$TMUX" ] && [ -n "$(tmux list-sessions -F x 2>/dev/null)" ]; then
 	BG="$(tmux show-environment BG 2>/dev/null | sed 's/^BG=//')"
 fi
 
