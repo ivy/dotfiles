@@ -1390,8 +1390,6 @@ snapshots:
       node-addon-api: 8.9.2
       node-gyp-build: 4.8.4
       tree-sitter-javascript: 0.23.1
-    transitivePeerDependencies:
-      - tree-sitter
 
   typescript@5.9.3: {}
 
