@@ -60,3 +60,9 @@ cache = true
 # set". The two files have identical contents once applied.
 [scriptEnv]
 MISE_GLOBAL_CONFIG_FILE = {{ joinPath .chezmoi.sourceDir "dot_config/mise/config.toml" | quote }}
+
+# Templates run tools through mise shims, which fail outright when mise is older
+# than the min_version in its config. Upgrade mise before templates execute.
+[hooks.read-source-state.pre]
+command = "{{ .chezmoi.workingTree }}/bin/ensure-mise-version"
+args = ["{{ .chezmoi.workingTree }}/home/dot_config/mise/config.toml"]

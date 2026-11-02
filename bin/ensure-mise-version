@@ -1,0 +1,60 @@
+#!/bin/sh
+# ensure-mise-version — Upgrade mise when it is older than a config's min_version.
+#
+# Runs as chezmoi's read-source-state.pre hook: templates call tools through
+# mise shims, and an outdated mise refuses to run against a config whose
+# min_version it does not meet. Upgrades go through whatever installed mise.
+#
+# Usage:
+#   ensure-mise-version home/dot_config/mise/config.toml
+
+set -eu
+
+CONFIG="${1:?usage: ensure-mise-version <mise config.toml>}"
+
+die() {
+	printf 'error: %s\n' "$1" >&2
+	exit 1
+}
+step() { printf '==> %s\n' "$1" >&2; }
+
+command -v mise >/dev/null 2>&1 || exit 0
+
+required=$(sed -n 's/^min_version *= *"\([^"]*\)".*/\1/p' "$CONFIG")
+[ -n "$required" ] || exit 0
+
+# `mise --version` skips the min_version check that every other command enforces.
+current() { command mise --version 2>/dev/null | awk '{ print $1; exit }'; }
+
+# Succeeds when version $1 >= version $2, comparing dot-separated numbers.
+version_ge() {
+	awk -v a="$1" -v b="$2" 'BEGIN {
+		na = split(a, x, "."); nb = split(b, y, ".")
+		for (i = 1; i <= (na > nb ? na : nb); i++) {
+			if (x[i] + 0 > y[i] + 0) exit 0
+			if (x[i] + 0 < y[i] + 0) exit 1
+		}
+		exit 0
+	}'
+}
+
+have=$(current)
+version_ge "$have" "$required" && exit 0
+
+step "mise $have is older than min_version $required in $CONFIG; upgrading"
+
+mise_path=$(command -v mise)
+if command -v brew >/dev/null 2>&1 && brew list --formula mise >/dev/null 2>&1; then
+	brew upgrade mise >&2
+elif command -v dnf >/dev/null 2>&1 && rpm -qf "$mise_path" >/dev/null 2>&1; then
+	sudo dnf upgrade -y mise >&2
+elif command -v apt-get >/dev/null 2>&1 && dpkg -S "$mise_path" >/dev/null 2>&1; then
+	sudo apt-get update >&2 && sudo apt-get install -y --only-upgrade mise >&2
+else
+	command mise self-update --yes >&2
+fi
+
+have=$(current)
+version_ge "$have" "$required" ||
+	die "mise is still $have after upgrading; $CONFIG requires $required"
+step "mise upgraded to $have"
