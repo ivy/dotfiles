@@ -558,8 +558,8 @@ packages:
   run-parallel@1.2.0:
     resolution: {integrity: sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==}
 
-  semver@7.8.5:
-    resolution: {integrity: sha512-Y7/KDsb8LjooZpwaqGyulO6DQlksgCncchHGk+sZIY4SBvUocMBEFH5Ur1fI4dV+Jvl0w6cjvucaIi40puRioA==}
+  semver@7.8.6:
+    resolution: {integrity: sha512-9lpSSU4Mly3mrtruwLs1eLK6+gzbzqeBFwRNjIjE+9LuDpWdYctrQlQ3ej1Ilgi7gknpsTRnPoLP8DpCHqHIJw==}
     engines: {node: '>=10'}
     hasBin: true
 
@@ -968,7 +968,7 @@ snapshots:
       fs-extra: 11.4.1
       node-api-headers: 1.9.0
       rc: 1.2.8
-      semver: 7.8.5
+      semver: 7.8.6
       tar: 7.5.22
       url-join: 4.0.1
       which: 6.0.1
@@ -1164,7 +1164,7 @@ snapshots:
       ora: 9.4.1
       pretty-ms: 9.3.1
       proper-lockfile: 4.1.2
-      semver: 7.8.5
+      semver: 7.8.6
       simple-git: 3.36.0
       slice-ansi: 8.0.0
       stdout-update: 4.0.1
@@ -1258,7 +1258,7 @@ snapshots:
     dependencies:
       queue-microtask: 1.2.3
 
-  semver@7.8.5: {}
+  semver@7.8.6: {}
 
   shebang-command@2.0.0:
     dependencies:
