@@ -193,7 +193,7 @@ Scripts in `home/` execute when their trigger conditions change:
 | `run_onchange_before_10-install-mise-tools.sh.tmpl` | mise config or lock changes | All mise-managed tools (runtimes + backend tools) |
 | `run_onchange_install-nvim-plugins.sh.tmpl` | Neovim plugin specs or `lazy-lock.json` | LazyVim plugins at their locked commits |
 
-The `before_` scripts run ahead of every file chezmoi writes, in prefix order: system packages first (mise compiles some tools against them), then mise tools. Templates that probe for a tool with `lookPath` therefore see the full toolset on the first apply, so a fresh machine converges in one pass. The mise script reads its config and lockfile from the source tree for that reason. All Python/Node tools are installed via mise backends (`pipx:`, `npm:`) in that one script.
+The `before_` scripts run ahead of every file chezmoi writes, in prefix order: system packages first (mise compiles some tools against them), then mise tools. Templates that probe for a tool with `lookPath` therefore see the full toolset on the first apply, so a fresh machine converges in one pass. The mise script puts `~/.config/mise/config.toml` and the `mise.lock` symlink in place before it installs, so mise sees one user config that matches the lockfile. All Python/Node tools are installed via mise backends (`pipx:`, `npm:`) in that one script.
 
 ## Best Practices
 

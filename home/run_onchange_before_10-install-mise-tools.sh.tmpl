@@ -7,16 +7,26 @@
 set -o errexit
 set -o nounset
 
+# This runs before chezmoi writes any file, so templates that probe for tools
+# (lookPath) render against an installed toolset on the very first apply. mise
+# only holds the user config to the lockfile at its real path, so the config and
+# lockfile are put in place here rather than read from the source tree. Installing
+# from a config that is out of step with the lockfile fails, or installs the
+# wrong versions.
+#
+# The lockfile is a symlink rather than a copy: mise resolves a lockfile's
+# dependency-graph sidecars relative to the lockfile it finally opens, so the link
+# lets it find them beside the source file. See
+# https://mise.jdx.dev/dev-tools/mise-lock.html#sidecar-locations
+mkdir -p "${HOME}/.config/mise"
+install -m 0644 "{{ .chezmoi.sourceDir }}/dot_config/mise/config.toml" "${HOME}/.config/mise/config.toml"
+ln -sfn "{{ .chezmoi.sourceDir }}/dot_config/mise/mise.lock" "${HOME}/.config/mise/mise.lock"
+
 # Only run if mise is available
 if ! command -v mise >/dev/null 2>&1; then
     echo "mise not found, skipping tool installation"
     exit 0
 fi
-
-# This runs before chezmoi writes any file, so templates that probe for tools
-# (lookPath) render against an installed toolset on the very first apply. mise
-# reads its config and lockfile from the source tree ([scriptEnv] in
-# .chezmoi.toml.tmpl), since ~/.config/mise is not written yet.
 
 # Install exactly what the committed lockfile records and never rewrite it.
 # Unlocked, both `mise install` and `mise prune` re-resolve every platform

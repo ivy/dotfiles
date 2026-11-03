@@ -54,13 +54,6 @@ vault_path = {{ $obsidianVaultPath | replace "~" .chezmoi.homeDir | quote }}
 [onepassword]
 cache = true
 
-# Scripts resolve mise tools through the config in the source tree. Tools are
-# installed before chezmoi writes ~/.config/mise/config.toml, and without this
-# every shim run by a later script on a fresh machine fails with "No version is
-# set". The two files have identical contents once applied.
-[scriptEnv]
-MISE_GLOBAL_CONFIG_FILE = {{ joinPath .chezmoi.sourceDir "dot_config/mise/config.toml" | quote }}
-
 # Templates run tools through mise shims, which fail outright when mise is older
 # than the min_version in its config. Upgrade mise before templates execute.
 [hooks.read-source-state.pre]
