@@ -9,7 +9,7 @@
 #   5. npm: - Node CLI tools (requires node)
 
 # Older releases cannot install from these lockfiles.
-min_version = "2026.10.1"
+min_version = "2026.10.25"
 
 [settings]
 color_theme = "catppuccin"
