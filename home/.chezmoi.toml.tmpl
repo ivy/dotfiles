@@ -2,8 +2,8 @@
 # This template is processed during `chezmoi init` to create the actual config file.
 # Variables are prompted from the user and stored in the [data] section.
 
-{{- $gitName := promptString "Git user.name" "" -}}
-{{- $gitEmail := promptString "Git user.email" "" -}}
+{{- $gitName := promptStringOnce . "git.name" "Git user.name" "" -}}
+{{- $gitEmail := promptStringOnce . "git.email" "Git user.email" "" -}}
 {{- $useBedrock := false -}}
 {{- if hasKey . "claude" -}}
 {{-   $useBedrock = .claude.use_bedrock -}}
@@ -51,6 +51,10 @@ ngrok = {{ $credNgrok | quote }}
 # Per-machine value — stored only in the local chezmoi config, never committed.
 vault_path = {{ $obsidianVaultPath | replace "~" .chezmoi.homeDir | quote }}
 
+{{ if hasKey . "claudeExtensionsExtra" }}
+# Machine-local Claude Code extensions, carried over from the existing config.
+{{ dict "data" (dict "claudeExtensionsExtra" .claudeExtensionsExtra) | toToml }}
+{{ end }}
 [onepassword]
 cache = true
 
