@@ -32,7 +32,7 @@ bun = "1.4.4"
 "cargo:eza" = "0.23.5"
 
 # aqua: until github: backend works (github.com/bootandy/dust/issues/560)
-"aqua:bootandy/dust" = "1.2.6"
+"aqua:bootandy/dust" = "1.2.7"
 
 # conda: poppler publishes source tarballs only. Provides pdftoppm, which
 # Claude Code's Read tool needs to render PDF page ranges.
@@ -52,10 +52,10 @@ bun = "1.4.4"
 "github:aristocratos/btop" = { version = "1.4.8", os = ["linux"] }
 "github:atuinsh/atuin" = "18.24.4"
 # plannotator: binary the plannotator Claude Code plugin's hooks invoke on PATH
-"github:backnotprop/plannotator" = "0.28.42"
+"github:backnotprop/plannotator" = "0.28.44"
 "github:boyter/scc" = "4.1.0"
 "github:buildkite/cli" = "3.67.0"
-"github:carapace-sh/carapace-bin" = "1.8.1"
+"github:carapace-sh/carapace-bin" = "1.8.2"
 "github:charmbracelet/glow" = "3.0.0"
 "github:cli/cli" = "2.103.3"
 # 7-Zip proper (7zz): extracts RAR, which the p7zip in Fedora's repos cannot
@@ -69,7 +69,7 @@ bun = "1.4.4"
 "github:herdrdev/herdr" = "0.9.5"
 "github:jesseduffield/lazygit" = "0.66.2"
 "github:jqlang/jq" = "jq-1.8.2"
-"github:jdx/hk" = "2.10.0"
+"github:jdx/hk" = "2.11.0"
 "github:junegunn/fzf" = "0.74.5"
 "github:librespeed/speedtest-cli" = "1.0.14"
 "github:lima-vm/lima" = "2.2.1"
@@ -95,6 +95,6 @@ pipx = "1.18.11"
 "npm:@owloops/claude-powerline" = "1.32.5"
 "npm:@tobilu/qmd" = "2.8.3"
 "npm:bktide" = "1.0.1782920867"
-"npm:ccusage" = "20.0.46"
+"npm:ccusage" = "20.0.47"
 "npm:git-mob" = "4.0.1"
 "npm:obsidian-headless" = "0.0.14"
