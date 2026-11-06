@@ -5699,7 +5699,7 @@ specifiers = ["2.8.3"]
 
 [[tools."npm:bktide"]]
 version = "1.0.1782920867"
-aube = { path = ".mise/locks/npm-bktide/1.0.1782920867", digest = "sha256:6836aaed6d0ef272f3523448e4ac978343aabdc7963730a3d6ca74bbfb7df698" }
+aube = { path = ".mise/locks/npm-bktide/1.0.1782920867", digest = "sha256:992aa561bee8a23c18a48669ec8e0dd0914b7b6246040225bfb19e21046d3a12" }
 backend = "npm:bktide"
 specifiers = ["1.0.1782920867"]
 
