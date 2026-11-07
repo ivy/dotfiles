@@ -30,8 +30,11 @@ right) key="ctrl+l" ;;
 esac
 
 # Prefer the path herdr hands us: resolving `herdr` through the mise shim costs
-# ~90ms per call, which is felt on a key pressed this often.
-herdr="${HERDR_BIN_PATH:-herdr}"
+# ~90ms per call, which is felt on a key pressed this often. The path names the
+# binary the server started from, which a tool upgrade can remove from under a
+# running server, so fall back to the shim when it no longer exists.
+herdr="${HERDR_BIN_PATH:-}"
+[ -x "$herdr" ] || herdr=herdr
 pane="${HERDR_ACTIVE_PANE_ID:-}"
 
 # Nothing focused means nothing to navigate.

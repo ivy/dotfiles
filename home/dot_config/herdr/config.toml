@@ -179,7 +179,7 @@ description = "focus right, or ctrl+l to an editor"
 [[keys.command]]
 key = "prefix+ctrl+l"
 type = "shell"
-command = '"${HERDR_BIN_PATH:-herdr}" pane send-keys "$HERDR_ACTIVE_PANE_ID" ctrl+l'
+command = 'herdr pane send-keys "$HERDR_ACTIVE_PANE_ID" ctrl+l'
 description = "clear the focused pane"
 
 [ui]
