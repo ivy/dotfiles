@@ -3665,145 +3665,145 @@ url = "https://github.com/aristocratos/btop/releases/download/v1.4.8/btop-x86_64
 url_api = "https://api.github.com/repos/aristocratos/btop/releases/assets/674452462"
 
 [[tools."github:atuinsh/atuin"]]
-version = "18.24.4"
+version = "18.24.5"
 backend = "github:atuinsh/atuin"
-specifiers = ["18.24.4"]
+specifiers = ["18.24.5"]
 
 [tools."github:atuinsh/atuin"."platforms.linux-arm64"]
-checksum = "sha256:5216c5fc98d46c0f99106699f88f122e4a5332e8151f481fdaac408329e3d0c6"
-url = "https://github.com/atuinsh/atuin/releases/download/v18.24.4/atuin-aarch64-unknown-linux-gnu.tar.gz"
-url_api = "https://api.github.com/repos/atuinsh/atuin/releases/assets/690584609"
+checksum = "sha256:ae4228314f6b33705fe584dce58a2910b8e19fbeb8b652263ee7b66cc7e87a59"
+url = "https://github.com/atuinsh/atuin/releases/download/v18.24.5/atuin-aarch64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/atuinsh/atuin/releases/assets/707958968"
 provenance = "github-attestations"
 
 [tools."github:atuinsh/atuin"."platforms.linux-arm64-musl"]
-checksum = "sha256:7698bd70195bde165bb37ea3133aa6663dd48ff7d6a23042cda2c7be4c22ba78"
-url = "https://github.com/atuinsh/atuin/releases/download/v18.24.4/atuin-aarch64-unknown-linux-musl.tar.gz"
-url_api = "https://api.github.com/repos/atuinsh/atuin/releases/assets/690584613"
+checksum = "sha256:b44b3f264652b847b2e524ec397aa498c13076ed75cf213239ed2b9a0de2f99d"
+url = "https://github.com/atuinsh/atuin/releases/download/v18.24.5/atuin-aarch64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/atuinsh/atuin/releases/assets/707958969"
 provenance = "github-attestations"
 
 [tools."github:atuinsh/atuin"."platforms.linux-x64"]
-checksum = "sha256:d5ed5958ef04a4c20cb876feaa7fbad965f6ccd7b997e7ed54e862adec9ce0fc"
-url = "https://github.com/atuinsh/atuin/releases/download/v18.24.4/atuin-x86_64-unknown-linux-gnu.tar.gz"
-url_api = "https://api.github.com/repos/atuinsh/atuin/releases/assets/690584795"
+checksum = "sha256:e16a95f10e9592543d2d578e44c2f1dccf89b57915c2e2c6935b435b3f43cee4"
+url = "https://github.com/atuinsh/atuin/releases/download/v18.24.5/atuin-x86_64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/atuinsh/atuin/releases/assets/707959200"
 provenance = "github-attestations"
 
 [tools."github:atuinsh/atuin"."platforms.linux-x64-baseline"]
-checksum = "sha256:d5ed5958ef04a4c20cb876feaa7fbad965f6ccd7b997e7ed54e862adec9ce0fc"
-url = "https://github.com/atuinsh/atuin/releases/download/v18.24.4/atuin-x86_64-unknown-linux-gnu.tar.gz"
-url_api = "https://api.github.com/repos/atuinsh/atuin/releases/assets/690584795"
+checksum = "sha256:e16a95f10e9592543d2d578e44c2f1dccf89b57915c2e2c6935b435b3f43cee4"
+url = "https://github.com/atuinsh/atuin/releases/download/v18.24.5/atuin-x86_64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/atuinsh/atuin/releases/assets/707959200"
 provenance = "github-attestations"
 
 [tools."github:atuinsh/atuin"."platforms.linux-x64-musl"]
-checksum = "sha256:788cff5b3903ca7f1f5bdff3e4b4975c38b3c20385176a49b01ad1bea5b37636"
-url = "https://github.com/atuinsh/atuin/releases/download/v18.24.4/atuin-x86_64-unknown-linux-musl.tar.gz"
-url_api = "https://api.github.com/repos/atuinsh/atuin/releases/assets/690584812"
+checksum = "sha256:54182762c9d91a4f779748f622749ff6963956db005feb13e62d037196b05618"
+url = "https://github.com/atuinsh/atuin/releases/download/v18.24.5/atuin-x86_64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/atuinsh/atuin/releases/assets/707959222"
 provenance = "github-attestations"
 
 [tools."github:atuinsh/atuin"."platforms.linux-x64-musl-baseline"]
-checksum = "sha256:788cff5b3903ca7f1f5bdff3e4b4975c38b3c20385176a49b01ad1bea5b37636"
-url = "https://github.com/atuinsh/atuin/releases/download/v18.24.4/atuin-x86_64-unknown-linux-musl.tar.gz"
-url_api = "https://api.github.com/repos/atuinsh/atuin/releases/assets/690584812"
+checksum = "sha256:54182762c9d91a4f779748f622749ff6963956db005feb13e62d037196b05618"
+url = "https://github.com/atuinsh/atuin/releases/download/v18.24.5/atuin-x86_64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/atuinsh/atuin/releases/assets/707959222"
 provenance = "github-attestations"
 
 [tools."github:atuinsh/atuin"."platforms.macos-arm64"]
-checksum = "sha256:edd06294377599bf4d85ca3337abc802256a991262260bdd980d1b649583553d"
-url = "https://github.com/atuinsh/atuin/releases/download/v18.24.4/atuin-aarch64-apple-darwin.tar.gz"
-url_api = "https://api.github.com/repos/atuinsh/atuin/releases/assets/690584610"
+checksum = "sha256:644e92d5667e2ebbc00758c71d5974bc907d238eaa6cdc32b24eb73dce7f9a5a"
+url = "https://github.com/atuinsh/atuin/releases/download/v18.24.5/atuin-aarch64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/atuinsh/atuin/releases/assets/707958967"
 provenance = "github-attestations"
 
 [tools."github:atuinsh/atuin"."platforms.macos-x64"]
-checksum = "sha256:aeeb67d1f3277e8bd92f2773ae383cad43ac49161a08aa4b9142122c99e1305e"
-url = "https://github.com/atuinsh/atuin/releases/download/v18.24.4/atuin-x86_64-apple-darwin.tar.gz"
-url_api = "https://api.github.com/repos/atuinsh/atuin/releases/assets/690584749"
+checksum = "sha256:220450dd55eee9a0b30797bb02412d90849c839f90ac1ae377a877c282e2deaa"
+url = "https://github.com/atuinsh/atuin/releases/download/v18.24.5/atuin-x86_64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/atuinsh/atuin/releases/assets/707959162"
 provenance = "github-attestations"
 
 [tools."github:atuinsh/atuin"."platforms.macos-x64-baseline"]
-checksum = "sha256:aeeb67d1f3277e8bd92f2773ae383cad43ac49161a08aa4b9142122c99e1305e"
-url = "https://github.com/atuinsh/atuin/releases/download/v18.24.4/atuin-x86_64-apple-darwin.tar.gz"
-url_api = "https://api.github.com/repos/atuinsh/atuin/releases/assets/690584749"
+checksum = "sha256:220450dd55eee9a0b30797bb02412d90849c839f90ac1ae377a877c282e2deaa"
+url = "https://github.com/atuinsh/atuin/releases/download/v18.24.5/atuin-x86_64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/atuinsh/atuin/releases/assets/707959162"
 provenance = "github-attestations"
 
 [tools."github:atuinsh/atuin"."platforms.windows-x64"]
-checksum = "sha256:773cb6a6538ac1f6d563abfe69c9a75e7e0455b5210d9ff071ef2b3f28368f3e"
-url = "https://github.com/atuinsh/atuin/releases/download/v18.24.4/atuin-x86_64-pc-windows-msvc.zip"
-url_api = "https://api.github.com/repos/atuinsh/atuin/releases/assets/690584780"
+checksum = "sha256:8ec5f2519d8019c129d3fb83a6c97eca29aa23391d8802af306d0c6de8cde30e"
+url = "https://github.com/atuinsh/atuin/releases/download/v18.24.5/atuin-x86_64-pc-windows-msvc.zip"
+url_api = "https://api.github.com/repos/atuinsh/atuin/releases/assets/707959190"
 provenance = "github-attestations"
 
 [tools."github:atuinsh/atuin"."platforms.windows-x64-baseline"]
-checksum = "sha256:773cb6a6538ac1f6d563abfe69c9a75e7e0455b5210d9ff071ef2b3f28368f3e"
-url = "https://github.com/atuinsh/atuin/releases/download/v18.24.4/atuin-x86_64-pc-windows-msvc.zip"
-url_api = "https://api.github.com/repos/atuinsh/atuin/releases/assets/690584780"
+checksum = "sha256:8ec5f2519d8019c129d3fb83a6c97eca29aa23391d8802af306d0c6de8cde30e"
+url = "https://github.com/atuinsh/atuin/releases/download/v18.24.5/atuin-x86_64-pc-windows-msvc.zip"
+url_api = "https://api.github.com/repos/atuinsh/atuin/releases/assets/707959190"
 provenance = "github-attestations"
 
 [[tools."github:backnotprop/plannotator"]]
-version = "0.28.44"
+version = "0.28.48"
 backend = "github:backnotprop/plannotator"
-specifiers = ["0.28.44"]
+specifiers = ["0.28.48"]
 
 [tools."github:backnotprop/plannotator"."platforms.linux-arm64"]
-checksum = "sha256:ff4c749aa0736d827be36621d9ec097f52b62a86a005bc33330d6cf870c7c393"
-url = "https://github.com/backnotprop/plannotator/releases/download/v0.28.44/plannotator-linux-arm64"
-url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/699687984"
+checksum = "sha256:68977cc4518559ae95711e9a4e25d9284c3a199f9eab96da4da8faa1ef4ba380"
+url = "https://github.com/backnotprop/plannotator/releases/download/v0.28.48/plannotator-linux-arm64"
+url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/704818507"
 provenance = "github-attestations"
 
 [tools."github:backnotprop/plannotator"."platforms.linux-arm64-musl"]
-checksum = "sha256:ff4c749aa0736d827be36621d9ec097f52b62a86a005bc33330d6cf870c7c393"
-url = "https://github.com/backnotprop/plannotator/releases/download/v0.28.44/plannotator-linux-arm64"
-url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/699687984"
+checksum = "sha256:68977cc4518559ae95711e9a4e25d9284c3a199f9eab96da4da8faa1ef4ba380"
+url = "https://github.com/backnotprop/plannotator/releases/download/v0.28.48/plannotator-linux-arm64"
+url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/704818507"
 provenance = "github-attestations"
 
 [tools."github:backnotprop/plannotator"."platforms.linux-x64"]
-checksum = "sha256:0bdc48629ff4e9625d58a4b79a34866141d9e8a1119ccf778c7d2e9fd6a672cb"
-url = "https://github.com/backnotprop/plannotator/releases/download/v0.28.44/plannotator-linux-x64"
-url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/699687996"
+checksum = "sha256:fa0a41e8e0a069af84dfd081ca0689b42842e55e2a72488030140f29a55a1db0"
+url = "https://github.com/backnotprop/plannotator/releases/download/v0.28.48/plannotator-linux-x64"
+url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/704818511"
 provenance = "github-attestations"
 
 [tools."github:backnotprop/plannotator"."platforms.linux-x64-baseline"]
-checksum = "sha256:0bdc48629ff4e9625d58a4b79a34866141d9e8a1119ccf778c7d2e9fd6a672cb"
-url = "https://github.com/backnotprop/plannotator/releases/download/v0.28.44/plannotator-linux-x64"
-url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/699687996"
+checksum = "sha256:fa0a41e8e0a069af84dfd081ca0689b42842e55e2a72488030140f29a55a1db0"
+url = "https://github.com/backnotprop/plannotator/releases/download/v0.28.48/plannotator-linux-x64"
+url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/704818511"
 provenance = "github-attestations"
 
 [tools."github:backnotprop/plannotator"."platforms.linux-x64-musl"]
-checksum = "sha256:0bdc48629ff4e9625d58a4b79a34866141d9e8a1119ccf778c7d2e9fd6a672cb"
-url = "https://github.com/backnotprop/plannotator/releases/download/v0.28.44/plannotator-linux-x64"
-url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/699687996"
+checksum = "sha256:fa0a41e8e0a069af84dfd081ca0689b42842e55e2a72488030140f29a55a1db0"
+url = "https://github.com/backnotprop/plannotator/releases/download/v0.28.48/plannotator-linux-x64"
+url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/704818511"
 provenance = "github-attestations"
 
 [tools."github:backnotprop/plannotator"."platforms.linux-x64-musl-baseline"]
-checksum = "sha256:0bdc48629ff4e9625d58a4b79a34866141d9e8a1119ccf778c7d2e9fd6a672cb"
-url = "https://github.com/backnotprop/plannotator/releases/download/v0.28.44/plannotator-linux-x64"
-url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/699687996"
+checksum = "sha256:fa0a41e8e0a069af84dfd081ca0689b42842e55e2a72488030140f29a55a1db0"
+url = "https://github.com/backnotprop/plannotator/releases/download/v0.28.48/plannotator-linux-x64"
+url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/704818511"
 provenance = "github-attestations"
 
 [tools."github:backnotprop/plannotator"."platforms.macos-arm64"]
-checksum = "sha256:57467265bfaa2c967c35b62b6ba323e649cd679713b67ad61e8bef7c4aaac24b"
-url = "https://github.com/backnotprop/plannotator/releases/download/v0.28.44/plannotator-darwin-arm64"
-url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/699687990"
+checksum = "sha256:52df533f6a88dc81fc80cd3e899858104f1036d71fc3a0a5ef6f0f7965fd3ca5"
+url = "https://github.com/backnotprop/plannotator/releases/download/v0.28.48/plannotator-darwin-arm64"
+url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/704818502"
 provenance = "github-attestations"
 
 [tools."github:backnotprop/plannotator"."platforms.macos-x64"]
-checksum = "sha256:7b2b665014cbca12c29e7f362a809683685e6f8704cbbfa51d0e1d6d5953fa77"
-url = "https://github.com/backnotprop/plannotator/releases/download/v0.28.44/plannotator-darwin-x64"
-url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/699687986"
+checksum = "sha256:aa90dc57dc351b9dd1b01bc353ad03b90dc85ae9f84569858396159e49ae70a2"
+url = "https://github.com/backnotprop/plannotator/releases/download/v0.28.48/plannotator-darwin-x64"
+url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/704818515"
 provenance = "github-attestations"
 
 [tools."github:backnotprop/plannotator"."platforms.macos-x64-baseline"]
-checksum = "sha256:7b2b665014cbca12c29e7f362a809683685e6f8704cbbfa51d0e1d6d5953fa77"
-url = "https://github.com/backnotprop/plannotator/releases/download/v0.28.44/plannotator-darwin-x64"
-url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/699687986"
+checksum = "sha256:aa90dc57dc351b9dd1b01bc353ad03b90dc85ae9f84569858396159e49ae70a2"
+url = "https://github.com/backnotprop/plannotator/releases/download/v0.28.48/plannotator-darwin-x64"
+url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/704818515"
 provenance = "github-attestations"
 
 [tools."github:backnotprop/plannotator"."platforms.windows-x64"]
-checksum = "sha256:f61a09598371432d1866547a29ad206fb9b1cd9657de03a1775c4df38937750b"
-url = "https://github.com/backnotprop/plannotator/releases/download/v0.28.44/plannotator-win32-x64.exe"
-url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/699687971"
+checksum = "sha256:9562c2b8be853b44ed1c7e20120222ffdae43d5f7b2c586d3fe1583d92a6a9c5"
+url = "https://github.com/backnotprop/plannotator/releases/download/v0.28.48/plannotator-win32-x64.exe"
+url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/704818509"
 provenance = "github-attestations"
 
 [tools."github:backnotprop/plannotator"."platforms.windows-x64-baseline"]
-checksum = "sha256:f61a09598371432d1866547a29ad206fb9b1cd9657de03a1775c4df38937750b"
-url = "https://github.com/backnotprop/plannotator/releases/download/v0.28.44/plannotator-win32-x64.exe"
-url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/699687971"
+checksum = "sha256:9562c2b8be853b44ed1c7e20120222ffdae43d5f7b2c586d3fe1583d92a6a9c5"
+url = "https://github.com/backnotprop/plannotator/releases/download/v0.28.48/plannotator-win32-x64.exe"
+url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/704818509"
 provenance = "github-attestations"
 
 [[tools."github:boyter/scc"]]
@@ -4472,74 +4472,74 @@ url = "https://github.com/ip7z/7zip/releases/download/26.05/7z2605-x64.exe"
 url_api = "https://api.github.com/repos/ip7z/7zip/releases/assets/662536847"
 
 [[tools."github:jdx/hk"]]
-version = "2.11.0"
+version = "2.11.1"
 backend = "github:jdx/hk"
-specifiers = ["2.11.0"]
+specifiers = ["2.11.1"]
 
 [tools."github:jdx/hk"."platforms.linux-arm64"]
-checksum = "sha256:49cbba44159c17a760319ccfcca0fe4a07fa716f217c157ea734923160b8acb9"
-url = "https://github.com/jdx/hk/releases/download/v2.11.0/hk-aarch64-unknown-linux-gnu.tar.gz"
-url_api = "https://api.github.com/repos/jdx/hk/releases/assets/698007099"
+checksum = "sha256:b94d3b405a9e392d0286491693fd22386d3c5be086bf4b8698df33623bfe91a9"
+url = "https://github.com/jdx/hk/releases/download/v2.11.1/hk-aarch64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/706553730"
 provenance = "github-attestations"
 
 [tools."github:jdx/hk"."platforms.linux-arm64-musl"]
-checksum = "sha256:9bb573baf0931bf4cce5c681dcb1b2bcbd5bc9b7fcbd079252a742876a529dfc"
-url = "https://github.com/jdx/hk/releases/download/v2.11.0/hk-aarch64-unknown-linux-musl.tar.gz"
-url_api = "https://api.github.com/repos/jdx/hk/releases/assets/698007096"
+checksum = "sha256:5e20747e1335c599e2c1cf5bff06a8153cd42a719af00ced218868784875a63f"
+url = "https://github.com/jdx/hk/releases/download/v2.11.1/hk-aarch64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/706553737"
 provenance = "github-attestations"
 
 [tools."github:jdx/hk"."platforms.linux-x64"]
-checksum = "sha256:a461eb97df8e60c4447d1fdaa74a3d31598d7aba0d7a68ceebad0ff0405c3b5b"
-url = "https://github.com/jdx/hk/releases/download/v2.11.0/hk-x86_64-unknown-linux-gnu.tar.gz"
-url_api = "https://api.github.com/repos/jdx/hk/releases/assets/698007144"
+checksum = "sha256:b9330bd4b9326c3e1aefd757ff923fdf6d1b060074bcb4e54e16ec0a81fde7ec"
+url = "https://github.com/jdx/hk/releases/download/v2.11.1/hk-x86_64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/706553774"
 provenance = "github-attestations"
 
 [tools."github:jdx/hk"."platforms.linux-x64-baseline"]
-checksum = "sha256:a461eb97df8e60c4447d1fdaa74a3d31598d7aba0d7a68ceebad0ff0405c3b5b"
-url = "https://github.com/jdx/hk/releases/download/v2.11.0/hk-x86_64-unknown-linux-gnu.tar.gz"
-url_api = "https://api.github.com/repos/jdx/hk/releases/assets/698007144"
+checksum = "sha256:b9330bd4b9326c3e1aefd757ff923fdf6d1b060074bcb4e54e16ec0a81fde7ec"
+url = "https://github.com/jdx/hk/releases/download/v2.11.1/hk-x86_64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/706553774"
 provenance = "github-attestations"
 
 [tools."github:jdx/hk"."platforms.linux-x64-musl"]
-checksum = "sha256:edac507e4fb248a7d0885367b87ec002b073c530bcb07c91334855e54c4b0352"
-url = "https://github.com/jdx/hk/releases/download/v2.11.0/hk-x86_64-unknown-linux-musl.tar.gz"
-url_api = "https://api.github.com/repos/jdx/hk/releases/assets/698007154"
+checksum = "sha256:2067ccb4eeb4cb17623a7f840ee24a64edcfa242431b090358a854e619b3d345"
+url = "https://github.com/jdx/hk/releases/download/v2.11.1/hk-x86_64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/706553782"
 provenance = "github-attestations"
 
 [tools."github:jdx/hk"."platforms.linux-x64-musl-baseline"]
-checksum = "sha256:edac507e4fb248a7d0885367b87ec002b073c530bcb07c91334855e54c4b0352"
-url = "https://github.com/jdx/hk/releases/download/v2.11.0/hk-x86_64-unknown-linux-musl.tar.gz"
-url_api = "https://api.github.com/repos/jdx/hk/releases/assets/698007154"
+checksum = "sha256:2067ccb4eeb4cb17623a7f840ee24a64edcfa242431b090358a854e619b3d345"
+url = "https://github.com/jdx/hk/releases/download/v2.11.1/hk-x86_64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/706553782"
 provenance = "github-attestations"
 
 [tools."github:jdx/hk"."platforms.macos-arm64"]
-checksum = "sha256:65cc3490e93522b55abe8ae42c2b5ffe452f9fe58282455ad59d10bc0deab272"
-url = "https://github.com/jdx/hk/releases/download/v2.11.0/hk-aarch64-apple-darwin.tar.gz"
-url_api = "https://api.github.com/repos/jdx/hk/releases/assets/698007103"
+checksum = "sha256:95f89e6eef60e0c690b0d439b30e3b8558f47235a1a45cbff7b5351d294e4322"
+url = "https://github.com/jdx/hk/releases/download/v2.11.1/hk-aarch64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/706553739"
 provenance = "github-attestations"
 
 [tools."github:jdx/hk"."platforms.macos-x64"]
 checksum = "sha256:85848c9a91ab8ba144ad8638062bc4bc85540a49d9576e60b50d27ec1d352d9f"
-url = "https://github.com/jdx/hk/releases/download/v2.11.0/hk%402.11.0.zip"
-url_api = "https://api.github.com/repos/jdx/hk/releases/assets/698007156"
+url = "https://github.com/jdx/hk/releases/download/v2.11.1/hk%402.11.1.zip"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/706553801"
 provenance = "github-attestations"
 
 [tools."github:jdx/hk"."platforms.macos-x64-baseline"]
 checksum = "sha256:85848c9a91ab8ba144ad8638062bc4bc85540a49d9576e60b50d27ec1d352d9f"
-url = "https://github.com/jdx/hk/releases/download/v2.11.0/hk%402.11.0.zip"
-url_api = "https://api.github.com/repos/jdx/hk/releases/assets/698007156"
+url = "https://github.com/jdx/hk/releases/download/v2.11.1/hk%402.11.1.zip"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/706553801"
 provenance = "github-attestations"
 
 [tools."github:jdx/hk"."platforms.windows-x64"]
-checksum = "sha256:cb62de9ffb3d8265c513f194769c7b5575671f7bbfad3fab9529db54a0a32e14"
-url = "https://github.com/jdx/hk/releases/download/v2.11.0/hk-x86_64-pc-windows-msvc.zip"
-url_api = "https://api.github.com/repos/jdx/hk/releases/assets/698007111"
+checksum = "sha256:60b925d9734cd6bec5fab78b9c825b39b2ad9b1c9d9f03b685423c2d21ae9a8c"
+url = "https://github.com/jdx/hk/releases/download/v2.11.1/hk-x86_64-pc-windows-msvc.zip"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/706553733"
 provenance = "github-attestations"
 
 [tools."github:jdx/hk"."platforms.windows-x64-baseline"]
-checksum = "sha256:cb62de9ffb3d8265c513f194769c7b5575671f7bbfad3fab9529db54a0a32e14"
-url = "https://github.com/jdx/hk/releases/download/v2.11.0/hk-x86_64-pc-windows-msvc.zip"
-url_api = "https://api.github.com/repos/jdx/hk/releases/assets/698007111"
+checksum = "sha256:60b925d9734cd6bec5fab78b9c825b39b2ad9b1c9d9f03b685423c2d21ae9a8c"
+url = "https://github.com/jdx/hk/releases/download/v2.11.1/hk-x86_64-pc-windows-msvc.zip"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/706553733"
 provenance = "github-attestations"
 
 [[tools."github:jesseduffield/lazygit"]]
@@ -5680,10 +5680,10 @@ backend = "npm:@openai/codex"
 specifiers = ["0.166.0"]
 
 [[tools."npm:@owloops/claude-powerline"]]
-version = "1.32.5"
-aube = { path = ".mise/locks/npm-owloops-claude-powerline/1.32.5", digest = "sha256:921d029bcdd830d0aaa7ade8e7fd80c6e64d24d73a16ca8702888af0f9d790fd" }
+version = "1.32.6"
+aube = { path = ".mise/locks/npm-owloops-claude-powerline/1.32.6", digest = "sha256:91ffd8718dc335be0578f66726a781d22184a0ded3ecf9a177e4bb6ed02313b0" }
 backend = "npm:@owloops/claude-powerline"
-specifiers = ["1.32.5"]
+specifiers = ["1.32.6"]
 
 [[tools."npm:@playwright/mcp"]]
 version = "0.0.84"
@@ -5704,10 +5704,10 @@ backend = "npm:bktide"
 specifiers = ["1.0.1782920867"]
 
 [[tools."npm:ccusage"]]
-version = "20.0.47"
-aube = { path = ".mise/locks/npm-ccusage/20.0.47", digest = "sha256:54dc2558943fb996a30d7ae28cd59b99af2a7c892a1b39b4b5cd6e8367a713c6" }
+version = "20.0.48"
+aube = { path = ".mise/locks/npm-ccusage/20.0.48", digest = "sha256:ce5fe373bd636e80bacb79224784ea0d2b723101bfa61b792d68c3cb54b7fb33" }
 backend = "npm:ccusage"
-specifiers = ["20.0.47"]
+specifiers = ["20.0.48"]
 
 [[tools."npm:git-mob"]]
 version = "4.0.1"
@@ -5722,63 +5722,63 @@ backend = "npm:obsidian-headless"
 specifiers = ["0.0.14"]
 
 [[tools.pipx]]
-version = "1.18.11"
+version = "1.18.12"
 backend = "aqua:pypa/pipx"
-specifiers = ["1.18.11"]
+specifiers = ["1.18.12"]
 
 [tools.pipx."platforms.linux-arm64"]
-checksum = "sha256:37282fd4fad8700169a718f2ca8c469dbf4ffbf004972670cb468cf255106f07"
+checksum = "sha256:076a10eff45dbb54a3eb2e5131ce1264eebb4e38c3a0ce58a8cd632da422952e"
 checksum_source = "mise-versions"
-url = "https://github.com/pypa/pipx/releases/download/1.18.11/pipx.pyz"
-url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/693756457"
+url = "https://github.com/pypa/pipx/releases/download/1.18.12/pipx.pyz"
+url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/704369079"
 
 [tools.pipx."platforms.linux-arm64-musl"]
-checksum = "sha256:37282fd4fad8700169a718f2ca8c469dbf4ffbf004972670cb468cf255106f07"
+checksum = "sha256:076a10eff45dbb54a3eb2e5131ce1264eebb4e38c3a0ce58a8cd632da422952e"
 checksum_source = "mise-versions"
-url = "https://github.com/pypa/pipx/releases/download/1.18.11/pipx.pyz"
-url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/693756457"
+url = "https://github.com/pypa/pipx/releases/download/1.18.12/pipx.pyz"
+url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/704369079"
 
 [tools.pipx."platforms.linux-x64"]
-checksum = "sha256:37282fd4fad8700169a718f2ca8c469dbf4ffbf004972670cb468cf255106f07"
+checksum = "sha256:076a10eff45dbb54a3eb2e5131ce1264eebb4e38c3a0ce58a8cd632da422952e"
 checksum_source = "mise-versions"
-url = "https://github.com/pypa/pipx/releases/download/1.18.11/pipx.pyz"
-url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/693756457"
+url = "https://github.com/pypa/pipx/releases/download/1.18.12/pipx.pyz"
+url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/704369079"
 
 [tools.pipx."platforms.linux-x64-baseline"]
-checksum = "sha256:37282fd4fad8700169a718f2ca8c469dbf4ffbf004972670cb468cf255106f07"
+checksum = "sha256:076a10eff45dbb54a3eb2e5131ce1264eebb4e38c3a0ce58a8cd632da422952e"
 checksum_source = "mise-versions"
-url = "https://github.com/pypa/pipx/releases/download/1.18.11/pipx.pyz"
-url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/693756457"
+url = "https://github.com/pypa/pipx/releases/download/1.18.12/pipx.pyz"
+url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/704369079"
 
 [tools.pipx."platforms.linux-x64-musl"]
-checksum = "sha256:37282fd4fad8700169a718f2ca8c469dbf4ffbf004972670cb468cf255106f07"
+checksum = "sha256:076a10eff45dbb54a3eb2e5131ce1264eebb4e38c3a0ce58a8cd632da422952e"
 checksum_source = "mise-versions"
-url = "https://github.com/pypa/pipx/releases/download/1.18.11/pipx.pyz"
-url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/693756457"
+url = "https://github.com/pypa/pipx/releases/download/1.18.12/pipx.pyz"
+url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/704369079"
 
 [tools.pipx."platforms.linux-x64-musl-baseline"]
-checksum = "sha256:37282fd4fad8700169a718f2ca8c469dbf4ffbf004972670cb468cf255106f07"
+checksum = "sha256:076a10eff45dbb54a3eb2e5131ce1264eebb4e38c3a0ce58a8cd632da422952e"
 checksum_source = "mise-versions"
-url = "https://github.com/pypa/pipx/releases/download/1.18.11/pipx.pyz"
-url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/693756457"
+url = "https://github.com/pypa/pipx/releases/download/1.18.12/pipx.pyz"
+url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/704369079"
 
 [tools.pipx."platforms.macos-arm64"]
-checksum = "sha256:37282fd4fad8700169a718f2ca8c469dbf4ffbf004972670cb468cf255106f07"
+checksum = "sha256:076a10eff45dbb54a3eb2e5131ce1264eebb4e38c3a0ce58a8cd632da422952e"
 checksum_source = "mise-versions"
-url = "https://github.com/pypa/pipx/releases/download/1.18.11/pipx.pyz"
-url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/693756457"
+url = "https://github.com/pypa/pipx/releases/download/1.18.12/pipx.pyz"
+url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/704369079"
 
 [tools.pipx."platforms.macos-x64"]
-checksum = "sha256:37282fd4fad8700169a718f2ca8c469dbf4ffbf004972670cb468cf255106f07"
+checksum = "sha256:076a10eff45dbb54a3eb2e5131ce1264eebb4e38c3a0ce58a8cd632da422952e"
 checksum_source = "mise-versions"
-url = "https://github.com/pypa/pipx/releases/download/1.18.11/pipx.pyz"
-url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/693756457"
+url = "https://github.com/pypa/pipx/releases/download/1.18.12/pipx.pyz"
+url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/704369079"
 
 [tools.pipx."platforms.macos-x64-baseline"]
-checksum = "sha256:37282fd4fad8700169a718f2ca8c469dbf4ffbf004972670cb468cf255106f07"
+checksum = "sha256:076a10eff45dbb54a3eb2e5131ce1264eebb4e38c3a0ce58a8cd632da422952e"
 checksum_source = "mise-versions"
-url = "https://github.com/pypa/pipx/releases/download/1.18.11/pipx.pyz"
-url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/693756457"
+url = "https://github.com/pypa/pipx/releases/download/1.18.12/pipx.pyz"
+url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/704369079"
 
 [[tools.pkl]]
 version = "0.32.2"
