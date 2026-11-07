@@ -3,30 +3,8 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
 
-  // Presets: sensible defaults, conventional-commit PR titles, no dashboard issue
-  "extends": [
-    "config:recommended",
-    ":semanticCommits",
-    ":disableDependencyDashboard"
-  ],
-
-  // Evaluate schedules in Pacific time
-  "timezone": "America/Los_Angeles",
-
-  // Commit via the GitHub API instead of pushing with git
-  "platformCommit": "enabled",
-
-  // Auto-raise a PR when Renovate config options need migration
-  "configMigration": true,
-
-  // Squash-merge passing PRs automatically; packageRules below can override
-  "automerge": true,
-  "automergeStrategy": "squash",
-
-  // "auto" (the config:recommended default) rebases every open branch on every
-  // push to main whenever automerge is on. main has no up-to-date-branch
-  // requirement, so automerge works fine without that — only rebase on conflict.
-  "rebaseWhen": "conflicted",
+  // Shared defaults. This file holds only what is true of dotfiles.
+  "extends": ["github>ivy/renovate-config"],
 
   // Default from config:recommended is 5; raise to avoid throttling with many pinned tools
   "prHourlyLimit": 10,
@@ -130,31 +108,6 @@
     {
       "matchFileNames": ["home/.chezmoiexternal.toml.tmpl"],
       "groupName": "chezmoi externals"
-    },
-
-    // -------------------------------------------------------------------------
-    // Supply-chain quarantine
-    //
-    // Hold a release for three days so scanners and researchers get a window
-    // before it lands here. Keyed on datasource rather than manager, because
-    // the binding constraint is whether a releaseTimestamp comes back at all:
-    // minimumReleaseAgeBehaviour defaults to "timestamp-required", which treats
-    // a missing timestamp as pending indefinitely. git-refs supplies no
-    // timestamp, and the docker datasource only does so for Docker Hub — so
-    // both are left out entirely rather than quarantined into a permanent
-    // stall.
-    //
-    // matchUpdateTypes is load-bearing, not hygiene. Only major/minor/patch
-    // carry a releaseTimestamp onto the upgrade; digest, pinDigest, pin, bump,
-    // lockfileUpdate, rollback and replacement do not. Renovate checks the age
-    // a second time at branch level against that field, so any update type
-    // without one opens a PR that never merges.
-    // -------------------------------------------------------------------------
-    {
-      "matchDatasources": ["github-tags", "github-releases", "npm"],
-      "matchUpdateTypes": ["major", "minor", "patch"],
-      "minimumReleaseAge": "3 days",
-      "internalChecksFilter": "strict"
     },
 
     // Branch-tip deps track a moving ref, so there is no release to age against
