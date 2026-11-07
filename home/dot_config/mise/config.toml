@@ -15,12 +15,20 @@ min_version = "2026.10.25"
 color_theme = "catppuccin"
 lockfile = true
 
+[tool_alias]
+mr-boxington = "github:jdx/mr-boxington"
+
 [tools]
 # Runtimes (install first - required by pipx/npm/cargo backends)
 node = "26.13.0"
 python = "3.15.2"
 pkl = "0.32.2"
-rust = "1.99.1"
+# mr_boxington: cargo runs through mbx, which keeps target/ in a shared,
+# garbage-collected store (~/.cache/mbx) instead of each checkout
+rust = { version = "1.99.1", mr_boxington = true }
+# The mr_boxington option looks this tool up by its short name; the
+# [tool_alias] entry keeps it on the github: backend (ADR-005)
+mr-boxington = "1.29.2"
 bun = "1.4.4"
 
 # Cargo (Rust tools built from source)
