@@ -1,0 +1,5 @@
+# ~/.bash_profile — login bash (`bash -l`, `bash -lc`) reads only this file,
+# so pull in ~/.bashrc, which holds the whole environment.
+if [ -f "$HOME/.bashrc" ]; then
+  . "$HOME/.bashrc"
+fi

@@ -1,0 +1,66 @@
+# ~/.bashrc — bash is the agent shell: Claude Code's Bash tool snapshots this
+# file once per session (CLAUDE_CODE_SHELL, set by bin/sync-claude-settings).
+# zsh is the human shell. This file gives agents the same environment and tools
+# as zsh (.zshenv, .zprofile, .zshrc), minus the interactive features.
+#
+# The snapshot shell is non-interactive, so there is no `[[ $- == *i* ]]`
+# early return. Shell options stay at bash defaults: agents write for stock bash.
+
+{{ template "shell-env" . }}
+{{- if eq .chezmoi.os "linux" }}
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+  . /etc/bashrc
+fi
+{{- end }}
+
+# PATH, lowest precedence first; each step prepends. Matches the zsh order.
+if [ -d "$HOME/.local/bin" ]; then
+  PATH="$HOME/.local/bin:$PATH"
+fi
+
+# mise in SHIM MODE (see .zprofile): shims and command wrappers. Re-asserted
+# here because macOS path_helper (/etc/profile) reorders PATH in login shells.
+if command -v mise >/dev/null; then
+  eval "$(command mise activate bash --shims)"
+fi
+
+# Agent/CI shells: see docs/adrs/002-agent-optimized-shell-with-envsense.md
+if command -v envsense >/dev/null && envsense check -q --any agent ci; then
+  # An inherited CDPATH makes `cd dir` resolve against other directories
+  unset CDPATH
+fi
+
+# Per-repository trusted binaries (see .zshrc): highest precedence
+PATH=".git/safe/../../bin:$PATH"
+
+# Collapse duplicate PATH entries, first occurrence wins (zsh: typeset -U).
+# Runs last so re-prepended dirs end up in front.
+_dedupe_path() {
+  local dir out=""
+  local -a dirs
+  IFS=: read -r -a dirs <<<"$PATH"
+  for dir in "${dirs[@]}"; do
+    case ":$out:" in
+    *":$dir:"*) ;;
+    *) out="${out:+$out:}$dir" ;;
+    esac
+  done
+  PATH="$out"
+}
+_dedupe_path
+unset -f _dedupe_path
+export PATH
+
+{{- if and (lookPath "gh") (lookPath "mise") }}
+
+# Wrap mise to use GitHub token from gh CLI
+# Fixes "API rate limit exceeded" errors when mise downloads tools from GitHub releases
+alias mise='GITHUB_TOKEN="$(gh auth token)" command mise'
+{{- end }}
+
+# Machine-local additions
+if [ -r "$HOME/.bashrc.local" ]; then
+  . "$HOME/.bashrc.local"
+fi

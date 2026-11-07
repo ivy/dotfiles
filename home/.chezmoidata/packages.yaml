@@ -17,6 +17,9 @@ packages:
       - pkl-lsp
       - tree
 
+      # Shells
+      - bash  # Claude Code's Bash tool; macOS /bin/bash (3.2) is too old
+
       # System monitoring
       - btop
       - htop

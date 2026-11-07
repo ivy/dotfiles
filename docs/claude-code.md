@@ -163,6 +163,14 @@ cannot pin them. Updates are agent-driven via `claude plugin update`
 (e.g. during `/update`). See [ADR-006](adrs/006-declarative-claude-code-extensions.md)
 for the full reasoning and revisit conditions.
 
+## The Bash tool runs bash
+
+`sync-claude-settings` sets `CLAUDE_CODE_SHELL` to bash (`/usr/bin/bash` on Linux, Homebrew's bash on macOS, whose `/bin/bash` 3.2 Claude Code rejects). Without it, the Bash tool runs the login shell, zsh, and agents write bash. zsh gives some bash-legal names special meaning: `path` is tied to `$PATH`, so a loop like `while read -r size path` silently replaces `PATH` with a data directory, and the next command can run whatever executable that directory holds under the same name.
+
+Claude Code snapshots the shell's rc file once per session, so `~/.bashrc` ([`home/dot_bashrc.tmpl`](../home/dot_bashrc.tmpl)) carries the agent environment: the exports shared with `.zshenv` ([`home/.chezmoitemplates/shell-env`](../home/.chezmoitemplates/shell-env)), mise in shim mode, and the `mise` token alias.
+
+To check a session: `echo "$BASH_VERSION"` in the Bash tool prints a version.
+
 ## Guard hook: no ad-hoc installers
 
 A global `PreToolUse`/`Bash` hook
@@ -190,7 +198,8 @@ per-Bash-call environment doesn't persist.
 
 | Path | Purpose |
 |------|---------|
-| `bin/sync-claude-settings` | writes the script-owned `settings.json` keys + guard hook |
+| `bin/sync-claude-settings` | writes the script-owned `settings.json` keys (including `CLAUDE_CODE_SHELL`) + guard hook |
+| `home/dot_bashrc.tmpl` | the Bash tool's environment |
 | `bin/sync-claude-extensions` | reconciles marketplaces / plugins / MCP servers |
 | `home/.chezmoidata/claude-extensions.yaml` | committed public base set |
 | `home/run_onchange_sync-claude-extensions.sh.tmpl` | apply-time trigger |

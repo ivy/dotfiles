@@ -59,6 +59,34 @@ set_feature_flags() {
     | .autoUpdatesChannel = "latest"' "${SETTINGS}" >"${SETTINGS}.tmp" && mv "${SETTINGS}.tmp" "${SETTINGS}"
 }
 
+# Run the Bash tool under bash, not the login shell (zsh). Agents write bash, and
+# zsh gives bash-legal names special meaning: `path` is tied to $PATH, so
+# `read -r path` silently swaps which binaries run. macOS ships bash 3.2, which
+# Claude Code rejects, so use Homebrew's bash there.
+set_bash_tool_shell() {
+	local shell=""
+	case "$(uname -s)" in
+	Darwin)
+		if command -v brew >/dev/null 2>&1; then
+			shell="$(brew --prefix)/bin/bash"
+		fi
+		;;
+	*)
+		shell="/usr/bin/bash"
+		;;
+	esac
+
+	if [[ -n "${shell}" && -x "${shell}" ]]; then
+		printf 'setting CLAUDE_CODE_SHELL=%s in %s\n' "${shell}" "${SETTINGS}"
+		jq --arg shell "${shell}" '.env = ((.env // {}) + {"CLAUDE_CODE_SHELL": $shell})' \
+			"${SETTINGS}" >"${SETTINGS}.tmp" && mv "${SETTINGS}.tmp" "${SETTINGS}"
+	else
+		printf 'warning: no suitable bash found (%s) — Bash tool falls back to the login shell\n' "${shell:-brew missing}" >&2
+		jq 'del(.env.CLAUDE_CODE_SHELL)' \
+			"${SETTINGS}" >"${SETTINGS}.tmp" && mv "${SETTINGS}.tmp" "${SETTINGS}"
+	fi
+}
+
 # Set global tool permissions so we don't re-approve common tools per-project
 set_permissions() {
 	printf 'setting global permissions in %s\n' "${SETTINGS}"
@@ -452,6 +480,7 @@ main() {
 	backup_settings
 	set_status_line
 	set_feature_flags
+	set_bash_tool_shell
 	set_permissions
 	set_hooks
 

@@ -1,13 +1,4 @@
-# XDG Base Directory specification
-# https://specifications.freedesktop.org/basedir-spec/latest/
-export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
-export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
-export XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
-export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
-
-# XDG system directories
-export XDG_DATA_DIRS="${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
-export XDG_CONFIG_DIRS="${XDG_CONFIG_DIRS:-/etc/xdg}"
+{{ template "shell-env" . }}
 
 # Keep PATH entries unique — collapse duplicates created by macOS path_helper
 # and the shim re-prepends in .zprofile/.zshenv (first occurrence wins, so a
@@ -27,23 +18,6 @@ fi
 if [[ -d "$HOME/.local/share/mise/shims" && ":$PATH:" != *":$HOME/.local/share/mise/shims:"* ]]; then
   export PATH="$HOME/.local/share/mise/shims:$PATH"
 fi
-
-# Editor configuration
-export EDITOR="nvim"
-
-# Pager configuration
-export PAGER="less"
-export LESS="-FR --mouse --wheel-lines=3"
-
-# NPM security hardening - disable postinstall scripts for global CLI tools
-export NPM_CONFIG_IGNORE_SCRIPTS=1
-export NPM_CONFIG_AUDIT=false
-export NPM_CONFIG_FUND=false
-
-{{- if and (eq .chezmoi.os "darwin") (glob (joinPath .chezmoi.homeDir "Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock")) }}
-# 1Password SSH agent
-export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
-{{- end }}
 
 # Source system-specific overrides and additions *last*
 if [[ -r "$HOME/.zshenv.local" ]]; then
