@@ -15,20 +15,22 @@ min_version = "2026.10.25"
 color_theme = "catppuccin"
 lockfile = true
 
-[tool_alias]
-mr-boxington = "github:jdx/mr-boxington"
+# Every cargo runs through mbx (github:jdx/mr-boxington below), which keeps
+# target/ in a shared, garbage-collected store under ~/.cache/mbx. A config
+# wrapper rather than rust's mr_boxington option: that option rides on one rust
+# entry, so a project that pins its own rust silently drops it. mbx still runs
+# the cargo of whichever rust the project selects.
+# https://mise.jdx.dev/dev-tools/shims.html#command-wrappers
+[wrappers.cargo]
+command = "mbx"
+env = { MBX_CARGO_SHIM_MODE = "1" }
 
 [tools]
 # Runtimes (install first - required by pipx/npm/cargo backends)
 node = "26.13.0"
 python = "3.15.2"
 pkl = "0.32.2"
-# mr_boxington: cargo runs through mbx, which keeps target/ in a shared,
-# garbage-collected store (~/.cache/mbx) instead of each checkout
-rust = { version = "1.99.1", mr_boxington = true }
-# The mr_boxington option looks this tool up by its short name; the
-# [tool_alias] entry keeps it on the github: backend (ADR-005)
-mr-boxington = "1.29.2"
+rust = "1.99.1"
 bun = "1.4.4"
 
 # Cargo (Rust tools built from source)
@@ -78,6 +80,7 @@ bun = "1.4.4"
 "github:jesseduffield/lazygit" = "0.66.2"
 "github:jqlang/jq" = "jq-1.8.2"
 "github:jdx/hk" = "2.11.1"
+"github:jdx/mr-boxington" = "1.29.2"
 "github:junegunn/fzf" = "0.74.5"
 "github:librespeed/speedtest-cli" = "1.0.14"
 "github:lima-vm/lima" = "2.2.1"
