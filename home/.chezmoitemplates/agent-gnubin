@@ -1,0 +1,16 @@
+{{- /*
+  macOS only: put GNU userland ahead of the BSD tools in agent shells. Agents
+  write GNU idioms (`sed -i`, `date -d`, `stat -c`, `readlink -f`), which the
+  BSD tools reject or silently interpret differently. Shared by .zshrc and
+  .bashrc, so it is POSIX sh. The kegs are installed from
+  .chezmoidata/packages.yaml.
+*/ -}}
+{{- $prefix := ternary "/opt/homebrew" "/usr/local" (eq .chezmoi.arch "arm64") }}
+  for _gnu_keg in coreutils findutils gawk gnu-sed gnu-tar grep; do
+    if [ -d "{{ $prefix }}/opt/${_gnu_keg}/libexec/gnubin" ]; then
+      PATH="{{ $prefix }}/opt/${_gnu_keg}/libexec/gnubin:$PATH"
+    fi
+  done
+  unset _gnu_keg
+  export PATH
+{{- /* no trailing newline: callers place their own `fi` */ -}}

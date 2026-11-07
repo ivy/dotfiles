@@ -207,6 +207,12 @@ source {{ $zshSyntaxHighlightPath }}
 {{- end }}
 
 fi  # end (( ! _is_automated ))
+{{- if eq .chezmoi.os "darwin" }}
+
+if (( _is_automated )); then
+{{- template "agent-gnubin" . }}
+fi
+{{- end }}
 
 # ============================================================================
 # Always-available: PATH, functions, credential aliases

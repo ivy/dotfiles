@@ -20,6 +20,14 @@ packages:
       # Shells
       - bash  # Claude Code's Bash tool; macOS /bin/bash (3.2) is too old
 
+      # GNU userland, put ahead of the BSD tools in agent shells
+      # (home/.chezmoitemplates/agent-gnubin)
+      - findutils
+      - gawk
+      - gnu-sed
+      - gnu-tar
+      - grep
+
       # System monitoring
       - btop
       - htop

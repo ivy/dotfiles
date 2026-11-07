@@ -167,7 +167,7 @@ for the full reasoning and revisit conditions.
 
 `sync-claude-settings` sets `CLAUDE_CODE_SHELL` to bash (`/usr/bin/bash` on Linux, Homebrew's bash on macOS, whose `/bin/bash` 3.2 Claude Code rejects). Without it, the Bash tool runs the login shell, zsh, and agents write bash. zsh gives some bash-legal names special meaning: `path` is tied to `$PATH`, so a loop like `while read -r size path` silently replaces `PATH` with a data directory, and the next command can run whatever executable that directory holds under the same name.
 
-Claude Code snapshots the shell's rc file once per session, so `~/.bashrc` ([`home/dot_bashrc.tmpl`](../home/dot_bashrc.tmpl)) carries the agent environment: the exports shared with `.zshenv` ([`home/.chezmoitemplates/shell-env`](../home/.chezmoitemplates/shell-env)), mise in shim mode, and the `mise` token alias.
+Claude Code snapshots the shell's rc file once per session, so `~/.bashrc` ([`home/dot_bashrc.tmpl`](../home/dot_bashrc.tmpl)) carries the agent environment: the exports shared with `.zshenv` ([`home/.chezmoitemplates/shell-env`](../home/.chezmoitemplates/shell-env)), mise in shim mode, and the `mise` token alias. On macOS, agent shells also put GNU coreutils, findutils, gawk, sed, tar, and grep ahead of the BSD tools ([`home/.chezmoitemplates/agent-gnubin`](../home/.chezmoitemplates/agent-gnubin)), detected through envsense as in [ADR-002](adrs/002-agent-optimized-shell-with-envsense.md).
 
 To check a session: `echo "$BASH_VERSION"` in the Bash tool prints a version.
 

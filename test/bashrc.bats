@@ -35,6 +35,16 @@ render_bashrc() {
 	[[ "$output" == *'mise activate bash --shims'* ]]
 }
 
+@test "GNU gnubin dirs are prepended on darwin only" {
+	run render_bashrc darwin
+	[ "$status" -eq 0 ]
+	[[ "$output" == *'libexec/gnubin'* ]]
+
+	run render_bashrc linux
+	[ "$status" -eq 0 ]
+	[[ "$output" != *'libexec/gnubin'* ]]
+}
+
 @test "bashrc leaves no duplicate PATH entries" {
 	run render_bashrc linux
 	[ "$status" -eq 0 ]

@@ -30,6 +30,9 @@ fi
 if command -v envsense >/dev/null && envsense check -q --any agent ci; then
   # An inherited CDPATH makes `cd dir` resolve against other directories
   unset CDPATH
+{{- if eq .chezmoi.os "darwin" }}
+{{- template "agent-gnubin" . }}
+{{- end }}
 fi
 
 # Per-repository trusted binaries (see .zshrc): highest precedence
