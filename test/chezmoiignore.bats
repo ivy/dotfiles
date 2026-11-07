@@ -25,6 +25,7 @@ managed_for() {
 	[ "$status" -eq 0 ]
 
 	[[ "$output" == *"Library/LaunchAgents/net.ivyevans.qmd-mcp.plist"* ]]
+	[[ "$output" == *"Library/Application Support/mbx/config.toml"* ]]
 }
 
 @test "systemd user units are excluded on darwin" {

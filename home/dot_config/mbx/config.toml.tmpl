@@ -1,0 +1,38 @@
+{{- /* Half the logical CPUs stay out of mbx's compile pool. */ -}}
+{{- $cpus := 0 -}}
+{{- if eq .chezmoi.os "darwin" -}}
+{{-   $cpus = output "sysctl" "-n" "hw.logicalcpu" | trim | atoi -}}
+{{- else -}}
+{{-   $cpus = output "nproc" | trim | atoi -}}
+{{- end -}}
+# mr-boxington (mbx) global settings, managed by chezmoi. `mbx settings set`
+# writes this file directly, so change the source in the dotfiles instead.
+# Settings reference: https://mr-boxington.jdx.dev/configuration
+
+# The same crate in different checkouts of one repo builds byte-identical, so
+# worktrees share cached results. Panics and debug info name a placeholder in
+# place of the checkout path.
+share_workspace_root = true
+
+[gc]
+# One budget for the action store, managed targets, incremental state, and
+# generated source trees.
+max_total_size = "150GiB"
+# Results from a Rust version nothing has used for a week are dead weight.
+rustc_max_age = "7d"
+
+[target]
+# Agent worktrees are disposable: their targets go first when over budget.
+evict_first = [".claude/worktrees", ".cache/worktrees"]
+
+[scheduler]
+reserve_cpus = {{ div $cpus 2 }}
+# Test binaries wait for permits too, so concurrent test runs from several
+# agents cannot oversubscribe the machine.
+tests = true
+
+# mold links through clang (homestead's dev_packages on Linux). mbx installs
+# mold only on Linux; other targets keep the system linker.
+[linker.profiles.dev]
+x86_64-unknown-linux-gnu = "mold@3.0.0"
+aarch64-unknown-linux-gnu = "mold@3.0.0"

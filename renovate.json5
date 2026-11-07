@@ -166,6 +166,16 @@
       "extractVersionTemplate": "^v(?<version>.+)$"
     },
 
+    // mold, the linker mbx installs for dev builds, pinned per target triple
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/^home/dot_config/mbx/config\\.toml\\.tmpl$/"],
+      "matchStrings": ["\"mold@(?<currentValue>[^\"]+)\""],
+      "depNameTemplate": "rui314/mold",
+      "datasourceTemplate": "github-releases",
+      "extractVersionTemplate": "^v(?<version>.+)$"
+    },
+
     // The mise version in `constraints` above. A manager of its own, because the
     // patterns of the previous one would match their own definitions here.
     {
