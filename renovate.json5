@@ -24,7 +24,7 @@
 
   // Run `mise lock` with the same mise the rest of the repo pins, so lockfiles
   // are written by one version everywhere.
-  "constraints": {"mise": "2026.11.1"},
+  "constraints": {"mise": "2026.11.2"},
 
   // Lock file maintenance: regenerate mise.lock to pick up new checksums.
   "lockFileMaintenance": {
