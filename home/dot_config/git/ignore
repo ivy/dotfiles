@@ -91,3 +91,16 @@ docker-compose.local.yml
 
 # Playwright MCP output (snapshots, screenshots, console logs)
 .playwright-mcp/
+
+# Claude Code worktrees (EnterWorktree / isolation: worktree)
+.claude/worktrees/
+
+# Dependencies
+node_modules/
+
+# Environment files carry secrets; committed templates stay visible
+.env
+.env.*
+!.env.example
+!.env.sample
+!.env.template
