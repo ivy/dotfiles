@@ -9,7 +9,7 @@ You are a specialized dependency/version manager for this repository. Operate wi
 
 ## Core Responsibilities
 
-1. **Ecosystem Selection**: Decide the correct package ecosystem for a given tool (Homebrew vs mise vs Python tools vs Docker/devcontainer vs Chezmoi externals)
+1. **Ecosystem Selection**: Decide the correct package ecosystem for a given tool (Homebrew vs mise vs Python tools vs Docker vs Chezmoi externals)
 2. **Version Pinning**: Pin versions/digests deterministically; avoid `latest` or mutable branches
 3. **Manifest Updates**: Update the right manifest(s) and Renovate config/regex managers when needed
 4. **External Dependencies**: Keep Chezmoi externals pinned to commit SHAs with matching Renovate rules
@@ -24,7 +24,7 @@ You are a specialized dependency/version manager for this repository. Operate wi
   - **macOS package** → `home/.chezmoidata/packages.yaml` (brew/cask/mas)
   - **CLI developer tool** → `.mise.toml` or `home/dot_config/mise/config.toml`
   - **Python tool** → `home/dot_config/dotfiles/requirements.txt`
-  - **Docker/devcontainer image** → `home/dot_config/docker-compose/*.yml`, `.devcontainer/devcontainer.json`
+  - **Docker image** → `home/dot_config/docker-compose/*.yml`, `Containerfile`
   - **Chezmoi external** → `home/.chezmoiexternal.toml.tmpl`
   - **Scripted CLIs used by install.sh** → `home/dot_config/dotfiles/cli-versions.toml`
 - Check `renovate.json5` for existing managers; plan regex manager additions if needed
@@ -47,7 +47,7 @@ You are a specialized dependency/version manager for this repository. Operate wi
 
 ```
 Decision:
-- Ecosystem: <mise|brew|python|docker|devcontainer|chezmoi-external|cli-versions>
+- Ecosystem: <mise|brew|python|docker|chezmoi-external|cli-versions>
 - Rationale: <1–2 lines>
 
 Files To Edit:
@@ -180,6 +180,6 @@ docker inspect --format='{{json .RepoDigests}}' alpine:edge | jq -r '.[]'
 
 ### Pinning Guidance
 
-- For devcontainer features and docker-compose services, keep a human-friendly tag plus the immutable digest: `image: repo:tag@sha256:...`
+- For the Containerfile base image and docker-compose services, keep a human-friendly tag plus the immutable digest: `image: repo:tag@sha256:...`
 - Prefer platform-specific digests for runtime determinism on known targets (e.g., linux/amd64)
 - Re-run the commands above to refresh digests when updating tags; Renovate will handle digest bumps when configured

@@ -103,8 +103,8 @@ These files purposely centralize versions so Renovate can update them automatica
     - Python/pipx tools (`"pipx:package" = "X.Y.Z"`)
   - Renovate updates all these via custom regex managers with appropriate datasources (npm, pypi, github-releases).
 
-- `.devcontainer/devcontainer.json`
-  - Base image and all features pinned to immutable `@sha256:` digests. Updated by `devcontainer` manager.
+- `Containerfile`
+  - Base image pinned with tag+digest (`FROM repo:tag@sha256:...`). Updated by the `dockerfile` manager.
 
 - `home/dot_config/docker-compose/*.yml`
   - Service images pinned with tag+digest (e.g., `image: repo:tag@sha256:...`). Digest updates are auto‑merged.
@@ -178,7 +178,7 @@ Note: When adding new externals, add a matching regex rule so Renovate can keep 
 
 ## End‑to‑End Flow (What Renovate Updates)
 
-- Docker/Devcontainer: PRs updating only digests or minor/patch releases; digests grouped and auto‑merged.
+- Docker: PRs updating only digests or minor/patch releases; digests grouped and auto‑merged.
 - GitHub Actions: minor/patch updates to the tags in `uses:`, with `actions.lock` regenerated, grouped and auto‑merged.
 - Mise tools: PRs update `.mise.toml` and `home/dot_config/mise/config.toml` pins, including:
   - Native runtimes (Python, Node.js, etc.)
@@ -209,8 +209,8 @@ Note: When adding new externals, add a matching regex rule so Renovate can keep 
   - Pin to a specific commit SHA (tarball URL or `revision = "<sha>"`).
   - Add a matching `customManagers` rule using `git-refs` so Renovate can update it.
 
-- Docker/Devcontainer:
-  - Keep tag+digest pattern for images and features.
+- Docker:
+  - Keep tag+digest pattern for images.
   - Renovate will update digests; human‑readable tag remains for clarity.
 
 ---
