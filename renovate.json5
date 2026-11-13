@@ -257,6 +257,17 @@
       "packageNameTemplate": "https://github.com/{{{depName}}}"
     },
 
+    // gh CLI extensions — release tags in .chezmoidata/gh-extensions.yaml
+    {
+      "customType": "jsonata",
+      "fileFormat": "yaml",
+      "managerFilePatterns": ["/^home/\\.chezmoidata/gh-extensions\\.yaml$/"],
+      "matchStrings": [
+        "ghExtensions.{ \"depName\": repo, \"currentValue\": version }"
+      ],
+      "datasourceTemplate": "github-releases"
+    },
+
     // --- lazy.nvim lockfile (home/dot_config/nvim/lazy-lock.json) ----------------
     // Neovim plugins managed by lazy.nvim. The lockfile stores each plugin by
     // its directory name (e.g. "LazyVim"), not the full GitHub slug

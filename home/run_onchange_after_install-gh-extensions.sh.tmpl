@@ -1,0 +1,48 @@
+#!/bin/bash
+
+# Installs the gh CLI extensions declared in .chezmoidata/gh-extensions.yaml at
+# their pinned release tags. Re-runs when that list changes.
+#
+# A pinned extension refuses `gh extension upgrade`, and `install --force`
+# moves it to a new tag but records it as unpinned, so a changed version is
+# removed and installed afresh.
+#
+# gh-extensions hash: {{ include ".chezmoidata/gh-extensions.yaml" | sha256sum }}
+
+[ -n "${DEBUG:-}" ] && set -o xtrace
+set -o errexit
+set -o nounset
+set -o pipefail
+
+# Resolved at runtime, not with lookPath: mise installs gh earlier in this same
+# apply, so the shim may not exist yet when this is rendered.
+if ! command -v gh >/dev/null 2>&1; then
+    echo "gh not found, skipping gh extension install"
+    exit 0
+fi
+
+# Prints the installed tag of an extension, or nothing when it is absent.
+installed_version() {
+    gh extension list | awk -F '\t' -v repo="$1" '$2 == repo { print $3 }'
+}
+
+ensure_extension() {
+    local repo="$1" version="$2" current
+    current="$(installed_version "$repo")"
+
+    if [ "$current" = "$version" ]; then
+        return
+    fi
+
+    if [ -n "$current" ]; then
+        echo "Replacing gh extension $repo $current with $version"
+        gh extension remove "${repo#*/gh-}"
+    else
+        echo "Installing gh extension $repo $version"
+    fi
+
+    gh extension install "$repo" --pin "$version"
+}
+{{ range .ghExtensions }}
+ensure_extension {{ .repo | quote }} {{ .version | quote }}
+{{- end }}

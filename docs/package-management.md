@@ -15,6 +15,7 @@ This guide explains how to add, update, and manage packages in this dotfiles rep
 | **GUI Applications** | `home/.chezmoidata/packages.yaml` | `casks: [ghostty]` | ❌ Manual |
 | **Neovim Plugins** | `home/dot_config/nvim/lua/plugins/*.lua` | LazyVim specs | ⚙️ Via LazyVim |
 | **Shell Plugins** | `home/.chezmoiexternal.toml.tmpl` | Pinned to SHA | ✅ Yes |
+| **gh CLI Extensions** | `home/.chezmoidata/gh-extensions.yaml` | `repo: github/gh-actions-lock`, `version: v0.4.1` | ✅ Yes |
 
 ## Core Philosophy
 

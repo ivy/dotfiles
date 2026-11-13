@@ -1,0 +1,9 @@
+# gh CLI extensions, installed at these release tags by
+# run_onchange_after_install-gh-extensions.sh.tmpl. Renovate bumps `version`
+# from each repo's GitHub releases.
+
+ghExtensions:
+  # Generates and verifies .github/workflows/actions.lock, the GitHub Actions
+  # dependency lockfile.
+  - repo: github/gh-actions-lock
+    version: v0.4.1
