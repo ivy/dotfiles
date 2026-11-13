@@ -10,7 +10,7 @@ workflows:
         - 'jdx/mise-action@v5.2.7'
     '.github/workflows/claude.yml':
         - 'actions/checkout@v7.0.1'
-        - 'anthropics/claude-code-action@v1.0.269'
+        - 'anthropics/claude-code-action@v1.0.271'
     '.github/workflows/container.yml':
         - 'actions/attest-build-provenance@v4.2.2'
         - 'actions/checkout@v7.0.1'
@@ -48,9 +48,9 @@ dependencies:
         commit: 'sha1-cf430e030ddbb5b0abf93d22962f4752f3646cd9'
         owner_id: 44036562
         repo_id: 192625955
-    'anthropics/claude-code-action@v1.0.269':
-        ref: 'v1.0.269'
-        commit: 'sha1-61a9c274fa7110a66dfafc1bbbced03833eb25fe'
+    'anthropics/claude-code-action@v1.0.271':
+        ref: 'v1.0.271'
+        commit: 'sha1-4fa93a88de49bbef68b10eb15aabedf28ca0e1ed'
         owner_id: 76263028
         repo_id: 986421638
         uses:
