@@ -52,6 +52,9 @@ EOF
 	# Should use dnf install
 	[[ "$output" == *"dnf install"* ]]
 
+	# Should count a package as installed when another one provides it
+	[[ "$output" == *"rpm -q --whatprovides"* ]]
+
 	# Should contain our test packages
 	[[ "$output" == *"git"* ]]
 	[[ "$output" == *"zsh"* ]]

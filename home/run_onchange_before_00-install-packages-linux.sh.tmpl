@@ -16,7 +16,9 @@ if command -v dnf >/dev/null 2>&1; then
         {{ . | quote }}
 {{ end -}}
     )
-    is_installed() { rpm -q "$1" >/dev/null 2>&1; }
+    # A name can be provided by another package (util-linux provides
+    # util-linux-user), which a plain `rpm -q` reports as not installed.
+    is_installed() { rpm -q --whatprovides "$1" >/dev/null 2>&1; }
 elif command -v apt-get >/dev/null 2>&1; then
     packages=(
 {{ range .packages.linux.apt -}}
