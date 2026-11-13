@@ -1,41 +1,49 @@
 # GitHub Actions Stack
 
-Linting for GitHub Actions workflows and action definitions.
+Linting for GitHub Actions workflows, composite actions and Dependabot configuration, with every action locked to a commit in `.github/workflows/actions.lock`.
 
 ## Detection Indicators
 
 | File/Pattern | Confidence |
 |---|---|
 | `.github/workflows/*.yml` | High |
-| `action.yml` or `action.yaml` | High (for ghalint_action) |
+| `.github/actions/**/action.yml` | High |
+| `action.yml` or `action.yaml` at the root | High (extend the glob, see Gotchas) |
+| `.github/dependabot.yml` | High |
 
 ## Builtins
 
 | Name | Builtin | What it does |
 |------|---------|-------------|
-| ghalint-workflow | `Builtins.ghalint_workflow` | Lints GHA workflow files (pinned actions, timeout-minutes, etc.) |
-| ghalint-action | `Builtins.ghalint_action` | Lints GHA action definition files |
+| jactionlint | `Builtins.jactionlint` | Lints workflows, composite actions and `dependabot.yml` ([jdx/jactionlint](https://github.com/jdx/jactionlint)): syntax, expressions, shellcheck on `run:` scripts, security and policy rules. Has a fix. |
 
 ## Tool Install Commands
 
 ```bash
-mise use ghalint
+mise use aqua:jdx/jactionlint@X.Y.Z
+mise use aqua:koalaman/shellcheck@X.Y.Z   # jactionlint runs it on every run: script
+```
+
+Lock the actions the workflows use (the [gh-actions-lock](https://github.com/github/gh-actions-lock) extension):
+
+```bash
+gh actions-lock                 # writes .github/workflows/actions.lock, rewrites uses: to exact tags
+gh actions-lock --verify        # what CI runs
 ```
 
 ## Gotchas
 
-- **Both builtins are `const`**: They cannot be overridden with `(Builtins.ghalint_workflow) { ... }`. Use them as-is or write a custom step instead.
-- **ghalint_workflow runs without `{{files}}`**: The check command is `ghalint run` (no file arguments). It scans `.github/workflows/*` via its own glob. This means it always checks all workflows, not just staged files.
-- **ghalint blocks commits on pre-existing issues**: Since `ghalint run` checks ALL workflow files (not just staged ones), pre-existing violations (missing `timeout-minutes`, missing job-level `permissions`, unpinned actions) will block every commit. Either: (a) fix all workflow issues as part of the bootstrap, or (b) write a custom step with a `slow` profile so it doesn't block commits by default.
-- **ghalint_action**: Only include if the project has an `action.yml` or `action.yaml` in the root. Its glob is `List("**/action.*")` with `types = List("yaml")`.
-- **Overlap with yaml linters**: If you also include yamlfmt/yamllint, exclude `.github/workflows/` from them to avoid double-linting GHA workflow files. ghalint is more specific and useful for workflows.
+- **hk package version**: `Builtins.jactionlint` exists from hk 2.6.0 (check only) and has its fix from 2.7.0. On an older `hk.pkl` package, write an inline step instead: `["jactionlint"] { glob = List(".github/workflows/*.y*ml"); check = "jactionlint --format gcc {{files}}"; fix = "jactionlint --fix {{files}}" }`.
+- **shellcheck must be pinned**: jactionlint shells out to `shellcheck`, and a mise shim with no version behind it is a fatal error rather than a skipped check. Pin shellcheck in the project's `mise.toml` even when the shell stack is not included.
+- **Lock, don't SHA-pin**: with `actions.lock` present, jactionlint's `unpinned-uses` rule accepts the exact tags the lockfile pins, so workflows keep readable `uses: actions/checkout@v7.0.1` refs. Run `gh actions-lock` after every change to a `uses:` line, and add a CI job that runs `gh actions-lock --verify` so a stale lockfile fails. Renovate's `github-actions` manager regenerates the lockfile with each update.
+- **Root `action.yml` is not in the builtin's glob**: it covers `.github/workflows/`, `.github/actions/**/action.y*ml` and `.github/dependabot.y*ml`. A repository that publishes an action at its root extends it: `(Builtins.jactionlint) { glob = List(".github/workflows/*.y*ml", ".github/actions/**/action.y*ml", ".github/dependabot.y*ml", "action.y*ml") }`.
+- **The default profile blocks commits on existing workflows**: it reports missing `timeout-minutes`, `concurrency:` and `permissions:`, `cache-poisoning`, Dependabot cooldowns and more, so a first run on an existing repository usually fails. Fix the findings as part of the bootstrap. `jactionlint --explain <rule>` gives the reasoning and the fix of each rule.
+- **Suppress narrowly, with a reason**: for a genuine false positive, or a fix that would change behaviour (a deploy workflow must not cancel in progress), add a durable `ignores:` entry with `rule`, `file` and `reason` to `.github/jactionlint.yaml` ([config reference](https://jactionlint.jdx.dev/config)). Do not turn rules off globally.
+- **Overlap with yaml linters**: If you also include yamlfmt/yamllint, exclude `.github/` from them to avoid double-linting workflow files.
 
 ## Example Pkl Snippet
 
 ```pkl
 // Always include if .github/workflows/ exists
-["ghalint-workflow"] = Builtins.ghalint_workflow
-
-// Only include if action.yml exists in project root
-["ghalint-action"] = Builtins.ghalint_action
+["jactionlint"] = Builtins.jactionlint
 ```

@@ -1,0 +1,14 @@
+# jactionlint configuration: https://jactionlint.jdx.dev/config
+ignores:
+  - rule: dangerous-triggers
+    file: .github/workflows/claude.yml
+    reason: >-
+      @claude mentions arrive as comments, so the workflow needs issue_comment.
+      The job runs only when the commenter is ivy, and the only scope its
+      token can write is id-token.
+  - rule: concurrency-limits
+    file: .github/workflows/claude.yml
+    reason: >-
+      Every comment on a thread starts a run, Claude's own progress comments
+      included. A concurrency group would cancel or displace the Claude run
+      that is already answering.

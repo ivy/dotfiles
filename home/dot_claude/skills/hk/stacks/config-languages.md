@@ -33,7 +33,7 @@ mise use yamllint     # YAML linter (Python-based)
 - **pkl uses `types` not `glob`**: The builtin uses `types = List("pkl")` for file matching, which catches files by extension and content detection.
 - **yamllint --strict**: The builtin runs `yamllint --strict {{files}}` which treats warnings as errors. Projects may need a `.yamllint.yml` config to customize rules.
 - **yamlfmt needs config**: Respects `yamlfmt.yaml` or `.yamlfmt.yml` in the project root. Without it, uses default formatting which may not match project conventions.
-- **Skip YAML builtins for GHA-only YAML**: If the only YAML files in the project are GitHub Actions workflows, skip yamlfmt/yamllint — ghalint handles those better. Including both causes conflicts (ghalint expects specific formatting that yamlfmt may change).
+- **Skip YAML builtins for GHA-only YAML**: If the only YAML files in the project are GitHub Actions workflows, skip yamlfmt/yamllint — jactionlint handles those better.
 - **Overlap with GHA stack**: If both stacks are included, exclude `.github/` from yamlfmt and yamllint to avoid conflicts.
 
 ## Example Pkl Snippet
@@ -43,7 +43,7 @@ mise use yamllint     # YAML linter (Python-based)
 ["pkl"] = Builtins.pkl
 ["pkl-format"] = Builtins.pkl_format
 
-// YAML — exclude GHA workflows if ghalint is also included
+// YAML — exclude GHA workflows if jactionlint is also included
 ["yamlfmt"] = (Builtins.yamlfmt) {
   exclude = ".github/"
 }

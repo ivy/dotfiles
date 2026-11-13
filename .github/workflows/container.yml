@@ -30,9 +30,6 @@ jobs:
     permissions:
       contents: read
       packages: write
-    outputs:
-      # Pass image name to merge job (same for both matrix legs)
-      image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -62,8 +59,6 @@ jobs:
           file: Containerfile
           platforms: ${{ matrix.platform }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha,scope=${{ matrix.platform }}
-          cache-to: type=gha,scope=${{ matrix.platform }},mode=max
           secrets: |
             github_token=${{ secrets.GITHUB_TOKEN }}
           outputs: type=image,name=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }},push-by-digest=true,name-canonical=true,push=true
@@ -121,10 +116,13 @@ jobs:
       - name: Create multi-arch manifest and push
         id: push
         working-directory: /tmp/digests
+        shell: bash
         run: |
-          docker buildx imagetools create \
-            $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
-            $(printf '${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@sha256:%s ' *)
+          tags=$(jq -r '.tags[]' <<< "$DOCKER_METADATA_OUTPUT_JSON")
+          args=()
+          while IFS= read -r tag; do args+=(-t "$tag"); done <<< "$tags"
+          for digest in *; do args+=("${REGISTRY}/${IMAGE_NAME}@sha256:${digest}"); done
+          docker buildx imagetools create "${args[@]}"
           # Grab the digest of the manifest list for attestation
           tag=$(jq -r '.tags[0]' <<< "$DOCKER_METADATA_OUTPUT_JSON")
           digest=$(docker buildx imagetools inspect "$tag" | awk '/^Digest:/{print $2}')

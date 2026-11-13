@@ -27,7 +27,6 @@ Every dependency has an exact version. Renovate opens PRs to update them.
 | **Shell plugins** | Commit SHA pins | `home/.chezmoiexternal.toml.tmpl` |
 | **Tmux plugins** | Commit SHA pins | `home/.chezmoidata/tmux-plugins.yaml` |
 | **Docker Compose images** | Tag + `@sha256:` digest | `home/dot_config/docker-compose/*.yml` |
-| **Devcontainer** | `@sha256:` digest pins | `.devcontainer/devcontainer.json` |
 | **Cosign** | Exact version pins | `home/dot_config/dotfiles/cli-versions.toml`, `Containerfile` |
 | **mise** | Exact version pin for scripted installs, CI and Renovate's `mise lock`; package-manager installs take the repository's version | `home/dot_config/dotfiles/cli-versions.toml`, `Containerfile`, `.github/workflows/ci.yml`, `renovate.json5` |
 
@@ -70,6 +69,8 @@ The `install.sh` bootstrap script installs cosign first, then uses it to verify 
 | Build attestation (`actions/attest-build-provenance`) | Done |
 | Pinned Actions (commit SHAs) | Done |
 | Minimal workflow permissions | Done |
+| Workflow linting ([jactionlint](https://github.com/jdx/jactionlint)) | Done |
+| No restored build cache in the publishing job | Done |
 | Cosign installed in image | Done (not yet used in CI) |
 
 ## What's Missing

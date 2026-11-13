@@ -106,7 +106,7 @@ Read each detected stack's `.md` file from the `stacks/` directory (relative to 
 
 Check for additional context that affects configuration:
 - Does `.editorconfig` exist? (affects editorconfig-checker, shfmt)
-- Does `action.yml` exist? (affects ghalint_action)
+- Does `action.yml` exist at the root? (extend the jactionlint glob to lint it)
 - Are there `.tmpl` files? (affects shell stack exclusions)
 - Is this a chezmoi repo? (template exclusions needed)
 - Does the project use conventional commits? (check pre-computed context git log, or look for `commitlint`, `.commitlintrc`)
@@ -175,7 +175,7 @@ Write the plan including:
 6. **Commit strategy** — the exact sequence of commits:
    - Commit 1: config files (`hk.pkl`, `.mise.toml`, `.markdownlint.json`, `.stylua.toml`, etc.)
    - Commit 2: `hk fix --all` auto-formatted changes to tracked files
-   - Commit 3: manual fixes for hook-blocking issues (e.g., ghalint workflow hardening)
+   - Commit 3: manual fixes for hook-blocking issues (e.g., jactionlint workflow hardening)
 
 Call `ExitPlanMode` and wait for approval.
 
@@ -186,7 +186,7 @@ Run these steps in order:
 1. **Install tools one at a time** with pinned versions:
    ```bash
    mise use hk@X.Y.Z
-   mise use ghalint@X.Y.Z
+   mise use aqua:jdx/jactionlint@X.Y.Z
    # etc. — one tool per command to avoid partial failures
    ```
    After each install, verify it landed in the project `.mise.toml` (not global config).
@@ -223,6 +223,6 @@ Run these steps in order:
 7. **Commit in sequence** (per the plan's commit strategy):
    - Commit 1: config files only
    - Commit 2: auto-formatted changes from `hk fix`
-   - Commit 3: manual fixes (e.g., ghalint workflow hardening) if needed
+   - Commit 3: manual fixes (e.g., jactionlint workflow hardening) if needed
 
 8. **Report results** — summarize what was installed, configured, and any remaining issues.
