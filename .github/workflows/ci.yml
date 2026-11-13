@@ -8,7 +8,8 @@ on:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+  # Every commit on main keeps its own result; a pull request only needs its latest.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   lint:
@@ -25,7 +26,7 @@ jobs:
         with:
           version: 2026.11.5 # mise
       - name: Run linting checks
-        run: hk check
+        run: hk check --all
 
   test:
     runs-on: ${{ matrix.os }}

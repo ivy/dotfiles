@@ -75,7 +75,7 @@ tmux kill-session -t verify
 ./bin/test              # Run all tests (what CI runs)
 bats test/<file>.bats   # Run one test file
 mise run lint           # Lint + auto-fix (hk fix)
-hk check                # Lint without fixing (what CI runs)
+hk check --all          # Lint every file without fixing (what CI runs)
 ```
 
 **Before opening a PR:** `hk check && ./bin/test`
