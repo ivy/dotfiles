@@ -5752,7 +5752,7 @@ specifiers = ["0.0.84"]
 
 [[tools."npm:@tobilu/qmd"]]
 version = "2.8.3"
-aube = { path = ".mise/locks/npm-tobilu-qmd/2.8.3", digest = "sha256:8b01a5591119bdf5b436915e990f4aca73d52a92d98bcda2e6f5e9c0725a2f5d" }
+aube = { path = ".mise/locks/npm-tobilu-qmd/2.8.3", digest = "sha256:d553600a47b90de008f556f93a09ceb339bc18b8f020e163eede08bd1749e104" }
 backend = "npm:@tobilu/qmd"
 specifiers = ["2.8.3"]
 
@@ -5770,7 +5770,7 @@ specifiers = ["20.0.48"]
 
 [[tools."npm:git-mob"]]
 version = "4.0.1"
-aube = { path = ".mise/locks/npm-git-mob/4.0.1", digest = "sha256:af0d0801cfebe3c9672bff579607b5bdfc00c05696f984e02e33adae16d94e4e" }
+aube = { path = ".mise/locks/npm-git-mob/4.0.1", digest = "sha256:baeb34e59c7d44714671ed4ed66a81b2e574eaf0d950251d02d410515fe0e308" }
 backend = "npm:git-mob"
 specifiers = ["4.0.1"]
 
