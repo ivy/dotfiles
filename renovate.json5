@@ -50,7 +50,8 @@
     "managerFilePatterns": ["/^home/dot_config/docker-compose/.*\\.ya?ml$/"]
   },
 
-  // Pin Actions to full-length commit SHAs for reproducibility
+  // Workflows keep exact tags; .github/workflows/actions.lock holds their
+  // commits, and Renovate regenerates it with each update.
   "github-actions": {
     "pinDigests": true,
     "managerFilePatterns": ["/^\\.github/workflows/.*\\.ya?ml$/"]

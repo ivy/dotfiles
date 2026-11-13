@@ -23,7 +23,7 @@ Every dependency has an exact version. Renovate opens PRs to update them.
 | Layer | How | Where |
 |---|---|---|
 | **Mise tools** | Exact versions + lockfile with per-platform SHA256 checksums; npm tools also lock their full dependency graph | `home/dot_config/mise/config.toml`, `mise.lock`, `.mise/locks/` |
-| **GitHub Actions** | Commit SHA pins | `.github/workflows/*.yml` |
+| **GitHub Actions** | Exact tags locked to commit SHAs by [`gh actions-lock`](https://github.com/github/gh-actions-lock), verified in CI | `.github/workflows/actions.lock` |
 | **Shell plugins** | Commit SHA pins | `home/.chezmoiexternal.toml.tmpl` |
 | **Tmux plugins** | Commit SHA pins | `home/.chezmoidata/tmux-plugins.yaml` |
 | **Docker Compose images** | Tag + `@sha256:` digest | `home/dot_config/docker-compose/*.yml` |
@@ -67,7 +67,7 @@ The `install.sh` bootstrap script installs cosign first, then uses it to verify 
 |---|---|
 | Multi-arch builds (amd64 + arm64) | Done |
 | Build attestation (`actions/attest-build-provenance`) | Done |
-| Pinned Actions (commit SHAs) | Done |
+| Locked Actions (`actions.lock`) | Done |
 | Minimal workflow permissions | Done |
 | Workflow linting ([jactionlint](https://github.com/jdx/jactionlint)) | Done |
 | No restored build cache in the publishing job | Done |

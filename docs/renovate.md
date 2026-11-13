@@ -29,7 +29,7 @@ Enabled managers and file discovery:
 - `mise`: `home/dot_config/mise/config.toml`, plus `mise.lock` via `lockFileMaintenance`
 - `dockerfile`: `Containerfile`
 - `docker-compose`: `home/dot_config/docker-compose/*.y[a]ml`
-- `github-actions`: `.github/workflows/*.y[a]ml` (with digest pinning)
+- `github-actions`: `.github/workflows/*.y[a]ml`, with each action's commit locked in `.github/workflows/actions.lock`, which Renovate regenerates with every update
 - `jsonata`: `home/.chezmoidata/tmux-plugins.yaml`
 
 Everything else — npm, pip, bundler and friends — is off via `enabledManagers`.
@@ -38,7 +38,7 @@ Everything else — npm, pip, bundler and friends — is off via `enabledManager
 
 ## Batching and rebase churn
 
-One PR per dependency does not scale here. Between ~30 SHA-pinned Neovim plugins, tmux plugins, chezmoi externals, digest-pinned Actions and container images, a quiet week upstream still produces a double-digit pile of PRs — and each merge rebases every branch behind it.
+One PR per dependency does not scale here. Between ~30 SHA-pinned Neovim plugins, tmux plugins, chezmoi externals, locked Actions and digest-pinned container images, a quiet week upstream still produces a double-digit pile of PRs — and each merge rebases every branch behind it.
 
 Two `packageRules` levers keep that in check.
 
@@ -46,7 +46,7 @@ Two `packageRules` levers keep that in check.
 
 | Group | Matched by | Covers |
 |-------|-----------|--------|
-| `github actions` | `matchManagers: ["github-actions"]` | workflow action versions and digests |
+| `github actions` | `matchManagers: ["github-actions"]` | workflow action versions and `actions.lock` |
 | `container images` | `matchManagers: ["dockerfile", "docker-compose"]` | `Containerfile` and compose image tags/digests |
 | `mise tools` | `matchManagers: ["mise"]` | every pinned tool in the mise manifest |
 | `neovim plugins` | `matchFileNames: ["home/dot_config/nvim/lazy-lock.json"]` | lazy.nvim lockfile commits |
@@ -179,7 +179,7 @@ Note: When adding new externals, add a matching regex rule so Renovate can keep 
 ## End‑to‑End Flow (What Renovate Updates)
 
 - Docker/Devcontainer: PRs updating only digests or minor/patch releases; digests grouped and auto‑merged.
-- GitHub Actions: digest pinning and minor/patch updates grouped and auto‑merged.
+- GitHub Actions: minor/patch updates to the tags in `uses:`, with `actions.lock` regenerated, grouped and auto‑merged.
 - Mise tools: PRs update `.mise.toml` and `home/dot_config/mise/config.toml` pins, including:
   - Native runtimes (Python, Node.js, etc.)
   - Aqua/Ubi tools (from GitHub releases)
