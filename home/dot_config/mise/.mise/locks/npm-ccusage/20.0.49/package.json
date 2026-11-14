@@ -2,6 +2,6 @@
   "name": "mise-npm-install",
   "private": true,
   "dependencies": {
-    "@playwright/mcp": "0.0.84"
+    "ccusage": "20.0.49"
   }
 }
