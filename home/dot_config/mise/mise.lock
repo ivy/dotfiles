@@ -5752,7 +5752,7 @@ specifiers = ["0.0.84"]
 
 [[tools."npm:@tobilu/qmd"]]
 version = "2.8.3"
-aube = { path = ".mise/locks/npm-tobilu-qmd/2.8.3", digest = "sha256:d553600a47b90de008f556f93a09ceb339bc18b8f020e163eede08bd1749e104" }
+aube = { path = ".mise/locks/npm-tobilu-qmd/2.8.3", digest = "sha256:5c0dc67e51aa20a1b312042c61ee918ef546e753504b7058665a81f510c7d711" }
 backend = "npm:@tobilu/qmd"
 specifiers = ["2.8.3"]
 
