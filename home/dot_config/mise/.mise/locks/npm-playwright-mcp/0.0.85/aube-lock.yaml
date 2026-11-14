@@ -1,0 +1,43 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    dependencies:
+      '@playwright/mcp':
+        specifier: 0.0.85
+        version: 0.0.85
+
+packages:
+
+  '@playwright/mcp@0.0.85':
+    resolution: {integrity: sha512-bSfECMbLXhJdWkGhLzNMxTZuazG+9IDJ679gflji3yyD94e7ARnGdqmJmG6lTPB+gYX+OiFLmX5myBl62+wZEw==}
+    engines: {node: '>=18'}
+    hasBin: true
+
+  playwright-core@1.66.0-alpha-2026-11-09:
+    resolution: {integrity: sha512-HZVc/E3nqrasH7PPvJNwc7aCNsKXKjvtViZBpeFfopGOeB0zr3r5q4TKfqzkrdIcCKWCulyLVVGtla/LYbmxUQ==}
+    engines: {node: '>=20'}
+    hasBin: true
+
+  playwright@1.66.0-alpha-2026-11-09:
+    resolution: {integrity: sha512-raaHhtTYsm9ydMdGa11MEIwI8KM9RP4CuyvAb/lbd6e3bYhsBHXPMVGvyYJWldQxwUgMYnngY2VY5vCpimB2Dg==}
+    engines: {node: '>=20'}
+    hasBin: true
+
+snapshots:
+
+  '@playwright/mcp@0.0.85':
+    dependencies:
+      playwright: 1.66.0-alpha-2026-11-09
+      playwright-core: 1.66.0-alpha-2026-11-09
+
+  playwright-core@1.66.0-alpha-2026-11-09: {}
+
+  playwright@1.66.0-alpha-2026-11-09:
+    dependencies:
+      playwright-core: 1.66.0-alpha-2026-11-09
