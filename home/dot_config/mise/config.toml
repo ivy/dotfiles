@@ -101,11 +101,11 @@ bun = "1.4.4"
 pipx = "1.18.16"
 
 # Node tools via npm
-"npm:@openai/codex" = "0.167.1"
+"npm:@openai/codex" = "0.167.2"
 "npm:@playwright/mcp" = "0.0.85"
 "npm:@owloops/claude-powerline" = "1.32.8"
 "npm:@tobilu/qmd" = "2.8.3"
 "npm:bktide" = "1.0.1782920867"
-"npm:ccusage" = "20.0.49"
+"npm:ccusage" = "20.0.50"
 "npm:git-mob" = "4.0.1"
 "npm:obsidian-headless" = "0.0.14"

@@ -1,0 +1,78 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    dependencies:
+      ccusage:
+        specifier: 20.0.50
+        version: 20.0.50
+
+packages:
+
+  '@ccusage/ccusage-darwin-arm64@20.0.50':
+    resolution: {integrity: sha512-GCb5wVtKlAYQKGwu3Eipzlmw3oMdh7oTdOEni2/z1LP1b7P6Pa5TGPIyhcGOR4345Ihfw8+0iO2Qtga2AlJMMw==}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@ccusage/ccusage-darwin-x64@20.0.50':
+    resolution: {integrity: sha512-zONySDodBay46hE9WefsYFZG6BSQQqN/T4m6mMZrTbCdG/6srTP+B3+Ap+ORAynuCtFBzodpA/hYxQq/EelwKw==}
+    cpu: [x64]
+    os: [darwin]
+
+  '@ccusage/ccusage-linux-arm64@20.0.50':
+    resolution: {integrity: sha512-3GYTeZrUSFTN03LBqH0m6IUb1MDKNRhzZady0CHb322Q1A1ee5CQv9a4psbrP14w0do5lSdbZ22sTkelb2Ge+g==}
+    cpu: [arm64]
+    os: [linux]
+
+  '@ccusage/ccusage-linux-x64@20.0.50':
+    resolution: {integrity: sha512-m+V8+9SiH/HI/kDLFLb9PXd6IWL+/qwbtGex9UJ3McZcQfdLtsVTRZ+/3UI+QJPoEBVypD3uAx9m6wbHQrbh7w==}
+    cpu: [x64]
+    os: [linux]
+
+  '@ccusage/ccusage-win32-arm64@20.0.50':
+    resolution: {integrity: sha512-MMOZlxWfZPg+kaNW0oHjjBGESRhGZamOWG13hAbkSYjwH70jPjdXu+3g54xi7eR51X+aYt3K1/clP5BRulek6Q==}
+    cpu: [arm64]
+    os: [win32]
+
+  '@ccusage/ccusage-win32-x64@20.0.50':
+    resolution: {integrity: sha512-LNncBPmc5+DNlQZDIv3R/YrRnKpHqU10wGZXCdz2JP/FNRcRoJB0zADVwxXtlLWZqAr4v4SfdEsSEsuDILz4dw==}
+    cpu: [x64]
+    os: [win32]
+
+  ccusage@20.0.50:
+    resolution: {integrity: sha512-jqpIJqWUdRwKwnaqHV/445FqTfEkLSDFwJZHG9ADeigLnYvzHlelNRfrGCsDjvdKEbsSoOO+QjxmFAyR2ARMTg==}
+    hasBin: true
+
+snapshots:
+
+  '@ccusage/ccusage-darwin-arm64@20.0.50':
+    optional: true
+
+  '@ccusage/ccusage-darwin-x64@20.0.50':
+    optional: true
+
+  '@ccusage/ccusage-linux-arm64@20.0.50':
+    optional: true
+
+  '@ccusage/ccusage-linux-x64@20.0.50':
+    optional: true
+
+  '@ccusage/ccusage-win32-arm64@20.0.50':
+    optional: true
+
+  '@ccusage/ccusage-win32-x64@20.0.50':
+    optional: true
+
+  ccusage@20.0.50:
+    optionalDependencies:
+      '@ccusage/ccusage-darwin-arm64': 20.0.50
+      '@ccusage/ccusage-darwin-x64': 20.0.50
+      '@ccusage/ccusage-linux-arm64': 20.0.50
+      '@ccusage/ccusage-linux-x64': 20.0.50
+      '@ccusage/ccusage-win32-arm64': 20.0.50
+      '@ccusage/ccusage-win32-x64': 20.0.50

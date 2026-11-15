@@ -2,6 +2,6 @@
   "name": "mise-npm-install",
   "private": true,
   "dependencies": {
-    "@openai/codex": "0.167.1"
+    "ccusage": "20.0.50"
   }
 }
