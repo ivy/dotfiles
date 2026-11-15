@@ -5733,10 +5733,10 @@ checksum = "sha256:e2edda75bfb089654705cf65a13b58933bfd5f57148e8ebda916f58a2474f
 url = "https://nodejs.org/dist/v26.13.1/node-v26.13.1-win-x64.zip"
 
 [[tools."npm:@openai/codex"]]
-version = "0.167.1"
-aube = { path = ".mise/locks/npm-openai-codex/0.167.1", digest = "sha256:e42c0c05ae651c20caa46947999445dc5f573b702c462f35ed2ac214018fa838" }
+version = "0.167.2"
+aube = { path = ".mise/locks/npm-openai-codex/0.167.2", digest = "sha256:6ddb270efde50e460a5af09a82c30061b4dd8586bf087b207e845484aed8c7fd" }
 backend = "npm:@openai/codex"
-specifiers = ["0.167.1"]
+specifiers = ["0.167.2"]
 
 [[tools."npm:@owloops/claude-powerline"]]
 version = "1.32.8"
@@ -5763,10 +5763,10 @@ backend = "npm:bktide"
 specifiers = ["1.0.1782920867"]
 
 [[tools."npm:ccusage"]]
-version = "20.0.49"
-aube = { path = ".mise/locks/npm-ccusage/20.0.49", digest = "sha256:2fd29a9000c4bbf7d2d0c15f2c70e82ea7add63dfc375fbd99bcbb4bfbc4f5ea" }
+version = "20.0.50"
+aube = { path = ".mise/locks/npm-ccusage/20.0.50", digest = "sha256:2eec5db1e439c0653b50cf7747e8c825fb1941c6831bba4c88cf409439a98e76" }
 backend = "npm:ccusage"
-specifiers = ["20.0.49"]
+specifiers = ["20.0.50"]
 
 [[tools."npm:git-mob"]]
 version = "4.0.1"
