@@ -60,9 +60,9 @@ bun = "1.4.4"
 "github:ajeetdsouza/zoxide" = { version = "0.10.0", platforms.linux-arm64 = { asset_pattern = "zoxide-*-aarch64-unknown-linux-musl.tar.gz" } }
 # btop: upstream ships Linux binaries only; macOS gets it from Homebrew (packages.yaml)
 "github:aristocratos/btop" = { version = "1.4.8", os = ["linux"] }
-"github:atuinsh/atuin" = "18.24.6"
+"github:atuinsh/atuin" = "18.24.8"
 # plannotator: binary the plannotator Claude Code plugin's hooks invoke on PATH
-"github:backnotprop/plannotator" = "0.28.62"
+"github:backnotprop/plannotator" = "0.28.64"
 "github:boyter/scc" = "4.1.0"
 "github:buildkite/cli" = "3.68.0"
 "github:carapace-sh/carapace-bin" = "1.8.2"
@@ -70,9 +70,9 @@ bun = "1.4.4"
 "github:cli/cli" = "2.104.0"
 # 7-Zip proper (7zz): extracts RAR, which the p7zip in Fedora's repos cannot
 "github:ip7z/7zip" = "26.06"
-"github:technicalpickles/cq" = "0.11.1"
+"github:technicalpickles/cq" = "0.11.2"
 "github:dandavison/delta" = "0.20.1"
-"github:dlvhdr/gh-dash" = "4.26.2"
+"github:dlvhdr/gh-dash" = "4.26.3"
 "github:gitleaks/gitleaks" = "8.30.1"
 # herdr: persistent runtime for agent terminal sessions. The mise registry still
 # points at the pre-transfer owner (ogulcancelik/herdr) — pin the canonical repo.
@@ -90,22 +90,22 @@ bun = "1.4.4"
 "github:sharkdp/bat" = "0.26.1"
 "github:sharkdp/fd" = "10.5.2"
 "github:smtg-ai/claude-squad" = "1.0.20"
-"github:sst/opencode" = "2.2.7"
+"github:sst/opencode" = "2.3.0"
 "github:starship/starship" = "1.27.0"
 "github:yt-dlp/yt-dlp" = { version = "2026.10.26", rename_exe = "yt-dlp" }
 # glab: GitLab CLI. Ships releases on gitlab.com, not GitHub — the gitlab: backend
 # (not aqua:) is the appropriate fetcher here, unrelated to ADR-005's aqua concerns.
-"gitlab:gitlab-org/cli" = "1.130.0"
+"gitlab:gitlab-org/cli" = "1.131.0"
 
 # pipx itself (prerequisite for any `pipx:` backend entries)
 pipx = "1.18.16"
 
 # Node tools via npm
-"npm:@openai/codex" = "0.167.2"
+"npm:@openai/codex" = "0.169.0"
 "npm:@playwright/mcp" = "0.0.85"
 "npm:@owloops/claude-powerline" = "1.32.8"
 "npm:@tobilu/qmd" = "2.8.3"
 "npm:bktide" = "1.0.1782920867"
-"npm:ccusage" = "20.0.50"
+"npm:ccusage" = "20.0.51"
 "npm:git-mob" = "4.0.1"
 "npm:obsidian-headless" = "0.0.14"
