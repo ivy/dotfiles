@@ -366,8 +366,8 @@ packages:
   graceful-fs@4.2.12:
     resolution: {integrity: sha512-iuyGF2E4oafQfPsRrG2wtY2ILupMhvtdrhzrxB+0VcjsPpSPttpfYdjnGFGsTi5MaJFjI1jOKHPQ6UTbTj9TAw==}
 
-  ignore@7.0.14:
-    resolution: {integrity: sha512-wCBiZ77u1tuWde6G/nfOtLaCTYcFDU5yCzARzK10y+rLhzYoL7a7yEemcopcc2Mzow7gZOIjnV2ym1NYmdiJOQ==}
+  ignore@7.0.16:
+    resolution: {integrity: sha512-52N+Y4HRMOJmbLmr+DqO4iSRyyB7N52gm7PWCT6h0p978+oKbqHCB7gIJIwZvBUsjlSdWbrBFqUSmIFNZMpn0A==}
     engines: {node: '>= 4'}
 
   ini@1.3.8:
@@ -1044,7 +1044,7 @@ snapshots:
 
   graceful-fs@4.2.12: {}
 
-  ignore@7.0.14: {}
+  ignore@7.0.16: {}
 
   ini@1.3.8: {}
 
@@ -1154,7 +1154,7 @@ snapshots:
       env-var: 7.5.0
       filenamify: 6.0.0
       fs-extra: 11.4.1
-      ignore: 7.0.14
+      ignore: 7.0.16
       ipull: 3.9.5
       is-unicode-supported: 2.1.0
       lifecycle-utils: 4.5.2
