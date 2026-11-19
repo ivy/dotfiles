@@ -62,7 +62,7 @@ bun = "1.4.4"
 "github:aristocratos/btop" = { version = "1.4.8", os = ["linux"] }
 "github:atuinsh/atuin" = "18.24.8"
 # plannotator: binary the plannotator Claude Code plugin's hooks invoke on PATH
-"github:backnotprop/plannotator" = "0.28.65"
+"github:backnotprop/plannotator" = "0.28.66"
 "github:boyter/scc" = "4.1.0"
 "github:buildkite/cli" = "3.68.0"
 "github:carapace-sh/carapace-bin" = "1.8.2"
