@@ -3867,75 +3867,75 @@ url = "https://github.com/boyter/scc/releases/download/v4.1.0/scc_Windows_x86_64
 url_api = "https://api.github.com/repos/boyter/scc/releases/assets/549478880"
 
 [[tools."github:buildkite/cli"]]
-version = "3.68.0"
+version = "3.69.0"
 backend = "github:buildkite/cli"
-specifiers = ["3.68.0"]
+specifiers = ["3.69.0"]
 
 [tools."github:buildkite/cli"."platforms.linux-arm64"]
-checksum = "sha256:b15b7dc2d41597d6a37f53216e05ddb12f8b4d1743a07a99a2f2931dd9559016"
+checksum = "sha256:3f9704c1165cd6e21e579d6c96e55459589cb69d811f399e5f402d2609baa907"
 checksum_source = "mise-versions"
-url = "https://github.com/buildkite/cli/releases/download/v3.68.0/bk_3.68.0_linux_arm64.tar.gz"
-url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/726340987"
+url = "https://github.com/buildkite/cli/releases/download/v3.69.0/bk_3.69.0_linux_arm64.tar.gz"
+url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/756729854"
 
 [tools."github:buildkite/cli"."platforms.linux-arm64-musl"]
-checksum = "sha256:b15b7dc2d41597d6a37f53216e05ddb12f8b4d1743a07a99a2f2931dd9559016"
+checksum = "sha256:3f9704c1165cd6e21e579d6c96e55459589cb69d811f399e5f402d2609baa907"
 checksum_source = "mise-versions"
-url = "https://github.com/buildkite/cli/releases/download/v3.68.0/bk_3.68.0_linux_arm64.tar.gz"
-url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/726340987"
+url = "https://github.com/buildkite/cli/releases/download/v3.69.0/bk_3.69.0_linux_arm64.tar.gz"
+url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/756729854"
 
 [tools."github:buildkite/cli"."platforms.linux-x64"]
-checksum = "sha256:43923fdb27abe22844e3adba7683d269361cd4397494999baec7e6f7ce99bb0b"
+checksum = "sha256:d435b99657f0ef37cb6493c927bea35af4fec9570143a763ffd7bb4eb8208491"
 checksum_source = "mise-versions"
-url = "https://github.com/buildkite/cli/releases/download/v3.68.0/bk_3.68.0_linux_amd64.tar.gz"
-url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/726340986"
+url = "https://github.com/buildkite/cli/releases/download/v3.69.0/bk_3.69.0_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/756729858"
 
 [tools."github:buildkite/cli"."platforms.linux-x64-baseline"]
-checksum = "sha256:43923fdb27abe22844e3adba7683d269361cd4397494999baec7e6f7ce99bb0b"
+checksum = "sha256:d435b99657f0ef37cb6493c927bea35af4fec9570143a763ffd7bb4eb8208491"
 checksum_source = "mise-versions"
-url = "https://github.com/buildkite/cli/releases/download/v3.68.0/bk_3.68.0_linux_amd64.tar.gz"
-url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/726340986"
+url = "https://github.com/buildkite/cli/releases/download/v3.69.0/bk_3.69.0_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/756729858"
 
 [tools."github:buildkite/cli"."platforms.linux-x64-musl"]
-checksum = "sha256:43923fdb27abe22844e3adba7683d269361cd4397494999baec7e6f7ce99bb0b"
+checksum = "sha256:d435b99657f0ef37cb6493c927bea35af4fec9570143a763ffd7bb4eb8208491"
 checksum_source = "mise-versions"
-url = "https://github.com/buildkite/cli/releases/download/v3.68.0/bk_3.68.0_linux_amd64.tar.gz"
-url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/726340986"
+url = "https://github.com/buildkite/cli/releases/download/v3.69.0/bk_3.69.0_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/756729858"
 
 [tools."github:buildkite/cli"."platforms.linux-x64-musl-baseline"]
-checksum = "sha256:43923fdb27abe22844e3adba7683d269361cd4397494999baec7e6f7ce99bb0b"
+checksum = "sha256:d435b99657f0ef37cb6493c927bea35af4fec9570143a763ffd7bb4eb8208491"
 checksum_source = "mise-versions"
-url = "https://github.com/buildkite/cli/releases/download/v3.68.0/bk_3.68.0_linux_amd64.tar.gz"
-url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/726340986"
+url = "https://github.com/buildkite/cli/releases/download/v3.69.0/bk_3.69.0_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/756729858"
 
 [tools."github:buildkite/cli"."platforms.macos-arm64"]
-checksum = "sha256:8faf0f911304016a145c3204728c3e57ad86482d6aeab45ff8ce44f757d58dd7"
+checksum = "sha256:a7ddeffcb31915edab03051a4b168f3d8bed86945044a0883ba10f39ae62249c"
 checksum_source = "mise-versions"
-url = "https://github.com/buildkite/cli/releases/download/v3.68.0/bk_3.68.0_macOS_arm64.zip"
-url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/726340988"
+url = "https://github.com/buildkite/cli/releases/download/v3.69.0/bk_3.69.0_macOS_arm64.zip"
+url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/756729857"
 
 [tools."github:buildkite/cli"."platforms.macos-x64"]
-checksum = "sha256:2222a4f9f42ae5d0e2d4aaf4a7c9992a7d11d2087d65c4721cb306dd52fec2e4"
+checksum = "sha256:7a272b7c472b43a08af5db82a7fb356d68c2796665cdc6bdcee8c60abf272b6b"
 checksum_source = "mise-versions"
-url = "https://github.com/buildkite/cli/releases/download/v3.68.0/bk_3.68.0_macOS_amd64.zip"
-url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/726340985"
+url = "https://github.com/buildkite/cli/releases/download/v3.69.0/bk_3.69.0_macOS_amd64.zip"
+url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/756729856"
 
 [tools."github:buildkite/cli"."platforms.macos-x64-baseline"]
-checksum = "sha256:2222a4f9f42ae5d0e2d4aaf4a7c9992a7d11d2087d65c4721cb306dd52fec2e4"
+checksum = "sha256:7a272b7c472b43a08af5db82a7fb356d68c2796665cdc6bdcee8c60abf272b6b"
 checksum_source = "mise-versions"
-url = "https://github.com/buildkite/cli/releases/download/v3.68.0/bk_3.68.0_macOS_amd64.zip"
-url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/726340985"
+url = "https://github.com/buildkite/cli/releases/download/v3.69.0/bk_3.69.0_macOS_amd64.zip"
+url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/756729856"
 
 [tools."github:buildkite/cli"."platforms.windows-x64"]
-checksum = "sha256:8d82de00102a5de33fd5f6cd7fd128ebda9e72c6a3c310961a39b12d04a707a5"
+checksum = "sha256:69ffb5d85c5c7eb97695d2a361d3cbcabaed28ecf78793daff79832fe25c45d8"
 checksum_source = "mise-versions"
-url = "https://github.com/buildkite/cli/releases/download/v3.68.0/bk_3.68.0_windows_amd64.zip"
-url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/726341038"
+url = "https://github.com/buildkite/cli/releases/download/v3.69.0/bk_3.69.0_windows_amd64.zip"
+url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/756729948"
 
 [tools."github:buildkite/cli"."platforms.windows-x64-baseline"]
-checksum = "sha256:8d82de00102a5de33fd5f6cd7fd128ebda9e72c6a3c310961a39b12d04a707a5"
+checksum = "sha256:69ffb5d85c5c7eb97695d2a361d3cbcabaed28ecf78793daff79832fe25c45d8"
 checksum_source = "mise-versions"
-url = "https://github.com/buildkite/cli/releases/download/v3.68.0/bk_3.68.0_windows_amd64.zip"
-url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/726341038"
+url = "https://github.com/buildkite/cli/releases/download/v3.69.0/bk_3.69.0_windows_amd64.zip"
+url_api = "https://api.github.com/repos/buildkite/cli/releases/assets/756729948"
 
 [[tools."github:carapace-sh/carapace-bin"]]
 version = "1.8.2"
@@ -4472,74 +4472,74 @@ url = "https://github.com/ip7z/7zip/releases/download/26.06/7z2606-x64.exe"
 url_api = "https://api.github.com/repos/ip7z/7zip/releases/assets/720544254"
 
 [[tools."github:jdx/hk"]]
-version = "2.12.0"
+version = "2.13.0"
 backend = "github:jdx/hk"
-specifiers = ["2.12.0"]
+specifiers = ["2.13.0"]
 
 [tools."github:jdx/hk"."platforms.linux-arm64"]
-checksum = "sha256:0f4e44802c3fcf98461b6608281353ae1944b82fd12f4a683f8e2e6683e562f3"
-url = "https://github.com/jdx/hk/releases/download/v2.12.0/hk-aarch64-unknown-linux-gnu.tar.gz"
-url_api = "https://api.github.com/repos/jdx/hk/releases/assets/728911209"
+checksum = "sha256:490196a4e638991c671f42941d72ade4d00b14750145f34fc64377b49fc070bb"
+url = "https://github.com/jdx/hk/releases/download/v2.13.0/hk-aarch64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/756295808"
 provenance = "github-attestations"
 
 [tools."github:jdx/hk"."platforms.linux-arm64-musl"]
-checksum = "sha256:82758b9671b4b3627f126dc8e9803bb156c23893b4f9ec212797f81c4d242e50"
-url = "https://github.com/jdx/hk/releases/download/v2.12.0/hk-aarch64-unknown-linux-musl.tar.gz"
-url_api = "https://api.github.com/repos/jdx/hk/releases/assets/728911207"
+checksum = "sha256:cff2d433a82104ace7084a23970ff05b0bf3ca529e00c61da20780104106a3dd"
+url = "https://github.com/jdx/hk/releases/download/v2.13.0/hk-aarch64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/756295807"
 provenance = "github-attestations"
 
 [tools."github:jdx/hk"."platforms.linux-x64"]
-checksum = "sha256:db98f893b882f064c1f7abcc96f4ccc31e8154fd1ba0f7f94823d371c2c4fdad"
-url = "https://github.com/jdx/hk/releases/download/v2.12.0/hk-x86_64-unknown-linux-gnu.tar.gz"
-url_api = "https://api.github.com/repos/jdx/hk/releases/assets/728911276"
+checksum = "sha256:8ff0b29c9925d73df9b14af7fc43ace86de03db73eafa3046750fce5c39e1955"
+url = "https://github.com/jdx/hk/releases/download/v2.13.0/hk-x86_64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/756295854"
 provenance = "github-attestations"
 
 [tools."github:jdx/hk"."platforms.linux-x64-baseline"]
-checksum = "sha256:db98f893b882f064c1f7abcc96f4ccc31e8154fd1ba0f7f94823d371c2c4fdad"
-url = "https://github.com/jdx/hk/releases/download/v2.12.0/hk-x86_64-unknown-linux-gnu.tar.gz"
-url_api = "https://api.github.com/repos/jdx/hk/releases/assets/728911276"
+checksum = "sha256:8ff0b29c9925d73df9b14af7fc43ace86de03db73eafa3046750fce5c39e1955"
+url = "https://github.com/jdx/hk/releases/download/v2.13.0/hk-x86_64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/756295854"
 provenance = "github-attestations"
 
 [tools."github:jdx/hk"."platforms.linux-x64-musl"]
-checksum = "sha256:cab1ba30c605444112b4499790a97bd28dda83ffc352baa4aa87d5abfb12c668"
-url = "https://github.com/jdx/hk/releases/download/v2.12.0/hk-x86_64-unknown-linux-musl.tar.gz"
-url_api = "https://api.github.com/repos/jdx/hk/releases/assets/728911289"
+checksum = "sha256:3d5ae62e2befe95fa6fc7ffd63a0876c3efe3409634fbd6561b8bb0be787eeae"
+url = "https://github.com/jdx/hk/releases/download/v2.13.0/hk-x86_64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/756295859"
 provenance = "github-attestations"
 
 [tools."github:jdx/hk"."platforms.linux-x64-musl-baseline"]
-checksum = "sha256:cab1ba30c605444112b4499790a97bd28dda83ffc352baa4aa87d5abfb12c668"
-url = "https://github.com/jdx/hk/releases/download/v2.12.0/hk-x86_64-unknown-linux-musl.tar.gz"
-url_api = "https://api.github.com/repos/jdx/hk/releases/assets/728911289"
+checksum = "sha256:3d5ae62e2befe95fa6fc7ffd63a0876c3efe3409634fbd6561b8bb0be787eeae"
+url = "https://github.com/jdx/hk/releases/download/v2.13.0/hk-x86_64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/756295859"
 provenance = "github-attestations"
 
 [tools."github:jdx/hk"."platforms.macos-arm64"]
-checksum = "sha256:269c17d47e884c19adb77144d5957e854fc5fc6a1a6f9c1a0a5b19431e2fabb8"
-url = "https://github.com/jdx/hk/releases/download/v2.12.0/hk-aarch64-apple-darwin.tar.gz"
-url_api = "https://api.github.com/repos/jdx/hk/releases/assets/728911206"
+checksum = "sha256:64efc441dc0858a175909fd6253ddd6c540da80e7d1bd2a2ad0ec9c0cdab3d97"
+url = "https://github.com/jdx/hk/releases/download/v2.13.0/hk-aarch64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/756295809"
 provenance = "github-attestations"
 
 [tools."github:jdx/hk"."platforms.macos-x64"]
-checksum = "sha256:08bafc512c9fa921c0260375001d170d7137105d57c4afc37d0e01b9ac9edb6b"
-url = "https://github.com/jdx/hk/releases/download/v2.12.0/hk%402.12.0.zip"
-url_api = "https://api.github.com/repos/jdx/hk/releases/assets/728911320"
+checksum = "sha256:a64b7a9ce587060bd3888cf2e65b14fa33689c12386856c714204e7b094b87c8"
+url = "https://github.com/jdx/hk/releases/download/v2.13.0/hk%402.13.0.zip"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/756295864"
 provenance = "github-attestations"
 
 [tools."github:jdx/hk"."platforms.macos-x64-baseline"]
-checksum = "sha256:08bafc512c9fa921c0260375001d170d7137105d57c4afc37d0e01b9ac9edb6b"
-url = "https://github.com/jdx/hk/releases/download/v2.12.0/hk%402.12.0.zip"
-url_api = "https://api.github.com/repos/jdx/hk/releases/assets/728911320"
+checksum = "sha256:a64b7a9ce587060bd3888cf2e65b14fa33689c12386856c714204e7b094b87c8"
+url = "https://github.com/jdx/hk/releases/download/v2.13.0/hk%402.13.0.zip"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/756295864"
 provenance = "github-attestations"
 
 [tools."github:jdx/hk"."platforms.windows-x64"]
-checksum = "sha256:052f2ea36dc679cae7fbbd57f75c2b4e5c4cd7bb6711f7bf6b9a147524ffe9f9"
-url = "https://github.com/jdx/hk/releases/download/v2.12.0/hk-x86_64-pc-windows-msvc.zip"
-url_api = "https://api.github.com/repos/jdx/hk/releases/assets/728911213"
+checksum = "sha256:2908de6281368b8128f1d4d7a03905d3ab0eb86a82641d6055be88806bf9ffac"
+url = "https://github.com/jdx/hk/releases/download/v2.13.0/hk-x86_64-pc-windows-msvc.zip"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/756295806"
 provenance = "github-attestations"
 
 [tools."github:jdx/hk"."platforms.windows-x64-baseline"]
-checksum = "sha256:052f2ea36dc679cae7fbbd57f75c2b4e5c4cd7bb6711f7bf6b9a147524ffe9f9"
-url = "https://github.com/jdx/hk/releases/download/v2.12.0/hk-x86_64-pc-windows-msvc.zip"
-url_api = "https://api.github.com/repos/jdx/hk/releases/assets/728911213"
+checksum = "sha256:2908de6281368b8128f1d4d7a03905d3ab0eb86a82641d6055be88806bf9ffac"
+url = "https://github.com/jdx/hk/releases/download/v2.13.0/hk-x86_64-pc-windows-msvc.zip"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/756295806"
 provenance = "github-attestations"
 
 [[tools."github:jdx/mr-boxington"]]
@@ -4816,64 +4816,75 @@ url = "https://github.com/junegunn/fzf/releases/download/v0.75.0/fzf-0.75.0-wind
 url_api = "https://api.github.com/repos/junegunn/fzf/releases/assets/720590885"
 
 [[tools."github:librespeed/speedtest-cli"]]
-version = "1.0.14"
+version = "1.0.15"
 backend = "github:librespeed/speedtest-cli"
-specifiers = ["1.0.14"]
+specifiers = ["1.0.15"]
 
 [tools."github:librespeed/speedtest-cli"."platforms.linux-arm64"]
-checksum = "sha256:75e51a2494d03cb35a92ddbf862b40571a25a1526f3cf3dfa8b1d5d7bc622bd9"
-url = "https://github.com/librespeed/speedtest-cli/releases/download/v1.0.14/librespeed-cli_1.0.14_linux_arm64.tar.gz"
-url_api = "https://api.github.com/repos/librespeed/speedtest-cli/releases/assets/517684287"
+checksum = "sha256:ebba182d9bc9cda28f2e1c3be829d71acd2440d4794b7aa7998ce4e40e8a2f0f"
+checksum_source = "mise-versions"
+url = "https://github.com/librespeed/speedtest-cli/releases/download/v1.0.15/librespeed-cli_1.0.15_linux_arm64.tar.gz"
+url_api = "https://api.github.com/repos/librespeed/speedtest-cli/releases/assets/757609021"
 
 [tools."github:librespeed/speedtest-cli"."platforms.linux-arm64-musl"]
-checksum = "sha256:75e51a2494d03cb35a92ddbf862b40571a25a1526f3cf3dfa8b1d5d7bc622bd9"
-url = "https://github.com/librespeed/speedtest-cli/releases/download/v1.0.14/librespeed-cli_1.0.14_linux_arm64.tar.gz"
-url_api = "https://api.github.com/repos/librespeed/speedtest-cli/releases/assets/517684287"
+checksum = "sha256:ebba182d9bc9cda28f2e1c3be829d71acd2440d4794b7aa7998ce4e40e8a2f0f"
+checksum_source = "mise-versions"
+url = "https://github.com/librespeed/speedtest-cli/releases/download/v1.0.15/librespeed-cli_1.0.15_linux_arm64.tar.gz"
+url_api = "https://api.github.com/repos/librespeed/speedtest-cli/releases/assets/757609021"
 
 [tools."github:librespeed/speedtest-cli"."platforms.linux-x64"]
-checksum = "sha256:89800767ac14085c78a20847ebea23340f6c14a78de0a15c2ac7db8b565c961f"
-url = "https://github.com/librespeed/speedtest-cli/releases/download/v1.0.14/librespeed-cli_1.0.14_linux_amd64.tar.gz"
-url_api = "https://api.github.com/repos/librespeed/speedtest-cli/releases/assets/517684385"
+checksum = "sha256:78c94e6e9cdd69bc4c3fb393ef12a132363a0e9b3f725c5cfd193de5b66e11de"
+checksum_source = "mise-versions"
+url = "https://github.com/librespeed/speedtest-cli/releases/download/v1.0.15/librespeed-cli_1.0.15_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/librespeed/speedtest-cli/releases/assets/757608809"
 
 [tools."github:librespeed/speedtest-cli"."platforms.linux-x64-baseline"]
-checksum = "sha256:89800767ac14085c78a20847ebea23340f6c14a78de0a15c2ac7db8b565c961f"
-url = "https://github.com/librespeed/speedtest-cli/releases/download/v1.0.14/librespeed-cli_1.0.14_linux_amd64.tar.gz"
-url_api = "https://api.github.com/repos/librespeed/speedtest-cli/releases/assets/517684385"
+checksum = "sha256:78c94e6e9cdd69bc4c3fb393ef12a132363a0e9b3f725c5cfd193de5b66e11de"
+checksum_source = "mise-versions"
+url = "https://github.com/librespeed/speedtest-cli/releases/download/v1.0.15/librespeed-cli_1.0.15_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/librespeed/speedtest-cli/releases/assets/757608809"
 
 [tools."github:librespeed/speedtest-cli"."platforms.linux-x64-musl"]
-checksum = "sha256:89800767ac14085c78a20847ebea23340f6c14a78de0a15c2ac7db8b565c961f"
-url = "https://github.com/librespeed/speedtest-cli/releases/download/v1.0.14/librespeed-cli_1.0.14_linux_amd64.tar.gz"
-url_api = "https://api.github.com/repos/librespeed/speedtest-cli/releases/assets/517684385"
+checksum = "sha256:78c94e6e9cdd69bc4c3fb393ef12a132363a0e9b3f725c5cfd193de5b66e11de"
+checksum_source = "mise-versions"
+url = "https://github.com/librespeed/speedtest-cli/releases/download/v1.0.15/librespeed-cli_1.0.15_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/librespeed/speedtest-cli/releases/assets/757608809"
 
 [tools."github:librespeed/speedtest-cli"."platforms.linux-x64-musl-baseline"]
-checksum = "sha256:89800767ac14085c78a20847ebea23340f6c14a78de0a15c2ac7db8b565c961f"
-url = "https://github.com/librespeed/speedtest-cli/releases/download/v1.0.14/librespeed-cli_1.0.14_linux_amd64.tar.gz"
-url_api = "https://api.github.com/repos/librespeed/speedtest-cli/releases/assets/517684385"
+checksum = "sha256:78c94e6e9cdd69bc4c3fb393ef12a132363a0e9b3f725c5cfd193de5b66e11de"
+checksum_source = "mise-versions"
+url = "https://github.com/librespeed/speedtest-cli/releases/download/v1.0.15/librespeed-cli_1.0.15_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/librespeed/speedtest-cli/releases/assets/757608809"
 
 [tools."github:librespeed/speedtest-cli"."platforms.macos-arm64"]
-checksum = "sha256:2c19acf8cf751341ca4edcf6ce5ca460c1091646e68fcea885d941ce3542af7d"
-url = "https://github.com/librespeed/speedtest-cli/releases/download/v1.0.14/librespeed-cli_1.0.14_darwin_arm64.tar.gz"
-url_api = "https://api.github.com/repos/librespeed/speedtest-cli/releases/assets/517684290"
+checksum = "sha256:485418766f0f6e3b617323c2025069cb34ed596eeca5ad8f57105880c6d031a1"
+checksum_source = "mise-versions"
+url = "https://github.com/librespeed/speedtest-cli/releases/download/v1.0.15/librespeed-cli_1.0.15_darwin_arm64.tar.gz"
+url_api = "https://api.github.com/repos/librespeed/speedtest-cli/releases/assets/757609011"
 
 [tools."github:librespeed/speedtest-cli"."platforms.macos-x64"]
-checksum = "sha256:1daa058118e8fc788d985734110f7a51f6d8d37c641be4782d0276cd21458eb8"
-url = "https://github.com/librespeed/speedtest-cli/releases/download/v1.0.14/librespeed-cli_1.0.14_darwin_amd64.tar.gz"
-url_api = "https://api.github.com/repos/librespeed/speedtest-cli/releases/assets/517684364"
+checksum = "sha256:de0e90b3e491aa32109e1731815494d780dd1be7ed6cead7faf83008ebbc54b5"
+checksum_source = "mise-versions"
+url = "https://github.com/librespeed/speedtest-cli/releases/download/v1.0.15/librespeed-cli_1.0.15_darwin_amd64.tar.gz"
+url_api = "https://api.github.com/repos/librespeed/speedtest-cli/releases/assets/757608985"
 
 [tools."github:librespeed/speedtest-cli"."platforms.macos-x64-baseline"]
-checksum = "sha256:1daa058118e8fc788d985734110f7a51f6d8d37c641be4782d0276cd21458eb8"
-url = "https://github.com/librespeed/speedtest-cli/releases/download/v1.0.14/librespeed-cli_1.0.14_darwin_amd64.tar.gz"
-url_api = "https://api.github.com/repos/librespeed/speedtest-cli/releases/assets/517684364"
+checksum = "sha256:de0e90b3e491aa32109e1731815494d780dd1be7ed6cead7faf83008ebbc54b5"
+checksum_source = "mise-versions"
+url = "https://github.com/librespeed/speedtest-cli/releases/download/v1.0.15/librespeed-cli_1.0.15_darwin_amd64.tar.gz"
+url_api = "https://api.github.com/repos/librespeed/speedtest-cli/releases/assets/757608985"
 
 [tools."github:librespeed/speedtest-cli"."platforms.windows-x64"]
-checksum = "sha256:324f9bc16f3b9bb6bfa6af89bad1e3e5183ae8c91464b3cb3fc2db8df1d6b503"
-url = "https://github.com/librespeed/speedtest-cli/releases/download/v1.0.14/librespeed-cli_1.0.14_windows_amd64.zip"
-url_api = "https://api.github.com/repos/librespeed/speedtest-cli/releases/assets/517684299"
+checksum = "sha256:198dfb0b5a01a2e7a0bf440de674889967434a72f61d79afb783b44da35cc157"
+checksum_source = "mise-versions"
+url = "https://github.com/librespeed/speedtest-cli/releases/download/v1.0.15/librespeed-cli_1.0.15_windows_amd64.zip"
+url_api = "https://api.github.com/repos/librespeed/speedtest-cli/releases/assets/757608784"
 
 [tools."github:librespeed/speedtest-cli"."platforms.windows-x64-baseline"]
-checksum = "sha256:324f9bc16f3b9bb6bfa6af89bad1e3e5183ae8c91464b3cb3fc2db8df1d6b503"
-url = "https://github.com/librespeed/speedtest-cli/releases/download/v1.0.14/librespeed-cli_1.0.14_windows_amd64.zip"
-url_api = "https://api.github.com/repos/librespeed/speedtest-cli/releases/assets/517684299"
+checksum = "sha256:198dfb0b5a01a2e7a0bf440de674889967434a72f61d79afb783b44da35cc157"
+checksum_source = "mise-versions"
+url = "https://github.com/librespeed/speedtest-cli/releases/download/v1.0.15/librespeed-cli_1.0.15_windows_amd64.zip"
+url_api = "https://api.github.com/repos/librespeed/speedtest-cli/releases/assets/757608784"
 
 [[tools."github:lima-vm/lima"]]
 version = "2.3.0"
@@ -5781,63 +5792,63 @@ backend = "npm:obsidian-headless"
 specifiers = ["0.0.14"]
 
 [[tools.pipx]]
-version = "1.18.16"
+version = "1.18.18"
 backend = "aqua:pypa/pipx"
-specifiers = ["1.18.16"]
+specifiers = ["1.18.18"]
 
 [tools.pipx."platforms.linux-arm64"]
-checksum = "sha256:bd3709947d3a36cb898f53c765aba568d01c1aef3302ec439037fcbbdad559c1"
+checksum = "sha256:c4d92ff7b12360b5e883c50ef4c555240eb596130d09c940e05ab2afdd937a06"
 checksum_source = "mise-versions"
-url = "https://github.com/pypa/pipx/releases/download/1.18.16/pipx.pyz"
-url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/720080157"
+url = "https://github.com/pypa/pipx/releases/download/1.18.18/pipx.pyz"
+url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/757320178"
 
 [tools.pipx."platforms.linux-arm64-musl"]
-checksum = "sha256:bd3709947d3a36cb898f53c765aba568d01c1aef3302ec439037fcbbdad559c1"
+checksum = "sha256:c4d92ff7b12360b5e883c50ef4c555240eb596130d09c940e05ab2afdd937a06"
 checksum_source = "mise-versions"
-url = "https://github.com/pypa/pipx/releases/download/1.18.16/pipx.pyz"
-url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/720080157"
+url = "https://github.com/pypa/pipx/releases/download/1.18.18/pipx.pyz"
+url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/757320178"
 
 [tools.pipx."platforms.linux-x64"]
-checksum = "sha256:bd3709947d3a36cb898f53c765aba568d01c1aef3302ec439037fcbbdad559c1"
+checksum = "sha256:c4d92ff7b12360b5e883c50ef4c555240eb596130d09c940e05ab2afdd937a06"
 checksum_source = "mise-versions"
-url = "https://github.com/pypa/pipx/releases/download/1.18.16/pipx.pyz"
-url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/720080157"
+url = "https://github.com/pypa/pipx/releases/download/1.18.18/pipx.pyz"
+url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/757320178"
 
 [tools.pipx."platforms.linux-x64-baseline"]
-checksum = "sha256:bd3709947d3a36cb898f53c765aba568d01c1aef3302ec439037fcbbdad559c1"
+checksum = "sha256:c4d92ff7b12360b5e883c50ef4c555240eb596130d09c940e05ab2afdd937a06"
 checksum_source = "mise-versions"
-url = "https://github.com/pypa/pipx/releases/download/1.18.16/pipx.pyz"
-url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/720080157"
+url = "https://github.com/pypa/pipx/releases/download/1.18.18/pipx.pyz"
+url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/757320178"
 
 [tools.pipx."platforms.linux-x64-musl"]
-checksum = "sha256:bd3709947d3a36cb898f53c765aba568d01c1aef3302ec439037fcbbdad559c1"
+checksum = "sha256:c4d92ff7b12360b5e883c50ef4c555240eb596130d09c940e05ab2afdd937a06"
 checksum_source = "mise-versions"
-url = "https://github.com/pypa/pipx/releases/download/1.18.16/pipx.pyz"
-url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/720080157"
+url = "https://github.com/pypa/pipx/releases/download/1.18.18/pipx.pyz"
+url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/757320178"
 
 [tools.pipx."platforms.linux-x64-musl-baseline"]
-checksum = "sha256:bd3709947d3a36cb898f53c765aba568d01c1aef3302ec439037fcbbdad559c1"
+checksum = "sha256:c4d92ff7b12360b5e883c50ef4c555240eb596130d09c940e05ab2afdd937a06"
 checksum_source = "mise-versions"
-url = "https://github.com/pypa/pipx/releases/download/1.18.16/pipx.pyz"
-url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/720080157"
+url = "https://github.com/pypa/pipx/releases/download/1.18.18/pipx.pyz"
+url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/757320178"
 
 [tools.pipx."platforms.macos-arm64"]
-checksum = "sha256:bd3709947d3a36cb898f53c765aba568d01c1aef3302ec439037fcbbdad559c1"
+checksum = "sha256:c4d92ff7b12360b5e883c50ef4c555240eb596130d09c940e05ab2afdd937a06"
 checksum_source = "mise-versions"
-url = "https://github.com/pypa/pipx/releases/download/1.18.16/pipx.pyz"
-url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/720080157"
+url = "https://github.com/pypa/pipx/releases/download/1.18.18/pipx.pyz"
+url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/757320178"
 
 [tools.pipx."platforms.macos-x64"]
-checksum = "sha256:bd3709947d3a36cb898f53c765aba568d01c1aef3302ec439037fcbbdad559c1"
+checksum = "sha256:c4d92ff7b12360b5e883c50ef4c555240eb596130d09c940e05ab2afdd937a06"
 checksum_source = "mise-versions"
-url = "https://github.com/pypa/pipx/releases/download/1.18.16/pipx.pyz"
-url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/720080157"
+url = "https://github.com/pypa/pipx/releases/download/1.18.18/pipx.pyz"
+url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/757320178"
 
 [tools.pipx."platforms.macos-x64-baseline"]
-checksum = "sha256:bd3709947d3a36cb898f53c765aba568d01c1aef3302ec439037fcbbdad559c1"
+checksum = "sha256:c4d92ff7b12360b5e883c50ef4c555240eb596130d09c940e05ab2afdd937a06"
 checksum_source = "mise-versions"
-url = "https://github.com/pypa/pipx/releases/download/1.18.16/pipx.pyz"
-url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/720080157"
+url = "https://github.com/pypa/pipx/releases/download/1.18.18/pipx.pyz"
+url_api = "https://api.github.com/repos/pypa/pipx/releases/assets/757320178"
 
 [[tools.pkl]]
 version = "0.33.0"
