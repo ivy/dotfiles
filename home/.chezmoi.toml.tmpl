@@ -26,6 +26,17 @@
 # using chezmoi for management. The workingTree variable points to the repo root.
 sourceDir = "{{ .chezmoi.workingTree }}"
 
+{{- $skillsDir := joinPath .chezmoi.homeDir ".claude" "skills" }}
+{{- $skillsMounted := output "sh" "-c" "mountpoint -q \"$1\" 2>/dev/null && echo true || echo false" "sh" $skillsDir | trim }}
+{{- if eq $skillsMounted "true" }}
+
+# ~/.claude/skills is a bind mount on this machine. Safe mode stages each write
+# in one temporary directory per device number, and a bind mount shares its
+# device with the rest of $HOME, so renaming a staged file across the mount
+# fails with "invalid cross-device link". Plain writes avoid the rename.
+safe = false
+{{- end }}
+
 # Data Section
 # Variables defined here are available in all templates via the .data namespace.
 # These values can be referenced in template files throughout the dotfiles repo.

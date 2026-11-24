@@ -61,3 +61,16 @@ render() {
 	[ "$status" -eq 0 ]
 	[[ "$output" != *"MISE_GLOBAL_CONFIG_FILE"* ]]
 }
+
+@test "turns off safe writes only where ~/.claude/skills is a mount point" {
+	run render
+	[ "$status" -eq 0 ]
+
+	local safe
+	safe="$(yq -p toml -o json '.' <<<"$output" | jq -r '.safe')"
+	if mountpoint -q "${HOME}/.claude/skills" 2>/dev/null; then
+		[ "$safe" = "false" ]
+	else
+		[ "$safe" = "null" ]
+	fi
+}
