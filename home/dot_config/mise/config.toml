@@ -92,6 +92,9 @@ bun = "1.4.4"
 "github:smtg-ai/claude-squad" = "1.0.20"
 "github:sst/opencode" = "2.3.0"
 "github:starship/starship" = "1.27.0"
+# skift: agent-first project management on a DAG. The skift@skift Claude Code
+# plugin (claude-extensions.yaml) runs this binary as its MCP server.
+"github:steading-ai/skift" = "0.3.0"
 "github:yt-dlp/yt-dlp" = { version = "2026.10.26", rename_exe = "yt-dlp" }
 # glab: GitLab CLI. Ships releases on gitlab.com, not GitHub — the gitlab: backend
 # (not aqua:) is the appropriate fetcher here, unrelated to ADR-005's aqua concerns.
