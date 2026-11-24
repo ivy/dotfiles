@@ -63,6 +63,21 @@
     // mise's github: backend strips the "v" prefix from tags automatically,
     // but Renovate writes back the raw tag. Strip it so versions stay clean.
     {"matchManagers": ["mise"], "extractVersion": "^v?(?<version>.+)$"},
+    // mise's conda backend installs from conda-forge, and anaconda.org looks a
+    // package up only under a channel.
+    {
+      "matchDatasources": ["conda"],
+      "registryUrls": ["https://api.anaconda.org/package/conda-forge/"]
+    },
+    // The mise custom manager below owns the `version:` input of
+    // jdx/mise-action. The github-actions manager reads that input as well,
+    // and its lookup needs the release tag's "v" prefix, which the pin omits.
+    {
+      "matchManagers": ["github-actions"],
+      "matchDepTypes": ["uses-with"],
+      "matchPackageNames": ["jdx/mise"],
+      "enabled": false
+    },
 
     // -------------------------------------------------------------------------
     // Batching: one PR per ecosystem, not one per dependency.
