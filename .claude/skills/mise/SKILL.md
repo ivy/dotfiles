@@ -5,7 +5,6 @@ argument-hint: [tool...]
 allowed-tools:
   - Bash(chezmoi diff:*)
   - Bash(gh release view:*)
-  - Bash(mise --cd home/dot_config/mise lock:*)
   - Bash(mise doctor:*)
   - Bash(mise fmt:*)
   - Bash(mise install:*)
@@ -88,11 +87,10 @@ checksum, attestation, and SLSA verification.
    "github:owner/repo" = "1.2.3"
    ```
 
-4. Apply and regenerate lockfile:
+4. Regenerate the lockfile, then apply (a full apply runs the install script):
    ```bash
-   chezmoi apply ~/.config/mise/config.toml
-   mise install --yes
-   mise --cd home/dot_config/mise lock
+   mise lock --global
+   chezmoi apply
    ```
 
 5. Verify the tool runs. Check the binary name — it may differ from the repo
@@ -108,11 +106,10 @@ checksum, attestation, and SLSA verification.
 
 2. Edit the version in `home/dot_config/mise/config.toml`
 
-3. Apply, install, and regenerate lockfile:
+3. Regenerate the lockfile, then apply:
    ```bash
-   chezmoi apply ~/.config/mise/config.toml
-   mise install --yes
-   mise --cd home/dot_config/mise lock
+   mise lock --global
+   chezmoi apply
    ```
 
 ### Regenerating lockfiles
@@ -122,12 +119,13 @@ linux-arm64-musl, linux-x64, linux-x64-musl, macos-arm64, macos-x64,
 windows-x64). Regenerate **both** after any config change:
 
 ```bash
-mise lock                            # project-level (mise.toml)
-mise --cd home/dot_config/mise lock  # user-level (config.toml)
+mise lock           # project-level (mise.toml)
+mise lock --global  # user-level (config.toml)
 ```
 
-`~/.config/mise/mise.lock` is a symlink to the user lockfile in this repository, so
-there is no deployed copy to keep in step. Anything `mise install` or `mise use`
+`~/.config/mise/config.toml` and `~/.config/mise/mise.lock` are symlinks to the
+files in this repository, so mise treats the repository's config as global config
+and `--global` locks it in place. There is no deployed copy to keep in step. Anything `mise install` or `mise use`
 writes to the lockfile, or to the dependency graphs under `.mise/locks/`, shows up
 as a change in the working tree. Commit the graphs with the lockfile; never
 reformat them, because the lockfile records a digest of each.
@@ -158,8 +156,8 @@ Use the full tag string as the version (e.g., `jq-1.8.1` not `1.8.1`).
 
 **Lockfile conflicts** — Delete and regenerate both:
 ```bash
-mise lock                            # project-level
-mise --cd home/dot_config/mise lock  # user-level
+mise lock           # project-level
+mise lock --global  # user-level
 ```
 
 ## Rules
