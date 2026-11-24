@@ -16,4 +16,5 @@ Library/**
 
 # Linked into the source tree by run_onchange_before_10-install-mise-tools.sh.tmpl,
 # not copied.
+.config/mise/config.toml
 .config/mise/mise.lock

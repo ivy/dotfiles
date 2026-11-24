@@ -43,3 +43,11 @@ managed_for() {
 	[[ "$output" == *".config/systemd/user/qmd-reindex.timer"* ]]
 	[[ "$output" == *".config/systemd/user/cbm-reindex.timer"* ]]
 }
+
+@test "mise config and lockfile are left to the install script's symlinks" {
+	run managed_for linux
+	[ "$status" -eq 0 ]
+
+	[[ "$output" != *".config/mise/config.toml"* ]]
+	[[ "$output" != *".config/mise/mise.lock"* ]]
+}

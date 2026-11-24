@@ -13,14 +13,14 @@ load test_helper
 	assert_script_structure "$output"
 }
 
-@test "puts the config and lockfile in place before installing" {
+@test "links the config and lockfile into the source tree before installing" {
 	local script_file="home/run_onchange_before_10-install-mise-tools.sh.tmpl"
 
 	run chezmoi execute-template --file "$script_file"
 	[ "$status" -eq 0 ]
 
 	local config_line lock_line install_line
-	config_line="$(grep -n 'install -m 0644 .*config.toml' <<<"$output" | cut -d: -f1)"
+	config_line="$(grep -n 'ln -sfn .*config.toml' <<<"$output" | cut -d: -f1)"
 	lock_line="$(grep -n 'ln -sfn .*mise.lock' <<<"$output" | cut -d: -f1)"
 	install_line="$(grep -n '^mise install' <<<"$output" | cut -d: -f1)"
 
