@@ -85,17 +85,31 @@ declared() {
 
 reconcile_marketplaces() {
 	log 'marketplaces:'
-	local existing declared_names name repo
-	existing="$(claude plugin marketplace list --json 2>/dev/null | jq -r '.[].name' || true)"
+	local existing_json existing declared_names name repo installed_repo
+	existing_json="$(claude plugin marketplace list --json 2>/dev/null || echo '[]')"
+	existing="$(jq -r '.[].name' <<<"${existing_json}")"
 
 	declared_names=''
 	while IFS=$'\t' read -r name repo; do
 		[[ -z "${name}" ]] && continue
 		declared_names+="${name}"$'\n'
-		if grep -qxF "${name}" <<<"${existing}"; then
+		if ! grep -qxF "${name}" <<<"${existing}"; then
+			log "  + add ${name} (${repo})"
+			run_claude plugin marketplace add "${repo}" || true
+			continue
+		fi
+
+		# A marketplace added by hand under the same name, from a local directory
+		# or another repository, otherwise passes as installed and keeps serving
+		# whatever that source holds. Plugins removed along with it are reinstalled
+		# by reconcile_plugins, which runs after this.
+		installed_repo="$(jq -r --arg name "${name}" \
+			'.[] | select(.name == $name) | .repo // .path // ""' <<<"${existing_json}")"
+		if [[ "${installed_repo}" == "${repo}" ]]; then
 			log "  ok: ${name}"
 		else
-			log "  + add ${name} (${repo})"
+			log "  ~ replace ${name} (${installed_repo:-unknown source} -> ${repo})"
+			run_claude plugin marketplace remove "${name}" || true
 			run_claude plugin marketplace add "${repo}" || true
 		fi
 	done < <(declared '.marketplaces' | jq -r '[.name, .repo] | @tsv')

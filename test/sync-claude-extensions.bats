@@ -49,7 +49,7 @@ run_reconciler() {
 @test "adds missing marketplaces and installs missing plugins" {
 	make_stubs
 	printf '%s' '{"claudeExtensions":{"marketplaces":[{"name":"pickled-claude-plugins","repo":"technicalpickles/pickled-claude-plugins"},{"name":"plannotator","repo":"backnotprop/plannotator"}],"plugins":["playground@claude-plugins-official","ci-cd-tools@pickled-claude-plugins"],"mcpServers":[]}}' >"$FAKE_DATA_JSON"
-	printf '%s' '[{"name":"pickled-claude-plugins"}]' >"$FAKE_MARKETPLACES_JSON"
+	printf '%s' '[{"name":"pickled-claude-plugins","source":"github","repo":"technicalpickles/pickled-claude-plugins"}]' >"$FAKE_MARKETPLACES_JSON"
 	printf '%s' '[{"id":"playground@claude-plugins-official","scope":"user"}]' >"$FAKE_PLUGINS_JSON"
 
 	run_reconciler
@@ -65,7 +65,7 @@ run_reconciler() {
 @test "idempotent: nothing missing means no add or install calls" {
 	make_stubs
 	printf '%s' '{"claudeExtensions":{"marketplaces":[{"name":"pickled-claude-plugins","repo":"technicalpickles/pickled-claude-plugins"}],"plugins":["ci-cd-tools@pickled-claude-plugins"],"mcpServers":[]}}' >"$FAKE_DATA_JSON"
-	printf '%s' '[{"name":"pickled-claude-plugins"}]' >"$FAKE_MARKETPLACES_JSON"
+	printf '%s' '[{"name":"pickled-claude-plugins","source":"github","repo":"technicalpickles/pickled-claude-plugins"}]' >"$FAKE_MARKETPLACES_JSON"
 	printf '%s' '[{"id":"ci-cd-tools@pickled-claude-plugins","scope":"user"}]' >"$FAKE_PLUGINS_JSON"
 
 	run_reconciler
@@ -73,6 +73,19 @@ run_reconciler() {
 
 	! grep -qF 'marketplace add' "$CLAUDE_CALLS_LOG"
 	! grep -qF 'plugin install' "$CLAUDE_CALLS_LOG"
+}
+
+@test "replaces a marketplace whose installed source differs from the declared repo" {
+	make_stubs
+	printf '%s' '{"claudeExtensions":{"marketplaces":[{"name":"skift","repo":"steading-ai/skift"}],"plugins":["skift@skift"],"mcpServers":[]}}' >"$FAKE_DATA_JSON"
+	printf '%s' '[{"name":"skift","source":"directory","path":"/src/skift/plugin"}]' >"$FAKE_MARKETPLACES_JSON"
+
+	run_reconciler
+	[ "$status" -eq 0 ]
+
+	[ "$(grep -n 'plugin marketplace remove skift' "$CLAUDE_CALLS_LOG" | cut -d: -f1)" -lt \
+		"$(grep -n 'plugin marketplace add steading-ai/skift' "$CLAUDE_CALLS_LOG" | cut -d: -f1)" ]
+	grep -qF 'plugin install skift@skift --scope user' "$CLAUDE_CALLS_LOG"
 }
 
 @test "--check reports actions but mutates nothing" {
