@@ -7,10 +7,10 @@ workflows:
         - 'actions/checkout@v7.0.1'
     '.github/workflows/ci.yml':
         - 'actions/checkout@v7.0.1'
-        - 'jdx/mise-action@v5.2.9'
+        - 'jdx/mise-action@v5.2.10'
     '.github/workflows/claude.yml':
         - 'actions/checkout@v7.0.1'
-        - 'anthropics/claude-code-action@v1.0.278'
+        - 'anthropics/claude-code-action@v1.0.286'
     '.github/workflows/container.yml':
         - 'actions/attest-build-provenance@v4.2.2'
         - 'actions/checkout@v7.0.1'
@@ -48,9 +48,9 @@ dependencies:
         commit: 'sha1-cf430e030ddbb5b0abf93d22962f4752f3646cd9'
         owner_id: 44036562
         repo_id: 192625955
-    'anthropics/claude-code-action@v1.0.278':
-        ref: 'v1.0.278'
-        commit: 'sha1-cc98b3ae241b0fcfb6a42a2690751afffecb4452'
+    'anthropics/claude-code-action@v1.0.286':
+        ref: 'v1.0.286'
+        commit: 'sha1-acfe7992852970efb4fee683d63d628e3e52df67'
         owner_id: 76263028
         repo_id: 986421638
         uses:
@@ -75,9 +75,9 @@ dependencies:
         commit: 'sha1-8d2750c68a42422c14e847fe6c8ac0403b4cbd6f'
         owner_id: 5429470
         repo_id: 288485773
-    'jdx/mise-action@v5.2.9':
-        ref: 'v5.2.9'
-        commit: 'sha1-236a21c3b91f5db6d4e174b348674a0f0caac06d'
+    'jdx/mise-action@v5.2.10':
+        ref: 'v5.2.10'
+        commit: 'sha1-90f833d396d0cc3674b631d2d225e306476c303a'
         owner_id: 216188
         repo_id: 738284564
     'oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6':
