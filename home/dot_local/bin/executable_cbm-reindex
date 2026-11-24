@@ -129,6 +129,20 @@ project_name() {
 	printf '%s' "${rel//[^A-Za-z0-9_-]/-}"
 }
 
+# Whether a checkout tracks git-crypt files without the key to decrypt them. Its
+# working tree then holds ciphertext under source file names, which has nothing to
+# index, and CBM's parsers crash partway through it on every cycle. Unlocking sets
+# the smudge filter in the repository's config, so the same checkout is picked up
+# once it is unlocked. A repository shared with GPG keys carries a .git-crypt
+# directory, and may encrypt .gitattributes itself, so either marker counts.
+git_crypt_locked() {
+	local repo="$1"
+
+	[[ -d "$repo/.git-crypt" ]] || grep -qs 'filter=git-crypt' "$repo/.gitattributes" ||
+		return 1
+	! git -C "$repo" config --get filter.git-crypt.smudge >/dev/null 2>&1
+}
+
 # Set by index_with_recovery; read by the caller.
 out=''
 daemon_stopped=false
@@ -186,6 +200,10 @@ while IFS= read -r gitdir; do
 			continue 2
 		fi
 	done
+
+	if git_crypt_locked "$repo"; then
+		continue
+	fi
 
 	name="$(project_name "$repo")"
 	seen+="${name}"$'\n'

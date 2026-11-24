@@ -85,7 +85,7 @@ The scheduler differs by platform and nothing else does. On darwin the jobs are 
 | mcp | `claude mcp list` | `qmd` and `codebase-memory` both `✔ Connected`. `qmd` is the http daemon on `localhost:8181`; `curl -s localhost:8181/health` separates a dead daemon from a bad declaration |
 | qmd | `qmd status`, `qmd collection list` | `Documents Total` above zero. This also proves the native `better-sqlite3` addon loads — a node ABI bump breaks it, and then every qmd call dies at `require`. Zero documents *with no collections listed* is a fresh machine, not a broken index: `~/.config/qmd/index.yml` is per-machine and deliberately unmanaged |
 | codebase-memory | `codebase-memory-mcp --version` against the pin in `~/.config/mise/config.toml` | equal |
-| codebase-memory | `ls ~/.cache/codebase-memory-mcp/*.db` excluding `_config.db`, vs `ls -d ~/src/*/*/*/.git` | equal — a shortfall means repos are unindexed |
+| codebase-memory | `ls ~/.cache/codebase-memory-mcp/*.db` excluding `_config.db`, vs `ls -d ~/src/*/*/*/.git` | equal once the checkouts `~/.local/bin/cbm-reindex` skips are discounted (its `EXCLUDE` list, and git-crypt checkouts that are still locked) — any other shortfall means repos are unindexed |
 | codebase-memory | names in that directory | none begin `Users-` or `[` — both are known regressions, see README |
 | codebase-memory | `codebase-memory-mcp cli index_status --project <any indexed name>` | `"status":"ready"` |
 | codebase-memory | `codebase-memory-mcp config list` | `auto_index false`, `auto_watch true`. These live in `_config.db`, which chezmoi does not manage, so drift here is invisible everywhere else |
