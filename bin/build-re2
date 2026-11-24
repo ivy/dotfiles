@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+# build-re2 — Compile re2's native addon inside an installed npm tool.
+#
+# mise's npm backend runs no dependency install scripts, and re2's install
+# script is what fetches or builds build/Release/re2.node. Without it Renovate
+# falls back to JavaScript RegExp, which accepts patterns (lookbehind,
+# backreferences) that Renovate's RE2 rejects, so config validation can pass
+# here and fail on the hosted app. This builds the addon from the C++ sources
+# re2 vendors in its tarball, so no prebuilt binary is fetched.
+#
+# Runs as the npm:renovate postinstall in mise.toml, which sets
+# MISE_TOOL_INSTALL_PATH. Needs a C++ toolchain, make, and python3 for node-gyp.
+#
+# Usage: build-re2 [install path]
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
+install_path="${1:-${MISE_TOOL_INSTALL_PATH:?usage: build-re2 <install path>}}"
+
+# The package's place under the install root depends on the installer's layout.
+re2_dir="$(find "${install_path}" -type f -path '*/node_modules/re2/binding.gyp' -print -quit)"
+if [[ -z "${re2_dir}" ]]; then
+	echo "build-re2: no re2 package under ${install_path}, nothing to build" >&2
+	exit 0
+fi
+re2_dir="$(dirname "${re2_dir}")"
+
+if [[ -f "${re2_dir}/build/Release/re2.node" ]] &&
+	(cd "${re2_dir}" && node -e 'require("./re2.js")') >/dev/null 2>&1; then
+	exit 0
+fi
+
+echo "build-re2: compiling re2 for Node ABI $(node -p 'process.versions.modules') in ${re2_dir}" >&2
+cd "${re2_dir}"
+NPM_CONFIG_IGNORE_SCRIPTS=false NPM_CONFIG_UPDATE_NOTIFIER=false npm run rebuild >&2
+node -e 'const RE2 = require("./re2.js"); new RE2("a+")'

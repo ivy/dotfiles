@@ -49,6 +49,14 @@ local linters = new Mapping<String, Step|Group> {
 
   // GitHub Actions
   ["jactionlint"] = Builtins.jactionlint
+  // --strict also fails on options a newer Renovate deprecates, so a Renovate
+  // bump that changes the schema fails here before the hosted app trips on it.
+  // --no-global: a file argument is otherwise checked as self-hosted global
+  // config, and renovate.json5 is repository config.
+  ["renovate"] {
+    glob = List("renovate.json5")
+    check = "renovate-config-validator --strict --no-global {{files}}"
+  }
 
   // Lua
   ["stylua"] = Builtins.stylua

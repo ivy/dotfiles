@@ -15,9 +15,23 @@ min_version = "2026.10.25"
 "github:jdx/hk" = "2.12.0"
 jq = "1.8.2"
 "npm:markdownlint-cli" = "0.50.0"
+# Runs the npm: tools in this file; Renovate needs a newer Node than CI
+# runners ship.
+node = "26.13.1"
 pkl = "0.33.0"
 shfmt = "3.14.1"
 stylua = "2.6.0"
+
+# renovate-config-validator for renovate.json5. @yarnpkg/libzip@3.2.2 was
+# published by hand without the provenance 3.2.0 and 3.2.1 carry
+# (https://github.com/yarnpkg/berry/issues/7182); drop the exclusion once
+# Renovate depends on a release that has it again. bin/build-re2 compiles the
+# RE2 engine Renovate validates regexes with.
+[tools."npm:renovate"]
+version = "44.247.2"
+trust_policy_excludes = ["@yarnpkg/libzip@3.2.2"]
+depends = ["node"]
+postinstall = "{{config_root}}/bin/build-re2"
 
 [tasks.lint]
 description = "Lint and auto-fix"
