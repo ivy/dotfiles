@@ -247,7 +247,8 @@ if [[ -n "$seen" ]]; then
 	for db in "$CACHE"/*.db; do
 		[[ -e "$db" ]] || continue
 		name="$(basename "$db" .db)"
-		[[ "$name" == _config ]] && continue
+		# CBM's own stores, not projects.
+		[[ "$name" == _config || "$name" == activity ]] && continue
 		if printf '%s' "$seen" | grep -Fxq -- "$name"; then
 			continue
 		fi
