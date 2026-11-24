@@ -5823,7 +5823,7 @@ specifiers = ["4.0.1"]
 
 [[tools."npm:obsidian-headless"]]
 version = "0.0.14"
-aube = { path = ".mise/locks/npm-obsidian-headless/0.0.14", digest = "sha256:5db1aebc0d0d3e6687f3a97c0913e497cea4b8832c674e10507ce82d3b8d78dd" }
+aube = { path = ".mise/locks/npm-obsidian-headless/0.0.14", digest = "sha256:2a70944e9839e401e17ef63347847642b4368b42f2567a2375f6b864f280896e" }
 backend = "npm:obsidian-headless"
 specifiers = ["0.0.14"]
 
