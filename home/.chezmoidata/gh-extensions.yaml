@@ -6,4 +6,4 @@ ghExtensions:
   # Generates and verifies .github/workflows/actions.lock, the GitHub Actions
   # dependency lockfile.
   - repo: github/gh-actions-lock
-    version: v0.4.1
+    version: v0.5.1
