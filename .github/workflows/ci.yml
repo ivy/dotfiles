@@ -22,7 +22,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Setup mise
-        uses: jdx/mise-action@v5.2.9
+        uses: jdx/mise-action@v5.2.10
         with:
           version: 2026.11.9 # mise
       - name: Run linting checks
@@ -42,7 +42,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Setup mise
-        uses: jdx/mise-action@v5.2.9
+        uses: jdx/mise-action@v5.2.10
         with:
           version: 2026.11.9 # mise
       - name: Install chezmoi
