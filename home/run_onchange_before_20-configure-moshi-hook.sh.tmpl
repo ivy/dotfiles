@@ -1,9 +1,13 @@
+{{- if dig "moshi" "enabled" false . -}}
 {{- $lock := include "dot_config/mise/mise.lock" | fromToml -}}
 {{- $entries := index $lock.tools "http:moshi-hook" -}}
 #!/bin/bash
 
 # moshi-hook version: {{ (index $entries 0).version }}
 
+# Renders only where data.moshi.enabled is set: elsewhere the binary is
+# installed but nothing runs it.
+#
 # Keeps the moshi-hook daemon on the version mise.lock pins. The version above
 # makes chezmoi re-run this on every moshi-hook upgrade, and only then. The
 # before_ prefix and the 20 put it after the mise install script (before_10),
@@ -52,3 +56,4 @@ if launchctl print "${label}" >/dev/null 2>&1; then
     echo "moshi-hook daemon restarted"
 fi
 {{- end }}
+{{ end -}}

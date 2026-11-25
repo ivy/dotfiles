@@ -11,6 +11,9 @@
 {{-   $useBedrock = promptBool "Use AWS Bedrock for Claude Code" false -}}
 {{- end -}}
 
+{{- /* Moshi mobile terminal — per machine, off unless chosen (not on work machines) */ -}}
+{{- $moshiEnabled := promptBoolOnce . "moshi.enabled" "Set up Moshi (mobile terminal daemon and agent hooks)" false -}}
+
 {{- /* 1Password credential references — override per machine via chezmoi init */ -}}
 {{- $credCodex := promptStringOnce . "credentials.codex" "1Password ref for OpenAI Codex" "" -}}
 {{- $credClaudeApi := promptStringOnce . "credentials.claude_api" "1Password ref for Claude API" "" -}}
@@ -48,6 +51,11 @@ email = {{ $gitEmail | quote }}
 
 [data.claude]
 use_bedrock = {{ $useBedrock }}
+
+[data.moshi]
+# Runs the moshi-hook daemon and installs Moshi's agent hooks and Claude rule.
+# The moshi-hook binary itself is a mise tool on every machine.
+enabled = {{ $moshiEnabled }}
 
 [data.credentials]
 # 1Password references for credential-injecting shell aliases

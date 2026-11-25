@@ -18,3 +18,10 @@ Library/**
 # not copied.
 .config/mise/config.toml
 .config/mise/mise.lock
+
+# Moshi is opt-in per machine (data.moshi.enabled, prompted by chezmoi init).
+{{ if not (dig "moshi" "enabled" false .) }}
+.config/systemd/user/moshi-hook.service
+Library/LaunchAgents/app.getmoshi.moshi-hook.plist
+.claude/rules/moshi.md
+{{ end }}

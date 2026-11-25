@@ -13,7 +13,7 @@ make_stubs() {
 	cat >"$STUB_BIN/chezmoi" <<'STUB'
 #!/usr/bin/env bash
 case "$*" in
-	"data --format json") printf '%s' '{"claude":{"use_bedrock":false}}' ;;
+	"data --format json") printf '{"claude":{"use_bedrock":false},"moshi":{"enabled":%s}}' "${FAKE_MOSHI_ENABLED:-true}" ;;
 esac
 exit 0
 STUB
@@ -82,6 +82,17 @@ run_sync() {
 	jq -e '.hooks.PreToolUse | length == 1' "$TEST_HOME_DIR/.claude/settings.json"
 }
 
+@test "skips the moshi hooks where Moshi is not enabled" {
+	make_stubs
+	export FAKE_MOSHI_INSTALLED=1 FAKE_MOSHI_ENABLED=false
+
+	run_sync
+	[ "$status" -eq 0 ]
+
+	[[ "$output" == *"moshi.enabled=false"* ]]
+	[ ! -s "$MOSHI_CALLS_LOG" ]
+}
+
 # Each moshi-hook release generates different hooks, so an upgrade has to
 # re-run the sync.
 @test "the chezmoi trigger re-runs on a moshi-hook upgrade" {
@@ -89,8 +100,10 @@ run_sync() {
 	version="$(yq -p toml '.tools."http:moshi-hook"[0].version' home/dot_config/mise/mise.lock)"
 	[ -n "$version" ]
 
-	run chezmoi execute-template --file home/run_onchange_sync-claude-settings.sh.tmpl
+	run chezmoi execute-template --config "$(chezmoi_config linux true)" --file home/run_onchange_sync-claude-settings.sh.tmpl
 	[ "$status" -eq 0 ]
 
 	[[ "$output" == *"moshi-hook version: ${version}"* ]]
+	# Turning Moshi on or off re-runs it too.
+	[[ "$output" == *"moshi enabled: true"* ]]
 }

@@ -34,15 +34,18 @@ teardown() {
 # a sibling source resolve it against chezmoi's real source directory; a
 # .data.chezmoi.sourceDir override does not influence that, so a config without
 # this key sends `include` to the default ~/.local/share/chezmoi and fails.
+#
+# The optional second argument sets data.moshi.enabled (default false).
 chezmoi_config() {
-	local os="$1"
-	local path="$TEST_TMPDIR/${os}-config.toml"
+	local os="$1" moshi="${2:-false}"
+	local path="$TEST_TMPDIR/${os}-moshi-${moshi}-config.toml"
 
 	cat >"$path" <<EOF
 sourceDir = "$REPO_ROOT"
 
 [data]
     chezmoi = { os = "$os", homeDir = "$TEST_HOME_DIR", sourceDir = "$TEST_SOURCE_DIR" }
+    moshi = { enabled = $moshi }
 EOF
 	printf '%s' "$path"
 }

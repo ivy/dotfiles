@@ -74,3 +74,15 @@ render() {
 		[ "$safe" = "null" ]
 	fi
 }
+
+# Off unless chosen: a work machine must not start the daemon or install hooks.
+@test "moshi.enabled defaults to off and keeps an existing choice" {
+	run render
+	[ "$status" -eq 0 ]
+	[ "$(yq -p toml -o json '.' <<<"$output" | jq -r '.data.moshi.enabled')" = "false" ]
+
+	printf '\n[data.moshi]\nenabled = true\n' >>"$CONFIG_FILE"
+	run render
+	[ "$status" -eq 0 ]
+	[ "$(yq -p toml -o json '.' <<<"$output" | jq -r '.data.moshi.enabled')" = "true" ]
+}

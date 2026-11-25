@@ -386,7 +386,15 @@ set_hooks() {
 # so each upgrade rewrites them. The installer merges into settings.json, leaving
 # other hooks and keys alone, and is idempotent.
 set_moshi_hooks() {
-	local moshi_hook
+	local moshi_hook moshi_enabled
+
+	# Opt-in per machine: the binary is a mise tool everywhere, but only machines
+	# with data.moshi.enabled run the daemon these hooks report to.
+	moshi_enabled=$(chezmoi data --format json | jq -r '.moshi.enabled // false')
+	if [[ "${moshi_enabled}" != "true" ]]; then
+		printf 'moshi.enabled=%s — skipping its Claude Code hooks\n' "${moshi_enabled}"
+		return 0
+	fi
 
 	# Resolved through mise rather than PATH: chezmoi runs this in the same apply
 	# that installs moshi-hook, from a process whose PATH predates it.
