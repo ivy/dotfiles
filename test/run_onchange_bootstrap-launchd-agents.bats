@@ -19,6 +19,7 @@ SCRIPT="home/run_onchange_after_bootstrap-launchd-agents.sh.tmpl"
 	[[ "$output" == *"net.ivyevans.qmd-reindex"* ]]
 	[[ "$output" == *"net.ivyevans.qmd-mcp"* ]]
 	[[ "$output" == *"net.ivyevans.cbm-reindex"* ]]
+	[[ "$output" == *"app.getmoshi.moshi-hook"* ]]
 	[[ "$output" == *"launchctl bootstrap"* ]]
 	# Boots the old job out first so a running agent picks up a changed plist.
 	[[ "$output" == *"launchctl bootout"* ]]
@@ -31,6 +32,7 @@ SCRIPT="home/run_onchange_after_bootstrap-launchd-agents.sh.tmpl"
 	[[ "$output" == *"reindex plist hash:"* ]]
 	[[ "$output" == *"mcp plist hash:"* ]]
 	[[ "$output" == *"cbm reindex plist hash:"* ]]
+	[[ "$output" == *"moshi-hook plist hash:"* ]]
 }
 
 @test "creates the log directory launchd will not create itself" {

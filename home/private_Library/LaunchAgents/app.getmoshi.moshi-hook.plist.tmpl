@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- The label matches the agent `moshi-hook service install` writes, so its
+	     `service status` and `service restart` subcommands act on this one.
+	     Don't run `service install` itself: it rewrites this plist to point at
+	     the versioned mise install directory, which `mise prune` deletes after an
+	     upgrade. -->
+	<key>Label</key>
+	<string>app.getmoshi.moshi-hook</string>
+
+	<!-- Daemon for the Moshi mobile terminal: holds the connection to the phone
+	     app and the local socket that agent hooks report to.
+
+	     launchd runs jobs with PATH=/usr/bin:/bin:/usr/sbin:/sbin, which has no
+	     mise shims — hence the absolute path. The shim resolves whichever
+	     moshi-hook version mise.lock pins, so an upgrade only needs a restart. -->
+	<key>ProgramArguments</key>
+	<array>
+		<string>{{ .chezmoi.homeDir }}/.local/share/mise/shims/moshi-hook</string>
+		<string>serve</string>
+	</array>
+
+	<!-- The daemon launches and inspects agents (claude, codex, herdr, tmux), so
+	     it needs the same tool PATH an interactive shell has. -->
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>PATH</key>
+		<string>{{ .chezmoi.homeDir }}/.local/share/mise/shims:{{ .chezmoi.homeDir }}/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+	</dict>
+
+	<key>WorkingDirectory</key>
+	<string>{{ .chezmoi.homeDir }}</string>
+
+	<key>RunAtLoad</key>
+	<true/>
+	<key>KeepAlive</key>
+	<true/>
+
+	<key>StandardOutPath</key>
+	<string>{{ .chezmoi.homeDir }}/Library/Logs/moshi-hook.log</string>
+	<key>StandardErrorPath</key>
+	<string>{{ .chezmoi.homeDir }}/Library/Logs/moshi-hook.log</string>
+</dict>
+</plist>

@@ -1,0 +1,32 @@
+[Unit]
+# Daemon for the Moshi mobile terminal: holds the connection to the phone app and
+# the local socket that agent hooks report to. moshi-hook is a mise tool — see
+# the http:moshi-hook entry in ~/.config/mise/config.toml.
+#
+# The name matches the unit `moshi-hook service install` writes, so its
+# `service status` and `service restart` subcommands act on this one. Don't run
+# `service install` itself: it rewrites this file with ExecStart pointing at the
+# versioned mise install directory, which `mise prune` deletes after an upgrade.
+Description=Moshi hook daemon
+Documentation=https://getmoshi.app/docs/hooks
+After=network-online.target
+
+[Service]
+Type=exec
+
+# The unit environment has no mise shims on PATH, hence the absolute path. The
+# shim resolves whichever moshi-hook version mise.lock pins, so an upgrade only
+# needs a restart, not a new unit.
+ExecStart=%h/.local/share/mise/shims/moshi-hook serve
+
+# The daemon launches and inspects agents (claude, codex, herdr, tmux), so it
+# needs the same tool PATH an interactive shell has.
+Environment=PATH=%h/.local/share/mise/shims:%h/.local/bin:/usr/local/bin:/usr/bin:/bin
+
+WorkingDirectory=%h
+Restart=on-failure
+RestartSec=5
+SyslogIdentifier=moshi-hook
+
+[Install]
+WantedBy=default.target

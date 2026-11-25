@@ -19,6 +19,7 @@ SCRIPT="home/run_onchange_after_bootstrap-systemd-units.sh.tmpl"
 	[[ "$output" == *"qmd-mcp.service"* ]]
 	[[ "$output" == *"qmd-reindex.timer"* ]]
 	[[ "$output" == *"cbm-reindex.timer"* ]]
+	[[ "$output" == *"moshi-hook.service"* ]]
 	[[ "$output" == *"systemctl --user daemon-reload"* ]]
 	# reenable rewrites the [Install] symlinks; restart is what makes a running
 	# unit pick up an edited file.
@@ -45,6 +46,7 @@ SCRIPT="home/run_onchange_after_bootstrap-systemd-units.sh.tmpl"
 	[[ "$output" == *"qmd reindex timer hash:"* ]]
 	[[ "$output" == *"cbm reindex unit hash:"* ]]
 	[[ "$output" == *"cbm reindex timer hash:"* ]]
+	[[ "$output" == *"moshi-hook unit hash:"* ]]
 }
 
 # A container built with `chezmoi init --apply` has no user manager to talk to,

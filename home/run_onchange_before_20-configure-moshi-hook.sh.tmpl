@@ -1,0 +1,45 @@
+{{- $lock := include "dot_config/mise/mise.lock" | fromToml -}}
+{{- $entries := index $lock.tools "http:moshi-hook" -}}
+#!/bin/bash
+
+# moshi-hook version: {{ (index $entries 0).version }}
+
+# Keeps the moshi-hook daemon on the version mise.lock pins. The version above
+# makes chezmoi re-run this on every moshi-hook upgrade, and only then. The
+# before_ prefix and the 20 put it after the mise install script (before_10),
+# so the new binary is in place, and before the unit or LaunchAgent is first
+# loaded, so the daemon never starts with its self-updater on.
+
+[ -n "${DEBUG:-}" ] && set -o xtrace
+set -o errexit
+set -o nounset
+
+# Resolved at runtime rather than with lookPath, because mise installs
+# moshi-hook during this same apply.
+if ! command -v mise >/dev/null 2>&1 || ! moshi_hook="$(mise which moshi-hook 2>/dev/null)"; then
+    echo "moshi-hook not installed, skipping its configuration"
+    exit 0
+fi
+
+# Off, not ask: mise owns this binary and Renovate advances it through
+# mise.lock. Left on auto, the daemon downloads each new release over the mise
+# install in place, behind the lockfile's back. `set` writes only this key in
+# ~/.config/moshi/config.toml and is a no-op when it already holds.
+"${moshi_hook}" set auto-update off </dev/null
+
+# A running daemon keeps the binary it started from, and the mise install
+# script has just pruned that version. Restart it onto the new one. Not
+# running means the service has not been loaded yet; the bootstrap script
+# starts it later in this apply.
+{{ if eq .chezmoi.os "linux" -}}
+if systemctl --user is-active --quiet moshi-hook.service 2>/dev/null; then
+    systemctl --user restart moshi-hook.service
+    echo "moshi-hook daemon restarted"
+fi
+{{- else if eq .chezmoi.os "darwin" -}}
+label="gui/$(id -u)/app.getmoshi.moshi-hook"
+if launchctl print "${label}" >/dev/null 2>&1; then
+    launchctl kickstart -k "${label}"
+    echo "moshi-hook daemon restarted"
+fi
+{{- end }}

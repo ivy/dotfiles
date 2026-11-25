@@ -112,3 +112,24 @@ pipx = "1.18.16"
 "npm:ccusage" = "20.0.51"
 "npm:git-mob" = "4.0.1"
 "npm:obsidian-headless" = "0.0.14"
+
+# moshi-hook: host daemon for the Moshi mobile terminal (https://getmoshi.app).
+# Releases are published only to Moshi's CDN, so the http: backend fetches them.
+#
+# "latest" is the one deliberate exception to exact pins here: mise.lock holds
+# the exact version and its checksums. Renovate's mise manager skips http:
+# tools, but its lock file maintenance runs `mise lock --bump`, which resolves
+# "latest" through version_list_url and advances the lock. An exact pin in this
+# file would need a Renovate regex manager instead, and its PRs would change the
+# version without the lockfile, which MISE_LOCKED installs then refuse.
+#
+# The daemon's own self-updater is turned off by
+# run_onchange_before_20-configure-moshi-hook.sh.tmpl; left on, it would
+# overwrite this install in place.
+[tools."http:moshi-hook"]
+version = "latest"
+# Linux and macOS only: Windows releases ship as .zip under another name.
+os = ["linux", "macos"]
+url = 'https://cdn.getmoshi.app/hook/v{{ version }}/moshi-hook_{{ os(linux="Linux", macos="Darwin") }}_{{ arch(x64="x86_64") }}.tar.gz'
+checksum_url = "https://cdn.getmoshi.app/hook/v{{ version }}/checksums.txt"
+version_list_url = "https://cdn.getmoshi.app/hook/latest/version.txt"

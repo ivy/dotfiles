@@ -17,6 +17,8 @@ aliases:
     - { tool: eza, replaces: la, command: "eza --icons=always --long --all --group-directories-first" }
     - { tool: eza, replaces: tree, command: "eza --icons=always --tree" }
     - { tool: claude-squad, replaces: cs, command: "claude-squad" }
+    # Moshi's own installer links `moshi` to moshi-hook; mise installs one name.
+    - { tool: moshi-hook, replaces: moshi, command: "moshi-hook" }
 
   # Credential-injecting aliases: fetch secret from 1Password, export as env var
   # Requires `op` on PATH. Each entry needs `tool` on PATH too.

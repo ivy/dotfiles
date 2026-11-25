@@ -14,6 +14,7 @@
 # qmd reindex timer hash: {{ include "dot_config/systemd/user/qmd-reindex.timer" | sha256sum }}
 # cbm reindex unit hash: {{ include "dot_config/systemd/user/cbm-reindex.service" | sha256sum }}
 # cbm reindex timer hash: {{ include "dot_config/systemd/user/cbm-reindex.timer" | sha256sum }}
+# moshi-hook unit hash: {{ include "dot_config/systemd/user/moshi-hook.service" | sha256sum }}
 
 [ -n "${DEBUG:-}" ] && set -o xtrace
 set -o errexit
@@ -29,10 +30,10 @@ fi
 
 systemctl --user daemon-reload
 
-# Only these three carry an [Install] section. The two oneshot services are
+# Only these four carry an [Install] section. The two oneshot services are
 # pulled in by their timers and must not be enabled on their own, or they would
 # also run once at every login.
-for unit in qmd-mcp.service qmd-reindex.timer cbm-reindex.timer; do
+for unit in qmd-mcp.service qmd-reindex.timer cbm-reindex.timer moshi-hook.service; do
     if [ ! -f "$HOME/.config/systemd/user/$unit" ]; then
         echo "$unit not found, skipping"
         continue
