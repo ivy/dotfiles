@@ -377,6 +377,32 @@ set_hooks() {
     ' "${SETTINGS}" >"${SETTINGS}.tmp" && mv "${SETTINGS}.tmp" "${SETTINGS}"
 }
 
+# Install the Moshi agent hooks, which report session events and permission
+# requests to the moshi-hook daemon (see the http:moshi-hook entry in the mise
+# config). moshi-hook's own installer writes them, rather than a jq merge here,
+# because the daemon flags hooks as stale unless they match its generated output
+# exactly, binary path included, and that output changes between releases.
+# run_onchange_sync-claude-settings.sh.tmpl keys on the locked moshi-hook version
+# so each upgrade rewrites them. The installer merges into settings.json, leaving
+# other hooks and keys alone, and is idempotent.
+set_moshi_hooks() {
+	local moshi_hook
+
+	# Resolved through mise rather than PATH: chezmoi runs this in the same apply
+	# that installs moshi-hook, from a process whose PATH predates it.
+	if ! command -v mise >/dev/null 2>&1 || ! moshi_hook="$(mise which moshi-hook 2>/dev/null)"; then
+		printf 'moshi-hook not installed — skipping its Claude Code hooks\n'
+		return 0
+	fi
+
+	printf 'installing moshi-hook Claude Code hooks into %s\n' "${SETTINGS}"
+	# A failure here leaves Moshi without session events, not Claude Code
+	# without settings, so it warns instead of failing the whole apply.
+	if ! "${moshi_hook}" install --target claude </dev/null; then
+		printf 'warning: moshi-hook install failed — Moshi will not see Claude Code sessions\n' >&2
+	fi
+}
+
 # Remove Bedrock model env vars (use_bedrock=false path)
 cleanup_model_env_vars() {
 	if jq -e '.env.ANTHROPIC_MODEL // .env.ANTHROPIC_DEFAULT_HAIKU_MODEL // .env.ANTHROPIC_DEFAULT_OPUS_MODEL // .env.ANTHROPIC_DEFAULT_SONNET_MODEL' "${SETTINGS}" >/dev/null 2>&1; then
@@ -482,6 +508,7 @@ main() {
 	set_bash_tool_shell
 	set_permissions
 	set_hooks
+	set_moshi_hooks
 
 	local use_bedrock
 	use_bedrock=$(chezmoi data --format json | jq -r '.claude.use_bedrock')

@@ -1,0 +1,96 @@
+#!/usr/bin/env bats
+
+load test_helper
+
+# Stub `chezmoi`, `mise` and `moshi-hook` on PATH so the sync runs its real jq
+# merges against a throwaway HOME. `mise which moshi-hook` resolves to the stub
+# only when $FAKE_MOSHI_INSTALLED is set; every moshi-hook invocation is appended
+# to $MOSHI_CALLS_LOG.
+make_stubs() {
+	STUB_BIN="$TEST_TMPDIR/bin"
+	mkdir -p "$STUB_BIN"
+
+	cat >"$STUB_BIN/chezmoi" <<'STUB'
+#!/usr/bin/env bash
+case "$*" in
+	"data --format json") printf '%s' '{"claude":{"use_bedrock":false}}' ;;
+esac
+exit 0
+STUB
+
+	cat >"$STUB_BIN/mise" <<STUB
+#!/usr/bin/env bash
+if [ "\$*" = "which moshi-hook" ] && [ -n "\${FAKE_MOSHI_INSTALLED:-}" ]; then
+	printf '%s\n' "$STUB_BIN/moshi-hook"
+	exit 0
+fi
+exit 1
+STUB
+
+	cat >"$STUB_BIN/moshi-hook" <<'STUB'
+#!/usr/bin/env bash
+printf '%s\n' "$*" >>"$MOSHI_CALLS_LOG"
+exit 0
+STUB
+
+	chmod +x "$STUB_BIN/chezmoi" "$STUB_BIN/mise" "$STUB_BIN/moshi-hook"
+
+	export MOSHI_CALLS_LOG="$TEST_TMPDIR/moshi-calls.log"
+	: >"$MOSHI_CALLS_LOG"
+}
+
+run_sync() {
+	run env PATH="$STUB_BIN:$PATH" HOME="$TEST_HOME_DIR" \
+		bash "${BATS_TEST_DIRNAME}/../bin/sync-claude-settings"
+}
+
+@test "installs the moshi-hook Claude Code hooks through moshi's own installer" {
+	make_stubs
+	export FAKE_MOSHI_INSTALLED=1
+
+	run_sync
+	[ "$status" -eq 0 ]
+
+	[ "$(cat "$MOSHI_CALLS_LOG")" = "install --target claude" ]
+}
+
+# The installer merges into the file the earlier steps wrote, so it has to run
+# after them: the installer guard hook must survive alongside moshi's.
+@test "installs moshi's hooks after the managed hooks are written" {
+	make_stubs
+	export FAKE_MOSHI_INSTALLED=1
+
+	run_sync
+	[ "$status" -eq 0 ]
+
+	local guard moshi
+	guard="$(printf '%s\n' "$output" | grep -n 'installer guard' | cut -d: -f1)"
+	moshi="$(printf '%s\n' "$output" | grep -n 'installing moshi-hook' | cut -d: -f1)"
+	[ -n "$guard" ] && [ -n "$moshi" ]
+	[ "$guard" -lt "$moshi" ]
+}
+
+@test "skips the moshi hooks when moshi-hook is not installed" {
+	make_stubs
+	unset FAKE_MOSHI_INSTALLED
+
+	run_sync
+	[ "$status" -eq 0 ]
+
+	[[ "$output" == *"moshi-hook not installed"* ]]
+	[ ! -s "$MOSHI_CALLS_LOG" ]
+	jq -e '.hooks.PreToolUse | length == 1' "$TEST_HOME_DIR/.claude/settings.json"
+}
+
+# Each moshi-hook release generates different hooks, so an upgrade has to
+# re-run the sync.
+@test "the chezmoi trigger re-runs on a moshi-hook upgrade" {
+	local version
+	version="$(yq -p toml '.tools."http:moshi-hook"[0].version' home/dot_config/mise/mise.lock)"
+	[ -n "$version" ]
+
+	run chezmoi execute-template --file home/run_onchange_sync-claude-settings.sh.tmpl
+	[ "$status" -eq 0 ]
+
+	[[ "$output" == *"moshi-hook version: ${version}"* ]]
+}
