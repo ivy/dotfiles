@@ -7,9 +7,9 @@ load test_helper
 # ("private_Library/**") renders fine and matches nothing. These tests ask
 # chezmoi which entries it would actually manage.
 managed_for() {
-	local os="$1"
+	local os="$1" moshi="${2:-false}"
 
-	chezmoi managed --config "$(chezmoi_config "$os")" --destination "$TEST_HOME_DIR"
+	chezmoi managed --config "$(chezmoi_config "$os" "$moshi")" --destination "$TEST_HOME_DIR"
 }
 
 @test "macOS-only entries are excluded on linux" {
@@ -50,4 +50,28 @@ managed_for() {
 
 	[[ "$output" != *".config/mise/config.toml"* ]]
 	[[ "$output" != *".config/mise/mise.lock"* ]]
+}
+
+# Moshi is opt-in per machine. The failure notifier is not gated: it is best
+# effort and a no-op where Moshi isn't paired.
+@test "Moshi's daemon and rule are managed only where Moshi is enabled" {
+	run managed_for linux
+	[ "$status" -eq 0 ]
+	[[ "$output" != *".config/systemd/user/moshi-hook.service"* ]]
+	[[ "$output" != *".claude/rules/moshi.md"* ]]
+	[[ "$output" == *".config/systemd/user/moshi-notify@.service"* ]]
+
+	run managed_for darwin
+	[ "$status" -eq 0 ]
+	[[ "$output" != *"Library/LaunchAgents/app.getmoshi.moshi-hook.plist"* ]]
+	[[ "$output" != *".claude/rules/moshi.md"* ]]
+
+	run managed_for linux true
+	[ "$status" -eq 0 ]
+	[[ "$output" == *".config/systemd/user/moshi-hook.service"* ]]
+	[[ "$output" == *".claude/rules/moshi.md"* ]]
+
+	run managed_for darwin true
+	[ "$status" -eq 0 ]
+	[[ "$output" == *"Library/LaunchAgents/app.getmoshi.moshi-hook.plist"* ]]
 }
