@@ -56,7 +56,7 @@ local linters = new Mapping<String, Step|Group> {
   // bump that changes the schema fails here before the hosted app trips on it.
   // --no-global: a file argument is otherwise checked as self-hosted global
   // config, and renovate.json5 is repository config.
-  ["renovate"] {
+  ["renovate"] = new Step {
     glob = List("renovate.json5")
     check = "renovate-config-validator --strict --no-global {{files}}"
   }

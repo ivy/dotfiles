@@ -12,7 +12,7 @@ min_version = "2026.10.25"
 "aqua:jdx/jactionlint" = "2.6.0"
 "github:buildkite/cli" = "3.68.0"
 "github:gitleaks/gitleaks" = "8.30.1"
-"github:jdx/hk" = "2.12.0"
+"github:jdx/hk" = "2.14.0"
 jq = "1.8.2"
 "npm:markdownlint-cli" = "0.50.0"
 # Runs the npm: tools in this file; Renovate needs a newer Node than CI
