@@ -22,14 +22,17 @@ local linters = new Mapping<String, Step|Group> {
     exclude = "docs/reference/**"
   }
   ["mise"] = Builtins.mise
-  // Every mise tool names an exact version — see docs/core-principles.md
+  // Every mise tool names an exact version — see docs/core-principles.md.
+  // http: tools are exempt: Renovate's mise manager cannot update them, so the
+  // exact pin lives in mise.lock, and lock file maintenance (`mise lock --bump`)
+  // advances it through the tool's version_list_url.
   ["mise-no-latest"] = new Step {
     glob = List("mise.toml", "home/dot_config/mise/config.toml")
     check =
       #"""
       failed=0
       for f in {{ files }}; do
-        pins=$(yq -p toml -o yaml '.tools | .. | select(tag == "!!str" and . == "latest") | path | join(".")' "$f") || exit 2
+        pins=$(yq -p toml -o yaml '.tools | .. | select(tag == "!!str" and . == "latest") | select(path[1] | test("^http:") | not) | path | join(".")' "$f") || exit 2
         if [ -n "$pins" ]; then
           printf '%s: pinned to "latest", use an exact version:\n%s\n' "$f" "$pins"
           failed=1

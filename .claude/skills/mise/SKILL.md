@@ -164,6 +164,9 @@ mise lock --global  # user-level
 
 - Edit `home/dot_config/mise/config.toml`, never `~/.config/mise/config.toml`
 - Pin exact versions for all tools — Renovate handles updates
-- Never use `latest` — always pin to a specific version
+- Never use `latest` — always pin to a specific version. The one exception is
+  an `http:` tool, which Renovate's mise manager cannot update: `latest` with a
+  `version_list_url` lets lock file maintenance (`mise lock --bump`) advance the
+  exact pin in `mise.lock` (see `http:moshi-hook`)
 - Always regenerate lockfile after config changes
 - Always verify the tool runs after installing
