@@ -5482,50 +5482,62 @@ url = "https://github.com/starship/starship/releases/download/v1.27.0/starship-x
 url_api = "https://api.github.com/repos/starship/starship/releases/assets/650074470"
 
 [[tools."github:steading-ai/skift"]]
-version = "0.3.0"
+version = "0.4.0-rc.2"
 backend = "github:steading-ai/skift"
-specifiers = ["0.3.0"]
+specifiers = ["0.4.0-rc.2"]
 
 [tools."github:steading-ai/skift"."platforms.linux-arm64"]
-checksum = "sha256:474465806559985ba1ccb8777ce72ef7af1d42803de65f56c264fa36914aa677"
-url = "https://github.com/steading-ai/skift/releases/download/v0.3.0/skift_0.3.0_linux_arm64.tar.gz"
-url_api = "https://api.github.com/repos/steading-ai/skift/releases/assets/785893009"
+checksum = "sha256:0d9badad48f98dca96deedd38fc07a2366d49dcdb6d3c18f961468efb1bcca7c"
+url = "https://github.com/steading-ai/skift/releases/download/v0.4.0-rc.2/skift_0.4.0-rc.2_linux_arm64.tar.gz"
+url_api = "https://api.github.com/repos/steading-ai/skift/releases/assets/793249796"
 provenance = "github-attestations"
 
 [tools."github:steading-ai/skift"."platforms.linux-arm64-musl"]
-checksum = "sha256:474465806559985ba1ccb8777ce72ef7af1d42803de65f56c264fa36914aa677"
-url = "https://github.com/steading-ai/skift/releases/download/v0.3.0/skift_0.3.0_linux_arm64.tar.gz"
-url_api = "https://api.github.com/repos/steading-ai/skift/releases/assets/785893009"
+checksum = "sha256:0d9badad48f98dca96deedd38fc07a2366d49dcdb6d3c18f961468efb1bcca7c"
+url = "https://github.com/steading-ai/skift/releases/download/v0.4.0-rc.2/skift_0.4.0-rc.2_linux_arm64.tar.gz"
+url_api = "https://api.github.com/repos/steading-ai/skift/releases/assets/793249796"
 provenance = "github-attestations"
 
 [tools."github:steading-ai/skift"."platforms.linux-x64"]
-checksum = "sha256:eaf6dad3de8cfcb8f857b0e4698367cd49b9851438161647ef6c82c89472269a"
-url = "https://github.com/steading-ai/skift/releases/download/v0.3.0/skift_0.3.0_linux_amd64.tar.gz"
-url_api = "https://api.github.com/repos/steading-ai/skift/releases/assets/785893003"
+checksum = "sha256:e1da27b994f564da8be40fe30bf168d49767abebbeb85056c3a2b688aa2e8334"
+url = "https://github.com/steading-ai/skift/releases/download/v0.4.0-rc.2/skift_0.4.0-rc.2_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/steading-ai/skift/releases/assets/793249756"
 provenance = "github-attestations"
 
 [tools."github:steading-ai/skift"."platforms.linux-x64-baseline"]
-checksum = "sha256:eaf6dad3de8cfcb8f857b0e4698367cd49b9851438161647ef6c82c89472269a"
-url = "https://github.com/steading-ai/skift/releases/download/v0.3.0/skift_0.3.0_linux_amd64.tar.gz"
-url_api = "https://api.github.com/repos/steading-ai/skift/releases/assets/785893003"
+checksum = "sha256:e1da27b994f564da8be40fe30bf168d49767abebbeb85056c3a2b688aa2e8334"
+url = "https://github.com/steading-ai/skift/releases/download/v0.4.0-rc.2/skift_0.4.0-rc.2_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/steading-ai/skift/releases/assets/793249756"
 provenance = "github-attestations"
 
 [tools."github:steading-ai/skift"."platforms.linux-x64-musl"]
-checksum = "sha256:eaf6dad3de8cfcb8f857b0e4698367cd49b9851438161647ef6c82c89472269a"
-url = "https://github.com/steading-ai/skift/releases/download/v0.3.0/skift_0.3.0_linux_amd64.tar.gz"
-url_api = "https://api.github.com/repos/steading-ai/skift/releases/assets/785893003"
+checksum = "sha256:e1da27b994f564da8be40fe30bf168d49767abebbeb85056c3a2b688aa2e8334"
+url = "https://github.com/steading-ai/skift/releases/download/v0.4.0-rc.2/skift_0.4.0-rc.2_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/steading-ai/skift/releases/assets/793249756"
 provenance = "github-attestations"
 
 [tools."github:steading-ai/skift"."platforms.linux-x64-musl-baseline"]
-checksum = "sha256:eaf6dad3de8cfcb8f857b0e4698367cd49b9851438161647ef6c82c89472269a"
-url = "https://github.com/steading-ai/skift/releases/download/v0.3.0/skift_0.3.0_linux_amd64.tar.gz"
-url_api = "https://api.github.com/repos/steading-ai/skift/releases/assets/785893003"
+checksum = "sha256:e1da27b994f564da8be40fe30bf168d49767abebbeb85056c3a2b688aa2e8334"
+url = "https://github.com/steading-ai/skift/releases/download/v0.4.0-rc.2/skift_0.4.0-rc.2_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/steading-ai/skift/releases/assets/793249756"
 provenance = "github-attestations"
 
 [tools."github:steading-ai/skift"."platforms.macos-arm64"]
-checksum = "sha256:b4d1ab760c499d0a4152cbc2e5157407a1e11ee1c168c84a0c9b9ef644b847ee"
-url = "https://github.com/steading-ai/skift/releases/download/v0.3.0/skift_0.3.0_darwin_arm64.tar.gz"
-url_api = "https://api.github.com/repos/steading-ai/skift/releases/assets/785892987"
+checksum = "sha256:7c0ad64ec1f3e231a4b4897a8f3b0742af59555871f641d510e84d65c38a5514"
+url = "https://github.com/steading-ai/skift/releases/download/v0.4.0-rc.2/skift_0.4.0-rc.2_darwin_arm64.tar.gz"
+url_api = "https://api.github.com/repos/steading-ai/skift/releases/assets/793249750"
+provenance = "github-attestations"
+
+[tools."github:steading-ai/skift"."platforms.macos-x64"]
+checksum = "sha256:08f37c3c782973158dd6aa035944235f9761bd3b85afaf0d72af758251134bc6"
+url = "https://github.com/steading-ai/skift/releases/download/v0.4.0-rc.2/skift_0.4.0-rc.2_darwin_amd64.tar.gz"
+url_api = "https://api.github.com/repos/steading-ai/skift/releases/assets/793249704"
+provenance = "github-attestations"
+
+[tools."github:steading-ai/skift"."platforms.macos-x64-baseline"]
+checksum = "sha256:08f37c3c782973158dd6aa035944235f9761bd3b85afaf0d72af758251134bc6"
+url = "https://github.com/steading-ai/skift/releases/download/v0.4.0-rc.2/skift_0.4.0-rc.2_darwin_amd64.tar.gz"
+url_api = "https://api.github.com/repos/steading-ai/skift/releases/assets/793249704"
 provenance = "github-attestations"
 
 [[tools."github:technicalpickles/cq"]]
