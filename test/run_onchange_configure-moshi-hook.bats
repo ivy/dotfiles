@@ -24,6 +24,16 @@ SCRIPT="home/run_onchange_before_20-configure-moshi-hook.sh.tmpl"
 	[[ "$output" == *"set auto-update off"* ]]
 }
 
+# Claude Code's hooks go through bin/sync-claude-settings, which owns its
+# settings.json; the other agents have no other writer.
+@test "installs hooks for codex and opencode but not claude" {
+	run chezmoi execute-template --file "$SCRIPT"
+	[ "$status" -eq 0 ]
+
+	[[ "$output" == *"install --target codex,opencode"* ]]
+	[[ "$output" != *"--target claude"* ]]
+}
+
 # The locked version is what makes chezmoi re-run the script on an upgrade.
 @test "embeds the locked moshi-hook version" {
 	local version

@@ -27,6 +27,15 @@ fi
 # ~/.config/moshi/config.toml and is a no-op when it already holds.
 "${moshi_hook}" set auto-update off </dev/null
 
+# Hooks for the other mise-installed agents. Claude Code's go through
+# bin/sync-claude-settings, which owns its settings.json. The daemon flags hooks
+# that differ from its generated output, binary path included, so each upgrade
+# reinstalls them; the installer leaves the rest of each config alone. A failure
+# costs Moshi those sessions' events, not the apply.
+if ! "${moshi_hook}" install --target codex,opencode </dev/null; then
+    echo "warning: moshi-hook install failed for codex/opencode" >&2
+fi
+
 # A running daemon keeps the binary it started from, and the mise install
 # script has just pruned that version. Restart it onto the new one. Not
 # running means the service has not been loaded yet; the bootstrap script
