@@ -20,7 +20,6 @@
 [core]
 	editor = nvim
 	excludesfile = ~/.config/git/ignore
-	hooksPath = ~/.config/git/hooks
 	autocrlf = input
 	pager = delta
 
@@ -124,6 +123,14 @@
 	jobs = 10
 	failFast = false
 
+# Secret scan on every commit in every repository. A configured hook runs
+# alongside the repository's own .git/hooks, and `hook.gitleaks.enabled = false`
+# in a repository's config opts it out. Called through the mise shim so it works
+# when git runs without mise on PATH.
+[hook "gitleaks"]
+	event = pre-commit
+	command = {{ joinPath .chezmoi.homeDir ".local/share/mise/shims/gitleaks" }} git --pre-commit --staged --redact --verbose --no-banner --log-level=warn
+
 [include]
 	path = ~/.config/git/config.local
 {{ if lookPath "git-lfs" -}}
@@ -135,6 +142,15 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
+{{- /*
+   The hooks `git lfs install` writes into a hooks directory, as configured
+   hooks so that every repository gets them without a shared core.hooksPath.
+*/}}
+{{ range list "pre-push" "post-checkout" "post-commit" "post-merge" }}
+[hook "lfs-{{ . }}"]
+	event = {{ . }}
+	command = git lfs {{ . }}
+{{- end }}
 {{ end -}}
 {{/*
    Prefer the mise shim over the resolved binary. lookPath returns a

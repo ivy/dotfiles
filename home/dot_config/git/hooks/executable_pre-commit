@@ -1,7 +1,0 @@
-#!/bin/sh
-# Global pre-commit hook — runs hk with gitleaks to guard against credential leaks.
-#
-# HACK(ivy): On macOS, dirs::config_dir() returns ~/Library/Application Support, not ~/.config,
-# so we explicitly set HK_CONFIG_DIR to ensure the global config is found.
-export HK_CONFIG_DIR="$HOME/.config/hk"
-exec "$HOME/.local/share/mise/shims/hk" run pre-commit "$@"

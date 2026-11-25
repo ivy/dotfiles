@@ -1,0 +1,15 @@
+# Targets chezmoi deletes on apply: stale files that would shadow or override
+# the config these dotfiles manage.
+
+# Global git hooks are configured in ~/.config/git/config. A hooks directory
+# here is unused, and pointing core.hooksPath at it disables every
+# repository's own .git/hooks.
+.config/git/hooks
+
+# A user-level hk config merges its steps into every project's hk runs, so an
+# undeclared effect there fails `hk check --safe` in every project.
+.config/hk/config.pkl
+
+# ~/.local/bin precedes mise on PATH, so an hk here shadows the mise-managed one.
+.local/bin/hk
+.local/src/hk
