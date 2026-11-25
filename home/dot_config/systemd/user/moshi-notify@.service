@@ -1,0 +1,21 @@
+[Unit]
+# Pushes a failure notice for another user unit to the phone through Moshi.
+# A unit opts in with:
+#
+#   OnFailure=moshi-notify@%n.service
+#
+# The instance (%i) is the failed unit's name. Installed on every Linux machine,
+# Moshi or not: `moshi-hook notify` is best effort and exits 0 with a reason on
+# stderr when the daemon isn't running or the host isn't paired, so on a machine
+# without Moshi a failure costs one journal line here and nothing else.
+Description=Notify Moshi that %i failed
+Documentation=https://getmoshi.app/docs/hooks
+
+[Service]
+Type=oneshot
+
+# The last few journal lines of the failed unit become the message body. The
+# shim is a standalone binary, so it needs no mise on the unit's PATH.
+ExecStart=/bin/sh -c 'journalctl --user --unit=%i --lines=5 --output=cat --no-pager | %h/.local/share/mise/shims/moshi-hook notify --error --source systemd --label "%H timers" --title "%i failed"'
+
+SyslogIdentifier=moshi-notify

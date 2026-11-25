@@ -4,6 +4,9 @@
 Description=Refresh the codebase-memory index for every repository under ~/src
 Documentation=file://%h/src/github.com/ivy/dotfiles/docs/codebase-memory-mcp.md
 
+# A failed run pushes to the phone where Moshi is set up; see moshi-notify@.service.
+OnFailure=moshi-notify@%n.service
+
 [Service]
 Type=oneshot
 ExecStart=%h/.local/bin/cbm-reindex

@@ -47,6 +47,7 @@ SCRIPT="home/run_onchange_after_bootstrap-systemd-units.sh.tmpl"
 	[[ "$output" == *"cbm reindex unit hash:"* ]]
 	[[ "$output" == *"cbm reindex timer hash:"* ]]
 	[[ "$output" == *"moshi-hook unit hash:"* ]]
+	[[ "$output" == *"moshi notify unit hash:"* ]]
 }
 
 # A container built with `chezmoi init --apply` has no user manager to talk to,
