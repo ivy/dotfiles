@@ -5,6 +5,8 @@
 # moshi enabled: {{ dig "moshi" "enabled" false . }}
 # moshi-hook version: {{ (index (index (include "dot_config/mise/mise.lock" | fromToml).tools "http:moshi-hook") 0).version }}
 # Each moshi-hook release generates new hooks; see set_moshi_hooks.
+# herdr version: {{ (index (index (include "dot_config/mise/mise.lock" | fromToml).tools "github:herdrdev/herdr") 0).version }}
+# herdr expects its integration reinstalled after each upgrade; see set_herdr_hooks.
 
 [[ -n "${DEBUG:-}" ]] && set -o xtrace
 set -o errexit

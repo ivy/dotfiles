@@ -411,6 +411,30 @@ set_moshi_hooks() {
 	fi
 }
 
+# Install herdr's Claude Code integration: a SessionStart hook that reports the
+# session id to the herdr pane it runs in, so a restarted herdr server resumes
+# the conversation (`claude --resume <id>`) instead of restoring an empty
+# shell. The hook exits immediately outside herdr. herdr's installer writes the
+# script and merges its entry into settings.json, leaving other hooks alone, and
+# herdr expects a reinstall after each upgrade, so
+# run_onchange_sync-claude-settings.sh.tmpl keys on the locked herdr version.
+set_herdr_hooks() {
+	local herdr
+
+	# Resolved through mise for the same reason as moshi-hook above.
+	if ! command -v mise >/dev/null 2>&1 || ! herdr="$(mise which herdr 2>/dev/null)"; then
+		printf 'herdr not installed — skipping its Claude Code integration\n'
+		return 0
+	fi
+
+	printf 'installing herdr Claude Code integration into %s\n' "${SETTINGS}"
+	# A failure costs session resume after a herdr restart, not Claude Code
+	# settings, so it warns instead of failing the whole apply.
+	if ! "${herdr}" integration install claude </dev/null; then
+		printf 'warning: herdr integration install failed — herdr will not resume Claude Code sessions\n' >&2
+	fi
+}
+
 # Remove Bedrock model env vars (use_bedrock=false path)
 cleanup_model_env_vars() {
 	if jq -e '.env.ANTHROPIC_MODEL // .env.ANTHROPIC_DEFAULT_HAIKU_MODEL // .env.ANTHROPIC_DEFAULT_OPUS_MODEL // .env.ANTHROPIC_DEFAULT_SONNET_MODEL' "${SETTINGS}" >/dev/null 2>&1; then
@@ -517,6 +541,7 @@ main() {
 	set_permissions
 	set_hooks
 	set_moshi_hooks
+	set_herdr_hooks
 
 	local use_bedrock
 	use_bedrock=$(chezmoi data --format json | jq -r '.claude.use_bedrock')
