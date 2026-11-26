@@ -51,7 +51,7 @@ bun = "1.4.4"
 # CLI tools (GitHub Releases - see ADR-005)
 # Avoid aqua: backend — registry lag and attestation mismatches break installs.
 # See docs/adrs/005-replace-aqua-backend-with-github-releases.md
-"github:BurntSushi/ripgrep" = "15.2.0"
+"github:BurntSushi/ripgrep" = "16.0.0"
 # codebase-memory-mcp: code knowledge graph over ~/src — see docs/adrs/008.
 # Releases ship a `-ui-` variant alongside the plain archive; the github: backend
 # picks the right one unaided and verifies the release's artifact attestations,
