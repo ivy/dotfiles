@@ -19,7 +19,7 @@ workflows:
         - 'docker/build-push-action@v7.4.0'
         - 'docker/login-action@v4.8.0'
         - 'docker/metadata-action@v6.2.0'
-        - 'docker/setup-buildx-action@v3.12.0'
+        - 'docker/setup-buildx-action@v4.4.1'
 dependencies:
     'actions/attest-build-provenance@v4.2.2':
         ref: 'v4.2.2'
@@ -70,9 +70,9 @@ dependencies:
         commit: 'sha1-dc802804100637a589fabce1cb79ff13a1411302'
         owner_id: 5429470
         repo_id: 306769011
-    'docker/setup-buildx-action@v3.12.0':
-        ref: 'v3.12.0'
-        commit: 'sha1-8d2750c68a42422c14e847fe6c8ac0403b4cbd6f'
+    'docker/setup-buildx-action@v4.4.1':
+        ref: 'v4.4.1'
+        commit: 'sha1-f87e5991a6d7451dcb8d9637bfbc97413f497069'
         owner_id: 5429470
         repo_id: 288485773
     'jdx/mise-action@v5.3.0':
