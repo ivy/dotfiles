@@ -204,6 +204,7 @@ packages:
   '@tinyhttp/content-disposition@2.2.4':
     resolution: {integrity: sha512-5Kc5CM2Ysn3vTTArBs2vESUt0AQiWZA86yc1TI3B+lxXmtEq133C1nxXNOgnzhrivdPZIh3zLj5gDnZjoLL5GA==}
     engines: {node: '>=12.17.0'}
+    deprecated: No longer maintained. Use content-disposition@3 instead.
 
   '@tobilu/qmd@2.8.3':
     resolution: {integrity: sha512-zjfVwrObPB618B6x8SdhlGv/tX9OxRHsbQnr5DUtBvqPK6HGQ27lM+9/BAY5okpjrHVnW56hLyDkqoTcsrVLzA==}
@@ -366,8 +367,8 @@ packages:
   graceful-fs@4.2.12:
     resolution: {integrity: sha512-iuyGF2E4oafQfPsRrG2wtY2ILupMhvtdrhzrxB+0VcjsPpSPttpfYdjnGFGsTi5MaJFjI1jOKHPQ6UTbTj9TAw==}
 
-  ignore@7.0.16:
-    resolution: {integrity: sha512-52N+Y4HRMOJmbLmr+DqO4iSRyyB7N52gm7PWCT6h0p978+oKbqHCB7gIJIwZvBUsjlSdWbrBFqUSmIFNZMpn0A==}
+  ignore@7.0.17:
+    resolution: {integrity: sha512-0c3zcBRlWmcKhcIQWckzkYncJRv5HHB8O32wO/FcWL8DDXWDJgiEF6SX9ThbTv5h/eZ+xJK+VvDjjQ+cQJhp3Q==}
     engines: {node: '>= 4'}
 
   ini@1.3.8:
@@ -656,8 +657,8 @@ packages:
     resolution: {integrity: sha512-4gB8na07fecVVkOI6Rs4e7T6NOTki5EmL7TUduTs6bu3EdnSycntVJ4re8kgZA+wx9IueI2Y11bfbgwtzuE0KQ==}
     engines: {node: '>=0.10.0'}
 
-  tar@7.5.23:
-    resolution: {integrity: sha512-lkukzdoGngZHJZXxW4S/E4Fp9ghTDlyZXrQGRNoJ/LXvDKcXUTq2sg5yQe74po7Voea6n/IN09+wE/QvJMiifA==}
+  tar@7.5.24:
+    resolution: {integrity: sha512-to/OxuCk5DeVONcjjODT7aeoRq5NIPPlfPc0tNML+wLlnf6u5BcJz97Uukv3pT3jzorkFhUevylkAiBr+ZmV2w==}
     engines: {node: '>=18'}
 
   to-regex-range@5.0.1:
@@ -969,7 +970,7 @@ snapshots:
       node-api-headers: 1.9.0
       rc: 1.2.8
       semver: 7.8.6
-      tar: 7.5.23
+      tar: 7.5.24
       url-join: 4.0.1
       which: 6.0.1
       yargs: 17.7.3
@@ -1044,7 +1045,7 @@ snapshots:
 
   graceful-fs@4.2.12: {}
 
-  ignore@7.0.16: {}
+  ignore@7.0.17: {}
 
   ini@1.3.8: {}
 
@@ -1154,7 +1155,7 @@ snapshots:
       env-var: 7.5.0
       filenamify: 6.0.0
       fs-extra: 11.4.1
-      ignore: 7.0.16
+      ignore: 7.0.17
       ipull: 3.9.5
       is-unicode-supported: 2.1.0
       lifecycle-utils: 4.5.2
@@ -1353,7 +1354,7 @@ snapshots:
 
   strip-json-comments@2.0.1: {}
 
-  tar@7.5.23:
+  tar@7.5.24:
     dependencies:
       '@isaacs/fs-minipass': 4.0.1
       chownr: 3.0.0

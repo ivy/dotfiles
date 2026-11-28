@@ -4154,6 +4154,10 @@ provenance = "github-attestations"
 version = "0.20.1"
 backend = "github:dandavison/delta"
 specifiers = ["0.20.1"]
+unsupported_platforms = [
+    "macos-x64",
+    "macos-x64-baseline",
+]
 
 [tools."github:dandavison/delta"."platforms.linux-arm64"]
 checksum = "sha256:da7f4338f593572ff426ae153e0870e2fdc72729416eff551b40cdeb67940db8"
@@ -4557,6 +4561,10 @@ provenance = "github-attestations"
 version = "1.30.0"
 backend = "github:jdx/mr-boxington"
 specifiers = ["1.30.0"]
+unsupported_platforms = [
+    "macos-x64",
+    "macos-x64-baseline",
+]
 
 [tools."github:jdx/mr-boxington"."platforms.linux-arm64"]
 checksum = "sha256:6317bb6780404e78c3b670d95e128c85871809dfc541882b2efaa34120f45e71"
@@ -5496,6 +5504,10 @@ url_api = "https://api.github.com/repos/starship/starship/releases/assets/650074
 version = "0.4.0-rc.2"
 backend = "github:steading-ai/skift"
 specifiers = ["0.4.0-rc.2"]
+unsupported_platforms = [
+    "windows-x64",
+    "windows-x64-baseline",
+]
 
 [tools."github:steading-ai/skift"."platforms.linux-arm64"]
 checksum = "sha256:0d9badad48f98dca96deedd38fc07a2366d49dcdb6d3c18f961468efb1bcca7c"
@@ -5754,45 +5766,45 @@ url = "https://gitlab.com/gitlab-org/cli/-/releases/v1.131.0/downloads/glab_1.13
 url_api = "https://gitlab.com/api/v4/projects/gitlab-org%2Fcli/packages/generic/glab/1%2E131%2E0/glab_1%2E131%2E0_windows_amd64%2Ezip"
 
 [[tools."http:moshi-hook"]]
-version = "0.4.64"
+version = "0.4.67"
 backend = "http:moshi-hook"
 specifiers = ["latest"]
 
 [tools."http:moshi-hook"."platforms.linux-arm64"]
-checksum = "sha256:d154e04df4220befb56a082c7068507e693acad4b02a0b9575bee5248c6d6b04"
-url = "https://cdn.getmoshi.app/hook/v0.4.64/moshi-hook_Linux_arm64.tar.gz"
+checksum = "sha256:e9a6e6b0160d862aecf907ee9c4b8e9d4edab556f88c09b967fb245c4103e5cc"
+url = "https://cdn.getmoshi.app/hook/v0.4.67/moshi-hook_Linux_arm64.tar.gz"
 
 [tools."http:moshi-hook"."platforms.linux-arm64-musl"]
-checksum = "sha256:d154e04df4220befb56a082c7068507e693acad4b02a0b9575bee5248c6d6b04"
-url = "https://cdn.getmoshi.app/hook/v0.4.64/moshi-hook_Linux_arm64.tar.gz"
+checksum = "sha256:e9a6e6b0160d862aecf907ee9c4b8e9d4edab556f88c09b967fb245c4103e5cc"
+url = "https://cdn.getmoshi.app/hook/v0.4.67/moshi-hook_Linux_arm64.tar.gz"
 
 [tools."http:moshi-hook"."platforms.linux-x64"]
-checksum = "sha256:1d7efd56588b46ed62e7a05110ad2eb08c4e25cbc632c87388f6d99d214e055b"
-url = "https://cdn.getmoshi.app/hook/v0.4.64/moshi-hook_Linux_x86_64.tar.gz"
+checksum = "sha256:630f1af06c261db1bdae0c9d02d3b8c772bcde3442d1d029465ab8a472a90ea2"
+url = "https://cdn.getmoshi.app/hook/v0.4.67/moshi-hook_Linux_x86_64.tar.gz"
 
 [tools."http:moshi-hook"."platforms.linux-x64-baseline"]
-checksum = "sha256:1d7efd56588b46ed62e7a05110ad2eb08c4e25cbc632c87388f6d99d214e055b"
-url = "https://cdn.getmoshi.app/hook/v0.4.64/moshi-hook_Linux_x86_64.tar.gz"
+checksum = "sha256:630f1af06c261db1bdae0c9d02d3b8c772bcde3442d1d029465ab8a472a90ea2"
+url = "https://cdn.getmoshi.app/hook/v0.4.67/moshi-hook_Linux_x86_64.tar.gz"
 
 [tools."http:moshi-hook"."platforms.linux-x64-musl"]
-checksum = "sha256:1d7efd56588b46ed62e7a05110ad2eb08c4e25cbc632c87388f6d99d214e055b"
-url = "https://cdn.getmoshi.app/hook/v0.4.64/moshi-hook_Linux_x86_64.tar.gz"
+checksum = "sha256:630f1af06c261db1bdae0c9d02d3b8c772bcde3442d1d029465ab8a472a90ea2"
+url = "https://cdn.getmoshi.app/hook/v0.4.67/moshi-hook_Linux_x86_64.tar.gz"
 
 [tools."http:moshi-hook"."platforms.linux-x64-musl-baseline"]
-checksum = "sha256:1d7efd56588b46ed62e7a05110ad2eb08c4e25cbc632c87388f6d99d214e055b"
-url = "https://cdn.getmoshi.app/hook/v0.4.64/moshi-hook_Linux_x86_64.tar.gz"
+checksum = "sha256:630f1af06c261db1bdae0c9d02d3b8c772bcde3442d1d029465ab8a472a90ea2"
+url = "https://cdn.getmoshi.app/hook/v0.4.67/moshi-hook_Linux_x86_64.tar.gz"
 
 [tools."http:moshi-hook"."platforms.macos-arm64"]
-checksum = "sha256:fe383699ee0ff9ad598bc321e84306f1503f46f5632e222f8d31c4b1d1518428"
-url = "https://cdn.getmoshi.app/hook/v0.4.64/moshi-hook_Darwin_arm64.tar.gz"
+checksum = "sha256:d5b9924e241c25f85871b8ec14ee9bc320df331c4225c094bd3ca5804eea4c24"
+url = "https://cdn.getmoshi.app/hook/v0.4.67/moshi-hook_Darwin_arm64.tar.gz"
 
 [tools."http:moshi-hook"."platforms.macos-x64"]
-checksum = "sha256:c0a6b03786fceebd52690f4aaebda065eeb24a6d59c8cac7e065a24a9f45f02b"
-url = "https://cdn.getmoshi.app/hook/v0.4.64/moshi-hook_Darwin_x86_64.tar.gz"
+checksum = "sha256:360ac1bdec76eb71296c1e3c48a1faf6f92b0a44f42dcf7dbc801447cde94558"
+url = "https://cdn.getmoshi.app/hook/v0.4.67/moshi-hook_Darwin_x86_64.tar.gz"
 
 [tools."http:moshi-hook"."platforms.macos-x64-baseline"]
-checksum = "sha256:c0a6b03786fceebd52690f4aaebda065eeb24a6d59c8cac7e065a24a9f45f02b"
-url = "https://cdn.getmoshi.app/hook/v0.4.64/moshi-hook_Darwin_x86_64.tar.gz"
+checksum = "sha256:360ac1bdec76eb71296c1e3c48a1faf6f92b0a44f42dcf7dbc801447cde94558"
+url = "https://cdn.getmoshi.app/hook/v0.4.67/moshi-hook_Darwin_x86_64.tar.gz"
 
 [[tools.node]]
 version = "26.13.1"
@@ -5863,13 +5875,13 @@ specifiers = ["0.0.85"]
 
 [[tools."npm:@tobilu/qmd"]]
 version = "2.8.3"
-aube = { path = ".mise/locks/npm-tobilu-qmd/2.8.3", digest = "sha256:6bcc764f3183457aca4f9c3a1d2bb376e15c54f99d225bd8f8da6d5cd24b7428" }
+aube = { path = ".mise/locks/npm-tobilu-qmd/2.8.3", digest = "sha256:fde12825d6efde3dcb1998048d0b63a2ccaf096fbbbb9b57bb3604f78d464a7c" }
 backend = "npm:@tobilu/qmd"
 specifiers = ["2.8.3"]
 
 [[tools."npm:bktide"]]
 version = "1.0.1782920867"
-aube = { path = ".mise/locks/npm-bktide/1.0.1782920867", digest = "sha256:2de95cbc428547d59df34ca7d2f93f40c6e5929032eb05e8076fcfe6af668aba" }
+aube = { path = ".mise/locks/npm-bktide/1.0.1782920867", digest = "sha256:af81dd6f7287b8afff2e15123e25bb2216da902320110c58356178068fbd0a42" }
 backend = "npm:bktide"
 specifiers = ["1.0.1782920867"]
 
@@ -5887,7 +5899,7 @@ specifiers = ["4.0.1"]
 
 [[tools."npm:obsidian-headless"]]
 version = "0.0.14"
-aube = { path = ".mise/locks/npm-obsidian-headless/0.0.14", digest = "sha256:2a70944e9839e401e17ef63347847642b4368b42f2567a2375f6b864f280896e" }
+aube = { path = ".mise/locks/npm-obsidian-headless/0.0.14", digest = "sha256:f50b226b1879d0963311be788609e7ce94ff9b2843460831faa8c47df6ee3f6a" }
 backend = "npm:obsidian-headless"
 specifiers = ["0.0.14"]
 
@@ -5895,6 +5907,10 @@ specifiers = ["0.0.14"]
 version = "1.18.16"
 backend = "aqua:pypa/pipx"
 specifiers = ["1.18.16"]
+unsupported_platforms = [
+    "windows-x64",
+    "windows-x64-baseline",
+]
 
 [tools.pipx."platforms.linux-arm64"]
 checksum = "sha256:bd3709947d3a36cb898f53c765aba568d01c1aef3302ec439037fcbbdad559c1"
