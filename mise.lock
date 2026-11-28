@@ -6,6 +6,7 @@ lockfile_version = 3
 version = "1.14.0"
 backend = "aqua:bats-core/bats-core"
 specifiers = ["1.14.0"]
+unsupported_platforms = ["windows-x64"]
 
 [tools."aqua:bats-core/bats-core"."platforms.linux-arm64"]
 checksum = "sha256:bb537b70b15b732f6d8827dd6578e3d8ce166636ce1f18ea9a074184fcce9177"
@@ -427,13 +428,13 @@ url = "https://nodejs.org/dist/v26.13.1/node-v26.13.1-win-x64.zip"
 
 [[tools."npm:markdownlint-cli"]]
 version = "0.50.0"
-aube = { path = ".mise/locks/npm-markdownlint-cli/0.50.0", digest = "sha256:246eeb873b25ced8e9272d4e8c3633bc10098679f93e088d221e804d9566da93" }
+aube = { path = ".mise/locks/npm-markdownlint-cli/0.50.0", digest = "sha256:0456eb3156d9464d95451615f2daeabbc1546acf4ff50279e0ba3cebb96f7225" }
 backend = "npm:markdownlint-cli"
 specifiers = ["0.50.0"]
 
 [[tools."npm:renovate"]]
 version = "44.247.2"
-aube = { path = ".mise/locks/npm-renovate/44.247.2~aa673d8d", digest = "sha256:11664b3a6d352d9bf05b946f7d2a1b61eb9ea3dc1368ee2f93e975378ce0caec" }
+aube = { path = ".mise/locks/npm-renovate/44.247.2~aa673d8d", digest = "sha256:22ca1c26ee0b71bf78cb46a0273c36db35f57eaf183df7ee0462fbc0d0daeedb" }
 backend = "npm:renovate"
 specifiers = ["44.247.2"]
 
